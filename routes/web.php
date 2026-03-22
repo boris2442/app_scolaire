@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\AcademiqueController;
+use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AnneeScolaireController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,6 +46,42 @@ Route::prefix('settings')->name('settings.')->group(function () {
 
     // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
     Route::patch('annees/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('annees.active');
+});
+
+
+
+// Route::prefix('settings/academique')->name('settings.academique.')->group(function () {
+//     Route::get('/', [AcademiqueController::class, 'index'])->name('index');
+//     Route::post('/cycles', [AcademiqueController::class, 'storeCycle'])->name('cycles.store');
+//     Route::post('/niveaux', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
+
+//     // Routes Cycles
+//     Route::put('/cycles/{cycle}', [AcademiqueController::class, 'updateCycle'])->name('cycles.update');
+//     Route::delete('/cycles/{cycle}', [AcademiqueController::class, 'destroyCycle'])->name('cycles.destroy');
+
+//     // Routes Niveaux
+//     Route::put('/niveaux/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
+//     Route::delete('/niveaux/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
+// });
+
+
+
+
+
+Route::prefix('settings/academique')->name('settings.academique.')->group(function () {
+    Route::get('/', [AcademiqueController::class, 'index'])->name('index');
+
+    // CYCLES
+    Route::post('/cycles', [AcademiqueController::class, 'storeCycle'])->name('cycles.store');
+    Route::get('/cycles/{cycle}/edit', [AcademiqueController::class, 'editCycle'])->name('cycles.edit');
+    Route::put('/cycles/{cycle}', [AcademiqueController::class, 'updateCycle'])->name('cycles.update');
+    Route::delete('/cycles/{cycle}', [AcademiqueController::class, 'destroyCycle'])->name('cycles.destroy');
+
+    // NIVEAUX
+    Route::post('/niveaux', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
+    Route::get('/niveaux/{niveau}/edit', [AcademiqueController::class, 'editNiveau'])->name('niveaux.edit');
+    Route::put('/niveaux/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
+    Route::delete('/niveaux/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
 });
 
 

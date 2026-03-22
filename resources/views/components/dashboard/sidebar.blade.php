@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <nav class="px-3 space-y-1">
+    {{-- <nav class="px-3 space-y-1">
 
         <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Tableau de
             Bord</div>
@@ -86,7 +86,56 @@
             <span class="sidebar-label ml-3 font-semibold">Bulletins & Bilans</span>
         </a>
 
+    </nav> --}}
+
+
+    <nav class="px-3 space-y-1">
+        <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+            Tableau de Bord
+        </div>
+
+        <a href="{{ route('settings.index') }}"
+            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+            <i class="fas fa-cogs w-6 text-center"></i>
+            <span class="sidebar-label ml-3 font-medium">Paramètres École</span>
+        </a>
+
+        <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider mt-4">
+            Scolarité
+        </div>
+
+        <a href="{{ route('settings.annees.index') }}"
+            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.annees.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+            <i class="fas fa-calendar-alt w-6 text-center"></i>
+            <span class="sidebar-label ml-3">Années</span>
+        </a>
+
+        <a href="{{ route('settings.academique.index') }}"
+            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+            <i class="fas fa-sitemap w-6 text-center"></i>
+            <span class="sidebar-label ml-3">Cycles & Niveaux</span>
+        </a>
+
+        <a href="#"
+            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group hover:bg-secondary hover:text-primary">
+            <i class="fas fa-school w-6 text-center"></i>
+            <span class="sidebar-label ml-3">Classes & Salles</span>
+        </a>
+
+        <a href="#"
+            class="flex items-center px-3 py-2.5 rounded-lg hover:bg-secondary hover:text-primary transition-colors group">
+            <i class="fas fa-book w-6 text-center"></i>
+            <span class="sidebar-label ml-3">Matières & Coeffs</span>
+        </a>
+
     </nav>
+
+
+
+
+
+
+
 
     <div class="absolute bottom-4 w-full px-3">
         <div class="border-t border-border my-4"></div>
@@ -172,31 +221,31 @@
 </script> --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.getElementById('sidebar');
-    const collapseBtn = document.getElementById('toggle-collapse');
-    const collapseIcon = document.getElementById('collapse-icon');
-    const labels = document.querySelectorAll('.sidebar-label');
+        const sidebar = document.getElementById('sidebar');
+        const collapseBtn = document.getElementById('toggle-collapse');
+        const collapseIcon = document.getElementById('collapse-icon');
+        const labels = document.querySelectorAll('.sidebar-label');
 
-    if (collapseBtn) {
-        collapseBtn.addEventListener('click', () => {
-            const isCollapsed = sidebar.dataset.collapsed === 'true';
+        if (collapseBtn) {
+            collapseBtn.addEventListener('click', () => {
+                const isCollapsed = sidebar.dataset.collapsed === 'true';
 
-            if (isCollapsed) {
-                // OUVRIR (Largeur 64)
-                sidebar.classList.remove('w-20');
-                sidebar.classList.add('w-64');
-                labels.forEach(el => el.classList.remove('hidden'));
-                collapseIcon.className = 'fas fa-angle-left text-xs';
-                sidebar.dataset.collapsed = 'false';
-            } else {
-                // RÉDUIRE (Largeur 20)
-                sidebar.classList.remove('w-64');
-                sidebar.classList.add('w-20');
-                labels.forEach(el => el.classList.add('hidden'));
-                collapseIcon.className = 'fas fa-angle-right text-xs';
-                sidebar.dataset.collapsed = 'true';
-            }
-        });
-    }
-});
+                if (isCollapsed) {
+                    // OUVRIR (Largeur 64)
+                    sidebar.classList.remove('w-20');
+                    sidebar.classList.add('w-64');
+                    labels.forEach(el => el.classList.remove('hidden'));
+                    collapseIcon.className = 'fas fa-angle-left text-xs';
+                    sidebar.dataset.collapsed = 'false';
+                } else {
+                    // RÉDUIRE (Largeur 20)
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    labels.forEach(el => el.classList.add('hidden'));
+                    collapseIcon.className = 'fas fa-angle-right text-xs';
+                    sidebar.dataset.collapsed = 'true';
+                }
+            });
+        }
+    });
 </script>

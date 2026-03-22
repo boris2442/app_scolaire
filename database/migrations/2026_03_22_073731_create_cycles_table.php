@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('cycles', function (Blueprint $table) {
             $table->id();
-            $table->string('nom'); // ex: 6ème, Terminale C
-            $table->string('niveau'); // ex: Premier Cycle, Second Cycle
+            $table->string('nom'); // ex: Premier Cycle
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('cycles');
     }
 };
