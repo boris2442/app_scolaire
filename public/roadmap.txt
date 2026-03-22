@@ -1,0 +1,93 @@
+cela s'appelle une Roadmap de Développement ou un Backlog. Cela permet de garder une vision claire, d'éviter de s'éparpiller et de valider chaque brique technique avant de passer à la suivante.
+
+Voici le plan de route structuré par modules logiques, respectant les dépendances de ta base de données.
+
+
+
+1. Phase Fondations (Infrastructure)
+[x] Architecture de la base de données (Migrations)
+
+[x] Design System (Variables CSS & Couleurs)
+
+[x] Layout Principal (Sidebar, Header, Responsive)
+
+[ ] Authentification & Système de Rôles
+
+2. Module Configuration Globale (Identité)  <-- AJOUTÉ ICI
+[ ] Paramètres de l'établissement (Nom, Slogan, Logo, Adresse, Téléphone, Email)
+
+
+3. Module Paramétrage Académique
+[ ] Gestion des Années Scolaires (Définir l'année active)
+
+[ ] Gestion des Trimestres et Séquences
+
+[ ] Configuration des Classes et des Salles
+
+[ ] Gestion des Matières et attribution des Coefficients
+
+(Le reste de la liste suit la même logique...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Module Paramétrage (Données de base)
+Ce module permet de configurer l'environnement avant d'accueillir des élèves.
+
+[ ] Gestion des Années Scolaires (Définir l'année active)
+
+[ ] Gestion des Trimestres et Séquences
+
+[ ] Configuration des Classes et des Salles (sous-classes)
+
+[ ] Gestion des Matières et attribution des Coefficients par classe
+
+3. Module Utilisateurs & Inscriptions
+[ ] Gestion des comptes Enseignants
+
+[ ] Base de données des Élèves (Fiche élève)
+
+[ ] Processus d'Inscription (Lier un élève à une salle pour une année donnée)
+
+4. Module Pédagogique (Affectations)
+[ ] Affectation des enseignants (Qui enseigne quelle matière dans quelle salle ?)
+
+[ ] Gestion des emplois du temps (Optionnel, selon ton besoin)
+
+5. Module Évaluations (Le Cœur du Système)
+[ ] Interface de saisie des Notes par séquence
+
+[ ] Gestion des Absences et des Retards
+
+[ ] Saisie des appréciations des enseignants
+
+6. Module de Calcul & Bilans (Moteur de traitement)
+[ ] Calcul automatique des moyennes séquentielles
+
+[ ] Calcul des moyennes trimestrielles et annuelles
+
+[ ] Calcul automatique des rangs et des statistiques de classe
+
+7. Module Impressions (Sorties PDF)
+[ ] Génération des bulletins de notes (Séquentiels/Trimestriels)
+
+[ ] Procès-verbaux de fin de trimestre
+
+[ ] Listes de classes et fiches de présence
+
+8. Finalisation & Déploiement
+[ ] Tests unitaires sur les calculs de moyennes
+
+[ ] Optimisation des performances (Indexation SQL)
+
+[ ] Mise en production
