@@ -17,6 +17,15 @@ class Classe extends Model
         return $this->belongsTo(AnneeScolaire::class);
     }
 
+
+public function matieres()
+{
+    return $this->belongsToMany(Matiere::class, 'classe_matiere')
+                ->withPivot('coefficient', 'ordre')
+                ->withTimestamps();
+}
+
+    
     // Petit "Accessor" pratique pour afficher le nom complet partout
     public function getNomCompletAttribute() {
         return $this->niveau->nom . ' ' . $this->nom;

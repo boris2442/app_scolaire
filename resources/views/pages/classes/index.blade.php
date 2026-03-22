@@ -56,23 +56,46 @@
                     <div class="p-3">
                         @forelse($niv->classes as $classe)
                             <div
-                                class="flex justify-between items-center bg-background p-2 rounded-lg border border-border mb-2 last:mb-0 group">
-                                <span class="text-sm font-bold text-foreground">{{ $niv->nom }} {{ $classe->nom }}</span>
-                                {{-- <span class="text-sm font-bold text-foreground">
-                                    {{ $classe->nom_complet }}
-                                </span> --}}
-                                <form action="{{ route('settings.classes.destroy', $classe) }}" method="POST"
-                                    onsubmit="return confirm('Supprimer cette classe ?')">
-                                    @csrf @method('DELETE')
-                                    <button
-                                        class="text-muted-foreground hover:text-danger opacity-0 group-hover:opacity-100 transition-all">
-                                        <i class="fas fa-trash-alt text-xs"></i>
-                                    </button>
-                                </form>
+                                class="flex justify-between items-center bg-background p-3 rounded-xl border border-border mb-2 last:mb-0 group">
+
+                                <div class="flex flex-col flex-1">
+                                    <span class="text-sm font-bold text-foreground">{{ $niv->nom }}
+                                        {{ $classe->nom }}</span>
+
+                                    <div class="flex flex-wrap gap-1 mt-1">
+                                        @forelse($classe->matieres as $m)
+                                            <span
+                                                class="text-[9px] bg-secondary px-1.5 py-0.5 rounded border border-border text-muted-foreground font-medium uppercase">
+                                                {{ $m->code }} ({{ $m->pivot->coefficient }})
+                                            </span>
+                                        @empty
+                                            <span
+                                                class="text-[9px] text-red-500 font-bold uppercase italic flex items-center gap-1">
+                                                <i class="fas fa-exclamation-triangle text-[8px]"></i> Aucun programme
+                                                défini
+                                            </span>
+                                        @endforelse
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('settings.classes.matieres.edit', $classe) }}"
+                                        class="text-primary hover:bg-primary/10 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                                        title="Configurer le programme">
+                                        <i class="fas fa-book-open text-xs"></i>
+                                    </a>
+
+                                    <form action="{{ route('settings.classes.destroy', $classe) }}" method="POST"
+                                        onsubmit="return confirm('Supprimer ?')">
+                                        @csrf @method('DELETE')
+                                        <button
+                                            class="text-muted-foreground hover:text-danger p-2 opacity-0 group-hover:opacity-100 transition-all">
+                                            <i class="fas fa-trash-alt text-xs"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         @empty
-                            <p class="text-[10px] italic text-muted-foreground text-center py-2">Aucune classe créée pour ce
-                                niveau.</p>
+                            <p class="text-[10px] italic text-muted-foreground text-center py-2">Aucune classe.</p>
                         @endforelse
                     </div>
                 </div>

@@ -22,7 +22,8 @@ class ClasseController extends Controller
 
         // On charge les classes de l'année active groupées par niveau
         $niveaux = Niveau::with(['classes' => function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id);
+            $q->where('annee_scolaire_id', $anneeActive->id)
+              ->with('matieres'); // On charge aussi les matières pour chaque classe
         }])->get();
 
         return view('pages.classes.index', compact('niveaux', 'anneeActive'));

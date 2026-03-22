@@ -3,7 +3,9 @@
 use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
+use App\Http\Controllers\ClasseMatiereController;
 use App\Http\Controllers\EtablissementController;
+use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,4 +93,14 @@ Route::prefix('settings/classes')->name('settings.classes.')->group(function () 
     Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
 });
 
+
+Route::prefix('settings/matieres')->name('settings.matieres.')->group(function () {
+    Route::get('/', [MatiereController::class, 'index'])->name('index');
+    Route::post('/', [MatiereController::class, 'store'])->name('store');
+    Route::put('/{matiere}', [MatiereController::class, 'update'])->name('update');
+    Route::delete('/{matiere}', [MatiereController::class, 'destroy'])->name('destroy');
+});
+
+Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'edit'])->name('settings.classes.matieres.edit');
+Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
 require __DIR__ . '/auth.php';
