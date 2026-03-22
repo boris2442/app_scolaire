@@ -116,8 +116,8 @@
             <span class="sidebar-label ml-3">Cycles & Niveaux</span>
         </a>
 
-        <a href="#"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group hover:bg-secondary hover:text-primary">
+        <a href="{{ route('settings.classes.index') }}"
+            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
             <i class="fas fa-school w-6 text-center"></i>
             <span class="sidebar-label ml-3">Classes & Salles</span>
         </a>

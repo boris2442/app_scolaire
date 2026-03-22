@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\AnneeScolaireController;
+use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -84,6 +85,10 @@ Route::prefix('settings/academique')->name('settings.academique.')->group(functi
     Route::delete('/niveaux/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
 });
 
-
+Route::prefix('settings/classes')->name('settings.classes.')->group(function () {
+    Route::get('/', [ClasseController::class, 'index'])->name('index');
+    Route::post('/', [ClasseController::class, 'store'])->name('store');
+    Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
+});
 
 require __DIR__ . '/auth.php';

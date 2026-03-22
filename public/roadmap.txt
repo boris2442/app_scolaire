@@ -52,6 +52,9 @@ Ce module permet de configurer l'environnement avant d'accueillir des élèves.
 
 [ ] Gestion des Matières et attribution des Coefficients par classe
 
+
+
+
 3. Module Utilisateurs & Inscriptions
 [ ] Gestion des comptes Enseignants
 

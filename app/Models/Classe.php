@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+
+class Classe extends Model
+{
+    protected $fillable = ['nom', 'niveau_id', 'annee_scolaire_id'];
+
+    public function niveau() {
+        return $this->belongsTo(Niveau::class);
+    }
+
+    public function anneeScolaire() {
+        return $this->belongsTo(AnneeScolaire::class);
+    }
+
+    // Petit "Accessor" pratique pour afficher le nom complet partout
+    public function getNomCompletAttribute() {
+        return $this->niveau->nom . ' ' . $this->nom;
+    }
+}
+
