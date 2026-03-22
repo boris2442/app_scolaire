@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAnneeScolaireRequest;
 use App\Models\AnneeScolaire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AnneeScolaireController extends Controller
 {
@@ -18,12 +19,44 @@ class AnneeScolaireController extends Controller
         return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
-    public function store(StoreAnneeScolaireRequest $request)
-    {
-        AnneeScolaire::create($request->validated());
+    // public function store(StoreAnneeScolaireRequest $request)
+    // {
+    //     AnneeScolaire::create($request->validated());
 
-        return back()->with('success', 'Année scolaire ajoutée.');
-    }
+    //     return back()->with('success', 'Année scolaire ajoutée.');
+    // }
+
+public function store(StoreAnneeScolaireRequest $request) {
+    DB::transaction(function () use ($request) {
+        // 1. Créer l'année
+        $annee = AnneeScolaire::create($request->validated());
+
+        // 2. Créer les 3 trimestres et leurs séquences
+        for ($i = 1; $i <= 3; $i++) {
+            $trimestre = $annee->trimestres()->create([
+                'nom' => "Trimestre $i"
+            ]);
+
+            // Pour chaque trimestre, on crée 2 séquences (1&2, 3&4, 5&6)
+            for ($j = 1; $j <= 2; $j++) {
+                $numSeq = ($i - 1) * 2 + $j;
+                $trimestre->sequences()->create([
+                    'nom' => "Séquence $numSeq"
+                ]);
+            }
+        }
+    });
+
+    return back()->with('success', 'Année scolaire et périodes pédagogiques générées avec succès !');
+}
+
+
+
+
+
+
+
+
 
     public function set_active(AnneeScolaire $annee_scolaire)
     {

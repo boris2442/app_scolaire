@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('trimestres', function (Blueprint $table) {
             $table->id();
 
-  
+
             $table->string('nom');
             $table->foreignId('annee_scolaire_id')->constrained()->onDelete('cascade');
             $table->timestamps();
