@@ -93,46 +93,54 @@
         <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
             Tableau de Bord
         </div>
+        <ul>
+            <li>
 
-        <a href="{{ route('settings.index') }}"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-            <i class="fas fa-cogs w-6 text-center"></i>
-            <span class="sidebar-label ml-3 font-medium">Paramètres École</span>
-        </a>
 
-        <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider mt-4">
-            Scolarité
-        </div>
+                <a href="{{ route('settings.index') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-cogs w-6 text-center"></i>
+                    <span class="sidebar-label ml-3 font-medium">Paramètres École</span>
+                </a>
+            </li>
+            <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider mt-4">
+                Scolarité
+            </div>
+            <li>
 
-        <a href="{{ route('settings.annees.index') }}"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.annees.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-            <i class="fas fa-calendar-alt w-6 text-center"></i>
-            <span class="sidebar-label ml-3">Années</span>
-        </a>
+                <a href="{{ route('settings.annees.index') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.annees.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-calendar-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Années</span>
+                </a>
+            </li>
+            <li>
 
-        <a href="{{ route('settings.academique.index') }}"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-            <i class="fas fa-sitemap w-6 text-center"></i>
-            <span class="sidebar-label ml-3">Cycles & Niveaux</span>
-        </a>
-
-        <a href="{{ route('settings.classes.index') }}"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-            <i class="fas fa-school w-6 text-center"></i>
-            <span class="sidebar-label ml-3">Classes & Salles</span>
-        </a>
-
-        <a href="{{ route('settings.matieres.index') }}"
-            class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-            <i class="fas fa-book w-6 text-center"></i>
-            <span class="sidebar-label ml-3">Matières & Coeffs</span>
-        </a>
-  
-        <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
+                <a href="{{ route('settings.academique.index') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-sitemap w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Cycles & Niveaux</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('settings.classes.index') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-school w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Classes & Salles</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('settings.matieres.index') }}"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-book w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Matières & Coeffs</span>
+                </a>
+            </li>
+            {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
             <i class="fas fa-chalkboard-teacher w-5"></i>
             <span class="text-sm">Classes & Programme</span>
-        </a>
-
+        </a> --}}
+        </ul>
 
     </nav>
 

@@ -10,20 +10,20 @@
     
     <div class="lg:col-span-1">
         <div class="bg-card p-6 rounded-2xl border border-border shadow-sm sticky top-24">
-            <h2 class="text-[10px] font-black uppercase text-primary mb-5 tracking-widest flex items-center gap-2">
+            <h2 class="text-[10px] font-black  text-primary mb-5 tracking-widest flex items-center gap-2">
                 <i class="fas fa-plus-circle"></i> Ajouter une matière
             </h2>
 
             <form action="{{ route('settings.matieres.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Nom complet</label>
+                    <label class="text-[12px] font-bold  text-muted-foreground ml-1">Nom complet</label>
                     <input type="text" name="nom" placeholder="ex: Mathématiques" 
                         class="w-full bg-secondary border-border rounded-xl text-sm px-4 py-3 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all" required>
                 </div>
 
                 <div>
-                    <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Code court (Trigramme)</label>
+                    <label class="text-[12px] font-bold  text-muted-foreground ml-1">Code court (Trigramme)</label>
                     <input type="text" name="code" placeholder="ex: MATH" 
                         class="w-full bg-secondary border-border rounded-xl text-sm px-4 py-3 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all uppercase" required>
                 </div>
@@ -40,7 +40,7 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-secondary/50 border-b border-border">
-                        <th class="px-6 py-4 text-[10px] font-black uppercase text-muted-foreground">Code</th>
+                        <th class="px-6 py-4 text-[10px] font-black  text-muted-foreground">Code</th>
                         <th class="px-6 py-4 text-[10px] font-black uppercase text-muted-foreground">Nom de la matière</th>
                         <th class="px-6 py-4 text-[10px] font-black uppercase text-muted-foreground text-right">Actions</th>
                     </tr>
@@ -49,7 +49,7 @@
                     @forelse($matieres as $matiere)
                         <tr class="hover:bg-secondary/20 transition-colors group">
                             <td class="px-6 py-4">
-                                <span class="bg-primary/10 text-primary text-[10px] font-black px-2 py-1 rounded uppercase">
+                                <span class="bg-primary/10 text-primary text-[10px] font-black px-2 py-1 rounded ">
                                     {{ $matiere->code }}
                                 </span>
                             </td>

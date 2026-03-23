@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('absences', function (Blueprint $table) {
             $table->id();
-             $table->integer('heures_justifiees')->default(0);
-    $table->integer('heures_non_justifiees')->default(0);
-    $table->foreignId('sequence_id')->constrained();
-    $table->foreignId('inscription_id')->constrained();
+            $table->integer('heures_justifiees')->default(0);
+            $table->integer('heures_non_justifiees')->default(0);
+            $table->foreignId('sequence_id')->constrained();
+            $table->foreignId('inscription_id')->constrained();
             $table->timestamps();
         });
     }

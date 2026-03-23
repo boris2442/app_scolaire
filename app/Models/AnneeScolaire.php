@@ -14,9 +14,10 @@ class AnneeScolaire extends Model
         'est_active' => 'boolean',
     ];
 
-public function trimestres() {
-    return $this->hasMany(Trimestre::class);
-}
+    public function trimestres()
+    {
+        return $this->hasMany(Trimestre::class);
+    }
 
 
     // Méthode pour activer cette année et désactiver les autres

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-               $table->decimal('valeur', 4, 2); // ex: 15.50
-    $table->foreignId('evaluation_id')->constrained();
-    $table->foreignId('inscription_id')->constrained();
-    $table->boolean('est_validee')->default(false);
+            $table->decimal('valeur', 4, 2); // ex: 15.50
+            $table->foreignId('evaluation_id')->constrained();
+            $table->foreignId('inscription_id')->constrained();
+            $table->boolean('est_validee')->default(false);
             $table->timestamps();
         });
     }

@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 
 class MatiereController extends Controller
 {
-public function index(Request $request)
+    public function index(Request $request)
     {
+        // $query = Matiere::query();
         $query = Matiere::query();
 
         // Petite recherche optionnelle
         if ($request->has('search')) {
             $query->where('nom', 'like', '%' . $request->search . '%')
-                  ->orWhere('code', 'like', '%' . $request->search . '%');
+                ->orWhere('code', 'like', '%' . $request->search . '%');
         }
 
         $matieres = $query->orderBy('nom')->paginate(10);

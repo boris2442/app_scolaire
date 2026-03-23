@@ -8,13 +8,15 @@ use App\Models\Classe;
 
 class Niveau extends Model
 {
-protected $fillable = ['nom', 'cycle_id'];
+    protected $fillable = ['nom', 'cycle_id'];
 
-public function cycle() {
-    return $this->belongsTo(Cycle::class);
-}
+    public function cycle()
+    {
+        return $this->belongsTo(Cycle::class);
+    }
 
-public function classes() {
-    return $this->hasMany(Classe::class);
-}
+    public function classes()
+    {
+        return $this->hasMany(Classe::class);
+    }
 }

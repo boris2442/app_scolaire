@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('niveaux', function (Blueprint $table) {
             $table->id();
             $table->string('nom'); // ex: 6ème
-    $table->foreignId('cycle_id')->constrained()->onDelete('cascade');
+            $table->foreignId('cycle_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
