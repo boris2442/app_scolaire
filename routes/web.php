@@ -4,6 +4,7 @@ use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
+use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
@@ -103,4 +104,16 @@ Route::prefix('settings/matieres')->name('settings.matieres.')->group(function (
 
 Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'edit'])->name('settings.classes.matieres.edit');
 Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    
+    // --- GESTION DES ELEVES ---
+    // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
+    Route::resource('eleves', EleveController::class);
+
+    // --- RECHERCHE RAPIDE (Optionnel pour plus tard) ---
+    Route::get('search/eleves', [EleveController::class, 'search'])->name('eleves.search');
+
+});
 require __DIR__ . '/auth.php';

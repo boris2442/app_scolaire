@@ -81,6 +81,9 @@
                                     <a href="{{ route('settings.classes.matieres.edit', $classe) }}"
                                         class="text-primary hover:bg-primary/10 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
                                         title="Configurer le programme">
+                                        <span class="text-[10px] font-black opacity-100">
+                                            Configurer
+                                        </span>
                                         <i class="fas fa-book-open text-xs"></i>
                                     </a>
 

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('eleve_id')->constrained();
-            $table->foreignId('salle_id')->constrained();
-            $table->foreignId('annee_scolaire_id')->constrained();
-            $table->timestamps();
+        Schema::table('eleves', function (Blueprint $table) {
+    $table->string('telephone_parent')->nullable();
+    $table->boolean('est_actif')->default(true);
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inscriptions');
+        Schema::table('eleves', function (Blueprint $table) {
+            //
+        });
     }
 };
