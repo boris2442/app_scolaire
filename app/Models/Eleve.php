@@ -2,32 +2,34 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
-  use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Eleve extends Model
 {
     protected $fillable = [
-        'matricule',
         'nom',
         'prenom',
         'date_naissance',
         'sexe',
         'lieu_naissance',
         'telephone_parent',
-        'adresse'
+        'adresse',
+        'photo', // <--- Ajoute ceci
+        'matricule'
     ];
 
-  
 
-/**
- * Un élève peut avoir plusieurs inscriptions (historique scolaire)
- */
-// app/Models/Eleve.php
-public function inscriptions(): HasMany
-{
-    return $this->hasMany(Inscription::class);
-}
+    /**
+     * Un élève peut avoir plusieurs inscriptions (historique scolaire)
+     */
+    // app/Models/Eleve.php
+    public function inscriptions(): HasMany
+    {
+        return $this->hasMany(Inscription::class);
+    }
     /**
      * Récupère les valeurs possibles de l'énumération 'sexe'
      */
@@ -55,4 +57,25 @@ public function inscriptions(): HasMany
 
         return $values ?: ['M', 'F'];
     }
+
+    // Dans app/Models/Eleve.php
+
+ 
+
+
+
+
+// app/Models/Eleve.php
+
+// Calcul de l'âge : Année Actuelle - Date de Naissance
+public function getAgeAttribute()
+{
+    return \Carbon\Carbon::parse($this->date_naissance)->age;
+}
+
+// Récupérer la dernière inscription (Niveau + Classe/Salle)
+public function getDerniereInscriptionAttribute()
+{
+    return $this->inscriptions()->latest()->first();
+}
 }

@@ -18,4 +18,8 @@ class Inscription extends Model
     {
         return $this->belongsTo(Classe::class);
     }
+    public function annee_scolaire() // avec un underscore _
+{
+    return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
+}
 }

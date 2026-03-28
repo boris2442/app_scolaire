@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EleveRequest;
 use App\Models\AnneeScolaire;
 use App\Models\Eleve;
 use App\Models\Inscription;
 use App\Models\Niveau;
+use App\Services\StudentAnalyticsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class EleveController extends Controller
 {
@@ -62,9 +64,41 @@ class EleveController extends Controller
 
     //     return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive'));
     // }
-    public function index(Request $request)
+
+    private function getKpis($anneeActiveId)
     {
+        // On récupère les IDs des élèves inscrits cette année pour filtrer nos stats
+        $stats = Inscription::where('annee_scolaire_id', $anneeActiveId)
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->selectRaw("
+            COUNT(*) as total,
+            SUM(CASE WHEN eleves.sexe = 'M' THEN 1 ELSE 0 END) as garcons,
+            SUM(CASE WHEN eleves.sexe = 'F' THEN 1 ELSE 0 END) as filles,
+            SUM(CASE WHEN inscriptions.statut = 'actif' THEN 1 ELSE 0 END) as confirmes
+        ")
+            ->first();
+
+        return [
+            'total' => $stats->total ?? 0,
+            'garcons' => $stats->garcons ?? 0,
+            'filles' => $stats->filles ?? 0,
+            'confirmes' => $stats->confirmes ?? 0,
+            'pourcentage_filles' => $stats->total > 0 ? round(($stats->filles / $stats->total) * 100) : 0,
+        ];
+    }
+    public function index(Request $request, StudentAnalyticsService $analytics)
+    {
+        // AJOUTE CETTE LIGNE JUSTE ICI (une seule fois pour nettoyer)
+        Cache::flush();
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+        // --- APPEL DES KPIs ---
+        // $kpis = $this->getKpis($anneeActive->id);
+        // Récupération des KPIs via le service
+        // $kpis = $analytics->getYearlyKpis($anneeActive->id);
+        // On récupère tout d'un coup
+        $stats = $analytics->getFullDashboardStats($anneeActive->id);
+
 
         // On commence la requête avec les relations nécessaires (Eager Loading)
         $query = Eleve::with(['inscriptions' => function ($q) use ($anneeActive) {
@@ -98,7 +132,7 @@ class EleveController extends Controller
 
         $niveaux = Niveau::with('classes')->get();
 
-        return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive'));
+        return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive', 'stats'));
     }
 
 
@@ -115,100 +149,18 @@ class EleveController extends Controller
         return view('pages.eleves.create', compact('anneeActive', 'niveaux', 'sexes'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // 1. Validation stricte
-    //     $request->validate([
-    //         'nom' => 'required|string|max:255',
-    //         'date_naissance' => 'required|date',
-    //         'sexe' => 'required|in:M,F',
-    //         'salle_id' => 'required|exists:salles,id',
-    //     ]);
-
-    //     // 2. Génération du Matricule (Ex: 26-0001)
-    //     $anneeSuffixe = date('y'); 
-    //     $totalEleves = Eleve::count();
-    //     $matricule = $anneeSuffixe . '-' . str_pad($totalEleves + 1, 4, '0', STR_PAD_LEFT);
-
-    //     // 3. Création de l'élève
-    //     $eleve = \App\Models\Eleve::create([
-    //         'matricule' => $matricule,
-    //         'nom' => strtoupper($request->nom), // Toujours en majuscules pour le nom
-    //         'prenom' => $request->prenom,
-    //         'date_naissance' => $request->date_naissance,
-    //         'sexe' => $request->sexe,
-    //         'lieu_naissance' => $request->lieu_naissance,
-    //         'telephone_parent' => $request->telephone_parent,
-    //         'adresse' => $request->adresse,
-    //     ]);
-
-    //     // 4. Inscription immédiate dans l'année active
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-    //     Inscription::create([
-    //         'eleve_id' => $eleve->id,
-    //         'salle_id' => $request->salle_id,
-    //         'annee_scolaire_id' => $anneeActive->id,
-    //         'date_inscription' => now(),
-    //     ]);
-
-    //     return redirect()->route('admin.eleves.index')
-    //         ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
-    // }
-
-
-    // public function store(EleveRequest $request)
-    // {
-
-    //     // 1. Validation stricte
-    //     $request->validated();
-
-    //     // 2. Génération du Matricule (Ex: 26-0001)
-    //     $anneeSuffixe = date('y');
-    //     $totalEleves = Eleve::count();
-    //     $matricule = $anneeSuffixe . '-' . str_pad($totalEleves + 1, 4, '0', STR_PAD_LEFT);
-
-
-
-    //     // Récupère uniquement les données qui ont passé la validation
-    //     $data = $request->validated();
-
-    //     $eleve = Eleve::create([
-    //         'matricule' => $matricule,
-    //         'nom' => strtoupper($data['nom']),
-    //         'prenom' => $data['prenom'],
-    //         'date_naissance' => $data['date_naissance'],
-    //         'sexe' => $data['sexe'],
-    //         'lieu_naissance' => $data['lieu_naissance'] ?? null,
-    //         'telephone_parent' => $data['telephone_parent'] ?? null,
-    //         'adresse' => $data['adresse'] ?? null,
-
-    //     ]);
-
-    //     // 4. Inscription immédiate dans l'année active
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-    //     Inscription::create([
-    //         'eleve_id' => $eleve->id,
-    //         'salle_id' => $request->salle_id,
-    //         'annee_scolaire_id' => $anneeActive->id,
-    //         'date_inscription' => now(),
-    //     ]);
-    //     return redirect()->route('admin.eleves.index')
-    //         ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
-
-
-
-    // }
-
-
 
 
     public function store(EleveRequest $request)
     {
         // 1. Récupérer les données validées
         $data = $request->validated();
-
+        // Gestion de l'image
+        if ($request->hasFile('photo')) {
+            // On stocke l'image dans storage/app/public/photos_eleves
+            $path = $request->file('photo')->store('photos_eleves', 'public');
+            $data['photo'] = $path;
+        }
         // 2. Utiliser une transaction pour la sécurité des données
         return DB::transaction(function () use ($data, $request) {
 
@@ -227,6 +179,7 @@ class EleveController extends Controller
                 'lieu_naissance' => $data['lieu_naissance'] ?? null,
                 'telephone_parent' => $data['telephone_parent'] ?? null,
                 'adresse' => $data['adresse'] ?? null,
+                'photo' => $data['photo'] ?? null,
             ]);
 
             // 4. Récupération de l'année scolaire active
@@ -247,5 +200,31 @@ class EleveController extends Controller
             return redirect()->route('admin.eleves.index')
                 ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
         });
+    }
+
+    /**
+     * Affiche le dossier complet d'un élève.
+     */
+    /**
+     * Affiche le dossier complet d'un élève.
+     * @param  \App\Models\Eleve  $eleve
+     */
+    //     public function show(Eleve $eleve)
+    //     {
+    //         // On charge les relations 'inscriptions' avec leurs classes et années scolaires
+    //         // pour que la vue puisse afficher l'historique sans refaire de requêtes SQL.
+
+    //         $eleve->load(['inscriptions.classe', 'inscriptions.anneeScolaire']);
+    //  @dump($eleve->toArray());
+    //         return view('pages.eleves.show', compact('eleve'));
+    //     }
+
+
+    public function show($id)
+    {
+        $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire', 'inscriptions.classe.niveau'])
+            ->findOrFail($id);
+
+        return view('pages.eleves.show', compact('eleve'));
     }
 }

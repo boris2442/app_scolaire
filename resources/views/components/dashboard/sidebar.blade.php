@@ -97,7 +97,8 @@
             <li>
 
 
-                <a href="{{ route('settings.index') }}"
+                <a href="{{ route('settings.index') }}" title="Parametres Ecole"
+                    aria-label="Configuration des parametres de l ecole"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-cogs w-6 text-center"></i>
                     <span class="sidebar-label ml-3 font-medium">Paramètres École</span>
@@ -108,7 +109,8 @@
             </div>
             <li>
 
-                <a href="{{ route('settings.annees.index') }}"
+                <a href="{{ route('settings.annees.index') }}" aria-label="Gestion des Années scolaires"
+                    title="Anees Scolaires"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.annees.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-calendar-alt w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Années</span>
@@ -116,24 +118,34 @@
             </li>
             <li>
 
-                <a href="{{ route('settings.academique.index') }}"
+                <a href="{{ route('settings.academique.index') }}" title="Niveaux et cycles"
+                    aria-label="Niveaux et cycles"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-sitemap w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Cycles & Niveaux</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('settings.classes.index') }}"
+                <a href="{{ route('settings.classes.index') }}" title="Clases et salles" aria-label="Clases et salles"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-school w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Classes & Salles</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('settings.matieres.index') }}"
+                <a href="{{ route('settings.matieres.index') }}" title="Matières & Coeffs"
+                    aria-label="Matières & Coeffs"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-book w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Matières & Coeffs</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.eleves.index') }}" title="Eleves"
+                    aria-label="Eleves"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.eleves.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-book w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Eleves</span>
                 </a>
             </li>
             {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
@@ -263,12 +275,11 @@
         }
     });
 
-        function toggleSidebar() {
+    function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
 
         sidebar.classList.toggle('-translate-x-full');
         overlay.classList.toggle('hidden');
     }
-
 </script>

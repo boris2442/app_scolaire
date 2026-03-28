@@ -62,10 +62,12 @@ Ce module permet de configurer l'environnement avant d'accueillir des élèves.
 
 [ ] Processus d'Inscription (Lier un élève à une salle pour une année donnée)
 
+
+
 4. Module Pédagogique (Affectations)
 [ ] Affectation des enseignants (Qui enseigne quelle matière dans quelle salle ?)
 
-[ ] Gestion des emplois du temps (Optionnel, selon ton besoin)
+
 
 5. Module Évaluations (Le Cœur du Système)
 [ ] Interface de saisie des Notes par séquence

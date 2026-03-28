@@ -12,10 +12,13 @@ class AnneeScolaireController extends Controller
 {
     public function index()
     {
-        $annees = AnneeScolaire::orderBy('date_debut', 'desc')->get();
-        $totalAnnees = $annees->count();
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $annees = AnneeScolaire::with(['trimestres.sequences'])
 
+            ->orderBy('date_debut', 'desc')->get();
+        $totalAnnees = $annees->count();
+        //$anneeActive = AnneeScolaire::where('est_active', true)->first();
+        // On récupère l'année active (petit bonus : on peut la chercher dans la collection déjà chargée)
+        $anneeActive = $annees->where('est_active', true)->first();
         return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
@@ -26,29 +29,30 @@ class AnneeScolaireController extends Controller
     //     return back()->with('success', 'Année scolaire ajoutée.');
     // }
 
-public function store(StoreAnneeScolaireRequest $request) {
-    DB::transaction(function () use ($request) {
-        // 1. Créer l'année
-        $annee = AnneeScolaire::create($request->validated());
+    public function store(StoreAnneeScolaireRequest $request)
+    {
+        DB::transaction(function () use ($request) {
+            // 1. Créer l'année
+            $annee = AnneeScolaire::create($request->validated());
 
-        // 2. Créer les 3 trimestres et leurs séquences
-        for ($i = 1; $i <= 3; $i++) {
-            $trimestre = $annee->trimestres()->create([
-                'nom' => "Trimestre $i"
-            ]);
-
-            // Pour chaque trimestre, on crée 2 séquences (1&2, 3&4, 5&6)
-            for ($j = 1; $j <= 2; $j++) {
-                $numSeq = ($i - 1) * 2 + $j;
-                $trimestre->sequences()->create([
-                    'nom' => "Séquence $numSeq"
+            // 2. Créer les 3 trimestres et leurs séquences
+            for ($i = 1; $i <= 3; $i++) {
+                $trimestre = $annee->trimestres()->create([
+                    'nom' => "Trimestre $i"
                 ]);
-            }
-        }
-    });
 
-    return back()->with('success', 'Année scolaire et périodes pédagogiques générées avec succès !');
-}
+                // Pour chaque trimestre, on crée 2 séquences (1&2, 3&4, 5&6)
+                for ($j = 1; $j <= 2; $j++) {
+                    $numSeq = ($i - 1) * 2 + $j;
+                    $trimestre->sequences()->create([
+                        'nom' => "Séquence $numSeq"
+                    ]);
+                }
+            }
+        });
+
+        return back()->with('success', 'Année scolaire et périodes pédagogiques générées avec succès !');
+    }
 
 
 

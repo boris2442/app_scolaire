@@ -1,7 +1,119 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
-    <div class="min-h-screen bg-background p-4 lg:p-8 text-foreground">
+    <div class="min-h-screen bg-background p-4 lg:p-8 text-foreground relative">
+
+
+
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Registre des élèves</h1>
+                <p class="text-sm text-muted-foreground">{{ $stats['total'] }} apprenants enregistrés cette année</p>
+            </div>
+
+            <div class=" inline-block text-left" x-data="{ open: false }">
+                <button @click="open = !open" @click.away="open = false"
+                    class="p-2 hover:bg-secondary rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                    </svg>
+                </button>
+                <div x-show="open" x-transition
+                    class="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-lg z-50 overflow-auto max-h-[200px]">
+                    <div class="py-1">
+                        <header
+                            class="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-border mb-1">
+                            Actions</header>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
+                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="max-w-7xl mx-auto px-6 mb-10">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
+                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Apprenants</p>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-bold">{{ $stats['total'] }}</span>
+                        <span class="text-[10px] text-primary font-medium">Inscrits</span>
+                    </div>
+                </div>
+
+                <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
+                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Parité F/G</p>
+                    <div class="flex flex-col gap-2">
+                        <span class="text-lg font-semibold">{{ $stats['filles'] }}f · {{ $stats['garcons'] }}g</span>
+                        <div class="w-full h-1 bg-secondary rounded-full overflow-hidden flex">
+                            @php $p = $stats['total'] > 0 ? ($stats['filles'] / $stats['total']) * 100 : 0; @endphp
+                            <div class="h-full bg-primary transition-all duration-500" style="width: {{ $p }}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
+                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Nouveaux</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-bold text-green-500">+{{ $stats['nouveaux'] }}%</span>
+                        <div class="px-1.5 py-0.5 rounded bg-green-500/10 text-[9px] text-green-600 font-bold italic">PRO
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-card p-5 rounded-xl border border-border shadow-sm col-span-2 lg:col-span-1">
+                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Répartition
+                        cycles</p>
+                    <div class="flex flex-wrap gap-3">
+                        @foreach ($stats['cycles'] as $c)
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-muted-foreground font-bold">{{ $c['cycle'] }}</span>
+                                <span class="text-xs font-semibold">{{ $c['total'] }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
 
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
             <div>
@@ -38,7 +150,8 @@
                     @foreach ($niveaux as $n)
                         <optgroup label="{{ $n->nom }}" class="bg-card">
                             @foreach ($n->classes as $c)
-                                <option value="{{ $c->id }}" {{ request('classe_id') == $c->id ? 'selected' : '' }}>
+                                <option value="{{ $c->id }}"
+                                    {{ request('classe_id') == $c->id ? 'selected' : '' }}>
                                     {{ $n->nom }} {{ $c->nom }}</option>
                             @endforeach
                         </optgroup>
@@ -78,7 +191,8 @@
                     <thead class="bg-secondary/50 border-b border-border">
                         <tr>
                             <th class="px-6 py-4 text-[10px] font-black uppercase text-foreground/50">Apprenant</th>
-                            <th class="px-6 py-4 text-[10px] font-black uppercase text-foreground/50 text-center">Genre</th>
+                            <th class="px-6 py-4 text-[10px] font-black uppercase text-foreground/50 text-center">Genre
+                            </th>
                             <th class="px-6 py-4 text-[10px] font-black uppercase text-foreground/50 text-center">Position
                                 Académique</th>
                             <th class="px-6 py-4 text-[10px] font-black uppercase text-foreground/50 text-right">Actions
@@ -97,8 +211,9 @@
                                         <div>
                                             <p class="text-sm font-black uppercase">{{ $eleve->nom }}
                                                 {{ $eleve->prenom }}</p>
-                                            <p class="text-[10px] text-primary font-bold tracking-wider">
+                                            <p class="text-[10px] text-primary font-bold tracking-wider"  >
                                                 {{ $eleve->matricule }}</p>
+                                                <span class="text-[10px] text-primary font-bold tracking-wider" >Inscrit le <i>{{$eleve->created_at}}</i></span>
                                         </div>
                                     </div>
                                 </td>
@@ -120,7 +235,8 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2 text-foreground/30">
-                                        <a href="#" class="p-2 hover:text-primary transition-colors"><i
+                                        <a href="{{ route('admin.eleves.show', $eleve) }}"
+                                            class="p-2 hover:text-primary transition-colors"><i
                                                 class="fas fa-fingerprint"></i></a>
                                         <a href="#" class="p-2 hover:text-danger transition-colors"><i
                                                 class="fas fa-trash-alt"></i></a>
