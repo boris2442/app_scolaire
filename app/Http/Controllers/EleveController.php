@@ -8,63 +8,23 @@ use App\Models\AnneeScolaire;
 use App\Models\Eleve;
 use App\Models\Inscription;
 use App\Models\Niveau;
+use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EleveController extends Controller
 {
 
-    // public function index(Request $request)
-    // {
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
+    protected $scolarite;
 
-    //     $query = Eleve::with(['inscriptions' => function ($q) use ($anneeActive) {
-    //         $q->where('annee_scolaire_id', $anneeActive->id)->with('classe');
-    //     }]);
-
-    //     // Recherche
-    //     if ($request->filled('search')) {
-    //         $search = $request->search;
-    //         $query->where(function ($q) use ($search) {
-    //             $q->where('nom', 'LIKE', "%{$search}%")
-    //                 ->orWhere('prenom', 'LIKE', "%{$search}%")
-    //                 ->orWhere('matricule', 'LIKE', "%{$search}%");
-    //         });
-    //     }
-
-    //     $eleves = $query->latest()->paginate(15)->withQueryString();
-
-    //     return view('pages.eleves.index', compact('eleves', 'anneeActive'));
-    // }
-
-    // public function index(Request $request)
-    // {
-    //     // 1. On récupère l'année active (le contexte est roi)
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-    //     // 2. On prépare la requête avec les relations pour éviter le "N/A"
-    //     $query = Eleve::with(['inscriptions' => function ($q) use ($anneeActive) {
-    //         $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
-    //     }]);
-
-    //     // 3. Système de filtre (si on choisit une classe dans l'URL)
-    //     if ($request->has('classe_id')) {
-    //         $query->whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
-    //             $q->where('classe_id', $request->classe_id)
-    //                 ->where('annee_scolaire_id', $anneeActive->id);
-    //         });
-    //     }
-
-    //     // 4. On pagine ! (Crucial pour les 10 000 élèves)
-    //     $eleves = $query->latest()->paginate(15);
-
-    //     $niveaux = Niveau::with('classes')->get();
-
-    //     return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive'));
-    // }
-
+    // On injecte le service via le constructeur pour l'avoir partout
+    public function __construct(ScolariteService $scolarite)
+    {
+        $this->scolarite = $scolarite;
+    }
     private function getKpis($anneeActiveId)
     {
         // On récupère les IDs des élèves inscrits cette année pour filtrer nos stats
@@ -128,7 +88,7 @@ class EleveController extends Controller
         }
 
         // PAGINATION : Crucial pour la performance (15 par page)
-        $eleves = $query->latest()->paginate(15)->withQueryString();
+        $eleves = $query->latest()->paginate(5)->withQueryString();
 
         $niveaux = Niveau::with('classes')->get();
 
@@ -226,5 +186,129 @@ class EleveController extends Controller
             ->findOrFail($id);
 
         return view('pages.eleves.show', compact('eleve'));
+    }
+
+
+
+
+
+
+
+    public function edit($id)
+    {
+        $eleve = Eleve::with('inscriptions')->findOrFail($id);
+
+        // Utilisation du service
+        $anneeActive = $this->scolarite->getAnneeActive();
+        $inscriptionActuelle = $this->scolarite->getClasseActuelle($eleve->id);
+
+        $niveaux = Niveau::with('classes')->get();
+        $sexes = Eleve::getSexeOptions();
+
+        return view('pages.eleves.edit', compact(
+            'eleve',
+            'anneeActive',
+            'niveaux',
+            'sexes',
+            'inscriptionActuelle'
+        ));
+    }
+
+    public function update(EleveRequest $request, $id)
+    {
+        $eleve = Eleve::findOrFail($id);
+        $data = $request->validated();
+
+        return DB::transaction(function () use ($data, $request, $eleve) {
+
+            // 1. Gestion de la Photo (Remplacement)
+            if ($request->hasFile('photo')) {
+                // Supprimer l'ancienne si elle existe
+                if ($eleve->photo && Storage::disk('public')->exists($eleve->photo)) {
+                    Storage::disk('public')->delete($eleve->photo);
+                }
+                $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
+            }
+
+            // 2. Mise à jour de l'élève
+            $eleve->update([
+                'nom' => strtoupper($data['nom']),
+                'prenom' => $data['prenom'],
+                'date_naissance' => $data['date_naissance'],
+                'sexe' => $data['sexe'],
+                'lieu_naissance' => $data['lieu_naissance'] ?? $eleve->lieu_naissance,
+                'telephone_parent' => $data['telephone_parent'] ?? $eleve->telephone_parent,
+                'adresse' => $data['adresse'] ?? $eleve->adresse,
+                'photo' => $data['photo'] ?? $eleve->photo,
+            ]);
+
+            // 3. Mise à jour de la Classe (Inscription)
+            // On cherche l'inscription de l'année active pour cet élève
+            $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+            if ($anneeActive) {
+                $inscription = Inscription::where('eleve_id', $eleve->id)
+                    ->where('annee_scolaire_id', $anneeActive->id)
+                    ->first();
+
+                if ($inscription) {
+                    $inscription->update(['classe_id' => $request->classe_id]);
+                }
+            }
+
+            return redirect()->route('admin.eleves.show', $eleve->id)
+                ->with('success', "Le dossier de {$eleve->nom} a été mis à jour.");
+        });
+    }
+
+
+
+
+
+
+
+
+    public function destroy($id)
+    {
+        $eleve = Eleve::findOrFail($id);
+
+        // On archive l'élève
+        $eleve->delete();
+
+        return redirect()->route('admin.eleves.index')
+            ->with('success', "L'élève {$eleve->nom} a été déplacé dans la corbeille.");
+    }
+
+
+
+
+    // Afficher uniquement les élèves supprimés
+    public function trashed()
+    {
+        $elevesArchives = Eleve::onlyTrashed()
+            ->orderByDesc('deleted_at')
+            ->paginate(10);
+
+        return view('pages.eleves.trashed', compact('elevesArchives'));
+    }
+
+    // Restaurer un élève
+    public function restore($id)
+    {
+        // On utilise withTrashed() pour pouvoir trouver l'élève même s'il est "supprimé"
+        $eleve = Eleve::withTrashed()->findOrFail($id);
+        $eleve->restore();
+
+        return redirect()->route('admin.eleves.index')
+            ->with('success', "Le dossier de {$eleve->nom} a été restauré avec succès.");
+    }
+
+    // Suppression définitive (Optionnel)
+    public function forceDelete($id)
+    {
+        $eleve = Eleve::withTrashed()->findOrFail($id);
+        $eleve->forceDelete(); // Ici, la ligne est réellement effacée de la BD
+
+        return redirect()->back()->with('success', "L'élève a été définitivement supprimé.");
     }
 }

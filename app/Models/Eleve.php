@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes; // <--- DOIT ÊTRE LÀ
 
 class Eleve extends Model
 {
+    use SoftDeletes; // <--- DOIT ÊTRE LÀ
     protected $fillable = [
         'nom',
         'prenom',
@@ -60,22 +62,22 @@ class Eleve extends Model
 
     // Dans app/Models/Eleve.php
 
- 
 
 
 
 
-// app/Models/Eleve.php
 
-// Calcul de l'âge : Année Actuelle - Date de Naissance
-public function getAgeAttribute()
-{
-    return \Carbon\Carbon::parse($this->date_naissance)->age;
-}
+    // app/Models/Eleve.php
 
-// Récupérer la dernière inscription (Niveau + Classe/Salle)
-public function getDerniereInscriptionAttribute()
-{
-    return $this->inscriptions()->latest()->first();
-}
+    // Calcul de l'âge : Année Actuelle - Date de Naissance
+    public function getAgeAttribute()
+    {
+        return \Carbon\Carbon::parse($this->date_naissance)->age;
+    }
+
+    // Récupérer la dernière inscription (Niveau + Classe/Salle)
+    public function getDerniereInscriptionAttribute()
+    {
+        return $this->inscriptions()->latest()->first();
+    }
 }

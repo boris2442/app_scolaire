@@ -106,14 +106,30 @@ Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class
 Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
 
 
+
+
+
+
+
+   Route::prefix('admin/eleves')->name('admin.eleves.')->group(function () {
+        Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
+        Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
+        Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
+    });
+
+
+
 Route::prefix('admin')->name('admin.')->group(function () {
-    
+
     // --- GESTION DES ELEVES ---
     // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
+ 
+
     Route::resource('eleves', EleveController::class);
 
     // --- RECHERCHE RAPIDE (Optionnel pour plus tard) ---
     Route::get('search/eleves', [EleveController::class, 'search'])->name('eleves.search');
-
 });
+
+
 require __DIR__ . '/auth.php';

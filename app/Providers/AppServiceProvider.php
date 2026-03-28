@@ -18,12 +18,12 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
- public function boot()
-{
-    // Partager l'objet 'ecole' avec toutes les vues
-    view()->composer('*', function ($view) {
-        $ecole = Etablissement::first() ?? new \App\Models\Etablissement();
-        $view->with('ecole', $ecole);
-    });
-}
+    public function boot()
+    {
+        // Partager l'objet 'ecole' avec toutes les vues
+        view()->composer('*', function ($view) {
+            $ecole = Etablissement::first() ?? new \App\Models\Etablissement();
+            $view->with('ecole', $ecole);
+        });
+    }
 }

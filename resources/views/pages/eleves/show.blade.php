@@ -36,7 +36,7 @@
                     class="px-4 py-2 bg-secondary border border-border rounded-lg text-xs font-bold  hover:bg-border transition-all">Imprimer
                     Fiche</button>
                 <button
-                    class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-bold  shadow-lg shadow-primary/20">Modifier</button>
+                    class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-bold  shadow-lg shadow-primary/20"> <a href="{{ route('admin.eleves.edit', $eleve->id) }}" class="text-white no-underline">Modifier</a></button>
             </div>
         </div>
 
