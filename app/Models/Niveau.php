@@ -19,4 +19,13 @@ class Niveau extends Model
     {
         return $this->hasMany(Classe::class);
     }
+
+
+    public function matieres()
+{
+    // On précise : Modèle lié, Table pivot, Clé du modèle actuel, Clé du modèle lié
+    return $this->belongsToMany(Matiere::class, 'classe_matiere', 'classe_id', 'matiere_id')
+                ->withPivot('coefficient', 'ordre')
+                ->withTimestamps();
+}
 }

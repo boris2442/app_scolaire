@@ -148,6 +148,22 @@
                     <span class="sidebar-label ml-3">Eleves</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.affectations.index') }}" title="Affectations"
+                    aria-label="Affectations"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.affectations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-book w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Affectation</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.enseignants.index') }}" title="Enseignants"
+                    aria-label="Enseignants"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Enseignants</span>
+                </a>
+            </li>
             {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
             <i class="fas fa-chalkboard-teacher w-5"></i>
             <span class="text-sm">Classes & Programme</span>

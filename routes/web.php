@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademiqueController;
+use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\EnseignantController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -111,11 +112,11 @@ Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::clas
 
 
 
-   Route::prefix('admin/eleves')->name('admin.eleves.')->group(function () {
-        Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
-        Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
-        Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
-    });
+Route::prefix('admin/eleves')->name('admin.eleves.')->group(function () {
+    Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
+    Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
+    Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
+});
 
 
 
@@ -123,7 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // --- GESTION DES ELEVES ---
     // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
- 
+
 
     Route::resource('eleves', EleveController::class);
 
@@ -131,5 +132,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('search/eleves', [EleveController::class, 'search'])->name('eleves.search');
 });
 
+Route::prefix('admin')->name('admin.')->group(function () {
 
+
+
+// --- MODULE ENSEIGNANTS ---
+    Route::get('enseignants', [EnseignantController::class, 'index'])->name('enseignants.index');
+    Route::get('enseignants/create', [EnseignantController::class, 'create'])->name('enseignants.create');
+    Route::post('enseignants', [EnseignantController::class, 'store'])->name('enseignants.store');
+
+    // --- MODULE PEDAGOGIQUE (AFFECTATIONS) ---
+    // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
+    Route::get('affectations', [AffectationController::class, 'index'])->name('affectations.index');
+    Route::post('affectations', [AffectationController::class, 'store'])->name('affectations.store');
+});
 require __DIR__ . '/auth.php';
