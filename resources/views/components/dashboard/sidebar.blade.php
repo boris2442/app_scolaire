@@ -168,6 +168,13 @@
                     <span class="sidebar-label ml-3">Evaluations</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.trimestres.index') }}" title="Trimestres" aria-label="Trimestres"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.trimestres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Trimestres</span>
+                </a>
+            </li>
             {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
             <i class="fas fa-chalkboard-teacher w-5"></i>
             <span class="text-sm">Classes & Programme</span>

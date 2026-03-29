@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Trimestre extends Model
 {
+    public const NOMS_VALIDES = ['1er Trimestre', '2e Trimestre', '3e Trimestre'];
     protected $fillable = ['nom', 'annee_scolaire_id'];
 
     public function sequences()

@@ -6,16 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Evaluation extends Model
 {
-    protected $fillable = [
-        'matiere_id',
-        'sequence_id',
-        'classe_id',
-        'date_evaluation',
-        'type_evaluation',
-        'affectation_id',
-        'titre',
-    ];
-   // C'est cette fonction que Laravel cherchait et n'a pas trouvée
+    protected $fillable = ['titre', 'sequence_id', 'classe_id', 'matiere_id', 'enseignant_id', 'date_evaluation'];
+    // C'est cette fonction que Laravel cherchait et n'a pas trouvée
     public function matiere()
     {
         return $this->belongsTo(Matiere::class);

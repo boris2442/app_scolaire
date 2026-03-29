@@ -11,6 +11,7 @@ use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TrimestreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -158,5 +159,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
     Route::get('/evaluations/{id}/saisie', [EvaluationController::class, 'saisie'])->name('evaluations.saisie');
     Route::post('/evaluations/{id}/bulk-store', [EvaluationController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
+});
+
+
+
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('trimestres', TrimestreController::class);
 });
 require __DIR__ . '/auth.php';

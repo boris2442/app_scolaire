@@ -172,25 +172,28 @@ class EvaluationController extends Controller
 
 
 
-
     public function store(Request $request)
     {
-        $request->validate([
-            'titre' => 'required|string',
-            'sequence_id' => 'required|exists:sequences,id',
-            'matiere_id' => 'required|exists:matieres,id',
-            'classe_id' => 'required|exists:classes,id',
+        // 1. On récupère l'enseignant lié à l'utilisateur connecté
+        $enseignant = auth()->user()->enseignant;
+
+        // SECURITÉ : Si l'utilisateur n'est pas un enseignant, on bloque
+        if (!$enseignant) {
+            return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+        }
+
+        $affectation = Affectation::findOrFail($request->affectation_id);
+
+        // 2. Création avec TOUTES les colonnes obligatoires
+        Evaluation::create([
+            'titre'         => $request->titre,
+            'sequence_id'   => $request->sequence_id,
+            'classe_id'     => $affectation->classe_id, // Récupéré via l'affectation
+            'matiere_id'    => $affectation->matiere_id, // Récupéré via l'affectation
+            'enseignant_id' => $enseignant->id,         // C'EST CETTE LIGNE QUI MANQUAIT !
+            'date_evaluation' => now(),
         ]);
 
-        // On crée l'évaluation (le conteneur des notes)
-        $evaluation = Evaluation::create([
-            'titre' => $request->titre,
-            'sequence_id' => $request->sequence_id,
-            'matiere_id' => $request->matiere_id,
-            'classe_id' => $request->classe_id,
-        ]);
-
-        // On redirige vers la page de saisie des notes pour cette évaluation
-        return redirect()->route('admin.evaluations.saisie', $evaluation->id);
+        return redirect()->route('admin.evaluations.index')->with('success', 'Évaluation initialisée !');
     }
 }
