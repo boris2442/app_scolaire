@@ -24,74 +24,6 @@ class EvaluationController extends Controller
     }
 
 
-    // public function index()
-    // {
-    //     // On récupère le profil enseignant de l'utilisateur connecté
-    //     $enseignant = auth()->user()->enseignant;
-    //     // Dans EvaluationController index()
-
-    //     // On récupère uniquement les évaluations créées par lui
-    //     // OU les évaluations des classes/matières qui lui sont affectées
-    //     $evaluations = Evaluation::whereHas('matiere', function ($query) use ($enseignant) {
-    //         $query->whereIn('id', $enseignant->affectations->pluck('matiere_id'));
-    //     })
-    //         ->with(['classe', 'matiere', 'sequence'])
-    //         ->latest()
-    //         ->get();
-
-    //     return view('pages.evaluations.index', compact('evaluations'));
-    // }
-
-
-    // public function index()
-    // {
-    //     $anneeActive = $this->scolarite->getAnneeActive();
-    //     $enseignant = auth()->user()->enseignant;
-
-    //     $sequences = Sequence::all();
-
-    //     $affectations = $enseignant
-    //         ? $enseignant->affectations()->with(['matiere', 'niveau', 'classe'])->get()
-    //         : collect();
-
-    //     // --- DEBUT DU CODE DE TEST A AJOUTER ---
-    //     if ($enseignant && $affectations->count() === 0) {
-    //         // On récupère les premiers éléments existants en base pour créer un test
-    //         $matiere = \App\Models\Matiere::first();
-    //         $classe = \App\Models\Classe::first();
-    //         $niveau = \App\Models\Niveau::first();
-
-    //         if ($matiere && $classe && $niveau) {
-    //             \App\Models\Affectation::create([
-    //                 'enseignant_id'     => $enseignant->id,
-    //                 'matiere_id'        => $matiere->id,
-    //                 'classe_id'         => $classe->id,
-    //                 'niveau_id'         => $niveau->id,
-    //                 'annee_scolaire_id' => $anneeActive->id,
-    //             ]);
-    //             // On rafraîchit la page pour que $affectations ne soit plus vide
-    //             return redirect()->refresh();
-    //         }
-    //     }
-    //     // --- FIN DU CODE DE TEST ---
-
-    //     dd([
-    //         'Utilisateur_ID'      => auth()->id(),
-    //         'role'                => auth()->user()->role,
-    //         'Est_Enseignant'      => $enseignant ? 'OUI' : 'NON',
-    //         'Nombre_Affectations' => $affectations->count(),
-    //         'Donnees'             => $affectations->toArray()
-    //     ]);
-
-    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence', 'niveau'])
-    //         ->latest()
-    //         ->get();
-
-    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
-    // }
-
-
-
 
 
 
@@ -125,75 +57,151 @@ class EvaluationController extends Controller
 
 
 
+    // public function saisie($id)
+    // {
+    //     $evaluation = Evaluation::findOrFail($id);
+    //     $user = auth()->user();
 
+    //     // VERIFICATION : Est-ce que ce prof est bien affecté à cette matière dans cette classe ?
+    //     $estAffecte = Affectation::where([
+    //         'enseignant_id' => $user->enseignant->id,
+    //         'classe_id' => $evaluation->classe_id,
+    //         'matiere_id' => $evaluation->matiere_id,
+    //         'annee_scolaire_id' => $this->scolarite->getAnneeActive()->id
+    //     ])->exists();
+
+    //     if (!$estAffecte && !$user->hasRole('admin')) {
+    //         return redirect()->route('dashboard')->with('error', 'Accès refusé : Vous n\'enseignez pas cette matière dans cette classe.');
+    //     }
+
+    //     // Si c'est bon, on continue...
+    //     // Dans EvaluationController.php
+    //     // $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+    //     //     ->with('eleve')
+    //     //     ->get();
+
+    //     // $notesExistantes = Note::where('evaluation_id', $evaluation->id)
+    //     //     ->get()
+    //     //     ->keyBy('inscription_id');
+    //     $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+    //         ->with('eleve')
+    //         ->get();
+
+    //     // ON FORCE LE TYPE : get() puis mapWithKeys pour être sûr que l'ID est un entier
+    //     $notesExistantes = Note::where('evaluation_id', $id)
+    //         ->get()
+    //         ->mapWithKeys(function ($note) {
+    //             return [(int)$note->inscription_id => $note];
+    //         });
+
+
+    //     return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
+    // }
+    // public function saisie($id)
+    // {
+    //     $evaluation = Evaluation::findOrFail($id);
+
+    //     // 1. On récupère les inscriptions de la classe
+    //     $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)->get();
+    //     $idsInscriptions = $inscriptions->pluck('id')->toArray();
+
+    //     // 2. On récupère TOUTES les notes qui existent pour cette évaluation
+    //     $notesBrutes = Note::where('evaluation_id', $id)->get();
+
+    //     // 3. On indexe par inscription_id
+    //     $notesExistantes = $notesBrutes->keyBy('inscription_id');
+
+    //     // DEBUG : Si tu ne vois toujours rien, décommente la ligne suivante pour voir le verdict :
+    //     // dd($idsInscriptions, $notesBrutes->toArray());
+
+    //     return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
+    // }
     public function saisie($id)
     {
-        $evaluation = Evaluation::findOrFail($id);
-        $user = auth()->user();
+        $evaluation = Evaluation::with('classe.niveau', 'matiere', 'sequence')->findOrFail($id);
 
-        // VERIFICATION : Est-ce que ce prof est bien affecté à cette matière dans cette classe ?
-        $estAffecte = Affectation::where([
-            'enseignant_id' => $user->enseignant->id,
-            'classe_id' => $evaluation->classe_id,
-            'matiere_id' => $evaluation->matiere_id,
-            'annee_scolaire_id' => $this->scolarite->getAnneeActive()->id
-        ])->exists();
+        $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+            ->with('eleve')
+            ->get();
 
-        if (!$estAffecte && !$user->hasRole('admin')) {
-            return redirect()->route('dashboard')->with('error', 'Accès refusé : Vous n\'enseignez pas cette matière dans cette classe.');
-        }
-
-        // Si c'est bon, on continue...
-        $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)->with('eleve')->get();
-        $notesExistantes = Note::where('evaluation_id', $evaluation->id)->get()->keyBy('inscription_id');
+        // On force l'indexation par l'ID d'inscription en tant qu'entier
+        $notesExistantes = Note::where('evaluation_id', $id)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [(int)$item->inscription_id => $item];
+            });
 
         return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
     }
 
-
-
-    public function bulkStoreNotes(Request $request, $evaluationId)
-    {
-        // Plus besoin de chercher l'année ici, elle est déjà dans $this->anneeActive
-        foreach ($request->notes as $inscriptionId => $valeur) {
-            if ($valeur !== null) {
-                Note::updateOrCreate(
-                    [
-                        'evaluation_id' => $evaluationId,
-                        'inscription_id' => $inscriptionId,
-                        // On peut même imaginer une sécurité ici si besoin
-                    ],
-                    ['valeur' => $valeur]
-                );
-            }
-        }
-        return back()->with('success', "Notes enregistrées pour l'année {$this->anneeActive->libelle}");
-    }
-
-
-
     public function store(Request $request)
     {
-        // 1. On récupère l'enseignant lié à l'utilisateur connecté
         $enseignant = auth()->user()->enseignant;
 
-        // SECURITÉ : Si l'utilisateur n'est pas un enseignant, on bloque
         if (!$enseignant) {
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
 
         $affectation = Affectation::findOrFail($request->affectation_id);
 
-        // 2. Création avec TOUTES les colonnes obligatoires
-        Evaluation::create([
-            'titre'         => $request->titre,
-            'sequence_id'   => $request->sequence_id,
-            'classe_id'     => $affectation->classe_id, // Récupéré via l'affectation
-            'matiere_id'    => $affectation->matiere_id, // Récupéré via l'affectation
-            'enseignant_id' => $enseignant->id,         // C'EST CETTE LIGNE QUI MANQUAIT !
-            'date_evaluation' => now(),
-        ]);
+        // ICI : On cherche si cette évaluation existe déjà pour ne pas perdre les notes
+        $evaluation = Evaluation::firstOrCreate(
+            [
+                'sequence_id'   => $request->sequence_id,
+                'classe_id'     => $affectation->classe_id,
+                'matiere_id'    => $affectation->matiere_id,
+                'enseignant_id' => $enseignant->id,
+                // On ne met pas 'titre' ou 'date' ici car ils peuvent varier
+            ],
+            [
+                'titre'           => $request->titre,
+                'date_evaluation' => now(),
+            ]
+        );
 
-        return redirect()->route('admin.evaluations.index')->with('success', 'Évaluation initialisée !');
+        return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
+            ->with('success', 'Session d\'évaluation prête !');
+    }
+
+
+
+    public function bulkStoreNotes(Request $request, $id)
+    {
+
+        $evaluation = Evaluation::findOrFail($id);
+
+        // 1. On vérifie qu'on a bien reçu le tableau 'notes'
+        if (!$request->has('notes')) {
+            return redirect()->back()->with('error', 'Aucune donnée n’a été envoyée.');
+        }
+
+        foreach ($request->notes as $inscriptionId => $donnees) {
+
+            // 2. On vérifie si 'valeur' existe ET n'est pas vide dans ce sous-tableau
+            if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
+
+
+                // Dans ton contrôleur, avant d'enregistrer
+                if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
+                    return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
+                }
+
+                Note::updateOrCreate(
+                    [
+                        'evaluation_id'  => $evaluation->id,
+                        'inscription_id' => $inscriptionId,
+                    ],
+                    [
+                        // TRÈS IMPORTANT : On pointe précisément vers 'valeur' 
+                        // et non vers tout le tableau $donnees
+                        'valeur'      => $donnees['valeur'],
+                        'observation' => $donnees['observation'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        return redirect()->route('admin.evaluations.index')
+            ->with('success', 'Félicitations ! Les notes ont été enregistrées.');
     }
 }

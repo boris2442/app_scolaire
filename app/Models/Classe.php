@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\AnneeScolaire;
+use App\Models\Inscription;
+use App\Models\Matiere;
+use App\Models\Niveau;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 class Classe extends Model
@@ -32,5 +37,13 @@ class Classe extends Model
     public function getNomCompletAttribute()
     {
         return $this->niveau->nom . ' ' . $this->nom;
+    }
+
+    /**
+     * Récupérer toutes les inscriptions pour cette classe.
+     */
+    public function inscriptions(): HasMany
+    {
+        return $this->hasMany(Inscription::class);
     }
 }

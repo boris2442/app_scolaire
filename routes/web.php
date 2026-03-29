@@ -5,6 +5,7 @@ use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
+use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
@@ -165,5 +166,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('trimestres', TrimestreController::class);
+});
+
+Route::prefix('enseignant')->name('enseignant.')->group(function() {
+    Route::get('/dashboard', [DashboardTeacherController::class, 'index'])->name('dashboard');
 });
 require __DIR__ . '/auth.php';

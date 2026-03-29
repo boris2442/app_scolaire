@@ -1,5 +1,5 @@
 <aside id="sidebar"
-    class="fixed top-0 left-0 z-40 w-64 h-screen pt-4 transition-all duration-300 border-r bg-card text-foreground border-border -translate-x-full md:translate-x-0"
+    class="fixed top-0 left-0 z-40 w-64 min-h-screen pt-4 transition-all duration-300 border-r bg-card text-foreground border-border -translate-x-full md:translate-x-0 overflow-y-auto"
     data-collapsed="false">
 
     <div class="absolute top-6 -right-3 hidden md:block">
@@ -173,6 +173,13 @@
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.trimestres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Trimestres</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Teachers</span>
                 </a>
             </li>
             {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">

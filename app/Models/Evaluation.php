@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Classe;
+use App\Models\Matiere;
+use App\Models\Note;
+use App\Models\Sequence;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Evaluation extends Model
 {
@@ -21,5 +26,12 @@ class Evaluation extends Model
     public function classe()
     {
         return $this->belongsTo(Classe::class);
+    }
+    /**
+     * Une évaluation possède plusieurs notes.
+     */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
     }
 }
