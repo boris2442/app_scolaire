@@ -46,4 +46,9 @@ class User extends Authenticatable
         'role', // INDISPENSABLE
         'phone',
     ];
+
+    public function enseignant()
+{
+    return $this->hasOne(Enseignant::class, 'user_id');
+}
 }

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Affectation;
+use App\Models\Departement;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Enseignant extends Model
 {
@@ -26,5 +30,11 @@ class Enseignant extends Model
     public function departement()
     {
         return $this->belongsTo(Departement::class);
+    }
+
+    public function affectations(): HasMany
+    {
+        // Assure-toi que la clé étrangère dans la table affectations est bien 'enseignant_id'
+        return $this->hasMany(Affectation::class, 'enseignant_id');
     }
 }

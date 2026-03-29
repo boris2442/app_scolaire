@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Affectation;
 use App\Models\Evaluation;
 use App\Models\Inscription;
+use App\Models\Note;
+use App\Models\Sequence;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
-use App\Models\Note;
+use Illuminate\Support\Facades\Auth;
 
 class EvaluationController extends Controller
 {
@@ -22,22 +24,106 @@ class EvaluationController extends Controller
     }
 
 
+    // public function index()
+    // {
+    //     // On récupère le profil enseignant de l'utilisateur connecté
+    //     $enseignant = auth()->user()->enseignant;
+    //     // Dans EvaluationController index()
+
+    //     // On récupère uniquement les évaluations créées par lui
+    //     // OU les évaluations des classes/matières qui lui sont affectées
+    //     $evaluations = Evaluation::whereHas('matiere', function ($query) use ($enseignant) {
+    //         $query->whereIn('id', $enseignant->affectations->pluck('matiere_id'));
+    //     })
+    //         ->with(['classe', 'matiere', 'sequence'])
+    //         ->latest()
+    //         ->get();
+
+    //     return view('pages.evaluations.index', compact('evaluations'));
+    // }
+
+
+    // public function index()
+    // {
+    //     $anneeActive = $this->scolarite->getAnneeActive();
+    //     $enseignant = auth()->user()->enseignant;
+
+    //     $sequences = Sequence::all();
+
+    //     $affectations = $enseignant
+    //         ? $enseignant->affectations()->with(['matiere', 'niveau', 'classe'])->get()
+    //         : collect();
+
+    //     // --- DEBUT DU CODE DE TEST A AJOUTER ---
+    //     if ($enseignant && $affectations->count() === 0) {
+    //         // On récupère les premiers éléments existants en base pour créer un test
+    //         $matiere = \App\Models\Matiere::first();
+    //         $classe = \App\Models\Classe::first();
+    //         $niveau = \App\Models\Niveau::first();
+
+    //         if ($matiere && $classe && $niveau) {
+    //             \App\Models\Affectation::create([
+    //                 'enseignant_id'     => $enseignant->id,
+    //                 'matiere_id'        => $matiere->id,
+    //                 'classe_id'         => $classe->id,
+    //                 'niveau_id'         => $niveau->id,
+    //                 'annee_scolaire_id' => $anneeActive->id,
+    //             ]);
+    //             // On rafraîchit la page pour que $affectations ne soit plus vide
+    //             return redirect()->refresh();
+    //         }
+    //     }
+    //     // --- FIN DU CODE DE TEST ---
+
+    //     dd([
+    //         'Utilisateur_ID'      => auth()->id(),
+    //         'role'                => auth()->user()->role,
+    //         'Est_Enseignant'      => $enseignant ? 'OUI' : 'NON',
+    //         'Nombre_Affectations' => $affectations->count(),
+    //         'Donnees'             => $affectations->toArray()
+    //     ]);
+
+    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence', 'niveau'])
+    //         ->latest()
+    //         ->get();
+
+    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
+    // }
+
+
+
+
+
+
     public function index()
     {
-        // On récupère le profil enseignant de l'utilisateur connecté
+        $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
 
-        // On récupère uniquement les évaluations créées par lui
-        // OU les évaluations des classes/matières qui lui sont affectées
-        $evaluations = Evaluation::whereHas('matiere', function ($query) use ($enseignant) {
-            $query->whereIn('id', $enseignant->affectations->pluck('matiere_id'));
-        })
-            ->with(['classe', 'matiere', 'sequence'])
+        // OPTION A : Si tu as une relation directe ou via les trimestres
+        // On récupère uniquement les séquences dont le trimestre appartient à l'année active
+        $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
+            $query->where('annee_scolaire_id', $anneeActive->id);
+        })->get();
+
+        $affectations = $enseignant
+            ? $enseignant->affectations()->with(['matiere', 'classe.niveau'])->get()
+            : collect();
+
+        // On récupère les évaluations déjà créées par ce prof
+        $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
+            ->where('enseignant_id', $enseignant?->id)
             ->latest()
             ->get();
 
-        return view('pages.evaluations.index', compact('evaluations'));
+        // $test = $affectations->first();
+        // dd($test->niveau_id, $test->niveau);
+
+        return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
     }
+
+
+
 
 
     public function saisie($id)
