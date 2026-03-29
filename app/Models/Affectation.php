@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Affectation extends Model
 {
+    protected $fillable = [
+        'enseignant_id',
+        'matiere_id',
+        'classe_id',
+        'annee_scolaire_id',
+    ];
     public function enseignant()
     {
         return $this->belongsTo(Enseignant::class);

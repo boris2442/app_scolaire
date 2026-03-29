@@ -6,11 +6,13 @@ use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EnseignantController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -136,7 +138,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-// --- MODULE ENSEIGNANTS ---
+    // --- MODULE ENSEIGNANTS ---
     Route::get('enseignants', [EnseignantController::class, 'index'])->name('enseignants.index');
     Route::get('enseignants/create', [EnseignantController::class, 'create'])->name('enseignants.create');
     Route::post('enseignants', [EnseignantController::class, 'store'])->name('enseignants.store');
@@ -145,5 +147,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
     Route::get('affectations', [AffectationController::class, 'index'])->name('affectations.index');
     Route::post('affectations', [AffectationController::class, 'store'])->name('affectations.store');
+    // Dans routes/web.php, à l'intérieur de ton groupe 'admin'
+    Route::post('/affectations/store/bulk-store', [AffectationController::class, 'bulkStore'])->name('affectations.bulk-store');
+});
+
+// Modeule Evaluations
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/evaluations', [EvaluationController::class, 'index'])->name('evaluations.index');
+    Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
+    Route::get('/evaluations/{id}/saisie', [EvaluationController::class, 'saisie'])->name('evaluations.saisie');
+    Route::post('/evaluations/{id}/bulk-store', [EvaluationController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
 });
 require __DIR__ . '/auth.php';

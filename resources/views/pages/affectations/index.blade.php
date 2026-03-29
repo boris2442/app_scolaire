@@ -33,81 +33,72 @@
 
     @if ($classeId)
         <div class="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-secondary/50 border-b border-border">
-                        <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Matière</th>
-                        <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-center">Code</th>
-                        <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Enseignant Responsable</th>
-                        <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-border">
-                    @forelse($matieresDuNiveau as $matiere)
-                        @php
-                            $affectation = $affectationsExistantes->get($matiere->id);
-                        @endphp
-                        <tr class="hover:bg-secondary/10 transition-colors">
-                            <td class="p-4">
-                                <p class="text-sm font-black uppercase">{{ $matiere->nom }}</p>
-                                <span class="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                                    Coeff: {{ $matiere->pivot->coefficient ?? '1' }}
-                                </span>
-                            </td>
-                            <td class="p-4 text-center">
-                                <code
-                                    class="text-[10px] font-bold bg-secondary px-2 py-1 rounded text-muted-foreground uppercase">
-                                    {{ $matiere->code }}
-                                </code>
-                            </td>
-                            <form action="{{ route('admin.affectations.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="classe_id" value="{{ $classeId }}">
-                                <input type="hidden" name="matiere_id" value="{{ $matiere->id }}">
+            {{-- UN SEUL FORMULAIRE QUI ENVELOPPE TOUT --}}
+            <form action="{{ route('admin.affectations.bulk-store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="classe_id" value="{{ $classeId }}">
 
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-secondary/50 border-b border-border">
+                            <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Matière</th>
+                            <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-center">Code</th>
+                            <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Enseignant Responsable
+                            </th>
+                            <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-right">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        @forelse($matieresDuNiveau as $matiere)
+                            @php $affectation = $affectationsExistantes->get($matiere->id); @endphp
+                            <tr class="hover:bg-secondary/10 transition-colors">
                                 <td class="p-4">
-                                    <select name="enseignant_id" required
+                                    <p class="text-sm font-black uppercase">{{ $matiere->nom }}</p>
+                                    <span class="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
+                                        Coeff: {{ $matiere->pivot->coefficient ?? '1' }}
+                                    </span>
+                                </td>
+                                <td class="p-4 text-center">
+                                    <code
+                                        class="text-[10px] font-bold bg-secondary px-2 py-1 rounded text-muted-foreground uppercase">
+                                        {{ $matiere->code }}
+                                    </code>
+                                </td>
+                                <td class="p-4">
+                                    {{-- LE NOM DU SELECT EST CRUCIAL --}}
+                                    <select name="affectations[{{ $matiere->id }}]"
                                         class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold uppercase focus:bg-white focus:ring-1 focus:ring-primary transition-all">
                                         <option value="">-- Non affecté --</option>
                                         @foreach ($enseignants as $enseignant)
                                             <option value="{{ $enseignant->id }}"
                                                 {{ $affectation && $affectation->enseignant_id == $enseignant->id ? 'selected' : '' }}>
                                                 {{ $enseignant->user->name }}
-                                                ({{ $enseignant->specialite ?? 'Généraliste' }})
                                             </option>
                                         @endforeach
                                     </select>
                                 </td>
                                 <td class="p-4 text-right">
-                                    <button type="submit"
-                                        class="p-2 {{ $affectation ? 'text-green-500' : 'text-primary' }} hover:scale-110 transition-all"
-                                        title="Mettre à jour">
-                                        <i class="fas {{ $affectation ? 'fa-check-double' : 'fa-save' }}"></i>
-                                    </button>
+                                    @if ($affectation)
+                                        <span class="text-green-500 text-[10px] font-black uppercase italic">Assigné</span>
+                                    @else
+                                        <span class="text-muted-foreground text-[10px] uppercase">En attente</span>
+                                    @endif
                                 </td>
-                            </form>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="p-12 text-center text-muted-foreground">
-                                <i class="fas fa-book-open text-4xl mb-4 opacity-20"></i>
-                                <p class="text-[10px] font-black uppercase tracking-widest">Aucune matière définie pour ce
-                                    niveau</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    @else
-        <div
-            class="flex flex-col items-center justify-center p-20 border-2 border-dashed border-border rounded-3xl bg-card/50">
-            <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mb-4">
-                <i class="fas fa-chalkboard-teacher text-muted-foreground"></i>
-            </div>
-            <p class="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Veuillez sélectionner une
-                classe pour gérer les affectations</p>
+                            </tr>
+                        @empty
+                            {{-- Ton code @empty ici --}}
+                        @endforelse
+                    </tbody>
+                </table>
+
+                {{-- BOUTON DE SAUVEGARDE --}}
+                <div class="p-6 bg-secondary/10 border-t flex justify-end">
+                    <button type="submit"
+                        class="bg-primary text-white px-8 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20">
+                        <i class="fas fa-save mr-2"></i> Enregistrer tout le tableau
+                    </button>
+                </div>
+            </form>
         </div>
     @endif
-
 @endsection

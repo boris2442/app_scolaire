@@ -3,7 +3,7 @@
 @section('content')
     <div class="max-w-4xl mx-auto">
         <div class="mb-8">
-            <h1 class="text-xl font-black uppercase text-foreground">Nouveau Personnel Enseignant</h1>
+            <h1 class="text-xl font-black  text-foreground">Nouveau Personnel Enseignant</h1>
             <p class="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Création du compte d'accès et du
                 profil professionnel</p>
         </div>
@@ -13,19 +13,25 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card p-8 rounded-2xl border border-border shadow-sm">
 
                 <div class="space-y-4">
-                    <h3 class="text-[10px] font-black uppercase text-primary border-b border-border pb-2">Compte Utilisateur
+                    <h3 class="text-[10px] font-black  text-primary border-b border-border pb-2">Compte Utilisateur
                     </h3>
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Nom Complet</label>
+                        <label class="text-[10px] font-black  ml-1">Nom Complet</label>
                         <input type="text" name="name" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all"
-                            placeholder="EX: SIMO BORIS">
+                            placeholder="EX: Hello Dupont">
                     </div>
                     <div>
                         <label class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
                         <input type="email" name="email" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="enseignant@academiapro.com">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase ml-1">Contact</label>
+                        <input type="text" name="contact" required
+                            class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                            placeholder="EX: +237  6 77 88 99 00">
                     </div>
                 </div>
 

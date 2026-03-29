@@ -40,9 +40,10 @@ class User extends Authenticatable
     }
 
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role', // INDISPENSABLE
-];
+        'name',
+        'email',
+        'password',
+        'role', // INDISPENSABLE
+        'phone',
+    ];
 }

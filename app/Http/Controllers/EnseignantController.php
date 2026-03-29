@@ -47,6 +47,7 @@ public function index()
                 'email' => $request->email,
                 'password' => Hash::make('12345678'),
                 'role' =>UserRole::ENSEIGNANT,
+                'phone' => $request->phone, // Nouveau !
             ]);
 
             Enseignant::create([

@@ -2,48 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
-  :root {
-    /* Fond et Surface */
-    --background: #f8fafc;    /* Slate 50 */
-    --foreground: #0f172a;    /* Slate 900 */
-    --card: #ffffff;
-    --card-foreground: #0f172a;
-    
-    /* Couleurs Primaires (Sérieux/Professionnel) */
-    --primary: #2563eb;       /* Blue 600 */
-    --primary-foreground: #ffffff;
-    
-    /* Couleurs Secondaires (Futuriste/Subtil) */
-    --secondary: #f1f5f9;     /* Slate 100 */
-    --secondary-foreground: #1e293b;
-    
-    /* États (Notes, Alertes, Validations) */
-    --success: #10b981;       /* Émeraude */
-    --warning: #f59e0b;       /* Ambre */
-    --danger: #ef4444;        /* Rouge */
-    
-    /* Bordures et Inputs */
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #3b82f6;
-  }
+    :root {
+        /* Fond et Surface */
+        --background: #f8fafc; /* Slate 50 */
+        --foreground: #0f172a; /* Slate 900 */
+        --card: #ffffff;
+        --card-foreground: #0f172a;
 
-  .dark {
-    /* Fond profond pour l'aspect futuriste */
-    --background: #020617;    /* Slate 950 (presque noir bleuté) */
-    --foreground: #f8fafc;
-    --card: #0f172a;          /* Slate 900 */
-    --card-foreground: #f8fafc;
-    
-    /* Primaire en mode sombre (plus éclatant) */
-    --primary: #38bdf8;       /* Sky 400 (aspect néon/tech) */
-    --primary-foreground: #020617;
-    
-    --secondary: #1e293b;     /* Slate 800 */
-    --secondary-foreground: #f1f5f9;
-    
-    --border: #1e293b;
-    --input: #1e293b;
-    --ring: #38bdf8;
-  }
+        /* Couleurs Primaires (Sérieux/Professionnel) */
+        --primary: #2563eb; /* Blue 600 */
+        --primary-foreground: #ffffff;
+
+        /* Couleurs Secondaires (Futuriste/Subtil) */
+        --secondary: #f1f5f9; /* Slate 100 */
+        --secondary-foreground: #1e293b;
+
+        /* États (Notes, Alertes, Validations) */
+        --success: #10b981; /* Émeraude */
+        --warning: #f59e0b; /* Ambre */
+        --danger: #ef4444; /* Rouge */
+
+        /* Bordures et Inputs */
+        --border: #e2e8f0;
+        --input: #e2e8f0;
+        --ring: #3b82f6;
+    }
+
+    .dark {
+        /* Fond profond pour l'aspect futuriste */
+        --background: #020617; /* Slate 950 (presque noir bleuté) */
+        --foreground: #f8fafc;
+        --card: #0f172a; /* Slate 900 */
+        --card-foreground: #f8fafc;
+
+        /* Primaire en mode sombre (plus éclatant) */
+        --primary: #38bdf8; /* Sky 400 (aspect néon/tech) */
+        --primary-foreground: #020617;
+
+        --secondary: #1e293b; /* Slate 800 */
+        --secondary-foreground: #f1f5f9;
+
+        --border: #1e293b;
+        --input: #1e293b;
+        --ring: #38bdf8;
+    }
 }
