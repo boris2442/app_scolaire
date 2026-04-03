@@ -43,6 +43,6 @@ class DashboardTeacherController extends Controller
                 'derniere_date' => $evaluation ? $evaluation->updated_at->diffForHumans() : null,
             ];
         });
-        return view('pages.enseignants.dashboard', compact('statsSaisie', 'enseignant'));
+        return view('pages.enseignants.dashboard', compact('statsSaisie', 'enseignant', 'anneeActive'));
     }
 }

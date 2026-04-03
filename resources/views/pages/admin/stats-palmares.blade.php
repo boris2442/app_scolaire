@@ -223,7 +223,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-border">
-                                @foreach ($stats['par_classe'] as $c)
+                                {{-- @foreach ($stats['par_classe'] as $c)
                                     @php $tauxClass = round(($c->reussite / $c->total) * 100); @endphp
                                     <tr class="hover:bg-secondary/20 transition-colors">
                                         <td class="px-6 py-4 font-bold">{{ $c->nom_complet_classe }}</td>
@@ -237,6 +237,34 @@
                                                 <span
                                                     class="text-[10px] font-bold w-8 text-right">{{ $tauxClass }}%</span>
                                             </div>
+                                        </td>
+                                    </tr>
+                                @endforeach --}}
+
+                                @foreach ($stats['par_classe'] as $c)
+                                    <tr class="hover:bg-secondary/20 transition-colors">
+                                        <td class="px-6 py-4 font-bold">{{ $c->nom_complet_classe }}</td>
+                                        <td class="px-6 py-4 font-mono">{{ number_format($c->moyenne_classe, 2) }}</td>
+
+                                        {{-- CORRECTION ICI --}}
+                                        <td class="px-6 py-4 text-center">
+                                            @php
+                                                // On calcule le taux : (Admis / Total de la classe) * 100
+                                                $taux = $c->total > 0 ? ($c->reussite / $c->total) * 100 : 0;
+                                            @endphp
+
+                                            <span
+                                                class="px-2 py-1 rounded-full text-[10px] font-bold {{ $taux >= 50 ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger' }}">
+                                                {{ number_format($taux, 1) }}%
+                                            </span>
+                                        </td>
+
+                                        <td class="px-6 py-4 text-right">
+                                            {{-- Ton bouton pour voir les détails --}}
+                                            <a href="{{ route('admin.statistiques.classe.detail', ['classe_id' => $c->id, 'sequence_id' => request('sequence_id')]) }}"
+                                                class="p-2 hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-lg transition-colors">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

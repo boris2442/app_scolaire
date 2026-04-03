@@ -18,6 +18,7 @@
                         Espace Gestion <span class="text-foreground">/</span>
                         <span class="text-gray-500 font-normal normal-case">Tableau de bord</span>
                     </span>
+
                 </div>
             </div>
 
@@ -38,7 +39,11 @@
                 </button>
 
                 <div class="h-8 w-px bg-border"></div>
-
+                <div class="h-4 w-px bg-border mx-2"></div>
+                <div id="digital-clock"
+                    class="text-sm font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                    00:00:00
+                </div>
                 <div class="flex items-center space-x-3 pl-2">
                     <div class="hidden text-right lg:block">
                         <p class="text-sm font-bold leading-none">{{ auth()->user()->name ?? 'Utilisateur' }}</p>
@@ -58,34 +63,3 @@
         </div>
     </div>
 </header>
-<script>
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-    // 1. Initialisation : Déterminer le mode actuel
-    if (localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        themeToggleLightIcon.classList.remove('hidden');
-        document.documentElement.classList.add('dark');
-    } else {
-        themeToggleDarkIcon.classList.remove('hidden');
-        document.documentElement.classList.remove('dark');
-    }
-
-    // 2. Événement au clic
-    themeToggleBtn.addEventListener('click', function() {
-        // Toggle icons
-        themeToggleDarkIcon.classList.toggle('hidden');
-        themeToggleLightIcon.classList.toggle('hidden');
-
-        // Toggle Dark Mode
-        if (document.documentElement.classList.contains('dark')) {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('color-theme', 'light');
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('color-theme', 'dark');
-        }
-    });
-</script>

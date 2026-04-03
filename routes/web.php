@@ -186,7 +186,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
 });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    // ... tes autres routes ...
 
-Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
-Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('admin.statistiques.index');
+    Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
+
+    // On pourra ajouter plus tard :
+    // Route::get('/audit-saisie/classe/{id}', [AuditSaisieController::class, 'show'])->name('audit.saisie.show');
+    Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
+    Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
+    // Dans routes/web.php (dans ton groupe de middleware admin)
+    Route::get('/statistiques/classe/{classe_id}/{sequence_id}', [StatistiqueController::class, 'detailClasse'])
+        ->name('statistiques.classe.detail');
+});
 require __DIR__ . '/auth.php';
