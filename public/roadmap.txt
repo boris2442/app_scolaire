@@ -84,12 +84,18 @@ Ce module permet de configurer l'environnement avant d'accueillir des élèves.
 
 [ ] Calcul automatique des rangs et des statistiques de classe
 
+
+
 7. Module Impressions (Sorties PDF)
 [ ] Génération des bulletins de notes (Séquentiels/Trimestriels)
 
 [ ] Procès-verbaux de fin de trimestre
 
 [ ] Listes de classes et fiches de présence
+
+
+
+
 
 8. Finalisation & Déploiement
 [ ] Tests unitaires sur les calculs de moyennes
@@ -114,4 +120,10 @@ tout e que il faut reelement fait dans le module 6
 
 
 
-La Logique du Moteur de Calcul (Module 6)Pour que ce soit propre et robuste, on va diviser le travail en 3 étapes :1. Le Niveau Séquentiel (Le plus simple)Action : Pour chaque élève, on fait la somme des notes d'une matière dans une séquence précise.Formule : $\text{Moyenne Matière} = \frac{\sum \text{Notes}}{\text{Nombre de notes}}$ (souvent une seule note par séquence au Cameroun).Coefficient : On multiplie cette moyenne par le coefficient de la matière.2. Le Niveau Trimestriel (L'agrégation)Logique : Un trimestre = Séquence A + Séquence B.Calcul : On fait la moyenne des deux séquences pour chaque matière, puis on calcule la Moyenne Générale Trimestrielle.3. Les Rangs et Statistiques (La compétition)Le Rang : Une fois que toutes les moyennes de la classe sont calculées, on trie les élèves.Les Stats : Taux de réussite, moyenne de la classe, plus forte/faible moyenne.
+La Logique du Moteur de Calcul (Module 6)Pour que ce soit propre et robuste, on va diviser le travail en 3 étapes :
+
+1. Le Niveau Séquentiel (Le plus simple)Action : Pour chaque élève, on fait la somme des notes d'une matière dans une séquence précise.Formule : $\text{Moyenne Matière} = \frac{\sum \text{Notes}}{\text{Nombre de notes}}$ (souvent une seule note par séquence au Cameroun).Coefficient : On multiplie cette moyenne par le coefficient de la matière.
+
+2. Le Niveau Trimestriel (L'agrégation)Logique : Un trimestre = Séquence A + Séquence B.Calcul : On fait la moyenne des deux séquences pour chaque matière, puis on calcule la Moyenne Générale Trimestrielle.
+
+3. Les Rangs et Statistiques (La compétition)Le Rang : Une fois que toutes les moyennes de la classe sont calculées, on trie les élèves.Les Stats : Taux de réussite, moyenne de la classe, plus forte/faible moyenne.

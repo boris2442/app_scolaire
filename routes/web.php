@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AcademiqueController;
+use App\Http\Controllers\Admin\AuditSaisieController;
 use App\Http\Controllers\Admin\ResultatController;
+use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
@@ -183,4 +185,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // On pourra ajouter plus tard :
     // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
 });
+
+
+Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
+Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('admin.statistiques.index');
 require __DIR__ . '/auth.php';

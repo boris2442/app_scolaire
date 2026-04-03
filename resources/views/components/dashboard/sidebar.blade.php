@@ -190,6 +190,23 @@
                     <span class="sidebar-label ml-3">Calcul des Résultats</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.audit.saisie') }}" title="Audit de Saisie"
+                    aria-label="Audit de Saisie"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.audit.saisie') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-search w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Audit de Saisie</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('admin.statistiques.index') }}" title="Statistiques"
+                    aria-label="Statistiques"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-chart-bar w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Statistiques</span>
+                </a>
+            </li>
 
         </ul>
 
