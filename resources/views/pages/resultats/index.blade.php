@@ -1,0 +1,72 @@
+@extends('layouts.admin.admin-layout')
+
+@section('content')
+    <div class="container mx-auto p-6 bg-background text-foreground min-h-screen">
+        <div class="flex items-center justify-between mb-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold tracking-tight text-foreground">Gestion des Résultats</h1>
+
+                <p class="text-xs italic opacity-70 text-foreground mt-1">
+                    Le moteur de calcul traite les notes brutes pour générer les moyennes pondérées,
+                    établit le classement automatique des élèves et prépare les statistiques de performance par classe.
+                </p>
+            </div>
+            <div class="bg-primary/10 text-primary px-4 py-2 rounded-full border border-primary/20 text-sm font-medium">
+                Année Académique : 2025-2026
+            </div>
+        </div>
+
+        @if (session('success'))
+            <div
+                class="bg-success/10 border border-success/20 text-success px-4 py-3 rounded-lg mb-6 flex items-center gap-3">
+                <i class="fas fa-check-circle"></i>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach ($classes as $classe)
+                <div
+                    class="bg-card text-card-foreground border border-border rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="p-5 border-b border-border flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-lg">{{ $classe->nom }}</h3>
+                            <span class="text-xs uppercase tracking-wider text-secondary-foreground opacity-60">
+                                {{ $classe->niveau->nom ?? 'Niveau Standard' }}
+                            </span>
+                        </div>
+                        <div class="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center text-primary">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <form action="{{ route('admin.resultats.calculer') }}" method="POST" class="space-y-4">
+                            @csrf
+                            <input type="hidden" name="classe_id" value="{{ $classe->id }}">
+
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 uppercase opacity-70">Sélectionner la
+                                    période</label>
+                                <select name="sequence_id"
+                                    class="w-full bg-background border border-input text-foreground rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-ring transition-all"
+                                    required>
+                                    <option value="">Choisir une séquence...</option>
+                                    @foreach ($sequences as $sequence)
+                                        <option value="{{ $sequence->id }}">{{ $sequence->nom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-primary text-primary-foreground hover:opacity-90 font-bold py-2.5 rounded-lg shadow-sm transition flex items-center justify-center gap-2">
+                                <i class="fas fa-calculator text-sm"></i>
+                                Lancer le calcul
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endsection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademiqueController;
+use App\Http\Controllers\Admin\ResultatController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
@@ -164,11 +165,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-Route::prefix('admin')->name('admin.')->group(function() {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('trimestres', TrimestreController::class);
 });
 
-Route::prefix('enseignant')->name('enseignant.')->group(function() {
+Route::prefix('enseignant')->name('enseignant.')->group(function () {
     Route::get('/dashboard', [DashboardTeacherController::class, 'index'])->name('dashboard');
+});
+
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    // ... tes autres routes ...
+
+    Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
+    Route::post('/resultats/calculer', [ResultatController::class, 'calculer'])->name('resultats.calculer');
+
+    // On pourra ajouter plus tard :
+    // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
 });
 require __DIR__ . '/auth.php';

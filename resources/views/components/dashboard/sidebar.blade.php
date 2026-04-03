@@ -1,5 +1,5 @@
 <aside id="sidebar"
-    class="fixed top-0 left-0 z-40 w-64 min-h-screen pt-4 transition-all duration-300 border-r bg-card text-foreground border-border -translate-x-full md:translate-x-0 overflow-y-auto"
+    class="fixed top-0 left-0 z-40 w-64 h-screen pt-4 pb-20 transition-all duration-300 border-r bg-card text-foreground border-border -translate-x-full md:translate-x-0 overflow-y-auto flex flex-col"
     data-collapsed="false">
 
     <div class="absolute top-6 -right-3 hidden md:block">
@@ -176,16 +176,21 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
-                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                <a href="{{ route('enseignant.dashboard') }}" title="Enseignants" aria-label="Enseignants"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Teachers</span>
                 </a>
             </li>
-            {{-- <a href="{{ route('settings.classes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-all {{ request()->routeIs('settings.classes.*') ? 'bg-primary/10 text-primary font-bold' : 'text-foreground/70' }}">
-            <i class="fas fa-chalkboard-teacher w-5"></i>
-            <span class="text-sm">Classes & Programme</span>
-        </a> --}}
+            <li>
+                <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
+                    aria-label="Calcul des Résultats"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-file-invoicer w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Calcul des Résultats</span>
+                </a>
+            </li>
+
         </ul>
 
     </nav>
@@ -197,7 +202,7 @@
 
 
 
-    <div class="absolute bottom-4 w-full px-3">
+    {{-- <div class="absolute bottom-4 w-full px-3">
         <div class="border-t border-border my-4"></div>
         <form method="POST" action="#"> @csrf
             <button type="submit"
@@ -206,79 +211,12 @@
                 <span class="sidebar-label ml-3">Déconnexion</span>
             </button>
         </form>
-    </div>
+    </div> --}}
 </aside>
 
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity" onclick="toggleSidebar()">
 </div>
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const toggleCollapse = document.getElementById('toggle-collapse');
-        const collapseIcon = document.getElementById('collapse-icon');
-        const labels = document.querySelectorAll('.sidebar-label');
 
-        // 1. Gestion du Collapse (Desktop)
-        if (toggleCollapse) {
-            toggleCollapse.addEventListener('click', () => {
-                const isCollapsed = sidebar.dataset.collapsed === 'true';
-
-                if (isCollapsed) {
-                    // Ouvrir
-                    sidebar.classList.replace('w-20', 'w-64');
-                    labels.forEach(el => el.classList.remove('hidden'));
-                    collapseIcon.classList.replace('fa-angle-right', 'fa-angle-left');
-                    sidebar.dataset.collapsed = 'false';
-                } else {
-                    // Réduire
-                    sidebar.classList.replace('w-64', 'w-20');
-                    labels.forEach(el => el.classList.add('hidden'));
-                    collapseIcon.classList.replace('fa-angle-left', 'fa-angle-right');
-                    sidebar.dataset.collapsed = 'true';
-                }
-            });
-        }
-    });
-
-    // 2. Fonction Toggle (Mobile)
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-
-        sidebar.classList.toggle('-translate-x-full');
-        overlay.classList.toggle('hidden');
-    }
-
-
-
-    const toggleCollapse = document.getElementById('toggle-collapse');
-    const sidebar = document.getElementById('sidebar');
-
-    toggleCollapse.addEventListener('click', () => {
-        const collapsed = sidebar.dataset.collapsed === 'true';
-
-        if (collapsed) {
-            // Ouvrir
-            sidebar.classList.remove('w-20');
-            sidebar.classList.add('w-64');
-            document.querySelectorAll('.sidebar-label').forEach(el => {
-                el.classList.remove('hidden');
-            });
-            sidebar.dataset.collapsed = 'false';
-            toggleCollapse.innerHTML = '<i class="fas fa-angle-left"></i>';
-        } else {
-            // Réduire
-            sidebar.classList.remove('w-64');
-            sidebar.classList.add('w-20');
-            document.querySelectorAll('.sidebar-label').forEach(el => {
-                el.classList.add('hidden');
-            });
-            sidebar.dataset.collapsed = 'true';
-            toggleCollapse.innerHTML = '<i class="fas fa-angle-right"></i>';
-        }
-    });
-</script> --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Evaluation extends Model
 {
-    protected $fillable = ['titre', 'sequence_id', 'classe_id', 'matiere_id', 'enseignant_id', 'date_evaluation'];
+    protected $fillable = ['titre', 'sequence_id', 'classe_id', 'matiere_id', 'enseignant_id', 'date_evaluation', 'annee_scolaire_id'];
     // C'est cette fonction que Laravel cherchait et n'a pas trouvée
     public function matiere()
     {

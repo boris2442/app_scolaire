@@ -31,6 +31,9 @@ class EvaluationController extends Controller
     {
         $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
+        if (!$enseignant) {
+            return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+        }
 
         // OPTION A : Si tu as une relation directe ou via les trimestres
         // On récupère uniquement les séquences dont le trimestre appartient à l'année active
@@ -57,65 +60,6 @@ class EvaluationController extends Controller
 
 
 
-    // public function saisie($id)
-    // {
-    //     $evaluation = Evaluation::findOrFail($id);
-    //     $user = auth()->user();
-
-    //     // VERIFICATION : Est-ce que ce prof est bien affecté à cette matière dans cette classe ?
-    //     $estAffecte = Affectation::where([
-    //         'enseignant_id' => $user->enseignant->id,
-    //         'classe_id' => $evaluation->classe_id,
-    //         'matiere_id' => $evaluation->matiere_id,
-    //         'annee_scolaire_id' => $this->scolarite->getAnneeActive()->id
-    //     ])->exists();
-
-    //     if (!$estAffecte && !$user->hasRole('admin')) {
-    //         return redirect()->route('dashboard')->with('error', 'Accès refusé : Vous n\'enseignez pas cette matière dans cette classe.');
-    //     }
-
-    //     // Si c'est bon, on continue...
-    //     // Dans EvaluationController.php
-    //     // $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
-    //     //     ->with('eleve')
-    //     //     ->get();
-
-    //     // $notesExistantes = Note::where('evaluation_id', $evaluation->id)
-    //     //     ->get()
-    //     //     ->keyBy('inscription_id');
-    //     $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
-    //         ->with('eleve')
-    //         ->get();
-
-    //     // ON FORCE LE TYPE : get() puis mapWithKeys pour être sûr que l'ID est un entier
-    //     $notesExistantes = Note::where('evaluation_id', $id)
-    //         ->get()
-    //         ->mapWithKeys(function ($note) {
-    //             return [(int)$note->inscription_id => $note];
-    //         });
-
-
-    //     return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
-    // }
-    // public function saisie($id)
-    // {
-    //     $evaluation = Evaluation::findOrFail($id);
-
-    //     // 1. On récupère les inscriptions de la classe
-    //     $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)->get();
-    //     $idsInscriptions = $inscriptions->pluck('id')->toArray();
-
-    //     // 2. On récupère TOUTES les notes qui existent pour cette évaluation
-    //     $notesBrutes = Note::where('evaluation_id', $id)->get();
-
-    //     // 3. On indexe par inscription_id
-    //     $notesExistantes = $notesBrutes->keyBy('inscription_id');
-
-    //     // DEBUG : Si tu ne vois toujours rien, décommente la ligne suivante pour voir le verdict :
-    //     // dd($idsInscriptions, $notesBrutes->toArray());
-
-    //     return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
-    // }
     public function saisie($id)
     {
         $evaluation = Evaluation::with('classe.niveau', 'matiere', 'sequence')->findOrFail($id);
@@ -136,6 +80,7 @@ class EvaluationController extends Controller
 
     public function store(Request $request)
     {
+
         $enseignant = auth()->user()->enseignant;
 
         if (!$enseignant) {
@@ -151,6 +96,7 @@ class EvaluationController extends Controller
                 'classe_id'     => $affectation->classe_id,
                 'matiere_id'    => $affectation->matiere_id,
                 'enseignant_id' => $enseignant->id,
+                'annee_scolaire_id' => $this->anneeActive->id, // <--- AJOUTE ÇA ICI
                 // On ne met pas 'titre' ou 'date' ici car ils peuvent varier
             ],
             [
