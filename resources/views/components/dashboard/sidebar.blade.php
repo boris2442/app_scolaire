@@ -205,6 +205,13 @@
                     <span class="sidebar-label ml-3">Statistiques</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.departements.index') }}" title="Départements" aria-label="Départements"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-building w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Départements</span>
+                </a>
+            </li>
 
         </ul>
 

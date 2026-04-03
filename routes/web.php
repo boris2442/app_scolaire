@@ -9,6 +9,7 @@ use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
 use App\Http\Controllers\DashboardTeacherController;
+use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
@@ -198,5 +199,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Dans routes/web.php (dans ton groupe de middleware admin)
     Route::get('/statistiques/classe/{classe_id}/{sequence_id}', [StatistiqueController::class, 'detailClasse'])
         ->name('statistiques.classe.detail');
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('/departements', DepartementController::class);
 });
 require __DIR__ . '/auth.php';
