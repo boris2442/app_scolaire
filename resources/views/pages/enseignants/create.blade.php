@@ -29,7 +29,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-black uppercase ml-1">Contact</label>
-                        <input type="text" name="contact" required
+                        <input type="text" name="phone" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="EX: +237  6 77 88 99 00">
                     </div>

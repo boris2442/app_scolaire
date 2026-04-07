@@ -148,6 +148,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('enseignants', [EnseignantController::class, 'index'])->name('enseignants.index');
     Route::get('enseignants/create', [EnseignantController::class, 'create'])->name('enseignants.create');
     Route::post('enseignants', [EnseignantController::class, 'store'])->name('enseignants.store');
+    Route::get('enseignants/{enseignant}/edit', [EnseignantController::class, 'edit'])->name('enseignants.edit');
+    Route::put('enseignants/{enseignant}', [EnseignantController::class, 'update'])->name('enseignants.update');
+    Route::delete('enseignants/{enseignant}', [EnseignantController::class, 'destroy'])->name('enseignants.destroy');
+    Route::get('enseignants/{enseignant}', [EnseignantController::class, 'show'])->name('enseignants.show');
 
     // --- MODULE PEDAGOGIQUE (AFFECTATIONS) ---
     // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
