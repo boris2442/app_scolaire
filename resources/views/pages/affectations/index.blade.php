@@ -8,13 +8,17 @@
         </p>
     </div>
 
+    <p class="text-sm text-gray-500 mb-4">Gérez les affectations des enseignants aux matières pour chaque classe.
+        Sélectionnez une classe pour voir ou modifier les affectations existantes.</p>
     <div class="bg-card p-6 rounded-2xl border border-border shadow-sm mb-8">
         <form action="{{ route('admin.affectations.index') }}" method="GET" class="flex items-end gap-4">
             <div class="flex-1">
                 <label class="text-[10px] font-black uppercase text-muted-foreground ml-1">Sélectionner une salle /
                     classe</label>
-                <select name="classe_id" onchange="this.form.submit()" class="...">
-                    <option value="">-- Choisir une classe --</option>
+                <select name="classe_id" onchange="this.form.submit()"
+                    class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold uppercase bg-white dark:bg-primary focus:ring-1 focus:ring-primary transition-all">
+                    <option value="" class="text-muted-foreground dark:text-gray-900">-- Choisir une classe --
+                    </option>
                     @foreach ($classes as $item)
                         <option value="{{ $item->id }}" {{ $classeId == $item->id ? 'selected' : '' }}>
                             {{ $item->niveau->nom }} {{ $item->nom }}
@@ -67,7 +71,7 @@
                                 <td class="p-4">
                                     {{-- LE NOM DU SELECT EST CRUCIAL --}}
                                     <select name="affectations[{{ $matiere->id }}]"
-                                        class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold uppercase focus:bg-white focus:ring-1 focus:ring-primary transition-all">
+                                        class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold uppercase bg-white dark:bg-primary focus:ring-1 focus:ring-primary transition-all">
                                         <option value="">-- Non affecté --</option>
                                         @foreach ($enseignants as $enseignant)
                                             <option value="{{ $enseignant->id }}"

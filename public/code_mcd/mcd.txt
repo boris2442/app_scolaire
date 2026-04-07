@@ -1,0 +1,239 @@
+@startuml MCD_Gestion_Scolaire_VRAI
+
+title MCD COMPLET - Système de Gestion Scolaire\nNiveau CONCEPTUEL (sans FK)
+
+entity USER {
+    *id
+    --
+    name
+    email
+    password
+    role
+    phone
+}
+
+entity ETABLISSEMENT {
+    *id
+    --
+    nom
+    adresse
+    telephone
+    email
+    code_ecole
+    slogan
+}
+
+entity CYCLE {
+    *id
+    --
+    nom
+}
+
+entity NIVEAU {
+    *id
+    --
+    nom
+}
+
+entity CLASSE {
+    *id
+    --
+    nom
+}
+
+entity MATIERE {
+    *id
+    --
+    nom
+    code
+}
+
+entity SALLE {
+    *id
+    --
+    numero
+    capacite
+}
+
+entity ANNEE_SCOLAIRE {
+    *id
+    --
+    libelle
+    date_debut
+    date_fin
+    est_active
+}
+
+entity TRIMESTRE {
+    *id
+    --
+    nom
+}
+
+entity SEQUENCE {
+    *id
+    --
+    nom
+}
+
+entity ELEVE {
+    *id
+    --
+    matricule
+    nom
+    prenom
+    date_naissance
+    sexe
+    lieu_naissance
+    telephone_parent
+    est_actif
+    adresse
+    photo
+}
+
+entity ENSEIGNANT {
+    *id
+    --
+    matricule
+    specialite
+}
+
+entity DEPARTEMENT {
+    *id
+    --
+    nom
+    code
+    description
+}
+
+' ======================== ASSOCIATIONS AVEC ATTRIBUTS ========================
+
+entity CLASSE_MATIERE {
+    --
+    coefficient
+    ordre
+}
+
+entity INSCRIPTION {
+    --
+    date_inscription
+    statut
+}
+
+entity AFFECTATION {
+}
+
+entity EVALUATION {
+    --
+    titre
+    date_evaluation
+}
+
+entity NOTE {
+    --
+    valeur
+    est_validee
+    observation
+}
+
+entity MOYENNE {
+    --
+    valeur
+    coefficient
+    total_points
+    rang
+    moyenne_classe
+    min_classe
+    max_classe
+    appreciation
+}
+
+entity BILAN {
+    --
+    total_points
+    total_coefs
+    moyenne
+    effectif_classe
+    mention
+    rang
+    moyenne_premier
+    moyenne_dernier
+    moyenne_classe
+    observation_conseil
+}
+
+entity APPRECIATION {
+    --
+    travail
+    discipline
+    conduite
+    commentaire
+}
+
+' ======================== RELATIONS AVEC CARDINALITES ========================
+
+USER ||--o| ENSEIGNANT : "devenir\n(0,1)---(1,1)"
+
+CYCLE ||--|{ NIVEAU : "comprend\n(1,N)---(1,1)"
+
+NIVEAU ||--|{ CLASSE : "contient\n(1,N)---(1,1)"
+
+ANNEE_SCOLAIRE ||--|{ CLASSE : "organise\n(1,N)---(1,1)"
+
+ANNEE_SCOLAIRE ||--|{ TRIMESTRE : "divise\n(1,N)---(1,1)"
+
+TRIMESTRE ||--|{ SEQUENCE : "contient\n(1,N)---(1,1)"
+
+CLASSE }o--o{ MATIERE : "CLASSE_MATIERE\n(0,N)---(0,N)\ncoefficient, ordre"
+
+CLASSE ||--o{ INSCRIPTION : "recevoir\n(1,N)---(0,N)"
+
+ELEVE ||--o{ INSCRIPTION : "effectuer\n(1,N)---(0,N)"
+
+ANNEE_SCOLAIRE ||--o{ INSCRIPTION : "encadrer\n(1,N)---(0,N)\ndate_inscription\nstatut"
+
+ENSEIGNANT ||--o{ AFFECTATION : "exercer\n(1,N)---(0,N)"
+
+MATIERE ||--o{ AFFECTATION : "enseigner\n(1,N)---(0,N)"
+
+CLASSE ||--o{ AFFECTATION : "assigner\n(1,N)---(0,N)"
+
+NIVEAU ||--o{ AFFECTATION : "couvrir\n(1,N)---(0,N)"
+
+ANNEE_SCOLAIRE ||--o{ AFFECTATION : "valider\n(1,N)---(0,N)"
+
+SEQUENCE ||--o{ EVALUATION : "comporter\n(1,N)---(0,N)\ntitre\ndate_evaluation"
+
+CLASSE ||--o{ EVALUATION : "evaluer\n(1,N)---(0,N)"
+
+MATIERE ||--o{ EVALUATION : "contenir\n(1,N)---(0,N)"
+
+ENSEIGNANT ||--o{ EVALUATION : "creer\n(1,N)---(0,N)"
+
+EVALUATION ||--o{ NOTE : "generer\n(1,N)---(1,N)\nvaleur\nest_validee\nobservation"
+
+INSCRIPTION ||--o{ NOTE : "produire\n(1,N)---(1,N)"
+
+INSCRIPTION ||--o{ MOYENNE : "calculer\n(1,N)---(0,N)\nvaleur\ncoefficient\ntotal_points\nrang\nappréciation"
+
+MATIERE ||--o{ MOYENNE : "concerner\n(1,N)---(0,N)"
+
+SEQUENCE }o--o{ MOYENNE : "evaluer_seq\n(0,N)---(0,N)"
+
+TRIMESTRE }o--o{ MOYENNE : "evaluer_trim\n(0,N)---(0,N)"
+
+INSCRIPTION ||--o{ BILAN : "synthetiser\n(1,N)---(0,N)\nmoyenne\nrang\nmention"
+
+SEQUENCE }o--o{ BILAN : "resume_seq\n(0,N)---(0,N)"
+
+TRIMESTRE }o--o{ BILAN : "resume_trim\n(0,N)---(0,N)"
+
+ANNEE_SCOLAIRE }o--o{ BILAN : "resume_annee\n(0,N)---(0,N)"
+
+SEQUENCE ||--o{ APPRECIATION : "apprecier\n(1,N)---(0,N)\ntravail\ndiscipline\nconduite\ncommentaire"
+
+INSCRIPTION ||--o{ APPRECIATION : "recevoir\n(1,N)---(0,N)"
+
+DEPARTEMENT ||--o| ENSEIGNANT : "gerer\n(1,N)---(0,1)"
+
+@enduml

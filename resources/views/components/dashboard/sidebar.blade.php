@@ -186,7 +186,7 @@
                 <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
                     aria-label="Calcul des Résultats"
                     class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                    <i class="fas fa-file-invoicer w-6 text-center"></i>
+                    <i class="fas fa-calculator w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Calcul des Résultats</span>
                 </a>
             </li>

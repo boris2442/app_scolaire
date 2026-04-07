@@ -217,8 +217,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span
-                                        class="px-2 py-1 bg-secondary rounded text-[10px] ">{{ $eleve->sexe }}</span>
+                                    <span class="px-2 py-1 bg-secondary rounded text-[10px] ">{{ $eleve->sexe }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @php $ins = $eleve->inscriptions->first(); @endphp
@@ -235,8 +234,8 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2 text-foreground/30">
                                         <a href="{{ route('admin.eleves.show', $eleve) }}"
-                                            class="p-2 hover:text-primary transition-colors"><i
-                                                class="fas fa-fingerprint"></i></a>
+                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><i
+                                                class="fas fa-eye"></i></a>
                                         <form action="{{ route('admin.eleves.destroy', $eleve->id) }}" method="POST"
                                             onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                             @csrf
@@ -246,6 +245,7 @@
                                             </button>
                                         </form>
                                         <a
+                                    title="Modifier les informations de l'élève"
                                             href="{{ route('admin.eleves.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><i
                                                 class="fas fa-pen-alt"></i></a>
                                     </div>

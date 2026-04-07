@@ -1,9 +1,9 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-foreground mb-4">Départements Académiques</h1>
+    <h1 class="text-2xl font-bold text-foreground mb-4">Départements Scolaire</h1>
     <p class="text-sm text-gray-500 mb-6">Gérez les différentes
-        structures académiques de votre établissement. Ajoutez, modifiez ou supprimez des départements selon les besoins.
+        structures scolaire de votre établissement. Ajoutez, modifiez ou supprimez des départements selon les besoins.
     </p>
 
     <div class="">

@@ -1,0 +1,1772 @@
+{
+    "project": "Educational Management System",
+    "description": "School management system with student, teacher, class, and evaluation modules",
+    "entities": [
+        {
+            "name": "User",
+            "table": "users",
+            "description": "System users (admin, teachers, secretaries)",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "email_verified_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "role",
+                    "type": "enum('admin','enseignant','secretaire')",
+                    "nullable": false,
+                    "default": "enseignant"
+                },
+                {
+                    "name": "phone",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "remember_token",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "enseignant",
+                    "type": "has_one",
+                    "relatedModel": "Enseignant",
+                    "foreignKey": "user_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Etablissement",
+            "table": "etablissements",
+            "description": "School institution",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "adresse",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "telephone",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "logo",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "code_ecole",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "slogan",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": []
+        },
+        {
+            "name": "Cycle",
+            "table": "cycles",
+            "description": "Educational cycle (Primary, Secondary, etc.)",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "niveaux",
+                    "type": "has_many",
+                    "relatedModel": "Niveau",
+                    "foreignKey": "cycle_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Niveau",
+            "table": "niveaux",
+            "description": "Grade level within a cycle",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "cycle_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "cycles.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "cycle",
+                    "type": "belongs_to",
+                    "relatedModel": "Cycle",
+                    "foreignKey": "cycle_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "classes",
+                    "type": "has_many",
+                    "relatedModel": "Classe",
+                    "foreignKey": "niveau_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "AnneeScolaire",
+            "table": "annee_scolaires",
+            "description": "School year",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "libelle",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "date_debut",
+                    "type": "date",
+                    "nullable": false
+                },
+                {
+                    "name": "date_fin",
+                    "type": "date",
+                    "nullable": false
+                },
+                {
+                    "name": "est_active",
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": false
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "trimestres",
+                    "type": "has_many",
+                    "relatedModel": "Trimestre",
+                    "foreignKey": "annee_scolaire_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Classe",
+            "table": "classes",
+            "description": "School class",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "niveau_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "niveaux.id"
+                },
+                {
+                    "name": "salle_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "salles.id"
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "niveau",
+                    "type": "belongs_to",
+                    "relatedModel": "Niveau",
+                    "foreignKey": "niveau_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "anneeScolaire",
+                    "type": "belongs_to",
+                    "relatedModel": "AnneeScolaire",
+                    "foreignKey": "annee_scolaire_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "matieres",
+                    "type": "belongs_to_many",
+                    "relatedModel": "Matiere",
+                    "pivotTable": "classe_matiere",
+                    "pivotAttributes": ["coefficient", "ordre"]
+                },
+                {
+                    "name": "inscriptions",
+                    "type": "has_many",
+                    "relatedModel": "Inscription",
+                    "foreignKey": "classe_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Matiere",
+            "table": "matieres",
+            "description": "Subject or course",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "code",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "classes",
+                    "type": "belongs_to_many",
+                    "relatedModel": "Classe",
+                    "pivotTable": "classe_matiere",
+                    "pivotAttributes": ["coefficient", "ordre"]
+                }
+            ]
+        },
+        {
+            "name": "Departement",
+            "table": "departements",
+            "description": "Department or faculty",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "code",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "description",
+                    "type": "text",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "enseignants",
+                    "type": "has_many",
+                    "relatedModel": "Enseignant",
+                    "foreignKey": "departement_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Enseignant",
+            "table": "enseignants",
+            "description": "Teacher",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "user_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "users.id"
+                },
+                {
+                    "name": "matricule",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "specialite",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "departement_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "departements.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "user",
+                    "type": "belongs_to",
+                    "relatedModel": "User",
+                    "foreignKey": "user_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "departement",
+                    "type": "belongs_to",
+                    "relatedModel": "Departement",
+                    "foreignKey": "departement_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "affectations",
+                    "type": "has_many",
+                    "relatedModel": "Affectation",
+                    "foreignKey": "enseignant_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Eleve",
+            "table": "eleves",
+            "description": "Student",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "matricule",
+                    "type": "string",
+                    "nullable": false,
+                    "index": "unique"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "prenom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "date_naissance",
+                    "type": "date",
+                    "nullable": false
+                },
+                {
+                    "name": "sexe",
+                    "type": "enum('M','F')",
+                    "nullable": false
+                },
+                {
+                    "name": "lieu_naissance",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "telephone_parent",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "est_actif",
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": true
+                },
+                {
+                    "name": "adresse",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "photo",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "deleted_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "inscriptions",
+                    "type": "has_many",
+                    "relatedModel": "Inscription",
+                    "foreignKey": "eleve_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Inscription",
+            "table": "inscriptions",
+            "description": "Student enrollment in class",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "eleve_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "eleves.id"
+                },
+                {
+                    "name": "classe_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "classes.id"
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "date_inscription",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "statut",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "eleve",
+                    "type": "belongs_to",
+                    "relatedModel": "Eleve",
+                    "foreignKey": "eleve_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "classe",
+                    "type": "belongs_to",
+                    "relatedModel": "Classe",
+                    "foreignKey": "classe_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "annee_scolaire",
+                    "type": "belongs_to",
+                    "relatedModel": "AnneeScolaire",
+                    "foreignKey": "annee_scolaire_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Affectation",
+            "table": "affectations",
+            "description": "Teacher assignment to a class/subject",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "enseignant_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "enseignants.id"
+                },
+                {
+                    "name": "matiere_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "matieres.id"
+                },
+                {
+                    "name": "classe_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "classes.id"
+                },
+                {
+                    "name": "niveau_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "niveaux.id"
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "enseignant",
+                    "type": "belongs_to",
+                    "relatedModel": "Enseignant",
+                    "foreignKey": "enseignant_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "matiere",
+                    "type": "belongs_to",
+                    "relatedModel": "Matiere",
+                    "foreignKey": "matiere_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "classe",
+                    "type": "belongs_to",
+                    "relatedModel": "Classe",
+                    "foreignKey": "classe_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "niveau",
+                    "type": "belongs_to",
+                    "relatedModel": "Niveau",
+                    "foreignKey": "niveau_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "anneeScolaire",
+                    "type": "belongs_to",
+                    "relatedModel": "AnneeScolaire",
+                    "foreignKey": "annee_scolaire_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Trimestre",
+            "table": "trimestres",
+            "description": "Quarter or term in school year",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "sequences",
+                    "type": "has_many",
+                    "relatedModel": "Sequence",
+                    "foreignKey": "trimestre_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "anneeScolaire",
+                    "type": "belongs_to",
+                    "relatedModel": "AnneeScolaire",
+                    "foreignKey": "annee_scolaire_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Sequence",
+            "table": "sequences",
+            "description": "Sequence within a trimester",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "nom",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "trimestre_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "trimestres.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "trimestre",
+                    "type": "belongs_to",
+                    "relatedModel": "Trimestre",
+                    "foreignKey": "trimestre_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Evaluation",
+            "table": "evaluations",
+            "description": "Assessment or test",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "titre",
+                    "type": "string",
+                    "nullable": false
+                },
+                {
+                    "name": "date_evaluation",
+                    "type": "date",
+                    "nullable": true
+                },
+                {
+                    "name": "sequence_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "sequences.id"
+                },
+                {
+                    "name": "classe_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "classes.id"
+                },
+                {
+                    "name": "matiere_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "matieres.id"
+                },
+                {
+                    "name": "enseignant_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "enseignants.id"
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "matiere",
+                    "type": "belongs_to",
+                    "relatedModel": "Matiere",
+                    "foreignKey": "matiere_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "sequence",
+                    "type": "belongs_to",
+                    "relatedModel": "Sequence",
+                    "foreignKey": "sequence_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "classe",
+                    "type": "belongs_to",
+                    "relatedModel": "Classe",
+                    "foreignKey": "classe_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "notes",
+                    "type": "has_many",
+                    "relatedModel": "Note",
+                    "foreignKey": "evaluation_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Note",
+            "table": "notes",
+            "description": "Student grade for an evaluation",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "valeur",
+                    "type": "decimal(4,2)",
+                    "nullable": false
+                },
+                {
+                    "name": "evaluation_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "evaluations.id"
+                },
+                {
+                    "name": "inscription_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "inscriptions.id"
+                },
+                {
+                    "name": "est_validee",
+                    "type": "boolean",
+                    "nullable": false,
+                    "default": false
+                },
+                {
+                    "name": "observation",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": []
+        },
+        {
+            "name": "Moyenne",
+            "table": "moyennes",
+            "description": "Student average/mean grade for a subject",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "inscription_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "inscriptions.id"
+                },
+                {
+                    "name": "matiere_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "matieres.id"
+                },
+                {
+                    "name": "sequence_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "sequences.id"
+                },
+                {
+                    "name": "trimestre_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "trimestres.id"
+                },
+                {
+                    "name": "valeur",
+                    "type": "decimal(4,2)",
+                    "nullable": false
+                },
+                {
+                    "name": "coefficient",
+                    "type": "integer",
+                    "nullable": false
+                },
+                {
+                    "name": "total_points",
+                    "type": "decimal(6,2)",
+                    "nullable": false
+                },
+                {
+                    "name": "rang",
+                    "type": "integer",
+                    "nullable": false
+                },
+                {
+                    "name": "moyenne_classe",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "min_classe",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "max_classe",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "appreciation",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": [
+                {
+                    "name": "inscription",
+                    "type": "belongs_to",
+                    "relatedModel": "Inscription",
+                    "foreignKey": "inscription_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "matiere",
+                    "type": "belongs_to",
+                    "relatedModel": "Matiere",
+                    "foreignKey": "matiere_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "sequence",
+                    "type": "belongs_to",
+                    "relatedModel": "Sequence",
+                    "foreignKey": "sequence_id",
+                    "ownerKey": "id"
+                },
+                {
+                    "name": "trimestre",
+                    "type": "belongs_to",
+                    "relatedModel": "Trimestre",
+                    "foreignKey": "trimestre_id",
+                    "ownerKey": "id"
+                }
+            ]
+        },
+        {
+            "name": "Bilan",
+            "table": "bilans",
+            "description": "Summary report for a student",
+            "primaryKey": "id",
+            "attributes": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "inscription_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "inscriptions.id"
+                },
+                {
+                    "name": "sequence_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "sequences.id"
+                },
+                {
+                    "name": "trimestre_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "trimestres.id"
+                },
+                {
+                    "name": "annee_scolaire_id",
+                    "type": "bigint",
+                    "nullable": true,
+                    "foreignKey": "annee_scolaires.id"
+                },
+                {
+                    "name": "total_points",
+                    "type": "decimal",
+                    "nullable": true
+                },
+                {
+                    "name": "total_coefs",
+                    "type": "decimal",
+                    "nullable": true
+                },
+                {
+                    "name": "moyenne",
+                    "type": "decimal(4,2)",
+                    "nullable": false
+                },
+                {
+                    "name": "effectif_classe",
+                    "type": "integer",
+                    "nullable": true
+                },
+                {
+                    "name": "mention",
+                    "type": "string",
+                    "nullable": true
+                },
+                {
+                    "name": "rang",
+                    "type": "integer",
+                    "nullable": false
+                },
+                {
+                    "name": "moyenne_premier",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "moyenne_dernier",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "moyenne_classe",
+                    "type": "decimal(4,2)",
+                    "nullable": true
+                },
+                {
+                    "name": "observation_conseil",
+                    "type": "text",
+                    "nullable": true
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ],
+            "relationships": []
+        }
+    ],
+    "pivotTables": [
+        {
+            "name": "classe_matiere",
+            "description": "Many-to-many relationship between Classe and Matiere",
+            "leftModel": "Classe",
+            "rightModel": "Matiere",
+            "pivotColumns": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "index": "primary"
+                },
+                {
+                    "name": "classe_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "classes.id"
+                },
+                {
+                    "name": "matiere_id",
+                    "type": "bigint",
+                    "nullable": false,
+                    "foreignKey": "matieres.id"
+                },
+                {
+                    "name": "coefficient",
+                    "type": "integer",
+                    "nullable": false,
+                    "default": 1
+                },
+                {
+                    "name": "ordre",
+                    "type": "integer",
+                    "nullable": false,
+                    "default": 1
+                },
+                {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "nullable": true
+                },
+                {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "nullable": true
+                }
+            ]
+        }
+    ],
+    "relationshipSummary": {
+        "oneToMany": [
+            {
+                "from": "User",
+                "to": "Enseignant",
+                "foreignKey": "user_id"
+            },
+            {
+                "from": "Cycle",
+                "to": "Niveau",
+                "foreignKey": "cycle_id"
+            },
+            {
+                "from": "Niveau",
+                "to": "Classe",
+                "foreignKey": "niveau_id"
+            },
+            {
+                "from": "AnneeScolaire",
+                "to": "Trimestre",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "AnneeScolaire",
+                "to": "Classe",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "Trimestre",
+                "to": "Sequence",
+                "foreignKey": "trimestre_id"
+            },
+            {
+                "from": "Eleve",
+                "to": "Inscription",
+                "foreignKey": "eleve_id"
+            },
+            {
+                "from": "Classe",
+                "to": "Inscription",
+                "foreignKey": "classe_id"
+            },
+            {
+                "from": "Ensemble",
+                "to": "Affectation",
+                "foreignKey": "enseignant_id"
+            },
+            {
+                "from": "Evaluation",
+                "to": "Note",
+                "foreignKey": "evaluation_id"
+            },
+            {
+                "from": "Departement",
+                "to": "Enseignant",
+                "foreignKey": "departement_id"
+            }
+        ],
+        "manyToOne": [
+            {
+                "from": "Enseignant",
+                "to": "User",
+                "foreignKey": "user_id"
+            },
+            {
+                "from": "Enseignant",
+                "to": "Departement",
+                "foreignKey": "departement_id"
+            },
+            {
+                "from": "Classe",
+                "to": "Niveau",
+                "foreignKey": "niveau_id"
+            },
+            {
+                "from": "Classe",
+                "to": "AnneeScolaire",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "Inscription",
+                "to": "Eleve",
+                "foreignKey": "eleve_id"
+            },
+            {
+                "from": "Inscription",
+                "to": "Classe",
+                "foreignKey": "classe_id"
+            },
+            {
+                "from": "Inscription",
+                "to": "AnneeScolaire",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "Affectation",
+                "to": "Enseignant",
+                "foreignKey": "enseignant_id"
+            },
+            {
+                "from": "Affectation",
+                "to": "Matiere",
+                "foreignKey": "matiere_id"
+            },
+            {
+                "from": "Affectation",
+                "to": "Classe",
+                "foreignKey": "classe_id"
+            },
+            {
+                "from": "Affectation",
+                "to": "Niveau",
+                "foreignKey": "niveau_id"
+            },
+            {
+                "from": "Affectation",
+                "to": "AnneeScolaire",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "Sequence",
+                "to": "Trimestre",
+                "foreignKey": "trimestre_id"
+            },
+            {
+                "from": "Trimestre",
+                "to": "AnneeScolaire",
+                "foreignKey": "annee_scolaire_id"
+            },
+            {
+                "from": "Evaluation",
+                "to": "Sequence",
+                "foreignKey": "sequence_id"
+            },
+            {
+                "from": "Evaluation",
+                "to": "Classe",
+                "foreignKey": "classe_id"
+            },
+            {
+                "from": "Evaluation",
+                "to": "Matiere",
+                "foreignKey": "matiere_id"
+            },
+            {
+                "from": "Evaluation",
+                "to": "Enseignant",
+                "foreignKey": "enseignant_id"
+            },
+            {
+                "from": "Note",
+                "to": "Evaluation",
+                "foreignKey": "evaluation_id"
+            },
+            {
+                "from": "Note",
+                "to": "Inscription",
+                "foreignKey": "inscription_id"
+            },
+            {
+                "from": "Moyenne",
+                "to": "Inscription",
+                "foreignKey": "inscription_id"
+            },
+            {
+                "from": "Moyenne",
+                "to": "Matiere",
+                "foreignKey": "matiere_id"
+            },
+            {
+                "from": "Moyenne",
+                "to": "Sequence",
+                "foreignKey": "sequence_id"
+            },
+            {
+                "from": "Moyenne",
+                "to": "Trimestre",
+                "foreignKey": "trimestre_id"
+            },
+            {
+                "from": "Bilan",
+                "to": "Inscription",
+                "foreignKey": "inscription_id"
+            },
+            {
+                "from": "Bilan",
+                "to": "Sequence",
+                "foreignKey": "sequence_id"
+            },
+            {
+                "from": "Bilan",
+                "to": "Trimestre",
+                "foreignKey": "trimestre_id"
+            }
+        ],
+        "manyToMany": [
+            {
+                "from": "Classe",
+                "to": "Matiere",
+                "pivotTable": "classe_matiere",
+                "pivotAttributes": ["coefficient", "ordre"]
+            }
+        ]
+    },
+    "keyConstraints": {
+        "primaryKeys": [
+            {
+                "table": "users",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "etablissements",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "cycles",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "niveaux",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "annee_scolaires",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "classes",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "matieres",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "departements",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "enseignants",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "eleves",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "inscriptions",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "affectations",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "trimestres",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "sequences",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "evaluations",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "notes",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "moyennes",
+                "column": "id",
+                "type": "bigint"
+            },
+            {
+                "table": "bilans",
+                "column": "id",
+                "type": "bigint"
+            }
+        ],
+        "uniqueConstraints": [
+            {
+                "table": "users",
+                "column": "email"
+            },
+            {
+                "table": "etablissements",
+                "column": "code_ecole"
+            },
+            {
+                "table": "matieres",
+                "column": "code"
+            },
+            {
+                "table": "departements",
+                "column": "nom"
+            },
+            {
+                "table": "enseignants",
+                "column": "matricule"
+            },
+            {
+                "table": "eleves",
+                "column": "matricule"
+            }
+        ],
+        "foreignKeys": [
+            {
+                "table": "niveaux",
+                "column": "cycle_id",
+                "references": "cycles.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "classes",
+                "column": "niveau_id",
+                "references": "niveaux.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "classes",
+                "column": "annee_scolaire_id",
+                "references": "annee_scolaires.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "enseignants",
+                "column": "user_id",
+                "references": "users.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "enseignants",
+                "column": "departement_id",
+                "references": "departements.id",
+                "onDelete": "set null"
+            },
+            {
+                "table": "trimestres",
+                "column": "annee_scolaire_id",
+                "references": "annee_scolaires.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "sequences",
+                "column": "trimestre_id",
+                "references": "trimestres.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "inscriptions",
+                "column": "eleve_id",
+                "references": "eleves.id"
+            },
+            {
+                "table": "inscriptions",
+                "column": "classe_id",
+                "references": "classes.id"
+            },
+            {
+                "table": "inscriptions",
+                "column": "annee_scolaire_id",
+                "references": "annee_scolaires.id"
+            },
+            {
+                "table": "affectations",
+                "column": "enseignant_id",
+                "references": "enseignants.id"
+            },
+            {
+                "table": "affectations",
+                "column": "matiere_id",
+                "references": "matieres.id"
+            },
+            {
+                "table": "affectations",
+                "column": "classe_id",
+                "references": "classes.id"
+            },
+            {
+                "table": "affectations",
+                "column": "niveau_id",
+                "references": "niveaux.id"
+            },
+            {
+                "table": "affectations",
+                "column": "annee_scolaire_id",
+                "references": "annee_scolaires.id"
+            },
+            {
+                "table": "evaluations",
+                "column": "sequence_id",
+                "references": "sequences.id"
+            },
+            {
+                "table": "evaluations",
+                "column": "classe_id",
+                "references": "classes.id"
+            },
+            {
+                "table": "evaluations",
+                "column": "matiere_id",
+                "references": "matieres.id"
+            },
+            {
+                "table": "evaluations",
+                "column": "enseignant_id",
+                "references": "enseignants.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "notes",
+                "column": "evaluation_id",
+                "references": "evaluations.id"
+            },
+            {
+                "table": "notes",
+                "column": "inscription_id",
+                "references": "inscriptions.id"
+            },
+            {
+                "table": "moyennes",
+                "column": "inscription_id",
+                "references": "inscriptions.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "moyennes",
+                "column": "matiere_id",
+                "references": "matieres.id"
+            },
+            {
+                "table": "moyennes",
+                "column": "sequence_id",
+                "references": "sequences.id"
+            },
+            {
+                "table": "moyennes",
+                "column": "trimestre_id",
+                "references": "trimestres.id"
+            },
+            {
+                "table": "bilans",
+                "column": "inscription_id",
+                "references": "inscriptions.id"
+            },
+            {
+                "table": "bilans",
+                "column": "sequence_id",
+                "references": "sequences.id"
+            },
+            {
+                "table": "bilans",
+                "column": "trimestre_id",
+                "references": "trimestres.id"
+            },
+            {
+                "table": "classe_matiere",
+                "column": "classe_id",
+                "references": "classes.id",
+                "onDelete": "cascade"
+            },
+            {
+                "table": "classe_matiere",
+                "column": "matiere_id",
+                "references": "matieres.id",
+                "onDelete": "cascade"
+            }
+        ]
+    }
+}
