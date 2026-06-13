@@ -24,42 +24,149 @@
 
             <div class="flex items-center space-x-2 sm:space-x-4">
 
-                <button id="theme-toggle" type="button"
-                    class="p-2.5 rounded-xl border border-border bg-secondary text-gray-500 hover:text-primary hover:border-primary transition-all duration-300 group">
-                    <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden group-hover:rotate-12 transition-transform"
-                        fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    </svg>
-                    <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden group-hover:rotate-90 transition-transform"
-                        fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z">
-                        </path>
-                    </svg>
-                </button>
+                {{-- <button id="theme-toggle" type="button"
+                    class="border border-border text-gray-500 hover:text-primary hover:border-primary transition-all duration-300 group p-2 rounded-lg">
 
-                <div class="h-8 w-px bg-border"></div>
+                    <i id="theme-toggle-dark-icon"
+                        class="fas fa-moon text-base hidden group-hover:rotate-12 transition-transform"></i>
+
+                    <i id="theme-toggle-light-icon"
+                        class="fas fa-sun text-lg hidden group-hover:rotate-90 transition-transform"></i>
+
+                </button> --}}
+
+                {{-- <div class="h-8 w-px bg-border"></div> --}}
                 <div class="h-4 w-px bg-border mx-2"></div>
                 <div id="digital-clock"
-                    class="text-sm font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                    class="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                     00:00:00
                 </div>
-                <div class="flex items-center space-x-3 pl-2">
+                {{-- <div class="flex items-center space-x-3 pl-2">
                     <div class="hidden text-right lg:block">
                         <p class="text-sm font-bold leading-none">{{ auth()->user()->name ?? 'Utilisateur' }}</p>
-                        <p class="text-[10px] text-primary font-medium uppercase mt-1">Administrateur</p>
+
                     </div>
 
                     <div class="relative group cursor-pointer">
                         <div
-                            class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all">
+                            class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all">
                             {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
                         </div>
                         <span
-                            class="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-success ring-2 ring-card"></span>
+                            class="absolute bottom-0 right-0 block h-1 w-1 rounded-full bg-success ring-2 ring-card"></span>
+                    </div>
+                </div> --}}
+
+
+
+                <div class="relative flex items-center pl-2">
+
+                    <button id="user-menu-button"
+                        class="flex items-center space-x-3 cursor-pointer focus:outline-none group">
+                        <div class="hidden text-right lg:block">
+                            <p
+                                class="text-sm font-bold leading-none text-foreground group-hover:text-primary transition-colors">
+                                {{ auth()->user()->name ?? 'Utilisateur' }}
+                            </p>
+                        </div>
+
+                        <div class="relative">
+                            <div
+                                class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all">
+                                {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                            </div>
+                            <span
+                                class="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-success ring-2 ring-card"></span>
+                        </div>
+
+                        <i
+                            class="fas fa-chevron-down text-[10px] text-gray-400 group-hover:text-primary transition-colors pl-1"></i>
+                    </button>
+
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-48 bg-card text-card-foreground border border-border rounded-xl shadow-xl z-50 overflow-hidden transform origin-top-right transition-all duration-200">
+
+                        <div class="px-4 py-2.5 border-b border-border bg-secondary/30">
+                            <p class="text-xs text-gray-400">Mon compte</p>
+                            <p class="text-sm font-medium truncate">{{ auth()->user()->email ?? 'user@example.com' }}
+                            </p>
+                        </div>
+
+                        <div class="p-1.5 space-y-0.5">
+                            <a href="{{ route('profile.edit') }}"
+                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
+                                <i class="fas fa-user-circle w-4 text-center"></i>
+                                <span>Mon Profil</span>
+                            </a>
+
+                            <a href="/notifications"
+                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
+                                <i class="fas fa-bell w-4 text-center"></i>
+                                <span>Notifications</span>
+                                <span
+                                    class="ml-auto bg-danger text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">3</span>
+                            </a>
+
+                            <a href="/settings"
+                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
+                                <i class="fas fa-cog w-4 text-center"></i>
+                                <span>Paramètres</span>
+                            </a>
+
+                            <div class="border-t border-border my-1"></div>
+
+                            <button id="theme-toggle" type="button"
+                                class="w-full flex items-center space-x-2 px-3 py-2 text-sm rounded-lg text-gray-500 hover:bg-secondary hover:text-primary transition-all duration-300 group/theme text-left">
+
+                                <span class="w-4 flex justify-center">
+                                    <i id="theme-toggle-dark-icon"
+                                        class="fas fa-moon text-base hidden group-hover/theme:rotate-12 transition-transform"></i>
+                                    <i id="theme-toggle-light-icon"
+                                        class="fas fa-sun text-lg hidden group-hover/theme:rotate-90 transition-transform"></i>
+                                </span>
+
+                                <span class="text-card-foreground">Changer de mode</span>
+                            </button>
+
+                            <div class="border-t border-border my-1"></div>
+                            <div class="border-t border-border my-1"></div>
+                            <form method="POST" action="/logout" class="block w-full">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-500 rounded-lg hover:bg-red-500/10 transition-colors text-left">
+                                    <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                                    <span>Déconnexion</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const button = document.getElementById('user-menu-button');
+                        const dropdown = document.getElementById('user-dropdown');
+
+                        if (button && dropdown) {
+                            // Toggle le menu lors du clic sur le bouton
+                            button.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                dropdown.classList.toggle('hidden');
+                            });
+
+                            // Ferme le menu si on clique n'importe où ailleurs
+                            document.addEventListener('click', (e) => {
+                                if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+                                    dropdown.classList.add('hidden');
+                                }
+                            });
+                        }
+                    });
+                </script>
             </div>
+
+
+
         </div>
     </div>
 </header>

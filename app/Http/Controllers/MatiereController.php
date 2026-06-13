@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CourseRequest;
 use App\Models\Matiere;
 use Illuminate\Http\Request;
 
@@ -23,12 +24,9 @@ class MatiereController extends Controller
         return view('pages.matieres.index', compact('matieres'));
     }
 
-    public function store(Request $request)
+    public function store(CourseRequest $request)
     {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:100|unique:matieres,nom',
-            'code' => 'required|string|max:10|unique:matieres,code',
-        ]);
+        $validated = $request->validated();
 
         Matiere::create($validated);
 

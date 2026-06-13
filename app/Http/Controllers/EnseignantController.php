@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TeacherRequest;
 use App\Models\Departement;
 use App\Models\Enseignant;
 use App\Models\User;
@@ -31,14 +32,9 @@ class EnseignantController extends Controller
         $departements = Departement::orderBy('nom')->get();
         return view('pages.enseignants.create', compact('departements'));
     }
-    public function store(Request $request)
+    public function store(TeacherRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'matricule' => 'required|unique:enseignants,matricule',
-            'departement_id' => 'required|exists:departements,id', // Validation de l'existence
-        ]);
+        $request->validated();
 
 
         DB::transaction(function () use ($request) {

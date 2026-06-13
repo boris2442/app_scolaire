@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BulkStoreRequest;
 use App\Models\Affectation;
 use App\Models\Classe;
 use App\Models\Enseignant;
@@ -33,19 +34,6 @@ class AffectationController extends Controller
         $matieresDuNiveau = [];
         $affectationsExistantes = [];
 
-        // if ($classeId) {
-        //     $classe = Classe::with('niveau.matieres')->findOrFail($classeId);
-
-        //     // On récupère les matières liées au niveau (ex: 6e) de cette classe (ex: 6e A)
-        //     // $matieresDuNiveau = $classe->niveau->matieres;
-        //     // Teste si tes matières sont liées à la classe plutôt qu'au niveau
-        //     $matieresDuNiveau = $classe->matieres;
-
-        //     $affectationsExistantes = Affectation::where('classe_id', $classeId) // Adapté ici aussi
-        //         ->where('annee_scolaire_id', $anneeActive->id)
-        //         ->get()
-        //         ->keyBy('matiere_id');
-        // }
 
 
         if ($classeId) {
@@ -77,39 +65,12 @@ class AffectationController extends Controller
 
 
 
-    // public function bulkStore(Request $request)
-    // {
-    //     $anneeActive = $this->scolarite->getAnneeActive();
-    //     $classeId = $request->classe_id;
-    //     $donnees = $request->affectations; // C'est un tableau [matiere_id => enseignant_id]
-
-    //     foreach ($donnees as $matiereId => $enseignantId) {
-    //         if ($enseignantId) { // On n'enregistre que si un prof est choisi
-    //             Affectation::updateOrCreate(
-    //                 [
-    //                     'classe_id' => $classeId,
-    //                     'matiere_id' => $matiereId,
-    //                     'annee_scolaire_id' => $anneeActive->id,
-    //                 ],
-    //                 ['enseignant_id' => $enseignantId]
-    //             );
-    //         }
-    //     }
-
-    //     return redirect()->back()->with('success', 'Tableau de service mis à jour d\'un seul coup !');
-    // }
 
 
-
-
-
-    public function bulkStore(Request $request)
+    public function bulkStore(BulkStoreRequest $request)
     {
         // 1. Validation (Évite les crashs si les données sont corrompues)
-        $request->validate([
-            'classe_id' => 'required|exists:classes,id',
-            'affectations' => 'nullable|array',
-        ]);
+        $request->validated();
 
         $anneeActive = $this->scolarite->getAnneeActive();
         $classeId = $request->classe_id;

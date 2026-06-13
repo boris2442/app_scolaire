@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCycleRequest;
+use App\Http\Requests\StoreLevelRequest;
+use App\Http\Requests\UpdateLevelRequest;
 use App\Models\Cycle;
 use App\Models\Niveau;
 use Illuminate\Http\Request;
@@ -15,30 +18,21 @@ class AcademiqueController extends Controller
         return view('pages.academique.index', compact('cycles'));
     }
 
-    public function storeCycle(Request $request)
+    public function storeCycle(StoreCycleRequest $request)
     {
-        $request->validate(['nom' => 'required|unique:cycles,nom']);
+        $request->validated();
         Cycle::create($request->all());
         return back()->with('success', 'Cycle ajouté !');
     }
 
-    public function storeNiveau(Request $request)
+    public function storeNiveau(StoreLevelRequest $request)
     {
-        $request->validate([
-            'nom' => 'required',
-            'cycle_id' => 'required|exists:cycles,id'
-        ]);
+        $request->validated();
         Niveau::create($request->all());
         return back()->with('success', 'Niveau ajouté !');
     }
 
 
-
-
-
-
-
-    
     // Afficher le formulaire d'édition d'un Cycle
     public function editCycle(Cycle $cycle)
     {
@@ -71,9 +65,9 @@ class AcademiqueController extends Controller
     }
 
     // --- ACTIONS POUR LES NIVEAUX ---
-    public function updateNiveau(Request $request, Niveau $niveau)
+    public function updateNiveau(UpdateLevelRequest $request, Niveau $niveau)
     {
-        $request->validate(['nom' => 'required', 'cycle_id' => 'required|exists:cycles,id']);
+        $request->validated();
         $niveau->update($request->all());
         return redirect()->route('settings.academique.index')->with('success', 'Niveau mis à jour !');
     }
@@ -83,11 +77,4 @@ class AcademiqueController extends Controller
         $niveau->delete();
         return redirect()->route('settings.academique.index')->with('success', 'Niveau supprimé.');
     }
-
-
-
-
-
-
-
 }

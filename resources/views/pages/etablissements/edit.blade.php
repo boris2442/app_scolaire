@@ -21,19 +21,7 @@
                             placeholder="Ex: Lycée Classique de Bafoussam">
                     </div>
 
-                    {{-- <div
-                        class="md:col-span-2 flex items-center space-x-6 bg-background/50 p-4 rounded-lg border border-dashed border-border">
-                        <div class="shrink-0">
-                            <img class="h-16 w-16 object-cover rounded-lg" src="{{ asset('images/logo.jpg') }}"
-                                alt="Current logo">
-                        </div>
-                        <label class="block">
-                            <span class="sr-only">Choisir un logo</span>
-                            <input type="file" name="logo"
-                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:opacity-90">
-                        </label>
-                    </div> --}}
-
+                   
 
 
                     <div class="mb-4">
@@ -63,7 +51,7 @@
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium mb-2">Adresse physique</label>
-                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5">{{ old('adresse', $etablissement->adresse) }}</textarea>
+                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 resize-none ">{{ old('adresse', $etablissement->adresse) }}</textarea>
                     </div>
 
                     <div>

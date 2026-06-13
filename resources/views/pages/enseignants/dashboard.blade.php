@@ -24,17 +24,7 @@
                     {{ \Carbon\Carbon::parse($anneeActive->date_fin)->format('d/m/Y') }}
                     {{-- </p> --}}
             </div>
-            <div class="flex items-center gap-2">
-                <button
-                    class="w-9 h-9 flex items-center justify-center bg-secondary text-secondary-foreground rounded-xl hover:ring-2 ring-primary/20 transition-all border border-border">
-                    <i class="fa-solid fa-bell text-xs"></i>
-                </button>
-                <a href="{{ route('profile.edit') }}"
-                    class="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground rounded-xl border border-border hover:bg-secondary/80 transition-all">
-                    <i class="fa-solid fa-user-circle text-sm"></i>
-                    <span class="text-xs font-bold">Mon Profil</span>
-                </a>
-            </div>
+          
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">

@@ -20,7 +20,7 @@ class TrimestreController extends Controller
         $anneeActive = AnneeScolaire::where('est_active', 1)
             ->with('trimestres.sequences')
             ->first();
-       // $anneesSansTrimestres = AnneeScolaire::withCount('trimestres')->get();
+        // $anneesSansTrimestres = AnneeScolaire::withCount('trimestres')->get();
         //     dd($anneesSansTrimestres->toArray()); // Ceci va stopper la page et afficher le contenu
 
         return view('pages.trimestres.index', compact('anneesSansTrimestres', 'anneeActive'));

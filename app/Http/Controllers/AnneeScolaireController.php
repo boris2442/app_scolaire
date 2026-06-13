@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAnneeScolaireRequest;
 use App\Models\AnneeScolaire;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
 class AnneeScolaireController extends Controller
@@ -22,12 +22,7 @@ class AnneeScolaireController extends Controller
         return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
-    // public function store(StoreAnneeScolaireRequest $request)
-    // {
-    //     AnneeScolaire::create($request->validated());
-
-    //     return back()->with('success', 'Année scolaire ajoutée.');
-    // }
+ 
 
     public function store(StoreAnneeScolaireRequest $request)
     {

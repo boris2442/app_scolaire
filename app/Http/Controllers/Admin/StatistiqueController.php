@@ -44,39 +44,6 @@ class StatistiqueController extends Controller
     // --- FONCTIONS PRIVÉES D'OPTIMISATION ---
 
 
-    // private function getStatsGlobales($sequenceId)
-    // {
-    //     $anneeId = $this->scolarite->getAnneeActive()->id;
-
-    //     // 1. On récupère d'abord l'effectif réel (Tous les inscrits de l'année)
-    //     $effectifReel = DB::table('inscriptions')
-    //         ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-    //         ->where('inscriptions.annee_scolaire_id', $anneeId)
-    //         ->select(
-    //             DB::raw('COUNT(*) as total'),
-    //             DB::raw('SUM(CASE WHEN eleves.sexe = "M" THEN 1 ELSE 0 END) as garcons'),
-    //             DB::raw('SUM(CASE WHEN eleves.sexe = "F" THEN 1 ELSE 0 END) as filles')
-    //         )->first();
-
-    //     // 2. On récupère les performances (Uniquement ceux qui ont des notes pour la séquence)
-    //     $performances = DB::table('moyennes')
-    //         ->where('sequence_id', $sequenceId)
-    //         ->select(
-    //             DB::raw('AVG(valeur) as moyenne_generale'),
-    //             DB::raw('SUM(CASE WHEN valeur >= 10 THEN 1 ELSE 0 END) as admis'),
-    //             DB::raw('MAX(valeur) as meilleure_note')
-    //         )->first();
-
-    //     // On fusionne les deux pour la vue
-    //     return (object) [
-    //         'effectif_total' => $effectifReel->total,
-    //         'garcons' => $effectifReel->garcons,
-    //         'filles' => $effectifReel->filles,
-    //         'moyenne_generale' => $performances->moyenne_generale ?? 0,
-    //         'admis' => $performances->admis ?? 0,
-    //         'meilleure_note' => $performances->meilleure_note ?? 0
-    //     ];
-    // }
 
     private function getStatsGlobales($sequenceId)
     {
@@ -118,21 +85,6 @@ class StatistiqueController extends Controller
             'filles_admis'     => $perf->filles_admis ?? 0,
         ];
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private function getTopEleves($sequenceId)

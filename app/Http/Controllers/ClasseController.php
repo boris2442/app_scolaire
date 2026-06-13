@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassStoreRequest;
 use App\Models\AnneeScolaire;
 use App\Models\Classe;
 use App\Models\Niveau;
-use Illuminate\Http\Request;
+
 
 class ClasseController extends Controller
 {
@@ -23,19 +24,15 @@ class ClasseController extends Controller
         // On charge les classes de l'année active groupées par niveau
         $niveaux = Niveau::with(['classes' => function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id)
-              ->with('matieres'); // On charge aussi les matières pour chaque classe
+                ->with('matieres'); // On charge aussi les matières pour chaque classe
         }])->get();
 
         return view('pages.classes.index', compact('niveaux', 'anneeActive'));
     }
 
-    public function store(Request $request)
+    public function store(ClassStoreRequest $request)
     {
-        $request->validate([
-            'nom' => 'required|string|max:50',
-            'niveau_id' => 'required|exists:niveaux,id',
-            'annee_scolaire_id' => 'required|exists:annee_scolaires,id'
-        ]);
+        $request->validated();
 
         Classe::create($request->all());
 

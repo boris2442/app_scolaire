@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartementRequest;
 use App\Models\Departement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ class DepartementController extends Controller
     {
         // $departements=Departement::with(['nom', 'code','created_at', 'description'])->get();
         // Dans DepartementController.php à la ligne 12
-     $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
+        $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
         return view('pages.departements.index', compact('departements'));
     }
 
@@ -63,29 +64,25 @@ class DepartementController extends Controller
 
 
     public function create()
-{
-    return view('pages.departements.create');
-}
+    {
+        return view('pages.departements.create');
+    }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'nom' => 'required|string|max:255',
-        'code' => 'required|string|max:10|unique:departements,code',
-        'description' => 'nullable|string'
-    ]);
+    public function store(DepartementRequest $request)
+    {
+        $request->validated();
 
-    DB::table('departements')->insert([
-        'nom' => $request->nom,
-        'code' => strtoupper($request->code),
-        'description' => $request->description,
-        'created_at' => now(),
-        'updated_at' => now(),
-        // Si tu as une colonne pour l'auteur, décommente la ligne suivante :
-        // 'createur_id' => auth()->id(), 
-    ]);
+        DB::table('departements')->insert([
+            'nom' => $request->nom,
+            'code' => strtoupper($request->code),
+            'description' => $request->description,
+            'created_at' => now(),
+            'updated_at' => now(),
+            // Si tu as une colonne pour l'auteur, décommente la ligne suivante :
+            // 'createur_id' => auth()->id(), 
+        ]);
 
-    return redirect()->route('admin.departements.index')
-                     ->with('success', 'Nouveau département créé avec succès !');
-}
+        return redirect()->route('admin.departements.index')
+            ->with('success', 'Nouveau département créé avec succès !');
+    }
 }

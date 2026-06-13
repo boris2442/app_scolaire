@@ -169,17 +169,7 @@ class EleveController extends Controller
      * Affiche le dossier complet d'un élève.
      * @param  \App\Models\Eleve  $eleve
      */
-    //     public function show(Eleve $eleve)
-    //     {
-    //         // On charge les relations 'inscriptions' avec leurs classes et années scolaires
-    //         // pour que la vue puisse afficher l'historique sans refaire de requêtes SQL.
-
-    //         $eleve->load(['inscriptions.classe', 'inscriptions.anneeScolaire']);
-    //  @dump($eleve->toArray());
-    //         return view('pages.eleves.show', compact('eleve'));
-    //     }
-
-
+   
     public function show($id)
     {
         $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire', 'inscriptions.classe.niveau'])
