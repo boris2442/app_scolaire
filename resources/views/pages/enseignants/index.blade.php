@@ -13,15 +13,16 @@
         </a>
     </div>
 
-    <div class="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+    <div class="bg-card rounded-2xl border border-border shadow-sm">
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-secondary/50 border-b border-border">
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Enseignant</th>
+                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground rounded-tl-2xl">Enseignant</th>
                     <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Matricule</th>
                     <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Département</th>
                     <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Statut Compte</th>
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-right">Actions</th>
+                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-right rounded-tr-2xl">Actions
+                    </th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-border">
@@ -57,70 +58,55 @@
                         </td>
                         <td class="p-4">
                             <span
-                                class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-[9px] font-black uppercase 
-               bg-[var(--success)]/10 text-[var(--success)]">
+                                class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-[9px] font-black uppercase bg-[var(--success)]/10 text-[var(--success)]">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>
                                 Actif
                             </span>
                         </td>
 
-                        {{-- <td class="p-4 text-right">
-                            <button class="p-2 text-muted-foreground hover:text-primary transition-colors">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td> --}}
-                        <td class="p-4 text-right relative">
-                            <div x-data="{ open: false }" class="relative inline-block text-left">
+                        <td class="p-4 text-right relative px-6">
+                            <div class="inline-block text-left">
 
-                                <!-- Bouton 3 points -->
-                                <button @click="open = !open"
-                                    class="p-2 rounded-md text-[var(--secondary-foreground)] hover:bg-[var(--secondary)] transition">
-                                    <i class="fas fa-ellipsis-v"></i>
+                                <button type="button" onclick="toggleDropdown(event, this)"
+                                    class="p-2 rounded-md text-[var(--secondary-foreground)] hover:bg-[var(--secondary)] transition focus:outline-none relative">
+                                    <i class="fas fa-ellipsis-v pointer-events-none"></i>
                                 </button>
 
-                                <!-- Menu -->
-                                <div x-show="open" @click.away="open = false" x-transition
-                                    class="absolute right-0 mt-2 w-44 rounded-xl shadow-lg border border-[var(--border)] 
-                   bg-[var(--card)] text-[var(--card-foreground)] z-50 overflow-hidden">
+                                <div
+                                    class="dropdown-menu hidden absolute right-0 mt-2 w-44 rounded-xl shadow-xl border border-[var(--border)] 
+            bg-[var(--card)] text-[var(--card-foreground)] z-50 overflow-hidden text-left">
 
-                                    <!-- Voir -->
                                     <a href="{{ route('admin.enseignants.show', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
                                         <i class="fas fa-eye text-[var(--primary)]"></i>
                                         Voir plus
                                     </a>
 
-                                    <!-- Editer -->
                                     <a href="{{ route('admin.enseignants.edit', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
                                         <i class="fas fa-edit text-[var(--primary)]"></i>
                                         Éditer
                                     </a>
 
-                                    <!-- Divider -->
                                     <div class="border-t border-[var(--border)] my-1"></div>
 
-                                    <!-- Supprimer -->
                                     <form action="{{ route('admin.enseignants.destroy', $enseignant) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ? Cette action est irréversible.')"
-                                            class="w-full flex items-center gap-3 px-4 py-2 text-sm 
-                           text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
+                                            class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
                                             <i class="fas fa-trash"></i>
                                             Supprimer
                                         </button>
                                     </form>
-
                                 </div>
                             </div>
                         </td>
-
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="p-12 text-center text-muted-foreground">
+                        <td colspan="5" class="p-12 text-center text-muted-foreground rounded-b-2xl">
                             <p class="text-[10px] font-black uppercase tracking-widest">Aucun enseignant enregistré pour le
                                 moment</p>
                         </td>
@@ -129,4 +115,31 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        function toggleDropdown(event, button) {
+            // Bloque la fermeture immédiate par le clic global
+            event.stopPropagation();
+
+            // Trouve le menu juste après le bouton cliqué
+            const currentMenu = button.nextElementSibling;
+
+            // Ferme TOUS les autres menus ouverts sur la page
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu !== currentMenu) {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            // Alterne l'affichage du menu actuel
+            currentMenu.classList.toggle('hidden');
+        }
+
+        // Ferme le menu si on clique n'importe où ailleurs sur la page
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+        });
+    </script>
 @endsection

@@ -40,13 +40,7 @@ Route::put('/configuration-etablissement', [EtablissementController::class, 'upd
 //Annees scolaires
 
 
-// Route::prefix('settings')->name('settings.')->group(function () {
-//     Route::resource('annees', AnneeScolaireController::class)->parameters([
-//         'annees' => 'annee_scolaire'
-//     ]);
-//     // Route spéciale pour l'activation
-//     Route::patch('annees/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('annees.active');
-// });
+
 
 // On regroupe tout sous le préfixe 'settings'
 Route::prefix('settings')->name('settings.')->group(function () {
@@ -60,24 +54,6 @@ Route::prefix('settings')->name('settings.')->group(function () {
     // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
     Route::patch('annees/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('annees.active');
 });
-
-
-
-// Route::prefix('settings/academique')->name('settings.academique.')->group(function () {
-//     Route::get('/', [AcademiqueController::class, 'index'])->name('index');
-//     Route::post('/cycles', [AcademiqueController::class, 'storeCycle'])->name('cycles.store');
-//     Route::post('/niveaux', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
-
-//     // Routes Cycles
-//     Route::put('/cycles/{cycle}', [AcademiqueController::class, 'updateCycle'])->name('cycles.update');
-//     Route::delete('/cycles/{cycle}', [AcademiqueController::class, 'destroyCycle'])->name('cycles.destroy');
-
-//     // Routes Niveaux
-//     Route::put('/niveaux/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
-//     Route::delete('/niveaux/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
-// });
-
-
 
 
 
@@ -113,10 +89,6 @@ Route::prefix('settings/matieres')->name('settings.matieres.')->group(function (
 
 Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'edit'])->name('settings.classes.matieres.edit');
 Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
-
-
-
-
 
 
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1efdd49645b8bedc68947abacc71b2ca",
+    "content-hash": "0a056e5d1bae75731ef73611da8a0e3d",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1501,6 +1501,77 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "hotwired-laravel/turbo-laravel",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hotwired-laravel/turbo-laravel.git",
+                "reference": "a3fe3023283d5a87a1639d3809502802c085421a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hotwired-laravel/turbo-laravel/zipball/a3fe3023283d5a87a1639d3809502802c085421a",
+                "reference": "a3fe3023283d5a87a1639d3809502802c085421a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.10",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "orchestra/workbench": "^9.0|^10.0|^11.0",
+                "phpunit/phpunit": "^10.5|^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Turbo": "\\HotwiredLaravel\\TurboLaravel\\Facades\\Turbo",
+                        "TurboStream": "\\HotwiredLaravel\\TurboLaravel\\Facades\\TurboStream"
+                    },
+                    "providers": [
+                        "\\HotwiredLaravel\\TurboLaravel\\TurboServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php",
+                    "src/globals.php"
+                ],
+                "psr-4": {
+                    "HotwiredLaravel\\TurboLaravel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tony Messias",
+                    "email": "tonysm@hey.com",
+                    "homepage": "https://tonysm.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Turbo Laravel gives you a set of conventions to make the most out of the Hotwire stack (inspired by turbo-rails gem).",
+            "homepage": "https://github.com/hotwired-laravel/turbo-laravel",
+            "keywords": [
+                "hotwire",
+                "hotwired",
+                "turbo",
+                "turbo-laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/hotwired-laravel/turbo-laravel/issues",
+                "source": "https://github.com/hotwired-laravel/turbo-laravel/tree/2.6.0"
+            },
+            "time": "2026-02-28T17:19:14+00:00"
         },
         {
             "name": "laravel/framework",

@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.3",
         "barryvdh/laravel-dompdf": "*",
+        "hotwired-laravel/turbo-laravel": "^2.6",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
         "maatwebsite/excel": "*"
