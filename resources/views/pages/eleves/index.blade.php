@@ -131,7 +131,7 @@
 
                 <div class="relative flex items-center">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="NOM OU MATRICULE..."
-                        class="w-full bg-secondary border-border rounded-xl pl-4 pr-12 py-3 text-xs font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                        class="w-full bg-secondary border-border rounded-full pl-4 pr-12 py-3 text-xs font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all lowercase">
                     <button type="submit"
                         class="absolute right-2 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
                         <i class="fas fa-search text-sm"></i>

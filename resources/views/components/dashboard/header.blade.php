@@ -24,16 +24,7 @@
 
             <div class="flex items-center space-x-2 sm:space-x-4">
 
-                {{-- <button id="theme-toggle" type="button"
-                    class="border border-border text-gray-500 hover:text-primary hover:border-primary transition-all duration-300 group p-2 rounded-lg">
 
-                    <i id="theme-toggle-dark-icon"
-                        class="fas fa-moon text-base hidden group-hover:rotate-12 transition-transform"></i>
-
-                    <i id="theme-toggle-light-icon"
-                        class="fas fa-sun text-lg hidden group-hover:rotate-90 transition-transform"></i>
-
-                </button> --}}
 
                 {{-- <div class="h-8 w-px bg-border"></div> --}}
                 <div class="h-4 w-px bg-border mx-2"></div>
@@ -41,21 +32,6 @@
                     class="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                     00:00:00
                 </div>
-                {{-- <div class="flex items-center space-x-3 pl-2">
-                    <div class="hidden text-right lg:block">
-                        <p class="text-sm font-bold leading-none">{{ auth()->user()->name ?? 'Utilisateur' }}</p>
-
-                    </div>
-
-                    <div class="relative group cursor-pointer">
-                        <div
-                            class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all">
-                            {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
-                        </div>
-                        <span
-                            class="absolute bottom-0 right-0 block h-1 w-1 rounded-full bg-success ring-2 ring-card"></span>
-                    </div>
-                </div> --}}
 
 
 
@@ -99,7 +75,7 @@
                                 <span>Mon Profil</span>
                             </a>
 
-                            <a href="/notifications"
+                            <a href=""
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
                                 <i class="fas fa-bell w-4 text-center"></i>
                                 <span>Notifications</span>
@@ -107,7 +83,7 @@
                                     class="ml-auto bg-danger text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">3</span>
                             </a>
 
-                            <a href="/settings"
+                            <a href=""
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
                                 <i class="fas fa-cog w-4 text-center"></i>
                                 <span>Paramètres</span>
@@ -143,7 +119,7 @@
                 </div>
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', () => {
+                    document.addEventListener('turbo:load', () => {
                         const button = document.getElementById('user-menu-button');
                         const dropdown = document.getElementById('user-dropdown');
 

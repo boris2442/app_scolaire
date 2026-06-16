@@ -8,8 +8,8 @@
 
     <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 class="text-xl font-black uppercase text-foreground tracking-tight">Catalogue des Matières</h1>
-            <p class="text-xs text-muted-foreground font-bold uppercase tracking-tighter">Définissez la liste globale des
+            <h1 class="text-xl font-semi-bold  text-foreground tracking-tight">Catalogue des Matières</h1>
+            <p class="text-xs text-muted-foreground font-bold  tracking-tighter">Définissez la liste globale des
                 enseignements</p>
         </div>
 
@@ -21,7 +21,7 @@
                 </div>
 
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher une matière..."
-                    class="block w-full md:w-72 bg-secondary/50 border border-border rounded-xl py-2.5 pl-10 pr-10 text-xs font-bold uppercase tracking-widest focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50">
+                    class="block w-full md:w-72 bg-secondary/50 border border-border rounded-full py-2.5 pl-10 pr-10 text-xs font-bold  tracking-widest focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50">
 
                 <button type="submit"
                     class="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-primary text-muted-foreground transition-colors">
@@ -51,7 +51,7 @@
                     <div>
                         <label class="text-[12px] font-bold  text-muted-foreground ml-1">Nom complet</label>
                         <input type="text" name="nom" placeholder="ex: Mathématiques"
-                            class="w-full bg-secondary border-border rounded-xl text-sm px-4 py-3 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                            class="w-full bg-secondary border-border rounded-xl text-sm px-4 py-2 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             required>
                     </div>
 
@@ -63,7 +63,7 @@
                     </div>
 
                     <button
-                        class="w-full bg-primary text-white font-black py-4 rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all uppercase text-[10px] tracking-widest">
+                        class="w-full bg-primary text-white font-black py-2 rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all  text-[10px] tracking-widest px-4">
                         Enregistrer au catalogue
                     </button>
                 </form>

@@ -21,21 +21,21 @@
 
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
-                    <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
+                    <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
                         <i class="fas fa-user-graduate"></i> État Civil de l'Élève
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Nom de famille</label>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de famille</label>
                             <input type="text" name="nom" placeholder="ex: SIMO"
-                                class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
 
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Prénoms</label>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Prénoms</label>
                             <input type="text" name="prenom" placeholder="ex: Boris Aubin"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                             @error('prenom')
@@ -44,7 +44,7 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Date de
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Date de
                                 naissance</label>
                             <input type="date" name="date_naissance"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
@@ -55,7 +55,7 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Genre / Sexe</label>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Genre / Sexe</label>
                             <select name="sexe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Lieu de naissance</label>
+                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Lieu de naissance</label>
                         <input type="text" name="lieu_naissance" placeholder="ex: Bafoussam"
                             class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         @error('lieu_naissance')
@@ -81,12 +81,12 @@
                 </div>
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
-                    <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
+                    <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
                         <i class="fas fa-phone-alt"></i> Contact Urgence (Parents)
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Téléphone
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Téléphone
                                 Parent</label>
                             <input type="tel" name="telephone_parent" placeholder="ex: 6xx xx xx xx"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
@@ -95,7 +95,7 @@
                             <span class="text-xs text-danger mt-1">{{ $message }}</span>
                         @enderror
                         <div>
-                            <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Adresse /
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Adresse /
                                 Quartier</label>
                             <input type="text" name="adresse" placeholder="ex: Djeleng V"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
@@ -114,10 +114,10 @@
                     </h2>
 
                     <div>
-                        <label class="text-[10px] font-bold uppercase text-muted-foreground ml-1">Classe de
+                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de
                             destination</label>
                         <select name="classe_id"
-                            class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black uppercase outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                            class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                             required>
                             @foreach ($niveaux as $niv)
                                 <optgroup label="{{ $niv->nom }}">
@@ -132,14 +132,14 @@
 
                     <div class="mt-8 border-t border-border pt-6">
                         <button type="submit"
-                            class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all uppercase text-xs tracking-widest">
+                            class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs tracking-widest">
                             Valider l'Inscription
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm text-center">
-                    <h2 class="text-[10px] font-black uppercase text-muted-foreground mb-4 tracking-widest text-left">Photo
+                    <h2 class="text-[10px] font-black  text-muted-foreground mb-4 tracking-widest text-left">Photo
                         d'identité</h2>
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mx-auto mb-4 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">

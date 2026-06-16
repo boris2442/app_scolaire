@@ -28,7 +28,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            // 'email' => ['required', 'string', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -38,20 +39,36 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
+    // public function authenticate(): void
+
+
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // 1. Détection dynamique : est-ce un email valide ? Sinon, c'est le téléphone
+        $fieldType = filter_var($this->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        // 2. On prépare les clés pour la tentative de connexion
+        $credentials = [
+            $fieldType => $this->input('login'),
+            'password' => $this->input('password'),
+        ];
+
+        // 3. Tentative d'authentification
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login' => trans('auth.failed'), // L'erreur s'affichera sous le champ 'login'
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
     }
+
+
+
 
     /**
      * Ensure the login request is not rate limited.
@@ -69,7 +86,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'login' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -81,6 +98,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('login')) . '|' . $this->ip());
     }
 }

@@ -15,7 +15,8 @@ class Enseignant extends Model
     protected $fillable = [
         'user_id',
         'matricule',
-        'departement_id' // <--- IL DOIT ÊTRE ICI
+        'departement_id' ,// <--- IL DOIT ÊTRE ICI
+        'enseignant_id'
     ];
 
     public function user()

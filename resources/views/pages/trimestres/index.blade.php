@@ -41,7 +41,7 @@
                     </div>
 
                     <button type="submit"
-                        class="w-full bg-primary hover:bg-primary/80  font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                        class="w-full bg-primary hover:bg-primary/80  font-bold py-2 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 px-4">
                         <i class="lucide-save"></i> INITIALISER LE TRIMESTRE
                     </button>
                 </form>

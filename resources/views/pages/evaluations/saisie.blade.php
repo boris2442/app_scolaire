@@ -10,13 +10,13 @@
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
                 </svg>
-                RETOUR AUX ÉVALUATIONS
+                Retour aux evaluations
             </a>
         </div>
 
         {{-- En-tête --}}
         <div class="mb-8 border-l-4 border-primary pl-4 py-2 bg-secondary/5 rounded-r-2xl">
-            <h2 class="text-[10px] font-bold uppercase text-primary tracking-widest opacity-80">Saisie des notes</h2>
+            <h2 class="text-[10px] font-bold  text-primary tracking-widest opacity-80">Saisie des notes</h2>
             <h1 class="text-lg md:text-xl font-black leading-tight uppercase">{{ $evaluation->titre }}</h1>
             <div class="mt-2 flex gap-4 text-[10px] text-white/60 font-medium italic">
                 <span>Classe: {{ $evaluation->classe->nom }}</span>
@@ -33,7 +33,7 @@
                     <table class="w-full text-left border-collapse min-w-[700px]"> {{-- Force la largeur minimum --}}
                         <thead>
                             <tr
-                                class="text-primary uppercase text-[10px] tracking-widest border-b border-white/10 bg-white/5">
+                                class="text-primary  text-[10px] tracking-widest border-b border-white/10 bg-white/5">
                                 <th class="p-4 text-center w-20">Matricule</th>
                                 <th class="p-4">Nom de l'élève</th>
                                 <th class="p-4 w-32 text-center">Note / 20</th>
