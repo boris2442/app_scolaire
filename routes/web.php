@@ -210,8 +210,8 @@ Route::prefix('enseignant')->name('enseignant.')->group(function () {
 
 // Route::get('/admin/statistiques/registre', [StatistiqueController::class, 'registreTrimestriel'])->name('admin.statistiques.registre');
 
-// Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
-//     ->name('admin.bulletins.imprimer');
+Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
+    ->name('admin.bulletins.imprimer');
 
 
 
@@ -232,4 +232,13 @@ Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
 // Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
 Route::get('/admin/bulletins/classe/{classe_id}', [BulletinPrintController::class, 'classeHub'])
     ->name('admin.bulletins.classe');
+
+
+    // Route pour générer le PDF de toute la classe d'un coup
+Route::get('/admin/bulletins/classe/{classe_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
+    ->name('admin.bulletins.imprimer-classe');
+
+// Route pour générer le PDF d'un seul élève isolé
+Route::get('/admin/bulletins/inscription/{inscription_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
+    ->name('admin.bulletins.imprimer-eleve');
 require __DIR__ . '/auth.php';

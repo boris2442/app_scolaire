@@ -133,4 +133,87 @@ class AcademicStatisticsService
         if ($note >= 10) return 'Passable';
         return 'Insuffisant';
     }
+
+
+
+
+    public function calculerBilanGeneralTrimestre($trimestreId, $inscriptionId, $anneeScolaireId)
+    {
+        // 1. Le code cherche quelles séquences appartiennent à ce trimestre (ex: Séquence 1 et Séquence 2)
+        $sequenceIds = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
+
+        // 2. Il va dans la table 'bilans' et additionne les points et les coefficients de ces deux séquences pour cet élève
+        $donneesTrimestre = DB::table('bilans')
+            ->where('inscription_id', $inscriptionId)
+            ->whereIn('sequence_id', $sequenceIds)
+            ->select(
+                DB::raw('AVG(moyenne) as moyenne_trimestrielle'),
+                DB::raw('SUM(total_points) as total_points_trimestre'),
+                DB::raw('SUM(total_coefs) as total_coefs_trimestre')
+            )
+            ->first();
+
+        $moyenneTrimestre = $donneesTrimestre->moyenne_trimestrielle ?? 0;
+        $mention = $this->obtenirMentionOuAppreciation($moyenneTrimestre);
+
+        // 3. IMPORTANT : Il crée une NOUVELLE LIGNE dans la table 'bilans'.
+        // Cette ligne représente le TRIMESTRE complet. 
+        // Donc 'sequence_id' reste VIDE (null) et 'trimestre_id' est REMPLI.
+        DB::table('bilans')->updateOrInsert(
+            [
+                'inscription_id' => $inscriptionId,
+                'trimestre_id'   => $trimestreId,
+                'sequence_id'    => null, // Null signifie "Ce n'est pas le bilan d'une séquence, c'est le bilan du trimestre"
+            ],
+            [
+                'moyenne'           => $moyenneTrimestre,
+                'total_points'      => $donneesTrimestre->total_points_trimestre ?? 0,
+                'total_coefs'       => $donneesTrimestre->total_coefs_trimestre ?? 0,
+                'mention'           => $mention,
+                'annee_scolaire_id' => $anneeScolaireId,
+                'updated_at'        => now(),
+            ]
+        );
+    }
+
+
+
+
+    public function attribuerRangsClasseForTrimestre($trimestreId, $classeId)
+    {
+        // 1. Le code récupère toutes les lignes trimestrielles de la table 'bilans' 
+        // pour tous les élèves de cette classe, et il les TRIE par moyenne décroissante (orderBy desc)
+        $bilans = DB::table('bilans')
+            ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
+            ->where('inscriptions.classe_id', $classeId)
+            ->where('bilans.trimestre_id', $trimestreId)
+            ->whereNull('bilans.sequence_id') // On ne prend que les bilans du trimestre (ceux qui ont sequence_id à null)
+            ->select('bilans.id', 'bilans.moyenne')
+            ->orderBy('bilans.moyenne', 'desc') // Le premier de la collection sera le premier de la classe
+            ->get();
+
+        $effectif = $bilans->count(); // Compte le nombre total d'élèves (ex: 4)
+        $rang = 1;
+
+        // 2. Le code parcourt les élèves un par un (du premier au dernier)
+        foreach ($bilans as $index => $bilan) {
+
+            // Gestion des ex-æquo : Si l'élève actuel a exactement la même moyenne que le précédent,
+            // il garde le même rang. Sinon, son rang correspond à sa position (+1).
+            if ($index > 0 && $bilan->moyenne == $bilans[$index - 1]->moyenne) {
+                // Pas de changement de rang
+            } else {
+                $rang = $index + 1;
+            }
+
+            // 3. Le code met à jour la ligne de l'élève dans la base de données 
+            // en enregistrant son 'rang' et l'effetif de la classe.
+            DB::table('bilans')
+                ->where('id', $bilan->id)
+                ->update([
+                    'rang'            => $rang,
+                    'effectif_classe' => $effectif, // Enregistre par exemple 4
+                ]);
+        }
+    }
 }

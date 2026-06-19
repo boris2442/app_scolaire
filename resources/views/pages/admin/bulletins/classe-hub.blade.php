@@ -16,7 +16,7 @@
             </div>
 
             <a 
-            {{-- href="{{ route('admin.bulletins.imprimer-classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimestreId]) }}"  --}}
+            href="{{ route('admin.bulletins.imprimer-classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimestreId]) }}" 
                target="_blank"
                class="inline-flex items-center justify-center px-5 py-3 bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold rounded-lg transition shadow-sm gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,8 +47,17 @@
                             <td class="p-4 font-mono text-xs text-foreground/70">{{ $eleve->matricule ?? 'N/A' }}</td>
                             <td class="p-4 font-medium text-foreground">{{ $eleve->nom }} {{ $eleve->prenom }}</td>
                             <td class="p-4 text-center">
+                                {{-- <a 
+                                href="{{ route('admin.bulletins.imprimer-eleve', ['inscription_id' => $eleve->inscription_id, 'trimestre_id' => $trimestreId]) }}" 
+                                   target="_blank"
+                                   class="inline-flex items-center px-3 py-1.5 bg-secondary text-secondary-foreground text-xs font-medium rounded hover:bg-secondary/80 transition border border-border gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span>Imprimer le Bulletin</span>
+                                </a> --}}
                                 <a 
-                                {{-- href="{{ route('admin.bulletins.imprimer-eleve', ['inscription_id' => $eleve->inscription_id, 'trimestre_id' => $trimestreId]) }}"  --}}
+                                href="{{ route('admin.bulletins.imprimer-eleve', ['inscription_id' => $eleve->inscription_id, 'trimestre_id' => $trimestreId]) }}" 
                                    target="_blank"
                                    class="inline-flex items-center px-3 py-1.5 bg-secondary text-secondary-foreground text-xs font-medium rounded hover:bg-secondary/80 transition border border-border gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -4,12 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnneeScolaire;
+use App\Models\Inscription;
 use App\Models\Sequence;
 use App\Models\Trimestre;
+use App\Services\AcademicStatisticsService;
 use Illuminate\Http\Request;
 
 class TrimestreController extends Controller
 {
+
+protected $statisticsService;
+
+    // On injecte le service dans le contrôleur
+    public function __construct(AcademicStatisticsService $statisticsService)
+    {
+        $this->statisticsService = $statisticsService;
+    }
+
+    // La fonction qui se déclenche quand tu cliques sur "Calculer le trimestre"
+    public function genererBilanTrimestre(Request $request, $trimestreId, $classeId)
+    {
+        // 1. Récupérer tous les élèves inscrits dans cette classe
+        $inscriptions = Inscription::where('classe_id', $classeId)->get();
+        $anneeScolaireId = 1; // À remplacer par ton ID d'année active
+
+        // 2. Étape 1 : Pour chaque élève, on calcule sa moyenne trimestrielle
+        foreach ($inscriptions as $inscription) {
+            $this->statisticsService->calculerBilanGeneralTrimestre($trimestreId, $inscription->id, $anneeScolaireId);
+        }
+
+        // 3. Étape 2 : Une fois que tous les élèves ont leur moyenne, on les classe !
+        $this->statisticsService->attribuerRangsClasseForTrimestre($trimestreId, $classeId);
+
+        return redirect()->back()->with('success', 'Les bilans et rangs du trimestre ont été calculés avec succès !');
+    }
+
+
+
+
+
+
+
+
+
+
     public function index()
     {
         // On ne propose que les années qui n'ont pas encore leurs 3 trimestres
