@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\Admin\AuditSaisieController;
+use App\Http\Controllers\Admin\BulletinPrintController;
 use App\Http\Controllers\Admin\ResultatController;
+use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AnneeScolaireController;
@@ -168,8 +170,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('/departements', DepartementController::class);
-});
+        Route::resource('/departements', DepartementController::class);
+    });
 });
 
 
@@ -198,5 +200,36 @@ Route::prefix('enseignant')->name('enseignant.')->group(function () {
 
 
 
+// // 1. L'adresse pour afficher la page du formulaire
+// Route::get('/admin/statistiques', [StatisticController::class, 'afficherFormulaireStatistiques'])->name('admin.statistiques.index');
 
+// // 2. L'adresse qui reçoit les données quand on clique sur le bouton "Calculer"
+// Route::post('/admin/statistiques/generer', [StatisticController::class, 'générerSequence'])->name('admin.statistiques.generer_sequence');
+
+
+
+// Route::get('/admin/statistiques/registre', [StatistiqueController::class, 'registreTrimestriel'])->name('admin.statistiques.registre');
+
+// Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
+//     ->name('admin.bulletins.imprimer');
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Page principale : La grille des 4 colonnes avec le choix du trimestre
+Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
+    ->name('admin.bulletins.index');
+
+// Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
+Route::get('/admin/bulletins/classe/{classe_id}', [BulletinPrintController::class, 'classeHub'])
+    ->name('admin.bulletins.classe');
 require __DIR__ . '/auth.php';

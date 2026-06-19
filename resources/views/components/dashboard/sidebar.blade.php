@@ -155,6 +155,20 @@
                     <span class="sidebar-label ml-3">Progression saisie</span>
                 </a>
             </li>
+            {{-- <li>
+                <a href="{{ route('admin.statistiques.registre') }}" title="RRegistre" aria-label="RRegistre"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-file-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Registres</span>
+                </a>
+            </li> --}}
+            <li>
+                <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
+                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-file-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Impressions</span>
+                </a>
+            </li>
 
 
 

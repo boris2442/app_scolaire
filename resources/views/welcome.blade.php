@@ -47,6 +47,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}"
+                    data-turbo="true"
                         class="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold shadow-lg shadow-primary/15 hover:scale-[1.02] active:scale-[0.98] transition-all">
                         Connexion
                     </a>
