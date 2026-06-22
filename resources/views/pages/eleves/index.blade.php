@@ -11,9 +11,9 @@
                 <p class="text-sm text-muted-foreground">{{ $stats['total'] }} apprenants enregistrés cette année</p>
             </div>
 
-            <div class=" inline-block text-left" x-data="{ open: false }">
-                <button @click="open = !open" @click.away="open = false"
-                    class="p-2 hover:bg-secondary rounded-full transition-colors">
+
+            <div class="relative inline-block text-left menu-wrapper">
+                <button class="menu-trigger p-2 hover:bg-secondary rounded-full transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="1" />
@@ -21,49 +21,71 @@
                         <circle cx="12" cy="19" r="1" />
                     </svg>
                 </button>
-                <div x-show="open" x-transition
-                    class="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-lg z-50 overflow-auto max-h-[200px]">
+
+                <div
+                    class="menu-content hidden absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-lg z-50 overflow-auto max-h-[200px]">
                     <div class="py-1">
                         <header
                             class="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-border mb-1">
-                            Actions</header>
+                            Actions
+                        </header>
+
                         <a href="{{ route('admin.eleves.trashed') }}"
-                            class="flex items-center gap-3 px-4 py-2 text-red-500 hover:underline transition-colors"><i
-                                class="fas fa-trash-alt mr-1 opacity-50 text-xs "></i>Voir la corbeille
-                            ({{ \App\Models\Eleve::onlyTrashed()->count() }})</a>
+                            class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
+                            <i class="fas fa-trash-alt mr-1 opacity-50 text-xs"></i>Voir la corbeille
+                            ({{ \App\Models\Eleve::onlyTrashed()->count() }})
+                        </a>
+
                         <a href="{{ route('admin.eleves.create') }}"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-print opacity-50 text-xs"></i> Add student</a>
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
+                            <i class="fas fa-plus opacity-50 text-xs"></i> Add student
+                        </a>
+
                         <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel</a>
-                        <a href="#"
-                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors"><i
-                                class="fas fa-print opacity-50 text-xs"></i> Imprimer</a>
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
+                            <i class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel
+                        </a>
+
+                        {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
+                        @if (request()->filled('classe_id'))
+                            <a href="{{ route('admin.eleves.imprimer', ['classe_id' => request('classe_id')]) }}"
+                                target="_blank"
+                                class="flex items-center gap-3 px-4 py-2 text-sm text-primary font-bold hover:bg-primary/10 transition-colors">
+                                <i class="fas fa-print opacity-50 text-xs"></i> Imprimer cette classe
+                            </a>
+                        @else
+                            <div class="px-4 py-2 text-[10px] text-muted-foreground italic">
+                                Filtrez une classe pour imprimer
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
+        <script>
+            document.addEventListener('click', function(e) {
+                // 1. Détecter si on a cliqué sur un bouton de menu
+                const trigger = e.target.closest('.menu-trigger');
+                const allMenus = document.querySelectorAll('.menu-content');
 
+                if (trigger) {
+                    // Trouver le menu associé au bouton cliqué
+                    const currentMenu = trigger.nextElementSibling;
+
+                    // Fermer tous les autres menus ouverts avant d'ouvrir celui-ci
+                    allMenus.forEach(menu => {
+                        if (menu !== currentMenu) menu.classList.add('hidden');
+                    });
+
+                    // Toggle l'état du menu cliqué
+                    currentMenu.classList.toggle('hidden');
+                } else {
+                    // Si on clique ailleurs sur la page, fermer tous les menus
+                    allMenus.forEach(menu => menu.classList.add('hidden'));
+                }
+            });
+        </script>
 
 
         <div class="max-w-7xl mx-auto px-6 mb-10">
@@ -244,8 +266,7 @@
                                                 <i class="fas fa-trash-alt"></i> Archiver
                                             </button>
                                         </form>
-                                        <a
-                                    title="Modifier les informations de l'élève"
+                                        <a title="Modifier les informations de l'élève"
                                             href="{{ route('admin.eleves.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><i
                                                 class="fas fa-pen-alt"></i></a>
                                     </div>

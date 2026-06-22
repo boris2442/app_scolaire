@@ -41,6 +41,7 @@ class AcademicStatisticsService
                     'coefficient'  => $item->coefficient,
                     'total_points' => $totalPoints,
                     'appreciation' => $appreciation,
+                    'effectif_classe'   => 0, // 👈 AJOUTE CETTE LIGNE ICI
                     'updated_at'   => now(),
                 ]
             );
@@ -102,6 +103,8 @@ class AcademicStatisticsService
             ->orderBy('bilans.moyenne', 'desc')
             ->get();
 
+        // dd($bilans);
+
         $effectif = $bilans->count();
         $rang = 1;
 
@@ -159,21 +162,23 @@ class AcademicStatisticsService
         // 3. IMPORTANT : Il crée une NOUVELLE LIGNE dans la table 'bilans'.
         // Cette ligne représente le TRIMESTRE complet. 
         // Donc 'sequence_id' reste VIDE (null) et 'trimestre_id' est REMPLI.
-        DB::table('bilans')->updateOrInsert(
-            [
-                'inscription_id' => $inscriptionId,
-                'trimestre_id'   => $trimestreId,
-                'sequence_id'    => null, // Null signifie "Ce n'est pas le bilan d'une séquence, c'est le bilan du trimestre"
-            ],
-            [
-                'moyenne'           => $moyenneTrimestre,
-                'total_points'      => $donneesTrimestre->total_points_trimestre ?? 0,
-                'total_coefs'       => $donneesTrimestre->total_coefs_trimestre ?? 0,
-                'mention'           => $mention,
-                'annee_scolaire_id' => $anneeScolaireId,
-                'updated_at'        => now(),
-            ]
-        );
+ DB::table('bilans')->updateOrInsert(
+    [
+        'inscription_id' => $inscriptionId,
+        'trimestre_id'   => $trimestreId,
+        'sequence_id'    => null,
+        'annee_scolaire_id' => $anneeScolaireId,  // ⬅️ AJOUTE CETTE LIGNE ICI
+    ],
+    [
+        'moyenne'           => $moyenneTrimestre,
+        'total_points'      => $donneesTrimestre->total_points_trimestre ?? 0,
+        'total_coefs'       => $donneesTrimestre->total_coefs_trimestre ?? 0,
+        'mention'           => $mention,
+        'annee_scolaire_id' => $anneeScolaireId,
+        'rang'              => 0,
+        'updated_at'        => now(),
+    ]
+);
     }
 
 
@@ -181,38 +186,40 @@ class AcademicStatisticsService
 
     public function attribuerRangsClasseForTrimestre($trimestreId, $classeId)
     {
-        // 1. Le code récupère toutes les lignes trimestrielles de la table 'bilans' 
-        // pour tous les élèves de cette classe, et il les TRIE par moyenne décroissante (orderBy desc)
         $bilans = DB::table('bilans')
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->where('inscriptions.classe_id', $classeId)
             ->where('bilans.trimestre_id', $trimestreId)
-            ->whereNull('bilans.sequence_id') // On ne prend que les bilans du trimestre (ceux qui ont sequence_id à null)
+            ->whereNull('bilans.sequence_id')
+            // MODIFICATION ICI : On force l'ID du bilan sous le nom 'bilan_id'
             ->select('bilans.id', 'bilans.moyenne')
-            ->orderBy('bilans.moyenne', 'desc') // Le premier de la collection sera le premier de la classe
+            ->orderBy('bilans.moyenne', 'desc')
             ->get();
 
-        $effectif = $bilans->count(); // Compte le nombre total d'élèves (ex: 4)
+        // 🔍 DEBUG : Affiche les bilans trouvés
+        \Log::info('DEBUG attribuerRangsClasseForTrimestre', [
+            'trimestre_id' => $trimestreId,
+            'classe_id' => $classeId,
+            'bilans_count' => $bilans->count(),
+            'bilans_data' => $bilans->toArray(),
+        ]);
+
+        $effectif = $bilans->count();
         $rang = 1;
 
-        // 2. Le code parcourt les élèves un par un (du premier au dernier)
         foreach ($bilans as $index => $bilan) {
-
-            // Gestion des ex-æquo : Si l'élève actuel a exactement la même moyenne que le précédent,
-            // il garde le même rang. Sinon, son rang correspond à sa position (+1).
             if ($index > 0 && $bilan->moyenne == $bilans[$index - 1]->moyenne) {
-                // Pas de changement de rang
+                // Même moyenne = même rang
             } else {
                 $rang = $index + 1;
             }
 
-            // 3. Le code met à jour la ligne de l'élève dans la base de données 
-            // en enregistrant son 'rang' et l'effetif de la classe.
+            // MODIFICATION ICI : On utilise le bon alias 'bilan_id'
             DB::table('bilans')
                 ->where('id', $bilan->id)
                 ->update([
                     'rang'            => $rang,
-                    'effectif_classe' => $effectif, // Enregistre par exemple 4
+                    'effectif_classe' => $effectif,
                 ]);
         }
     }

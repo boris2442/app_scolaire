@@ -16,8 +16,8 @@
         <div
             class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-4 rounded-2xl border border-border shadow-sm">
             <div>
-                <h1 class="text-lg font-black tracking-tight">Dashboard Enseignant</h1>
-                <p class="text-[10px] text-foreground/50 uppercase tracking-widest font-bold">Session Active:
+                <h1 class="text-lg  tracking-tight">Dashboard Enseignant</h1>
+                <p class="text-[10px] text-foreground/50  tracking-widest font-medium">Session Active:
                     {{-- <p class="text-sm font-medium"> --}}
                     {{ \Carbon\Carbon::parse($anneeActive->date_debut)->format('d/m/Y') }}
                     -
@@ -29,17 +29,17 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div class="bg-card border border-border p-3 rounded-2xl">
-                <p class="text-[9px] uppercase font-bold text-foreground/40 tracking-wider">Cours</p>
+                <p class="text-[9px]  text-foreground/40 tracking-wider">Cours</p>
                 <h3 class="text-xl font-black text-primary">{{ $statsSaisie->count() }}</h3>
             </div>
             <div class="bg-card border border-border p-3 rounded-2xl">
-                <p class="text-[9px] uppercase font-bold text-foreground/40 tracking-wider">Progression Moy.</p>
+                <p class="text-[9px]  text-foreground/40 tracking-wider">Progression Moy.</p>
                 <h3 class="text-xl font-black text-success">{{ round($statsSaisie->avg('pourcentage')) }}%</h3>
             </div>
         </div>
 
         <div class="space-y-3">
-            <h2 class="text-[10px] font-black uppercase tracking-widest text-foreground/30 px-1">Suivi des saisies par
+            <h2 class="text-[10px]  tracking-widest text-foreground/30 px-1">Suivi des saisies par
                 classe</h2>
 
             <div class="grid grid-cols-1 gap-2">
@@ -55,20 +55,20 @@
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-1.5">
-                                        <h4 class="text-sm font-bold tracking-tight">{{ $stat['classe'] }}</h4>
+                                        <h4 class="text-sm tracking-tight">{{ $stat['classe'] }}</h4>
                                         <span
-                                            class="text-[8px] px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border font-bold uppercase">
+                                            class="text-[8px] px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border ">
                                             {{ $stat['niveau'] }}
                                         </span>
                                     </div>
-                                    <p class="text-[10px] text-foreground/60 font-medium uppercase">{{ $stat['matiere'] }}
+                                    <p class="text-[10px] text-foreground/60 font-medium ">{{ $stat['matiere'] }}
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex-1">
                                 <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[8px] font-bold text-foreground/30 uppercase">Progression</span>
+                                    <span class="text-[8px] font-bold text-foreground/30 ">Progression</span>
                                     <span class="text-[10px] font-black text-foreground/80">{{ $stat['saisies'] }} /
                                         {{ $stat['total'] }}</span>
                                 </div>

@@ -24,7 +24,7 @@
 
 
     <nav class="px-3 space-y-1">
-        <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+        <div class="sidebar-label px-3 py-2 text-[10px] font-semibold text-gray-500  tracking-wider">
             Tableau de Bord
         </div>
         <ul>

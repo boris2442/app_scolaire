@@ -3,8 +3,8 @@
 @section('content')
     <div class="mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-black uppercase text-foreground">Gestion des Classes</h1>
-            <p class="text-xs text-muted-foreground uppercase font-bold tracking-tighter">Année en cours :
+            <h1 class="text-xl font-black  text-foreground">Gestion des Classes</h1>
+            <p class="text-xs text-muted-foreground   tracking-tighter">Année en cours :
                 {{ $anneeActive->libelle }}</p>
         </div>
     </div>
@@ -13,13 +13,13 @@
 
         <div class="lg:col-span-1">
             <div class="bg-card p-6 rounded-xl border border-border shadow-sm sticky top-24">
-                <h2 class="text-xs font-black uppercase text-primary mb-4 tracking-widest">Nouvelle Classe</h2>
+                <h2 class="text-xs font-black  text-primary mb-4 tracking-widest">Nouvelle Classe</h2>
                 <form action="{{ route('settings.classes.store') }}" method="POST" class="space-y-4">
                     @csrf
                     <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
 
                     <div>
-                        <label class="text-[10px] font-bold uppercase text-muted-foreground">Niveau</label>
+                        <label class="text-[10px] font-bold  text-muted-foreground">Niveau</label>
                         <select name="niveau_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1"
                             required>
                             <option value="">Choisir un niveau...</option>
@@ -30,14 +30,14 @@
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-bold uppercase text-muted-foreground">Nom/Suffixe (ex: A, B ou
+                        <label class="text-[10px]  text-muted-foreground">Nom/Suffixe (ex: A, B ou
                             Bilingue)</label>
                         <input type="text" name="nom" placeholder="Ex: A"
                             class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1" required>
                     </div>
 
                     <button
-                        class="w-full bg-primary text-white font-black py-2.5 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 uppercase text-[10px]">
+                        class="w-full bg-primary text-white font-black py-2.5 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2  text-[10px]">
                         <i class="fas fa-plus"></i> Créer la Classe
                     </button>
                 </form>

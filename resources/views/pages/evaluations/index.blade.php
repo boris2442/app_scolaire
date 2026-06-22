@@ -3,7 +3,7 @@
 @section('content')
     {{-- Formulaire de Création --}}
     <div class="bg-secondary/10 border border-white/5 p-8 rounded-3xl mb-10">
-        <h2 class="text-sm font-bold uppercase mb-6 text-primary tracking-widest">Initialiser une Session de Notes</h2>
+        <h2 class="text-sm   mb-6 text-primary tracking-widest">Initialiser une Session de Notes</h2>
 
         <form action="{{ route('admin.evaluations.store') }}" method="POST"
             class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 p-6 rounded-3xl border border-white/10">

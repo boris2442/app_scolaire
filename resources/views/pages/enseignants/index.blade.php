@@ -3,13 +3,13 @@
 @section('content')
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-xl font-black uppercase text-foreground">Personnel Enseignant</h1>
-            <p class="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Gestion des comptes et profils
+            <h1 class="text-xl font-black  text-foreground">Personnel Enseignant</h1>
+            <p class="text-[10px] text-muted-foreground font-bold  tracking-widest">Gestion des comptes et profils
                 instructeurs</p>
         </div>
         <a href="{{ route('admin.enseignants.create') }}"
-            class="bg-primary text-white px-6 py-3 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-            <i class="fas fa-plus mr-2"></i> Ajouter un prof
+            class="bg-primary text-white px-6 py-3 rounded-xl font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+            <i class="fas fa-plus mr-2"></i> Ajouter 
         </a>
     </div>
 
@@ -17,11 +17,11 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-secondary/50 border-b border-border">
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground rounded-tl-2xl">Enseignant</th>
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Matricule</th>
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Département</th>
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground">Statut Compte</th>
-                    <th class="p-4 text-[10px] font-black uppercase text-muted-foreground text-right rounded-tr-2xl">Actions
+                    <th class="p-4 text-[10px] font-black  text-muted-foreground rounded-tl-2xl">Enseignant</th>
+                    <th class="p-4 text-[10px] font-black  text-muted-foreground">Matricule</th>
+                    <th class="p-4 text-[10px] font-black  text-muted-foreground">Département</th>
+                    <th class="p-4 text-[10px] font-black  text-muted-foreground">Statut Compte</th>
+                    <th class="p-4 text-[10px] font-black  text-muted-foreground text-right rounded-tr-2xl">Actions
                     </th>
                 </tr>
             </thead>
@@ -35,7 +35,7 @@
                                     {{ substr($enseignant->user->name, 0, 2) }}
                                 </div>
                                 <div>
-                                    <p class="text-sm font-black uppercase">{{ $enseignant->user->name }}</p>
+                                    <p class="text-sm font-black ">{{ $enseignant->user->name }}</p>
                                     <p class="text-[10px] text-muted-foreground">{{ $enseignant->user->email }}</p>
                                     <p class="text-[10px] italic font-bold text-muted-foreground">
                                         {{ $enseignant->matricule }}</p>
@@ -46,19 +46,19 @@
                         <td class="p-4">
                             @if ($enseignant->departement)
                                 <span
-                                    class="text-[10px] font-black uppercase bg-primary/5 text-primary border border-primary/10 px-2 py-1 rounded">
+                                    class="text-[10px] font-black  bg-primary/5 text-primary border border-primary/10 px-2 py-1 rounded">
                                     {{ $enseignant->departement->nom }}
                                 </span>
                             @else
                                 <span
-                                    class="text-[10px] font-black uppercase bg-red-50 text-red-500 border border-red-100 px-2 py-1 rounded">
+                                    class="text-[10px] font-black  bg-red-50 text-red-500 border border-red-100 px-2 py-1 rounded">
                                     Département manquant
                                 </span>
                             @endif
                         </td>
                         <td class="p-4">
                             <span
-                                class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-[9px] font-black uppercase bg-[var(--success)]/10 text-[var(--success)]">
+                                class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-[9px] font-black  bg-[var(--success)]/10 text-[var(--success)]">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>
                                 Actif
                             </span>
@@ -107,7 +107,7 @@
                 @empty
                     <tr>
                         <td colspan="5" class="p-12 text-center text-muted-foreground rounded-b-2xl">
-                            <p class="text-[10px] font-black uppercase tracking-widest">Aucun enseignant enregistré pour le
+                            <p class="text-[10px] font-black  tracking-widest">Aucun enseignant enregistré pour le
                                 moment</p>
                         </td>
                     </tr>

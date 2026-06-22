@@ -22,7 +22,7 @@ class AnneeScolaireController extends Controller
         return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
- 
+
 
     public function store(StoreAnneeScolaireRequest $request)
     {

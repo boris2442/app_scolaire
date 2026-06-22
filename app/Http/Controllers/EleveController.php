@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EleveRequest;
 use App\Models\AnneeScolaire;
+use App\Models\Classe;
 use App\Models\Eleve;
+use App\Models\Etablissement;
 use App\Models\Inscription;
 use App\Models\Niveau;
 use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -52,11 +55,7 @@ class EleveController extends Controller
         Cache::flush();
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
 
-        // --- APPEL DES KPIs ---
-        // $kpis = $this->getKpis($anneeActive->id);
-        // Récupération des KPIs via le service
-        // $kpis = $analytics->getYearlyKpis($anneeActive->id);
-        // On récupère tout d'un coup
+
         $stats = $analytics->getFullDashboardStats($anneeActive->id);
 
 
@@ -169,7 +168,7 @@ class EleveController extends Controller
      * Affiche le dossier complet d'un élève.
      * @param  \App\Models\Eleve  $eleve
      */
-   
+
     public function show($id)
     {
         $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire', 'inscriptions.classe.niveau'])
@@ -300,5 +299,45 @@ class EleveController extends Controller
         $eleve->forceDelete(); // Ici, la ligne est réellement effacée de la BD
 
         return redirect()->back()->with('success', "L'élève a été définitivement supprimé.");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function imprimer(Request $request)
+    {
+        // 1. Validation : on s'assure qu'une classe est bien fournie
+        $request->validate([
+            'classe_id' => 'required|exists:classes,id'
+        ]);
+
+        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        // Récupération des infos de l'école
+        $etablissement =Etablissement::first();
+        // 2. Récupération des données filtrées
+        $eleves = Eleve::whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
+            $q->where('classe_id', $request->classe_id)
+                ->where('annee_scolaire_id', $anneeActive->id);
+        })->with(['inscriptions' => function ($q) use ($anneeActive) {
+            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
+        }])->get();
+
+        // Récupération de la classe pour le titre du document
+        $classe = Classe::with('niveau')->findOrFail($request->classe_id);
+
+        // 3. Génération du PDF
+        $pdf = \PDF::loadView('pages.eleves.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
+
+        // 4. Téléchargement ou affichage
+        return $pdf->download('liste_eleves_' . $classe->nom . '.pdf');
     }
 }

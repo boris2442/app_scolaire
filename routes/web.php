@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
 
 //Rou globale configuration middleware admin
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('admin/eleves/imprimer', [EleveController::class, 'imprimer'])->name('admin.eleves.imprimer');
     // Section Paramètres
     Route::get('/configuration-etablissement', [EtablissementController::class, 'edit'])->name('settings.index');
     Route::put('/configuration-etablissement', [EtablissementController::class, 'update'])->name('settings.update');
@@ -225,7 +227,38 @@ Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrint
 
 
 
-// Page principale : La grille des 4 colonnes avec le choix du trimestre
+// // Page principale : La grille des 4 colonnes avec le choix du trimestre
+// Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
+//     ->name('admin.bulletins.index');
+
+// // Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
+// Route::get('/admin/bulletins/classe/{classe_id}', [BulletinPrintController::class, 'classeHub'])
+//     ->name('admin.bulletins.classe');
+
+
+// // Route pour générer le PDF de toute la classe d'un coup
+// Route::get('/admin/bulletins/classe/{classe_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
+//     ->name('admin.bulletins.imprimer-classe');
+
+// // Route pour générer le PDF d'un seul élève isolé
+// Route::get('/admin/bulletins/inscription/{inscription_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
+//     ->name('admin.bulletins.imprimer-eleve');
+
+
+
+// Route::get('/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}', [BulletinPrintController::class, 'imprimerClasse'])
+//     ->name('admin.bulletins.classe');
+
+
+
+
+
+
+
+
+
+
+// Page principale : La grille avec le choix du trimestre
 Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
     ->name('admin.bulletins.index');
 
@@ -233,8 +266,7 @@ Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
 Route::get('/admin/bulletins/classe/{classe_id}', [BulletinPrintController::class, 'classeHub'])
     ->name('admin.bulletins.classe');
 
-
-    // Route pour générer le PDF de toute la classe d'un coup
+// Route pour générer le PDF de toute la classe d'un coup
 Route::get('/admin/bulletins/classe/{classe_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
     ->name('admin.bulletins.imprimer-classe');
 

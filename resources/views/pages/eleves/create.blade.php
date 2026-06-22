@@ -10,9 +10,15 @@
     @endif
 
     <div class="mb-8">
-        <h1 class="text-xl font-black uppercase text-foreground tracking-tight">Inscription d'un Nouvel Élève</h1>
-        <p class="text-xs text-muted-foreground font-bold uppercase tracking-tighter text-primary">Année Scolaire :
+        <h1 class="text-xl   text-foreground tracking-tight">Inscription d'un Nouvel Élève</h1>
+        <p class="text-xs text-muted-foreground   tracking-tighter text-primary">Année Scolaire :
             {{ $anneeActive->libelle }}</p>
+            <div class="">
+            <a href="{{ route('admin.eleves.index') }}"
+                class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px] tracking-widest hover:bg-secondary/70 transition-all">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+            </div>
     </div>
 
     <form action="{{ route('admin.eleves.store') }}" method="POST" enctype="multipart/form-data">
