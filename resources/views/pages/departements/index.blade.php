@@ -7,7 +7,7 @@
     </p>
 
     <div class="">
-        <a href="{{ route('admin.departements.create') }}"
+        <a href="{{ route('admin.departments.create') }}"
             class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all mb-6">
             <i class="fas fa-plus mr-2"></i> Ajouter un Département
         </a>
@@ -28,9 +28,9 @@
                         </h3>
                     </div>
 
-                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                    {{-- <div class="relative inline-block text-left" x-data="{ open: false }">
                         <button @click="open = !open" @click.away="open = false"
-                            class="p-2 rounded-lg hover:bg-secondary text-gray-400 hover:text-foreground transition-colors">
+                            class="p-2 rounded-full hover:bg-secondary text-gray-400 hover:text-foreground transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
@@ -42,7 +42,7 @@
                             x-transition:enter-end="transform opacity-100 scale-100"
                             class="absolute right-0 mt-2 w-48 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden">
                             <div class="py-1">
-                                <a href="{{ route('admin.departements.edit', $dept->id) }}"
+                                <a href="{{ route('admin.departments.edit', $dept->id) }}"
                                     class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
@@ -60,7 +60,40 @@
                                     Supprimer
                                 </button>
 
-                                <form action="{{ route('admin.departements.destroy', $dept->id) }}" method="POST"
+                                <form action="{{ route('admin.departments.destroy', $dept->id) }}" method="POST"
+                                    id="delete-form-{{ $dept->id }}" class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </div>
+                        </div>
+                    </div> --}}
+
+
+
+                    <div class="relative inline-block text-left">
+                        <button type="button" onclick="toggleMenu(this)"
+                            class="menu-trigger p-2 rounded-full hover:bg-secondary text-gray-400 hover:text-foreground transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                            </svg>
+                        </button>
+
+                        <div
+                            class="menu-content hidden absolute right-0 mt-2 w-48 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden">
+                            <div class="py-1">
+                                <a href="{{ route('admin.departments.edit', $dept->id) }}"
+                                    class="flex items-center px-4 py-2 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
+                                    Modifier
+                                </a>
+
+                                <button type="button" onclick="confirmDelete({{ $dept->id }})"
+                                    class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                    Supprimer
+                                </button>
+
+                                <form action="{{ route('admin.departments.destroy', $dept->id) }}" method="POST"
                                     id="delete-form-{{ $dept->id }}" class="hidden">
                                     @csrf
                                     @method('DELETE')
@@ -68,6 +101,11 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+
                 </div>
 
                 <p class="text-gray-500 text-sm line-clamp-2 mb-4 h-10">
@@ -75,7 +113,7 @@
                 </p>
 
                 <div
-                    class="pt-4 border-t border-border flex justify-between items-center text-[10px] text-gray-400 uppercase font-semibold">
+                    class="pt-4 border-t border-border flex justify-between items-center text-[10px] text-gray-400  font-semibold italic tracking-widest">
                     <div class="flex items-center">
                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -101,5 +139,28 @@
                 document.getElementById('delete-form-' + id).submit();
             }
         }
+
+
+        function toggleMenu(button) {
+            // 1. Trouver le menu associé au bouton (il est juste après le bouton)
+            const menu = button.nextElementSibling;
+
+            // 2. Fermer tous les autres menus ouverts sur la page
+            document.querySelectorAll('.menu-content').forEach(el => {
+                if (el !== menu) el.classList.add('hidden');
+            });
+
+            // 3. Basculer l'état du menu cliqué
+            menu.classList.toggle('hidden');
+        }
+
+        // 4. Fermer le menu si on clique n'importe où ailleurs sur la page
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.menu-trigger')) {
+                document.querySelectorAll('.menu-content').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        });
     </script>
 @endsection

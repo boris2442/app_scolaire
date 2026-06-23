@@ -8,7 +8,7 @@
                 Liste des élèves supprimés logiquement
             </p>
         </div>
-        <a href="{{ route('admin.eleves.index') }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
+        <a href="{{ route('admin.students.index') }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
             <i class="fas fa-arrow-left mr-2"></i> Retour à la liste active
         </a>
     </div>
@@ -53,7 +53,7 @@
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex justify-end gap-2">
-                                <form action="{{ route('admin.eleves.restore', $eleve->id) }}" method="POST">
+                                <form action="{{ route('admin.students.restore', $eleve->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" title="Restaurer" class="p-2 bg-green-500/10 text-green-600 rounded-lg hover:bg-green-500 hover:text-white transition-all">
@@ -61,7 +61,7 @@
                                     </button>
                                 </form>
 
-                                <form action="{{ route('admin.eleves.force-delete', $eleve->id) }}" method="POST" onsubmit="return confirm('ATTENTION : Cette action est irréversible. Supprimer définitivement ?')">
+                                <form action="{{ route('admin.students.force-delete', $eleve->id) }}" method="POST" onsubmit="return confirm('ATTENTION : Cette action est irréversible. Supprimer définitivement ?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" title="Supprimer définitivement" class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-all">

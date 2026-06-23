@@ -154,9 +154,10 @@ class EleveController extends Controller
                 'classe_id' => $request->classe_id, // Utilise la colonne de ta table inscriptions
                 'annee_scolaire_id' => $anneeActive->id,
                 'date_inscription' => now(),
+                'est_redoublant' => $request->has('est_redoublant') ? true : false,
             ]);
 
-            return redirect()->route('admin.eleves.index')
+            return redirect()->route('admin.students.index')
                 ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
         });
     }
@@ -245,7 +246,7 @@ class EleveController extends Controller
                 }
             }
 
-            return redirect()->route('admin.eleves.show', $eleve->id)
+            return redirect()->route('admin.students.show', $eleve->id)
                 ->with('success', "Le dossier de {$eleve->nom} a été mis à jour.");
         });
     }
@@ -264,7 +265,7 @@ class EleveController extends Controller
         // On archive l'élève
         $eleve->delete();
 
-        return redirect()->route('admin.eleves.index')
+        return redirect()->route('admin.students.index')
             ->with('success', "L'élève {$eleve->nom} a été déplacé dans la corbeille.");
     }
 
@@ -288,7 +289,7 @@ class EleveController extends Controller
         $eleve = Eleve::withTrashed()->findOrFail($id);
         $eleve->restore();
 
-        return redirect()->route('admin.eleves.index')
+        return redirect()->route('admin.students.index')
             ->with('success', "Le dossier de {$eleve->nom} a été restauré avec succès.");
     }
 
@@ -322,14 +323,16 @@ class EleveController extends Controller
 
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
         // Récupération des infos de l'école
-        $etablissement =Etablissement::first();
+        $etablissement = Etablissement::first();
         // 2. Récupération des données filtrées
         $eleves = Eleve::whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
             $q->where('classe_id', $request->classe_id)
                 ->where('annee_scolaire_id', $anneeActive->id);
         })->with(['inscriptions' => function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
-        }])->get();
+        }])
+            ->orderBy('nom', 'asc')
+            ->get();
 
         // Récupération de la classe pour le titre du document
         $classe = Classe::with('niveau')->findOrFail($request->classe_id);

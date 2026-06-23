@@ -80,6 +80,6 @@ class AnneeScolaireController extends Controller
     public function update(StoreAnneeScolaireRequest $request, AnneeScolaire $annee_scolaire)
     {
         $annee_scolaire->update($request->validated());
-        return redirect()->route('settings.annees.index')->with('success', 'Année mise à jour.');
+        return redirect()->route('settings.years.index')->with('success', 'Année mise à jour.');
     }
 }

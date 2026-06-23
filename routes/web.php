@@ -38,10 +38,10 @@ Route::middleware('auth')->group(function () {
 //Rou globale configuration middleware admin
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('admin/eleves/imprimer', [EleveController::class, 'imprimer'])->name('admin.eleves.imprimer');
+    Route::get('admin/student/print', [EleveController::class, 'imprimer'])->name('admin.eleves.imprimer');
     // Section Paramètres
-    Route::get('/configuration-etablissement', [EtablissementController::class, 'edit'])->name('settings.index');
-    Route::put('/configuration-etablissement', [EtablissementController::class, 'update'])->name('settings.update');
+    Route::get('/configuration-school', [EtablissementController::class, 'edit'])->name('settings.index');
+    Route::put('/configuration-school', [EtablissementController::class, 'update'])->name('settings.update');
 
 
     //Annees scolaires
@@ -54,17 +54,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         // Cette ligne gère TOUT (Index, Store, Edit, Update, Destroy)
         // Elle crée automatiquement la route 'settings.annees.edit' et 'settings.annees.update'
-        Route::resource('annees', AnneeScolaireController::class)->parameters([
-            'annees' => 'annee_scolaire' // Pour que Laravel injecte bien le modèle dans ton Controller
+        Route::resource('years', AnneeScolaireController::class)->parameters([
+            'years' => 'annee_scolaire' // Pour que Laravel injecte bien le modèle dans ton Controller
         ]);
 
         // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
-        Route::patch('annees/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('annees.active');
+        Route::patch('years/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('years.active');
     });
 
 
 
-    Route::prefix('settings/academique')->name('settings.academique.')->group(function () {
+    Route::prefix('settings/academic')->name('settings.academique.')->group(function () {
         Route::get('/', [AcademiqueController::class, 'index'])->name('index');
 
         // CYCLES
@@ -74,10 +74,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/cycles/{cycle}', [AcademiqueController::class, 'destroyCycle'])->name('cycles.destroy');
 
         // NIVEAUX
-        Route::post('/niveaux', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
-        Route::get('/niveaux/{niveau}/edit', [AcademiqueController::class, 'editNiveau'])->name('niveaux.edit');
-        Route::put('/niveaux/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
-        Route::delete('/niveaux/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
+        Route::post('/level', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
+        Route::get('/level/{niveau}/edit', [AcademiqueController::class, 'editNiveau'])->name('niveaux.edit');
+        Route::put('/level/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
+        Route::delete('/level/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
     });
 
     Route::prefix('settings/classes')->name('settings.classes.')->group(function () {
@@ -87,7 +87,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
 
 
-    Route::prefix('settings/matieres')->name('settings.matieres.')->group(function () {
+    Route::prefix('settings/courses')->name('settings.matieres.')->group(function () {
         Route::get('/', [MatiereController::class, 'index'])->name('index');
         Route::post('/', [MatiereController::class, 'store'])->name('store');
         Route::put('/{matiere}', [MatiereController::class, 'update'])->name('update');
@@ -99,7 +99,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 
-    Route::prefix('admin/eleves')->name('admin.eleves.')->group(function () {
+    Route::prefix('admin/students')->name('admin.students.')->group(function () {
         Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
         Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
         Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
@@ -113,10 +113,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
 
 
-        Route::resource('eleves', EleveController::class);
+        Route::resource('students', EleveController::class);
 
         // --- RECHERCHE RAPIDE (Optionnel pour plus tard) ---
-        Route::get('search/eleves', [EleveController::class, 'search'])->name('eleves.search');
+        Route::get('search/students', [EleveController::class, 'search'])->name('eleves.search');
     });
 
 
@@ -125,13 +125,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
         // --- MODULE ENSEIGNANTS ---
-        Route::get('enseignants', [EnseignantController::class, 'index'])->name('enseignants.index');
-        Route::get('enseignants/create', [EnseignantController::class, 'create'])->name('enseignants.create');
-        Route::post('enseignants', [EnseignantController::class, 'store'])->name('enseignants.store');
-        Route::get('enseignants/{enseignant}/edit', [EnseignantController::class, 'edit'])->name('enseignants.edit');
-        Route::put('enseignants/{enseignant}', [EnseignantController::class, 'update'])->name('enseignants.update');
-        Route::delete('enseignants/{enseignant}', [EnseignantController::class, 'destroy'])->name('enseignants.destroy');
-        Route::get('enseignants/{enseignant}', [EnseignantController::class, 'show'])->name('enseignants.show');
+        Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
+        Route::get('teachers/create', [EnseignantController::class, 'create'])->name('enseignants.create');
+        Route::post('teachers', [EnseignantController::class, 'store'])->name('enseignants.store');
+        Route::get('teachers/{enseignant}/edit', [EnseignantController::class, 'edit'])->name('enseignants.edit');
+        Route::put('teachers/{enseignant}', [EnseignantController::class, 'update'])->name('enseignants.update');
+        Route::delete('teachers/{enseignant}', [EnseignantController::class, 'destroy'])->name('enseignants.destroy');
+        Route::get('teachers/{enseignant}', [EnseignantController::class, 'show'])->name('enseignants.show');
 
         // --- MODULE PEDAGOGIQUE (AFFECTATIONS) ---
         // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
@@ -149,9 +149,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         // On pourra ajouter plus tard :
         // Route::get('/audit-saisie/classe/{id}', [AuditSaisieController::class, 'show'])->name('audit.saisie.show');
         // Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
-        Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
+        Route::get('/statistics', [StatistiqueController::class, 'index'])->name('statistiques.index');
         // Dans routes/web.php (dans ton groupe de middleware admin)
-        Route::get('/statistiques/classe/{classe_id}/{sequence_id}', [StatistiqueController::class, 'detailClasse'])
+        Route::get('/statistics/classe/{classe_id}/{sequence_id}', [StatistiqueController::class, 'detailClasse'])
             ->name('statistiques.classe.detail');
     });
 
@@ -163,8 +163,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
         // ... tes autres routes ...
 
-        Route::get('/resultats', [ResultatController::class, 'index'])->name('resultats.index');
-        Route::post('/resultats/calculer', [ResultatController::class, 'calculer'])->name('resultats.calculer');
+        Route::get('/results', [ResultatController::class, 'index'])->name('resultats.index');
+        Route::post('/results/calculs', [ResultatController::class, 'calculer'])->name('resultats.calculer');
 
         // On pourra ajouter plus tard :
         // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
@@ -172,7 +172,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::resource('/departements', DepartementController::class);
+        Route::resource('/departments', DepartementController::class);
     });
 });
 
@@ -193,7 +193,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 
-Route::prefix('enseignant')->name('enseignant.')->group(function () {
+Route::prefix('teatcher')->name('enseignant.')->group(function () {
     Route::get('/dashboard', [DashboardTeacherController::class, 'index'])->name('dashboard');
 });
 
@@ -212,7 +212,7 @@ Route::prefix('enseignant')->name('enseignant.')->group(function () {
 
 // Route::get('/admin/statistiques/registre', [StatistiqueController::class, 'registreTrimestriel'])->name('admin.statistiques.registre');
 
-Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
+Route::get('/admin/report/print/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
     ->name('admin.bulletins.imprimer');
 
 
@@ -259,18 +259,18 @@ Route::get('/admin/bulletins/imprimer/{inscription}/{trimestre}', [BulletinPrint
 
 
 // Page principale : La grille avec le choix du trimestre
-Route::get('/admin/bulletins', [BulletinPrintController::class, 'index'])
+Route::get('/admin/report', [BulletinPrintController::class, 'index'])
     ->name('admin.bulletins.index');
 
 // Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
-Route::get('/admin/bulletins/classe/{classe_id}', [BulletinPrintController::class, 'classeHub'])
+Route::get('/admin/report/class/{classe_id}', [BulletinPrintController::class, 'classeHub'])
     ->name('admin.bulletins.classe');
 
 // Route pour générer le PDF de toute la classe d'un coup
-Route::get('/admin/bulletins/classe/{classe_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
+Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
     ->name('admin.bulletins.imprimer-classe');
 
 // Route pour générer le PDF d'un seul élève isolé
-Route::get('/admin/bulletins/inscription/{inscription_id}/imprimer/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
+Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
     ->name('admin.bulletins.imprimer-eleve');
 require __DIR__ . '/auth.php';

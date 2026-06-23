@@ -32,7 +32,7 @@
         {{-- Formulaire à gauche --}}
         <div class="bg-card p-6 rounded-xl border border-border h-fit">
             <h2 class="text-sm font-bold uppercase mb-4">Nouvelle Année</h2>
-            <form action="{{ route('settings.annees.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('settings.years.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
                     <label class="text-xs font-medium">Libellé (ex: 2025-2026)</label>
@@ -88,7 +88,7 @@
 
                         <div class="flex items-center gap-2">
                             @if (!$annee->est_active)
-                                <form action="{{ route('settings.annees.active', $annee) }}" method="POST">
+                                <form action="{{ route('settings.years.active', $annee) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <button class="text-[10px] font-bold uppercase px-3 py-1.5 rounded bg-success/10 text-success border border-success/20 hover:bg-success hover:text-white transition-all">
                                         Activer
@@ -98,12 +98,12 @@
                                 <span class="text-[10px] font-bold uppercase px-3 py-1.5 rounded bg-primary text-white">Actuelle</span>
                             @endif
 
-                            <a href="{{ route('settings.annees.edit', $annee) }}" class="p-2 text-gray-400 hover:text-primary transition-colors">
+                            <a href="{{ route('settings.years.edit', $annee) }}" class="p-2 text-gray-400 hover:text-primary transition-colors">
                                 <i class="fas fa-edit"></i>
                             </a>
 
                             @if (!$annee->est_active)
-                                <form action="{{ route('settings.annees.destroy', $annee) }}" method="POST" onsubmit="return confirm('Supprimer ?')">
+                                <form action="{{ route('settings.years.destroy', $annee) }}" method="POST" onsubmit="return confirm('Supprimer ?')">
                                     @csrf @method('DELETE')
                                     <button class="text-gray-400 hover:text-danger p-2"><i class="fas fa-trash"></i></button>
                                 </form>

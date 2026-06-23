@@ -3,14 +3,14 @@
 @section('content')
 <div class="max-w-2xl mx-auto">
     <div class="mb-6 flex items-center gap-4">
-        <a href="{{ route('settings.annees.index') }}" class="p-2 bg-secondary rounded-lg hover:text-primary">
+        <a href="{{ route('settings.years.index') }}" class="p-2 bg-secondary rounded-lg hover:text-primary">
             <i class="fas fa-arrow-left"></i>
         </a>
         <h1 class="text-xl font-bold">Modifier l'année : {{ $annee_scolaire->libelle }}</h1>
     </div>
 
     <div class="bg-card p-8 rounded-xl border border-border shadow-sm">
-        <form action="{{ route('settings.annees.update', $annee_scolaire) }}" method="POST" class="space-y-6">
+        <form action="{{ route('settings.years.update', $annee_scolaire) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT') <div>
                 <label class="block text-sm font-medium mb-2">Libellé de l'année</label>

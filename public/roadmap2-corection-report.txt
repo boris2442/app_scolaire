@@ -1,0 +1,35 @@
+Checklist de perfectionnement" du bulletin :
+
+1. Structure et Organisation (Le squelette)
+Regroupement des matières : C'est le point majeur. Au lieu d'une liste de matières, nous devons créer des sections : Matières Littéraires et Sciences, Matières Scientifiques, Matières Complémentaires. Chaque groupe doit avoir son sous-total.
+
+Intégration des données manquantes :
+
+Conduite : Remplacer les tirets _____ par les vraies données (absences, retards, etc.).
+
+Appréciations de travail : Remplacer les mentions génériques par les appréciations réelles du conseil de classe si elles existent.
+
+2. Design et Typographie (L'aspect visuel)
+Police : Passer à une police système standard type Arial ou DejaVu Sans (plus lisible en petite taille sur PDF).
+
+Alignement des Entêtes : Ton entête actuel est un peu "aérien". On doit ajuster les margin et le line-height pour qu'il occupe exactement la largeur de la page comme sur ta photo.
+
+Grise des tableaux : Les lignes de séparation doivent être plus fines ( 0.5px ou 0.7px au lieu de 1px pour un rendu moins "lourd").
+
+Sceau et Signatures : Ajouter les espaces réservés pour le cachet du proviseur et la signature scannée.
+
+3. Logique de Données (Le moteur)
+Gestion des absents : Transformer le 0 des notes absentes en ABS (ou N.A).
+
+Barème de notation : Ajouter une petite section en bas de page pour la légende (ex: 16-20 : Très bien, 14-16 : Bien...).
+
+Synthèse finale : La zone "Profil de la classe" (Moyenne classe, Moyenne Max, Moyenne Min) doit être parfaitement alignée avec le cadre "Grand Total" pour que le bas du bulletin ressemble au modèle.
+
+Ma proposition de plan d'action
+Pour qu'on soit efficaces, je suggère qu'on règle ces problèmes un par un :
+
+Phase 1 : La structure des données (Base de données). On doit confirmer si ta table matieres a déjà une colonne groupe_id ou categorie.
+
+Phase 2 : Le calcul des sous-totaux. On adaptera ta requête PHP pour que le bulletin reçoive les moyennes par groupe.
+
+Phase 3 : Le "Fine-tuning" du CSS. On ajustera les marges, les polices et les largeurs de colonnes pour une copie conforme au modèle.

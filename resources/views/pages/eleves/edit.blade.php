@@ -16,12 +16,12 @@
                 Matricule : {{ $eleve->matricule }}
             </p>
         </div>
-        <a href="{{ route('admin.eleves.show', $eleve->id) }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
+        <a href="{{ route('admin.students.show', $eleve->id) }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
             <i class="fas fa-arrow-left mr-2"></i> Retour
         </a>
     </div>
 
-    <form action="{{ route('admin.eleves.update', $eleve->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.students.update', $eleve->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         

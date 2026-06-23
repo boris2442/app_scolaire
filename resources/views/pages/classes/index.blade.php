@@ -91,7 +91,8 @@
                                         onsubmit="return confirm('Supprimer ?')">
                                         @csrf @method('DELETE')
                                         <button
-                                            class="text-muted-foreground hover:text-danger p-2 opacity-0 group-hover:opacity-100 transition-all">
+                                            class="text-muted-foreground hover:text-danger p-2 opacity-0 group-hover:opacity-100 transition-all"
+                                            title="Supprimer la classe {{ $niv->nom }} {{ $classe->nom }}">
                                             <i class="fas fa-trash-alt text-xs"></i>
                                         </button>
                                     </form>

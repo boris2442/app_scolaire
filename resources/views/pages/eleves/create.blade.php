@@ -13,15 +13,15 @@
         <h1 class="text-xl   text-foreground tracking-tight">Inscription d'un Nouvel Élève</h1>
         <p class="text-xs text-muted-foreground   tracking-tighter text-primary">Année Scolaire :
             {{ $anneeActive->libelle }}</p>
-            <div class="">
-            <a href="{{ route('admin.eleves.index') }}"
+        <div class="">
+            <a href="{{ route('admin.students.index') }}"
                 class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px] tracking-widest hover:bg-secondary/70 transition-all">
                 <i class="fas fa-arrow-left"></i> Retour à la liste
             </a>
-            </div>
+        </div>
     </div>
 
-    <form action="{{ route('admin.eleves.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.students.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -76,15 +76,55 @@
                         </div>
                     </div>
 
-                    <div class="mt-6">
-                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Lieu de naissance</label>
-                        <input type="text" name="lieu_naissance" placeholder="ex: Bafoussam"
-                            class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
-                        @error('lieu_naissance')
-                            <span class="text-xs text-danger mt-1">{{ $message }}</span>
-                        @enderror
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Lieu de naissance -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Lieu de naissance
+                            </label>
+
+                            <input type="text" name="lieu_naissance" placeholder="Ex : Bafoussam"
+                                class="w-full bg-secondary border border-gray-300 rounded-lg py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-primary/20">
+
+                            @error('lieu_naissance')
+                                <span class="text-xs text-danger mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Statut élève -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Statut de l'élève (Redoublement)
+                            </label>
+
+                            <div class="border border-gray-300 rounded-lg px-4 py-3 h-[50px] flex items-center">
+                                <div class="flex items-center gap-6">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="est_redoublant" value="0" checked
+                                            class="w-4 h-4 text-primary">
+                                        <span class="text-sm text-gray-600">Nouvel élève</span>
+                                    </label>
+
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="est_redoublant" value="1"
+                                            class="w-4 h-4 text-primary">
+                                        <span class="text-sm text-gray-600">Redoublant</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+
+
+
                 </div>
+
+
+
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">

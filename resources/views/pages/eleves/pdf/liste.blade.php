@@ -57,8 +57,11 @@
                 {{ $etablissement->nom }}<br><em>"{{ $etablissement->slogan }}"</em>
             </td>
             <td class="header-col">
-                @if (isset($etablissement->logo))
-                    <img src="{{ public_path($etablissement->logo) }}" width="60">
+                @php
+                    $vraiCheminDansPublic = 'storage/' . $etablissement->logo;
+                @endphp
+                @if ($etablissement->logo && file_exists(public_path($vraiCheminDansPublic)))
+                    <img src="{{ public_path($vraiCheminDansPublic) }}" width="60">
                 @endif
             </td>
             <td class="header-col">

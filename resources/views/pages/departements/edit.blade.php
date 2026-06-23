@@ -7,7 +7,7 @@
                 <h1 class="text-2xl font-bold text-foreground">Modifier le Département</h1>
                 <p class="text-sm text-gray-500 mt-1">Mise à jour des informations de la structure académique.</p>
             </div>
-            <a href="{{ route('admin.departements.index') }}"
+            <a href="{{ route('admin.departments.index') }}"
                 class="flex items-center px-4 py-2 bg-secondary text-gray-700 rounded-xl border border-border hover:bg-border transition-all duration-300 shadow-sm text-sm font-medium">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -17,7 +17,7 @@
         </div>
 
         <div class="max-w-3xl mx-auto">
-            <form action="{{ route('admin.departements.update', $departement->id) }}" method="POST"
+            <form action="{{ route('admin.departments.update', $departement->id) }}" method="POST"
                 class="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
                 @csrf
                 @method('PUT')
@@ -29,7 +29,7 @@
                             <div class="relative">
                                 <input type="text" name="nom" id="nom"
                                     value="{{ old('nom', $departement->nom) }}" required
-                                    class="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
+                                    class="w-full px-4 py-3 bg-secondary/50 border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
                                     placeholder="Ex: Sciences et Technologies">
                             </div>
                             @error('nom')
@@ -41,7 +41,7 @@
                             <label for="code" class="text-sm font-bold text-foreground ml-1">Code / Abréviation</label>
                             <input type="text" name="code" id="code"
                                 value="{{ old('code', $departement->code) }}" required
-                                class="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm uppercase"
+                                class="w-full px-4 py-3 bg-secondary/50 border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm uppercase"
                                 placeholder="Ex: ST">
                             @error('code')
                                 <p class="text-xs text-danger mt-1">{{ $message }}</p>
@@ -53,7 +53,7 @@
                         <label for="description" class="text-sm font-bold text-foreground ml-1">Description
                             (Optionnel)</label>
                         <textarea name="description" id="description" rows="4"
-                            class="w-full px-4 py-3 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm resize-none"
+                            class="w-full px-4 py-3  border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm resize-none"
                             placeholder="Décrivez brièvement le rôle de ce département...">{{ old('description', $departement->description) }}</textarea>
                     </div>
 

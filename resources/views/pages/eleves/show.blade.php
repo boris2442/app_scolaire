@@ -1,8 +1,6 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
- 
-
     {{-- 3. Affichage du Niveau et de la Salle --}}
     @php
         $derniereInsc = $eleve->inscriptions->last();
@@ -19,7 +17,7 @@
 
         <div class="max-w-6xl mx-auto flex justify-between items-center mb-8">
             <div class="flex items-center gap-4">
-                <a href="{{ route('admin.eleves.index') }}"
+                <a href="{{ route('admin.students.index') }}"
                     class="p-2 hover:bg-secondary rounded-full border border-border transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -36,7 +34,9 @@
                     class="px-4 py-2 bg-secondary border border-border rounded-lg text-xs font-bold  hover:bg-border transition-all">Imprimer
                     Fiche</button>
                 <button
-                    class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-bold  shadow-lg shadow-primary/20"> <a href="{{ route('admin.eleves.edit', $eleve->id) }}" class="text-white no-underline">Modifier</a></button>
+                    class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-bold  shadow-lg shadow-primary/20">
+                    <a href="{{ route('admin.students.edit', $eleve->id) }}"
+                        class="text-white no-underline">Modifier</a></button>
             </div>
         </div>
 
@@ -103,19 +103,25 @@
                     </div>
                     <div class="grid grid-cols-2 gap-y-6 gap-x-8">
                         <div>
-                            <label class="text-[10px] font-bold text-muted-foreground  tracking-wider">Date de
+                            <label class="text-[10px]  text-muted-foreground  tracking-wider">Date de
                                 naissance</label>
-                            <p class="text-sm font-black">
+                            <p class="text-sm ">
                                 {{ \Carbon\Carbon::parse($eleve->date_naissance)->translatedFormat('d F Y') }}</p>
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-muted-foreground  tracking-wider">Lieu de
+                            <label class="text-[10px]  text-muted-foreground  tracking-wider">Lieu de
                                 naissance</label>
-                            <p class="text-sm font-black ">{{ $eleve->lieu_naissance }}</p>
+                            <p class="text-sm  ">{{ $eleve->lieu_naissance }}</p>
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-muted-foreground  tracking-wider">Genre / Sexe</label>
-                            <p class="text-sm font-black ">{{ $eleve->sexe == 'M' ? 'Masculin' : 'Féminin' }}</p>
+                            <label class="text-[10px]  text-muted-foreground  tracking-wider">Genre / Sexe</label>
+                            <p class="text-sm  ">{{ $eleve->sexe == 'M' ? 'Masculin' : 'Féminin' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-[10px]  text-muted-foreground tracking-wider">Redoublant</label>
+                            <p class="text-sm italic text-{{ $eleve->statut ? 'red' : 'green' }}-600">
+                                {{ $eleve->statut ? 'Yes' : 'NO' }}
+                            </p>
                         </div>
                         {{-- <div>
                             <label class="text-[10px] font-bold text-muted-foreground  tracking-wider">Tranche d'âge</label>

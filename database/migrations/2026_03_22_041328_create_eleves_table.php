@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('eleves', function (Blueprint $table) {
             $table->id();
-                $table->string('matricule')->unique();
+            $table->string('matricule')->unique();
             $table->string('nom');
             $table->string('prenom');
             $table->date('date_naissance');

@@ -45,9 +45,9 @@
                 </div>
                 <li>
 
-                    <a href="{{ route('settings.annees.index') }}" aria-label="Gestion des Années scolaires"
+                    <a href="{{ route('settings.years.index') }}" aria-label="Gestion des Années scolaires"
                         title="Anees Scolaires"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.annees.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.years.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-calendar-alt w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Années</span>
                     </a>
@@ -77,8 +77,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.eleves.index') }}" title="Eleves" aria-label="Eleves"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.eleves.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <a href="{{ route('admin.students.index') }}" title="Eleves" aria-label="Eleves"
+                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.students.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-book w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Eleves</span>
                     </a>
@@ -114,7 +114,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.departements.index') }}" title="Départements" aria-label="Départements"
+                    <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
                         class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-building w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Départements</span>

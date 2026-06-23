@@ -27,10 +27,11 @@ class EleveRequest extends FormRequest
             'prenom' => 'nullable|string|max:255',
             'date_naissance' => 'required|date',
             'sexe' => 'required|in:M,F',
-       'classe_id' => 'required|exists:classes,id', // On cible la table 'classes'
+            'classe_id' => 'required|exists:classes,id', // On cible la table 'classes'
             'lieu_naissance' => 'nullable|string',
             'telephone_parent' => 'nullable|string',
             'adresse' => 'nullable|string',
+            'est_redoublant' => 'nullable|boolean',
         ];
     }
 }

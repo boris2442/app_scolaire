@@ -30,13 +30,13 @@
                             Actions
                         </header>
 
-                        <a href="{{ route('admin.eleves.trashed') }}"
+                        <a href="{{ route('admin.students.trashed') }}"
                             class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
                             <i class="fas fa-trash-alt mr-1 opacity-50 text-xs"></i>Voir la corbeille
                             ({{ \App\Models\Eleve::onlyTrashed()->count() }})
                         </a>
 
-                        <a href="{{ route('admin.eleves.create') }}"
+                        <a href="{{ route('admin.students.create') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <i class="fas fa-plus opacity-50 text-xs"></i> Add student
                         </a>
@@ -142,13 +142,13 @@
                 </div>
             </div>
 
-            <a href="{{ route('admin.eleves.create') }}"
+            <a href="{{ route('admin.students.create') }}"
                 class="bg-primary hover:opacity-90 text-primary-foreground px-6 py-3 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center gap-3 text-xs font-black ">
                 <i class="fas fa-plus"></i> Nouvel Élève
             </a>
         </div>
 
-        <form action="{{ route('admin.eleves.index') }}" method="GET" class="space-y-4 mb-8">
+        <form action="{{ route('admin.students.index') }}" method="GET" class="space-y-4 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <div class="relative flex items-center">
@@ -181,7 +181,7 @@
                     </button>
 
                     @if (request()->anyFilled(['search', 'classe_id']))
-                        <a href="{{ route('admin.eleves.index') }}"
+                        <a href="{{ route('admin.students.index') }}"
                             class="bg-danger/10 text-danger border border-danger/20 px-4 py-3 rounded-xl text-[10px] font-black  hover:bg-danger hover:text-white transition-all flex items-center justify-center"
                             title="Réinitialiser">
                             <i class="fas fa-undo-alt"></i>
@@ -226,11 +226,11 @@
                                         </div>
                                         <div>
                                             <p class="text-sm  uppercase">
-                                                <a href="{{ route('admin.eleves.show', $eleve) }}">
+                                                <a href="{{ route('admin.students.show', $eleve) }}">
                                                     {{ $eleve->nom }}
                                                     {{ $eleve->prenom }}
+                                                </a>
                                             </p>
-                                            </a>
                                             <p class="text-[10px] text-primary font-bold tracking-wider">
                                                 {{ $eleve->matricule }}</p>
                                             <span class="text-[10px] text-primary font-bold tracking-wider">Inscrit le
@@ -255,10 +255,10 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2 text-foreground/30">
-                                        <a href="{{ route('admin.eleves.show', $eleve) }}"
+                                        <a href="{{ route('admin.students.show', $eleve) }}"
                                             title="Voir les détails"class="p-2 hover:text-primary transition-colors"><i
                                                 class="fas fa-eye"></i></a>
-                                        <form action="{{ route('admin.eleves.destroy', $eleve->id) }}" method="POST"
+                                        <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
                                             onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                             @csrf
                                             @method('DELETE')
@@ -267,7 +267,7 @@
                                             </button>
                                         </form>
                                         <a title="Modifier les informations de l'élève"
-                                            href="{{ route('admin.eleves.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><i
+                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><i
                                                 class="fas fa-pen-alt"></i></a>
                                     </div>
                                 </td>
