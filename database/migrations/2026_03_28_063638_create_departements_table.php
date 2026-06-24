@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('departements', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->unique(); // Ex: Informatique & TIC
-        $table->string('code')->nullable(); // Ex: INF
-        $table->text('description')->nullable();
+            $table->string('code')->nullable(); // Ex: INF
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

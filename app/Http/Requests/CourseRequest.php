@@ -25,6 +25,7 @@ class CourseRequest extends FormRequest
         return [
             'nom' => 'required|string|max:100|unique:matieres,nom',
             'code' => 'required|string|max:10|unique:matieres,code',
+            'groupe_matiere_id' => 'required|exists:groupes_matieres,id', // Validation cruciale
         ];
     }
 }

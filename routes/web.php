@@ -16,6 +16,7 @@ use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrimestreController;
@@ -90,6 +91,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('settings/courses')->name('settings.matieres.')->group(function () {
         Route::get('/', [MatiereController::class, 'index'])->name('index');
         Route::post('/', [MatiereController::class, 'store'])->name('store');
+        Route::get('edit/{matiere}', [MatiereController::class, 'edit'])->name('edit');
         Route::put('/{matiere}', [MatiereController::class, 'update'])->name('update');
         Route::delete('/{matiere}', [MatiereController::class, 'destroy'])->name('destroy');
     });
@@ -273,4 +275,12 @@ Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrin
 // Route pour générer le PDF d'un seul élève isolé
 Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
     ->name('admin.bulletins.imprimer-eleve');
+
+
+
+
+
+
+
+Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
 require __DIR__ . '/auth.php';

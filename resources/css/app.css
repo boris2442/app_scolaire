@@ -47,3 +47,8 @@
         --ring: #38bdf8;
     }
 }
+
+
+*, ::after, ::before, body{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}

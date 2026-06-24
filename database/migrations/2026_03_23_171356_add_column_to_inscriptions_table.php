@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('inscriptions', function (Blueprint $table) {
-           if (!Schema::hasColumn('inscriptions', 'classe_id')) {
-        Schema::table('inscriptions', function (Blueprint $table) {
-            $table->foreignId('classe_id')->nullable()->after('eleve_id')->constrained();
-        });
-    }
+            if (!Schema::hasColumn('inscriptions', 'classe_id')) {
+                Schema::table('inscriptions', function (Blueprint $table) {
+                    $table->foreignId('classe_id')->nullable()->after('eleve_id')->constrained();
+                });
+            }
         });
     }
 

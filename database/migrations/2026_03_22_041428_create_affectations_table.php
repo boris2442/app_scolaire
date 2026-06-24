@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('affectations', function (Blueprint $table) {
             $table->id();
-              $table->foreignId('enseignant_id')->constrained();
+            $table->foreignId('enseignant_id')->constrained();
             $table->foreignId('matiere_id')->constrained();
             $table->foreignId('salle_id')->constrained();
             $table->foreignId('annee_scolaire_id')->constrained();

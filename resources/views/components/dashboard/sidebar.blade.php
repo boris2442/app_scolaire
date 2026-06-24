@@ -11,7 +11,7 @@
 
     <div class="flex items-center px-6 mb-8 gap-3">
         <div class="flex-shrink-0">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-10 h-10 rounded-lg shadow-sm">
+            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-10 h-10 rounded shadow-sm">
         </div>
         <div class="sidebar-label transition-opacity duration-300">
             <h1 class="font-bold text-lg leading-none tracking-tight">ACADEMIA<span
@@ -35,7 +35,7 @@
 
                     <a href="{{ route('settings.index') }}" title="Parametres Ecole"
                         aria-label="Configuration des parametres de l ecole"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-cogs w-6 text-center"></i>
                         <span class="sidebar-label ml-3 font-medium">Paramètres École</span>
                     </a>
@@ -47,7 +47,7 @@
 
                     <a href="{{ route('settings.years.index') }}" aria-label="Gestion des Années scolaires"
                         title="Anees Scolaires"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.years.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.years.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-calendar-alt w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Années</span>
                     </a>
@@ -56,14 +56,14 @@
 
                     <a href="{{ route('settings.academique.index') }}" title="Niveaux et cycles"
                         aria-label="Niveaux et cycles"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-sitemap w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Cycles & Niveaux</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('settings.classes.index') }}" title="Clases et salles" aria-label="Clases et salles"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-school w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Classes & Salles</span>
                     </a>
@@ -71,28 +71,28 @@
                 <li>
                     <a href="{{ route('settings.matieres.index') }}" title="Matières & Coeffs"
                         aria-label="Matières & Coeffs"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-book w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Matières & Coeffs</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.students.index') }}" title="Eleves" aria-label="Eleves"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.students.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.students.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-book w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Eleves</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.affectations.index') }}" title="Affectations" aria-label="Affectations"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.affectations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.affectations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-book w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Affectation</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.trimestres.index') }}" title="Trimestres" aria-label="Trimestres"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.trimestres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.trimestres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Trimestres</span>
                     </a>
@@ -100,7 +100,7 @@
                 <li>
                     <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
                         aria-label="Calcul des Résultats"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-calculator w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Calcul des Résultats</span>
                     </a>
@@ -108,14 +108,14 @@
 
                 <li>
                     <a href="{{ route('admin.statistiques.index') }}" title="Statistiques" aria-label="Statistiques"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-chart-bar w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Statistiques</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-building w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Départements</span>
                     </a>
@@ -123,7 +123,7 @@
 
                 <li>
                     <a href="{{ route('admin.audit.saisie') }}" title="Audit de Saisie" aria-label="Audit de Saisie"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.audit.saisie') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.audit.saisie') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-search w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Audit de Saisie</span>
                     </a>
@@ -131,7 +131,7 @@
 
                 <li>
                     <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
-                        class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Enseignants</span>
                     </a>
@@ -142,7 +142,7 @@
 
             <li>
                 <a href="{{ route('admin.evaluations.index') }}" title="Evaluations" aria-label="Evaluations"
-                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Evaluations</span>
                 </a>
@@ -150,23 +150,31 @@
 
             <li>
                 <a href="{{ route('enseignant.dashboard') }}" title="Enseignants" aria-label="Enseignants"
-                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Progression saisie</span>
                 </a>
             </li>
             {{-- <li>
                 <a href="{{ route('admin.statistiques.registre') }}" title="RRegistre" aria-label="RRegistre"
-                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-file-alt w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Registres</span>
                 </a>
             </li> --}}
             <li>
                 <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
-                    class="flex items-center px-3 py-2.5 rounded-lg transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                     <i class="fas fa-file-alt w-6 text-center"></i>
                     <span class="sidebar-label ml-3">Impressions</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.groupes.index') }}"title="groupement des matieres "
+                    aria-label="groupement des matieres"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
+                    <i class="fas fa-file-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">groupement des matieres</span>
                 </a>
             </li>
 
@@ -189,7 +197,7 @@
         <div class="border-t border-border my-4"></div>
         <form method="POST" action="#"> @csrf
             <button type="submit"
-                class="flex items-center w-full px-3 py-2.5 rounded-lg bg-danger text-white hover:opacity-90 transition-all">
+                class="flex items-center w-full px-3 py-2.5 rounded bg-danger text-white hover:opacity-90 transition-all">
                 <i class="fas fa-sign-out-alt w-6 text-center"></i>
                 <span class="sidebar-label ml-3">Déconnexion</span>
             </button>

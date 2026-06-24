@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evaluations', function (Blueprint $table) {
+        Schema::create('groupes_matieres', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->foreignId('sequence_id')->constrained();
-            $table->foreignId('matiere_id')->constrained();
-            $table->foreignId('salle_id')->constrained();
+            $table->string('nom'); // Ex: "Matières Littéraires"
+            $table->integer('ordre')->default(0); // 1, 2, 3 pour l'ordre sur le bulletin
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evaluations');
+        Schema::dropIfExists('groupes_matieres');
     }
 };
