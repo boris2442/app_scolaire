@@ -109,64 +109,6 @@ class BulletinPrintController extends Controller
     }
 
     // 2. NOUVEAU : Impression de TOUTE la classe d'un coup
-    // public function imprimerClasse($classeId, $trimestreId)
-    // {
-    //     $etablissement = DB::table('etablissements')->first();
-    //     $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
-    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
-    //     $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
-
-    //     // On récupère tous les IDs d'inscriptions de cette classe
-    //     $inscriptionIds = DB::table('inscriptions')
-    //         ->where('classe_id', $classeId)
-    //         ->where('annee_scolaire_id', $anneeActive->id)
-    //         ->pluck('id');
-
-
-    //     // $stats = $this->calculerStatistiquesClasse([$inscriptionId], $trimestreId);
-    //     // AJOUTEZ CECI : Des statistiques vides par défaut pour l'impression solo
-
-    //     $stats = $this->calculerStatistiquesEnMemoire($bulletins);
-
-    //     // 2. NOUVEAU : On récupère TOUTES les notes de la classe en 1 seule requête SQL
-    //     $allNotes = DB::table('notes')
-    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
-    //         ->whereIn('notes.inscription_id', $inscriptionIds)
-    //         ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
-    //         ->select('notes.*', 'evaluations.matiere_id', 'evaluations.sequence_id')
-    //         ->get()
-    //         ->groupBy('inscription_id'); // Très important pour trier les notes par élève
-
-
-
-
-
-    //     // foreach ($inscriptionIds as $id) {
-    //     //     // Récupère les notes dans le panier (le "allNotes")
-    //     //     $notesEleve = $allNotes->get($id, collect());
-
-    //     //     // On passe $notesEleve en 4ème argument
-    //     //     $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
-    //     // }
-
-
-    //     // 3. Boucler pour remplir le tableau $bulletins
-    //     $bulletins = []; // On commence avec un tableau vide
-    //     foreach ($inscriptionIds as $id) {
-    //         $notesEleve = $allNotes->get($id, collect());
-    //         $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
-    //     }
-
-    //     // 3. Calcul des statistiques "à la volée" (votre proposition)
-    //     $stats = $this->calculerStatistiquesEnMemoire($bulletins);
-
-
-
-
-    //     $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
-
-    //     return $pdf->download("Bulletins_Classe.pdf");
-    // }
 
 
     public function imprimerClasse($classeId, $trimestreId)
@@ -315,6 +257,19 @@ class BulletinPrintController extends Controller
             ->where('annee_scolaire_id', $inscription->annee_scolaire_id)
             ->count();
 
+        // DEBUG : Ajoutez ceci temporairement juste avant la requête
+        //  dump($inscriptionId, $trimestreId);
+        // 2. Récupération du suivi disciplinaire pour cet élève au trimestre donné
+        $suiviDisciplinaire = DB::table('suivi_disciplinaires')
+            ->where('inscription_id', $inscriptionId)
+            ->where('trimestre_id', $trimestreId) // Assurez-vous d'avoir cette variable $trimestreId
+            ->first();
+
+
+        // DEBUG : Voyez-vous un objet ou NULL ?
+        // dd($suiviDisciplinaire);
+
+
         // 2. Récupération des matières
         $matieres = DB::table('classe_matiere')
             ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
@@ -392,7 +347,8 @@ class BulletinPrintController extends Controller
             'matieres' => $matieres,
             'notes' => $notes,
             'coefficients' => $coefficients,
-            'bilan' => $bilan
+            'bilan' => $bilan,
+            'suivi' => $suiviDisciplinaire, // Ajout du suivi disciplinaire
         ];
     }
 

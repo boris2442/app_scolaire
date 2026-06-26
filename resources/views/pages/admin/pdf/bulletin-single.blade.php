@@ -318,8 +318,8 @@
                         <th width="10%">Moy/20</th>
                         <th width="6%">Coeff</th>
                         <th width="10%">Total (N*C)</th>
-                        <th width="13%">Appréciation</th>
-                        <th width="15%">Professeur</th>
+                        <th width="13%">Compétences</th>
+                        <th width="15%">Professeur & Visa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -379,6 +379,22 @@
 
                                 $pointsMatiere = $moyenneMatiere20 * $matiere->coefficient;
 
+                                // Calcul séquence 1
+                                if ($noteSeq1 !== null) {
+                                    $totalPointsSeq1 += $noteSeq1 * $coef;
+                                }
+
+                                // Calcul séquence 2
+                                if ($noteSeq2 !== null) {
+                                    $totalPointsSeq2 += $noteSeq2 * $coef;
+                                }
+
+                                // Calcul trimestre
+                                $totalPointsTrimestre += $moyenneMatiere20 * $coef;
+
+                                // Total des coefficients
+                                $totalCoefficientsClasse += $coef;
+
                                 // Cumul pour le sous-total du groupe
                                 $sousTotalPoints += $pointsMatiere;
                                 $sousTotalCoeffs += $matiere->coefficient;
@@ -395,22 +411,22 @@
                                 </td>
                                 <td class="text-center">{{ $coef }}</td>
                                 <td class="text-center">{{ number_format($moyenneMatiere20 * $coef, 2) }}</td>
-                                <td class="text-center" style="font-size: 8px;">
+                                <td class="text-center" style="font-size: 8px; font-style: italic;">
                                     @if ($noteSeq1 === null && $noteSeq2 === null)
                                         -
-                                    @elseif($moyenneMatiere20 >= 16)
-                                        Très bien
                                     @elseif($moyenneMatiere20 >= 14)
-                                        Bien
-                                    @elseif($moyenneMatiere20 >= 12)
-                                        Assez bien
+                                        Acquis
                                     @elseif($moyenneMatiere20 >= 10)
-                                        Passable
+                                        En cours d’acquisition
                                     @else
-                                        Insuffisant
+                                        Non acquis
                                     @endif
                                 </td>
-                                <td class="text-left" style="font-size: 8px;">{{ $matiere->prof_nom ?? 'Non assigné' }}
+
+
+
+                                <td class="text-left" style="font-size: 8px;">M /
+                                    Mme{{ $matiere->prof_nom ?? 'Non assigné' }}
                                 </td>
 
 
@@ -448,6 +464,8 @@
                     </tr>
                 </tbody>
             </table>
+
+
             <table class="table-stats text-center">
                 <thead>
                     <tr>
@@ -488,20 +506,20 @@
                         </td>
 
                         <td style="font-size: 9px;">
-                           {{ $b['rang'] }} / {{ count($bulletins) }}
+                            {{ $b['rang'] }} / {{ count($bulletins) }}
                         </td>
                         <td style="font-size: 9px;">
-                            @if ($moyenneTrimFinale < 10)
+                            @if ($moyTrimestre < 10)
                                 Insuffisant
-                            @elseif ($moyenneTrimFinale < 12)
+                            @elseif ($moyTrimestre < 12)
                                 Passable
-                            @elseif ($moyenneTrimFinale < 14)
+                            @elseif ($moyTrimestre < 14)
                                 Assez bien
-                            @elseif ($moyenneTrimFinale < 16)
+                            @elseif ($moyTrimestre < 16)
                                 Bien
-                            @elseif ($moyenneTrimFinale < 18)
+                            @elseif ($moyTrimestre < 18)
                                 Très bien
-                            @elseif ($moyenneTrimFinale < 19)
+                            @elseif ($moyTrimestre < 19)
                                 Excellent
                             @else
                                 Parfait
@@ -512,7 +530,7 @@
                         </td>
                         {{-- {{ number_format($stats['moyenne'], 2) }} --}}
                         <td style="font-size: 8px; font-style: italic;">
-                            {{ $moyenneTrimFinale >= 10 ? 'Passable, du courage !' : 'Doit redoubler d\'efforts.' }}
+                            {{ $moyenneTrimFinale >= 10 ? 'Ne dormez pas, du courage !' : 'Doit redoubler d\'efforts.' }}
                         </td>
                     </tr>
 
@@ -522,6 +540,8 @@
 
                 </tbody>
             </table>
+
+
 
             <div class="stats-footer">
                 <table border="1" style="width: 100%; text-align: center; margin-top: 10px;">
@@ -535,19 +555,42 @@
             </div>
 
 
+            <br />
 
 
-
-            <table class="table-discipline text-center">
+            <table class="table-discipline text-center font-style: italic; font-size: 9px; margin-top: 10px;">
                 <tr>
-                    <td width="20%">Retards : _____</td>
-                    <td width="20%">Absences : _____</td>
-                    <td width="20%"> Consignes : _____</td>
-                    <td width="20%">Avert Conduite</td>
-                    <td width="20%"> Exclusion</td>
+                    <td width="(100/6)%" style="font-style: italic; font-size: 9px;">Retards (Heure) :
+                        {{-- {{ $suivi->retards ?? 0 }} --}}
+                        {{ $b['suivi']->retards ?? 0 }}
+                    </td>
+                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;">Absences :
+                        {{ $b['suivi']->absences ?? 0 }}</td>
+                    <td width="(100/6)%  " style="font-style: italic; font-size: 9px;"> Suspensions(Fois) :
+                        {{ $b['suivi']->suspensions ?? 0 }}</td>
+                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;">Avertissementsc:
+                        {{ $b['suivi']->avertissements ?? 0 }}</td>
+                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;"> Blames :
+                        {{ $b['suivi']->blames ?? 0 }}</td>
+                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;"> Exclusion(Jours) :
+                        {{ $b['suivi']->exclusions ?? 0 }}</td>
                 </tr>
             </table>
 
+            <br />
+            <table class="table-honneur" style="margin-bottom:10px;">
+                <tr>
+                    <td style="font-size: 10px; font-weight: bold;">
+                        Tableau d'honneur :
+                    </td>
+                    <td style="text-align: center;">
+                        Oui
+                    </td>
+                    <td style="text-align: center;">
+                        Non
+                    </td>
+                </tr>
+            </table>
             <table class="table-signatures">
                 <tr>
                     <td width="33%" class="text-center">Nom et visa du Prof principal</td>

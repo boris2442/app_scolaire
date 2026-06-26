@@ -177,6 +177,13 @@
                     <span class="sidebar-label ml-3">groupement des matieres</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('discipline.index') }}"title="Discipline" aria-label="Discipline"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('discipline.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
+                    <i class="fas fa-file-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Discipline</span>
+                </a>
+            </li>
 
 
 

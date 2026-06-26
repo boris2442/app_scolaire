@@ -12,6 +12,7 @@ use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
 use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
@@ -283,4 +284,12 @@ Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [Bulle
 
 
 Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
+
+// Route pour afficher le formulaire de sélection
+Route::get('/discipline/selection', [DisciplineController::class, 'index'])->name('discipline.index');
+
+// Route pour afficher la grille après validation du choix
+Route::get('/discipline/saisie', [DisciplineController::class, 'saisie'])->name('discipline.saisie');
+
+Route::post('/discipline/store', [DisciplineController::class, 'store'])->name('discipline.store');
 require __DIR__ . '/auth.php';

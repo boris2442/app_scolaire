@@ -332,6 +332,7 @@ class EleveController extends Controller
             $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
         }])
             ->orderBy('nom', 'asc')
+            ->orderBy('prenom', 'asc')
             ->get();
 
         // Récupération de la classe pour le titre du document

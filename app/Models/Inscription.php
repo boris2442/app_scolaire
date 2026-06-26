@@ -22,4 +22,10 @@ class Inscription extends Model
     {
         return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
     }
+
+    public function suivi()
+{
+    // On récupère le suivi pour le trimestre actif (ou passé en paramètre)
+    return $this->hasOne(SuiviDisciplinaire::class, 'inscription_id');
+}
 }
