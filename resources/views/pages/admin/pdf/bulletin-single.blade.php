@@ -219,6 +219,7 @@
 
     @foreach ($bulletins as $b)
         @php
+
             // On extrait les variables pour que ton code en dessous ne change pas
             $inscription = $b['inscription'];
             $totalElevesClasse = $b['totalElevesClasse'];
@@ -291,7 +292,7 @@
                         {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}</td>
                 </tr>
                 <tr>
-                    <td><strong>TITULAIRE :</strong> {{ $classe->titulaire_nom ?? 'N/A' }}</td>
+                    <td><strong>Redoublant :</strong> {{ $inscription->inscription->est_redoublant ?? 'N/A' }}</td>
                     <td>
                         <table style="width:100%; margin:0; border:none;">
                             <tr style="border:none;">
@@ -323,104 +324,126 @@
                 </thead>
                 <tbody>
                     @php
-                        $totalCoefG1 = 0;
-                        $totalPointsG1 = 0;
-
-                        // 1. On extrait de manière sécurisée les deux séquences du trimestre
-                        $seq1 = $sequences->values()->get(0);
-                        $seq2 = $sequences->values()->get(1);
-
-                        // 2. On stocke leurs IDs dans les variables
-                        $seq1Id = $seq1 ? $seq1->id : null;
-                        $seq2Id = $seq2 ? $seq2->id : null;
-
+                        // 1. Initialisation des totaux globaux du bulletin
+                        // 1. Initialisation des variables pour éviter l'erreur "Undefined variable"
                         $totalPointsSeq1 = 0;
                         $totalPointsSeq2 = 0;
                         $totalPointsTrimestre = 0;
                         $totalCoefficientsClasse = 0;
+
+                        // Initialisation des totaux globaux pour toutes les matières
+                        $totalPointsGlobal = 0;
+                        $totalCoeffGlobal = 0;
+
+                        // 2. Récupération sécurisée des IDs des séquences
+                        $seq1 = $sequences->values()->get(0);
+                        $seq2 = $sequences->values()->get(1);
+                        $seq1Id = $seq1 ? $seq1->id : null;
+                        $seq2Id = $seq2 ? $seq2->id : null;
+
                     @endphp
 
-                    @foreach ($matieres as $matiere)
+                    {{-- Boucle 1 : On parcourt les groupes --}}
+                    @foreach ($matieres as $groupeId => $matieresDuGroupe)
                         @php
-                            $idMat = $matiere->matiere_id ?? ($matiere->id ?? null);
-
-                            // Gestion 100% sécurisée du coefficient (PHP 8+ compatible)
-                            $coef = 1;
-                            if (isset($coefficients)) {
-                                if (is_array($coefficients)) {
-                                    // Si c'est un tableau, on récupère la clé ou la valeur par défaut de la matière
-        $coef = $coefficients[$idMat] ?? ($matiere->coefficient ?? 1);
-    } elseif (is_object($coefficients) && method_exists($coefficients, 'get')) {
-        // Si c'est un objet (Collection), on utilise la méthode get()
-                                    $coef = $coefficients->get($idMat, $matiere->coefficient ?? 1);
-                                } else {
-                                    $coef = $matiere->coefficient ?? 1;
-                                }
-                            } else {
-                                $coef = $matiere->coefficient ?? 1;
-                            }
-
-                            // Récupération des notes directes grâce aux IDs extraits plus haut
-                            $noteSeq1 = $seq1Id && isset($notes[$idMat][$seq1Id]) ? $notes[$idMat][$seq1Id] : null;
-                            $noteSeq2 = $seq2Id && isset($notes[$idMat][$seq2Id]) ? $notes[$idMat][$seq2Id] : null;
-
-                            // Valeurs par défaut à 0 pour les calculs physiques si la note est absente
-                            $valNoteSeq1 = $noteSeq1 ?? 0;
-                            $valNoteSeq2 = $noteSeq2 ?? 0;
-
-                            // Calcul propre de la moyenne de la matière pour le trimestre
-                            if ($noteSeq1 !== null && $noteSeq2 !== null) {
-                                $moyenneMatiere20 = ($valNoteSeq1 + $valNoteSeq2) / 2;
-                            } else {
-                                $moyenneMatiere20 = $noteSeq1 ?? ($noteSeq2 ?? 0);
-                            }
-
-                            // Accumulation globale pour le tableau de statistiques du bas
-                            $totalPointsSeq1 += $valNoteSeq1 * $coef;
-                            $totalPointsSeq2 += $valNoteSeq2 * $coef;
-                            $totalPointsTrimestre += $moyenneMatiere20 * $coef;
-                            $totalCoefficientsClasse += $coef;
+                            $sousTotalPoints = 0;
+                            $sousTotalCoeffs = 0;
                         @endphp
-
-                        <tr>
-                            <td class="text-left"><strong>{{ $matiere->matiere_nom ?? $matiere->nom }}</strong></td>
-                            <td class="text-center">{{ $noteSeq1 !== null ? number_format($noteSeq1, 2) : '-' }}</td>
-                            <td class="text-center">{{ $noteSeq2 !== null ? number_format($noteSeq2, 2) : '-' }}</td>
-                            <td class="text-center" style="font-weight: bold; background-color: #f9f9f9;">
-                                {{ number_format($moyenneMatiere20, 2) }}</td>
-                            <td class="text-center">{{ $coef }}</td>
-                            <td class="text-center">{{ number_format($moyenneMatiere20 * $coef, 2) }}</td>
-
-                            <td class="text-center" style="font-size: 8px;">
-                                @if ($noteSeq1 === null && $noteSeq2 === null)
-                                    -
-                                @elseif($moyenneMatiere20 >= 16)
-                                    Très bien
-                                @elseif($moyenneMatiere20 >= 14)
-                                    Bien
-                                @elseif($moyenneMatiere20 >= 12)
-                                    Assez bien
-                                @elseif($moyenneMatiere20 >= 10)
-                                    Passable
-                                @else
-                                    Insuffisant
-                                @endif
-                            </td>
-                            <td class="text-left"
-                                style="font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                {{ $matiere->prof_nom ?? ($matiere->enseignant_nom ?? 'Non assigné') }}
+                        {{-- Ligne de titre du groupe --}}
+                        {{-- On utilise le premier élément du groupe pour récupérer le nom du groupe --}}
+                        <tr style="background-color: #e5e7eb;">
+                            <td colspan="8" style="font-weight: 800;">
+                                {{ $matieresDuGroupe->first()->groupe_nom ?? 'AUTRES MATIÈRES' }}
                             </td>
                         </tr>
+
+                        {{-- Boucle 2 : On parcourt les matières DANS le groupe --}}
+                        @foreach ($matieresDuGroupe as $matiere)
+                            @php
+                                $idMat = $matiere->matiere_id;
+                                $coef = $matiere->coefficient ?? 1;
+
+                                // Récupération des notes
+                                $noteSeq1 = $seq1Id && isset($notes[$idMat][$seq1Id]) ? $notes[$idMat][$seq1Id] : null;
+                                $noteSeq2 = $seq2Id && isset($notes[$idMat][$seq2Id]) ? $notes[$idMat][$seq2Id] : null;
+
+                                $valNoteSeq1 = $noteSeq1 ?? 0;
+                                $valNoteSeq2 = $noteSeq2 ?? 0;
+
+                                // Calcul moyenne matière
+                                if ($noteSeq1 !== null && $noteSeq2 !== null) {
+                                    $moyenneMatiere20 = ($valNoteSeq1 + $valNoteSeq2) / 2;
+                                } else {
+                                    $moyenneMatiere20 = $noteSeq1 ?? ($noteSeq2 ?? 0);
+                                }
+
+                                $pointsMatiere = $moyenneMatiere20 * $matiere->coefficient;
+
+                                // Cumul pour le sous-total du groupe
+                                $sousTotalPoints += $pointsMatiere;
+                                $sousTotalCoeffs += $matiere->coefficient;
+                            @endphp
+
+                            <tr>
+                                <td class="text-left" style="padding-left: 20px;">{{ $matiere->matiere_nom }}</td>
+                                <td class="text-center">{{ $noteSeq1 !== null ? number_format($noteSeq1, 2) : '-' }}
+                                </td>
+                                <td class="text-center">{{ $noteSeq2 !== null ? number_format($noteSeq2, 2) : '-' }}
+                                </td>
+                                <td class="text-center" style="font-weight: bold; background-color: #f9f9f9;">
+                                    {{ number_format($moyenneMatiere20, 2) }}
+                                </td>
+                                <td class="text-center">{{ $coef }}</td>
+                                <td class="text-center">{{ number_format($moyenneMatiere20 * $coef, 2) }}</td>
+                                <td class="text-center" style="font-size: 8px;">
+                                    @if ($noteSeq1 === null && $noteSeq2 === null)
+                                        -
+                                    @elseif($moyenneMatiere20 >= 16)
+                                        Très bien
+                                    @elseif($moyenneMatiere20 >= 14)
+                                        Bien
+                                    @elseif($moyenneMatiere20 >= 12)
+                                        Assez bien
+                                    @elseif($moyenneMatiere20 >= 10)
+                                        Passable
+                                    @else
+                                        Insuffisant
+                                    @endif
+                                </td>
+                                <td class="text-left" style="font-size: 8px;">{{ $matiere->prof_nom ?? 'Non assigné' }}
+                                </td>
+
+
+                            </tr>
+                        @endforeach
+
+                        {{-- LIGNE DU SOUS-TOTAL DU GROUPE --}}
+                        <tr style="background-color: #f9f9f9; font-weight: bold;">
+                            {{-- On utilise colspan="5" pour sauter : Nom, Seq1, Seq2, Moy/20, Coeff --}}
+                            {{-- Total coef sous groupe --}}
+
+                            <td colspan="4" class="text-right">SOUS-TOTAL
+                                {{ $matieresDuGroupe->first()->groupe_nom }}</td>
+                            <td class="text-center">{{ $sousTotalCoeffs }}</td>
+                            {{-- Affiche la somme des Points (Total N*C) --}}
+                            <td class="text-center">{{ number_format($sousTotalPoints, 2) }}</td>
+
+                            {{-- Le reste des colonnes vides --}}
+                            <td colspan="2"></td>
+                        </tr>
+                        @php
+                            // C'est ICI que vous ajoutez les sous-totaux au total global
+                            $totalPointsGlobal += $sousTotalPoints;
+                            $totalCoeffGlobal += $sousTotalCoeffs;
+                        @endphp
                     @endforeach
 
+                    {{-- Ligne Totale finale --}}
                     <tr style="font-weight: bold; background-color: #f4f4f4;">
-                        <td class="text-left" style="text-transform: uppercase;">TOTAL SÉQUENTIEL</td>
-                        @foreach ($sequences as $seq)
-                            <td class="text-center">-</td>
-                        @endforeach
-                        <td class="text-center">-</td>
-                        <td class="text-center">{{ $totalCoefficientsClasse }}</td>
-                        <td class="text-center">{{ number_format($totalPointsTrimestre, 2) }}</td>
+                        <td class="text-left" style="text-transform: uppercase;">TOTAL GÉNÉRAL</td>
+                        <td colspan="3"></td>
+                        <td class="text-center">{{ $totalCoeffGlobal }}</td>
+                        <td class="text-center">{{ number_format($totalPointsGlobal, 2) }}</td>
                         <td colspan="2"></td>
                     </tr>
                 </tbody>
@@ -438,6 +461,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @foreach ($bulletins as $bulletin) --}}
                     <tr>
                         @php
                             // Formule stricte : Somme (Note * Coef) / Coefficient Total
@@ -454,35 +478,65 @@
                         <td>{{ number_format($moyenneSeq2Finale, 2) }}</td>
 
                         <td style="font-weight: bold; background-color: #f9f9f9;">
-                            {{ number_format($moyenneTrimFinale, 2) }}
+                            @php
+
+                                $moyTrimestre = $totalPointsGlobal / $totalCoeffGlobal;
+                            @endphp
+                            {{ number_format($moyTrimestre, 2) }}
+                            {{-- {{ number_format($stats['moyenne'], 2) }} --}}
+
                         </td>
 
-                        {{-- <td>{{ $bilan->rang ?? 'X' }}e / {{ $totalElevesClasse ?? 0 }}</td> --}}
-                        <td>
-                            @if (isset($bilan->rang) && is_numeric($bilan->rang) && $bilan->rang >= 1)
-                                {{ $bilan->rang == 1 ? '1er' : $bilan->rang . 'e' }}
-                            @else
-                                X
-                            @endif
-                            / {{ $totalElevesClasse ?? 0 }}
+                        <td style="font-size: 9px;">
+                           {{ $b['rang'] }} / {{ count($bulletins) }}
                         </td>
                         <td style="font-size: 9px;">
-                            @if ($moyenneTrimFinale >= 10)
-                                Passable
-                            @else
+                            @if ($moyenneTrimFinale < 10)
                                 Insuffisant
+                            @elseif ($moyenneTrimFinale < 12)
+                                Passable
+                            @elseif ($moyenneTrimFinale < 14)
+                                Assez bien
+                            @elseif ($moyenneTrimFinale < 16)
+                                Bien
+                            @elseif ($moyenneTrimFinale < 18)
+                                Très bien
+                            @elseif ($moyenneTrimFinale < 19)
+                                Excellent
+                            @else
+                                Parfait
                             @endif
                         </td>
 
-                        <td>{{ isset($bilan->moyenne_classe) ? number_format($bilan->moyenne_classe, 2) : '0.00' }}
+                        <td>{{ number_format($stats['moyenne'], 2) }}
                         </td>
-
+                        {{-- {{ number_format($stats['moyenne'], 2) }} --}}
                         <td style="font-size: 8px; font-style: italic;">
                             {{ $moyenneTrimFinale >= 10 ? 'Passable, du courage !' : 'Doit redoubler d\'efforts.' }}
                         </td>
                     </tr>
+
+
+                    {{-- @endforeach --}}
+
+
                 </tbody>
             </table>
+
+            <div class="stats-footer">
+                <table border="1" style="width: 100%; text-align: center; margin-top: 10px;">
+                    <tr>
+                        <td>Moyenne Classe : {{ number_format($stats['moyenne'], 2) }}</td>
+                        <td>Moyenne Max : {{ number_format($stats['max'], 2) }}</td>
+                        <td>Moyenne Min : {{ number_format($stats['min'], 2) }}</td>
+                        <td>Taux de réussite : {{ number_format($stats['taux_reussite'], 2) }}%</td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
 
             <table class="table-discipline text-center">
                 <tr>

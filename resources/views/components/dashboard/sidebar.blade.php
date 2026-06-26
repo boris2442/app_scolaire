@@ -90,13 +90,13 @@
                         <span class="sidebar-label ml-3">Affectation</span>
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{ route('admin.trimestres.index') }}" title="Trimestres" aria-label="Trimestres"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.trimestres.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
                         <span class="sidebar-label ml-3">Trimestres</span>
                     </a>
-                </li>
+                </li> --}}
                 <li>
                     <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
                         aria-label="Calcul des Résultats"

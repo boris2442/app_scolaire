@@ -1,13 +1,16 @@
 Checklist de perfectionnement" du bulletin :
 
 1. Structure et Organisation (Le squelette)
-Regroupement des matières : C'est le point majeur. Au lieu d'une liste de matières, nous devons créer des sections : Matières Littéraires et Sciences, Matières Scientifiques, Matières Complémentaires. Chaque groupe doit avoir son sous-total.
+Regroupement des matières : C'est le point majeur. Au lieu d'une liste de matières, nous devons créer des sections : Matières Littéraires et Sciences, Matières Scientifiques, Matières Complémentaires. Chaque groupe doit avoir son sous-total.   <<<<<<<<<OKAYYYYY>>>>>>>>>>>>>>
 
 Intégration des données manquantes :
 
 Conduite : Remplacer les tirets _____ par les vraies données (absences, retards, etc.).
 
 Appréciations de travail : Remplacer les mentions génériques par les appréciations réelles du conseil de classe si elles existent.
+
+
+
 
 2. Design et Typographie (L'aspect visuel)
 Police : Passer à une police système standard type Arial ou DejaVu Sans (plus lisible en petite taille sur PDF).
@@ -17,6 +20,9 @@ Alignement des Entêtes : Ton entête actuel est un peu "aérien". On doit ajust
 Grise des tableaux : Les lignes de séparation doivent être plus fines ( 0.5px ou 0.7px au lieu de 1px pour un rendu moins "lourd").
 
 Sceau et Signatures : Ajouter les espaces réservés pour le cachet du proviseur et la signature scannée.
+
+
+
 
 3. Logique de Données (Le moteur)
 Gestion des absents : Transformer le 0 des notes absentes en ABS (ou N.A).

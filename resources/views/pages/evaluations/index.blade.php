@@ -11,7 +11,7 @@
 
             {{-- 1. Sélection de la Séquence --}}
             <select name="sequence_id"
-                class="bg-secondary/20 border-white/10 rounded-xl p-3 text-sm  outline-none focus:border-primary" required>
+                class="bg-background border-white/10 rounded-xl p-3 text-sm  outline-none focus:border-primary" required>
                 <option value="">-- Période (Séquence) --</option>
                 @foreach ($sequences->groupBy('trimestre_id') as $trimestreId => $group)
                     <optgroup label="Trimestre {{ $loop->iteration }}">
@@ -24,7 +24,7 @@
 
             {{-- 2. Sélection du Cours (Matière + Classe) --}}
             <select name="affectation_id"
-                class="md:col-span-2 bg-secondary/20 border-white/10 rounded-xl p-3 text-sm  outline-none focus:border-primary"
+                class="md:col-span-2 bg-background border-white/10 rounded-xl p-3 text-sm  outline-none focus:border-primary"
                 required>
                 <option value="">-- Choisir le cours à évaluer --</option>
                 @foreach ($affectations as $aff)
@@ -39,7 +39,7 @@
 
             {{-- 3. Bouton de validation --}}
             <button type="submit"
-                class="bg-primary hover:bg-primary/80 font-black rounded-xl p-3 uppercase text-[10px] transition-all">
+                class="bg-primary hover:bg-primary/80 font-black rounded-xl p-3  text-[10px] transition-all">
                 Créer & Saisir Notes
             </button>
 

@@ -16,7 +16,7 @@
                 <label class="text-[10px] font-black  text-muted-foreground ml-1">Sélectionner une salle /
                     classe</label>
                 <select name="classe_id" onchange="this.form.submit()"
-                    class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold  bg-white dark:bg-primary focus:ring-1 focus:ring-primary transition-all">
+                    class="w-full px-4 py-2 rounded border border-border bg-secondary">
                     <option value="" class="text-muted-foreground dark:text-gray-900">-- Choisir une classe --
                     </option>
                     @foreach ($classes as $item)
@@ -58,7 +58,8 @@
                             <tr class="hover:bg-secondary/10 transition-colors">
                                 <td class="p-4">
                                     <p class="text-sm font-black ">{{ $matiere->nom }}</p>
-                                    <span class="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+                                    <span
+                                        class="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
                                         Coeff: {{ $matiere->pivot->coefficient ?? '1' }}
                                     </span>
                                 </td>
@@ -71,7 +72,7 @@
                                 <td class="p-4">
                                     {{-- LE NOM DU SELECT EST CRUCIAL --}}
                                     <select name="affectations[{{ $matiere->id }}]"
-                                        class="w-full bg-secondary/50 border-transparent rounded-lg py-2 px-3 text-xs font-bold  bg-white dark:bg-primary focus:ring-1 focus:ring-primary transition-all">
+                                        class="bg-card p-2 rounded-2xl border border-border shadow-sm mb-2">
                                         <option value="">-- Non affecté --</option>
                                         @foreach ($enseignants as $enseignant)
                                             <option value="{{ $enseignant->id }}"

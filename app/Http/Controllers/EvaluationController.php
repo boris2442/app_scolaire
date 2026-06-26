@@ -31,6 +31,7 @@ class EvaluationController extends Controller
     {
         $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
+        // dd($enseignant);
         if (!$enseignant) {
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
@@ -41,16 +42,24 @@ class EvaluationController extends Controller
             $query->where('annee_scolaire_id', $anneeActive->id);
         })->get();
 
+        // $affectations = $enseignant
+        //     ? $enseignant->affectations()->with(['matiere', 'classe.niveau'])->get()
+        //     : collect();
+
         $affectations = $enseignant
-            ? $enseignant->affectations()->with(['matiere', 'classe.niveau'])->get()
-            : collect();
+            ->affectations()->with(['matiere', 'classe.niveau'])->get()
+            //  : collect()
+        ;
+
+
+
 
         // On récupère les évaluations déjà créées par ce prof
         $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
             ->where('enseignant_id', $enseignant?->id)
             ->latest()
             ->get();
-
+        // dd($evaluations);
         // $test = $affectations->first();
         // dd($test->niveau_id, $test->niveau);
 

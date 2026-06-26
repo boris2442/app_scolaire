@@ -5,7 +5,7 @@
 
         <div class="space-y-6">
             <div class="bg-card p-6 rounded-xl border border-border shadow-sm text-center">
-                <h2 class="text-xs font-black uppercase text-primary mb-4 tracking-widest">1. Ajouter un Cycle</h2>
+                <h2 class="text-xs  text-primary mb-4 tracking-widest">1. Ajouter un Cycle</h2>
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
                     <input type="text" name="nom" placeholder="ex: Premier Cycle"
@@ -16,7 +16,7 @@
             </div>
 
             <div class="bg-card p-6 rounded-xl border border-border shadow-sm">
-                <h2 class="text-xs font-black uppercase text-primary mb-4 tracking-widest text-center">2. Ajouter un Niveau
+                <h2 class="text-xs   text-primary mb-4 tracking-widest text-center">2. Ajouter un Niveau
                 </h2>
                 <form action="{{ route('settings.academique.niveaux.store') }}" method="POST" class="space-y-4">
                     @csrf
@@ -85,7 +85,8 @@
                                 <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     {{-- Bouton Modifier (Ouvre un prompt simple pour l'exemple, ou tu peux faire une modale) --}}
                                     <a href="{{ route('settings.academique.niveaux.edit', $niveau) }}"
-                                        class="p-1 text-primary hover:bg-primary/10 rounded transition-colors">
+                                        class="p-1 text-primary hover:bg-primary/10 rounded transition-colors"
+                                        title="Modigier" aria-label="Modifier">
                                         <i class="fas fa-edit text-[10px]"></i>
                                     </a>
 
@@ -93,7 +94,8 @@
                                     <form action="{{ route('settings.academique.niveaux.destroy', $niveau) }}"
                                         method="POST" onsubmit="return confirm('Supprimer ce niveau ?')">
                                         @csrf @method('DELETE')
-                                        <button class="p-1 text-danger hover:bg-danger/10 rounded">
+                                        <button class="p-1 text-danger hover:bg-danger/10 rounded" title="Supprimer"
+                                            aria-label="Supprimer">
                                             <i class="fas fa-trash text-[10px]"></i>
                                         </button>
                                     </form>

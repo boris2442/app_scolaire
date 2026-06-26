@@ -44,12 +44,17 @@
                                 class="text-sm font-bold leading-none text-foreground group-hover:text-primary transition-colors">
                                 {{ auth()->user()->name ?? 'Utilisateur' }}
                             </p>
+                            <p
+                                class="text-xs italic  leading-none text-foreground group-hover:text-primary transition-colors">
+                                {{ auth()->user()->phone ?? '' }}
+                            </p>
                         </div>
 
                         <div class="relative">
                             <div
                                 class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all">
                                 {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                                {{-- {{ substr(auth()->user()->phone ?? 'U', 0, 1) }} --}}
                             </div>
                             <span
                                 class="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-success ring-2 ring-card"></span>

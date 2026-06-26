@@ -55,14 +55,11 @@
                                     <td class="p-4">
                                         <input type="number" step="0.25" name="notes[{{ $inscription->id }}][valeur]"
                                             value="{{ $maNote->valeur ?? '' }}"
-                                            class="w-full bg-secondary/20 border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded-xl px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
+                                            class="w-full bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded-xl px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
                                             placeholder="--">
                                     </td>
-                                    <td class="p-4 text-right">
-                                        {{-- <input type="text" name="notes[{{ $inscription->id }}][observation]"
-                                            value="{{ $maNote->observation ?? '' }}"
-                                            class="w-full bg-transparent border border-white/5 rounded-xl px-4 py-2 text-[10px] text-white/60 focus:border-white/20 transition-all outline-none"
-                                            placeholder="RAS"> --}}
+                                    {{-- <td class="p-4 text-right">
+                                      
                                         <select name="notes[{{ $inscription->id }}][observation]" ...>
                                             <option value="">-- Appréciation --</option>
                                             @foreach (\App\Models\Note::APPRECIATIONS as $code => $libelle)
@@ -72,7 +69,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

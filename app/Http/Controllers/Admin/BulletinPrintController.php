@@ -54,14 +54,6 @@ class BulletinPrintController extends Controller
         $trimestreId = $request->get('trimestre_id');
 
 
-        // 2. SÉCURITÉ : Si aucun trimestre n'est sélectionné, on prend le trimestre actif par défaut
-        // if (!$trimestreId) {
-        //     $trimestreActive = Trimestre::where('est_actif', true)->first();
-        //     $trimestreId = $trimestreActive ? $trimestreActive->id : \App\Models\Trimestre::first()?->id;
-        // }
-
-
-
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
         // Informations de la classe
@@ -95,15 +87,88 @@ class BulletinPrintController extends Controller
 
         // On récupère les données de cet élève et on les met dans un tableau []
         $bulletins = [
-            $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences)
+            $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences),
         ];
 
-        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement'))->setPaper('a4', 'portrait');
+        // 2. Récupérer les stats réelles de la classe de cet élève
+        $classeId = $bulletins[0]['inscription']->classe_id;
+        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+        $inscriptionIds = DB::table('inscriptions')
+            ->where('classe_id', $classeId)
+            ->where('annee_scolaire_id', $anneeActive->id)
+            ->pluck('id');
+
+
+        // $stats = $this->calculerStatistiquesClasse([$inscriptionId], $trimestreId);
+        // AJOUTEZ CECI : Des statistiques vides par défaut pour l'impression solo
+
+        $stats = $this->calculerStatistiquesEnMemoire($bulletins);
+        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
 
         return $pdf->download("Bulletin_Eleve.pdf");
     }
 
     // 2. NOUVEAU : Impression de TOUTE la classe d'un coup
+    // public function imprimerClasse($classeId, $trimestreId)
+    // {
+    //     $etablissement = DB::table('etablissements')->first();
+    //     $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+    //     $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+
+    //     // On récupère tous les IDs d'inscriptions de cette classe
+    //     $inscriptionIds = DB::table('inscriptions')
+    //         ->where('classe_id', $classeId)
+    //         ->where('annee_scolaire_id', $anneeActive->id)
+    //         ->pluck('id');
+
+
+    //     // $stats = $this->calculerStatistiquesClasse([$inscriptionId], $trimestreId);
+    //     // AJOUTEZ CECI : Des statistiques vides par défaut pour l'impression solo
+
+    //     $stats = $this->calculerStatistiquesEnMemoire($bulletins);
+
+    //     // 2. NOUVEAU : On récupère TOUTES les notes de la classe en 1 seule requête SQL
+    //     $allNotes = DB::table('notes')
+    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
+    //         ->whereIn('notes.inscription_id', $inscriptionIds)
+    //         ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
+    //         ->select('notes.*', 'evaluations.matiere_id', 'evaluations.sequence_id')
+    //         ->get()
+    //         ->groupBy('inscription_id'); // Très important pour trier les notes par élève
+
+
+
+
+
+    //     // foreach ($inscriptionIds as $id) {
+    //     //     // Récupère les notes dans le panier (le "allNotes")
+    //     //     $notesEleve = $allNotes->get($id, collect());
+
+    //     //     // On passe $notesEleve en 4ème argument
+    //     //     $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
+    //     // }
+
+
+    //     // 3. Boucler pour remplir le tableau $bulletins
+    //     $bulletins = []; // On commence avec un tableau vide
+    //     foreach ($inscriptionIds as $id) {
+    //         $notesEleve = $allNotes->get($id, collect());
+    //         $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
+    //     }
+
+    //     // 3. Calcul des statistiques "à la volée" (votre proposition)
+    //     $stats = $this->calculerStatistiquesEnMemoire($bulletins);
+
+
+
+
+    //     $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
+
+    //     return $pdf->download("Bulletins_Classe.pdf");
+    // }
+
+
     public function imprimerClasse($classeId, $trimestreId)
     {
         $etablissement = DB::table('etablissements')->first();
@@ -111,140 +176,112 @@ class BulletinPrintController extends Controller
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        // On récupère tous les IDs d'inscriptions de cette classe
         $inscriptionIds = DB::table('inscriptions')
             ->where('classe_id', $classeId)
             ->where('annee_scolaire_id', $anneeActive->id)
             ->pluck('id');
 
-
-
-        // 2. NOUVEAU : On récupère TOUTES les notes de la classe en 1 seule requête SQL
+        // 1. Récupération des notes en gros
         $allNotes = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
             ->whereIn('notes.inscription_id', $inscriptionIds)
             ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
             ->select('notes.*', 'evaluations.matiere_id', 'evaluations.sequence_id')
             ->get()
-            ->groupBy('inscription_id'); // Très important pour trier les notes par élève
+            ->groupBy('inscription_id');
 
-
-
-
-
-
-
-
-
-        // On boucle pour charger les données de chaque élève de la classe
+        // 2. Boucle pour remplir $bulletins
         $bulletins = [];
-        // foreach ($inscriptionIds as $id) {
-        //     $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences);
-        // }
-
-
-
-        // foreach ($inscriptionIds as $id) {
-        //     // Au lieu de demander à la fonction de retourner chercher dans la BDD,
-        //     // on lui passe directement les notes de cet élève déjà récupérées en mémoire.
-        //     $notesEleve = $allNotes->get($id, collect());
-
-        //     $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
-        // }
+        $moyennesIndividuelles = []; // Tableau pour stocker les moyennes de tous les élèves
 
 
         foreach ($inscriptionIds as $id) {
-            // Récupère les notes dans le panier (le "allNotes")
             $notesEleve = $allNotes->get($id, collect());
+            $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
 
-            // On passe $notesEleve en 4ème argument
-            $bulletins[] = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
+            // DÉBOGAGE : Si le bilan est null, on calcule la moyenne manuellement à partir des notes
+            // On ignore le bilan pour le calcul des statistiques de classe
+            $moyenneEleve = 0;
+
+            // Si votre bulletin contient des notes, calculons la moyenne ici pour les stats
+            if (!empty($notesEleve)) {
+                // Logique de calcul simplifiée : somme des notes / nombre de notes
+                $totalNotes = 0;
+                foreach ($notesEleve as $n) {
+                    $totalNotes += $n->valeur;
+                }
+                $moyenneEleve = count($notesEleve) > 0 ? $totalNotes / count($notesEleve) : 0;
+            }
+
+            $moyennesIndividuelles[] = (float)$moyenneEleve;
+
+            // On injecte cette moyenne calculée dans le bulletin pour que la vue l'utilise
+            $bulletin['moyenne_calculee'] = $moyenneEleve;
+            $bulletins[] = $bulletin;
+
+
+
+
+
+
+            // calcul de rang
+
+            // 1. On crée le tableau de classement
+            $classement = [];
+            foreach ($bulletins as $b) {
+                $classement[] = [
+                    'id' => $b['inscription']->inscription_id,
+                    'moyenne' => $b['moyenne_calculee']
+                ];
+            }
+
+            // 2. On trie par moyenne (du plus grand au plus petit)
+            usort($classement, function ($a, $b) {
+                return $b['moyenne'] <=> $a['moyenne'];
+            });
+
+            // 3. ICI : On calcule les rangs en tenant compte des ex-aequo
+            $rangs = [];
+            foreach ($classement as $index => $item) {
+                // Si la moyenne est identique au précédent, on prend le même rang
+                if ($index > 0 && $item['moyenne'] == $classement[$index - 1]['moyenne']) {
+                    $rangs[$item['id']] = $rangs[$classement[$index - 1]['id']];
+                } else {
+                    // Sinon, c'est le rang naturel
+                    $rangs[$item['id']] = $index + 1;
+                }
+            }
+
+            // 4. ICI : On injecte le rang dans chaque bulletin
+            foreach ($bulletins as &$b) {
+                $b['rang'] = $rangs[$b['inscription']->inscription_id];
+            }
         }
 
 
 
 
-        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement'))->setPaper('a4', 'portrait');
+
+
+
+
+        // 3. Calcul des statistiques "à la volée" (votre proposition)
+        // $stats = $this->calculerStatistiquesEnMemoire($bulletins);
+        // CALCUL DYNAMIQUE ET SANS REDONDANCE
+        $totalEleves = count($moyennesIndividuelles);
+        $stats = [
+            'moyenne' => $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0,
+            'min' => $totalEleves > 0 ? min($moyennesIndividuelles) : 0,
+            'max' => $totalEleves > 0 ? max($moyennesIndividuelles) : 0,
+            'taux_reussite' => $totalEleves > 0 ? (count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10)) / $totalEleves) * 100 : 0
+        ];
+
+        // dd($stats) ;
+
+        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
 
         return $pdf->download("Bulletins_Classe.pdf");
     }
-
-
-
-    // 3. LA LOGIQUE UNIQUE (Ton code actuel, mis dans une fonction réutilisable)
-    // private function chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences, $notesEleve = null)
-    // {
-    //     $inscription = DB::table('inscriptions')
-    //         ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-    //         ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
-    //         ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
-    //         ->join('annee_scolaires', 'inscriptions.annee_scolaire_id', '=', 'annee_scolaires.id')
-    //         ->where('inscriptions.id', $inscriptionId)
-    //         ->select(
-    //             'inscriptions.id as inscription_id',
-    //             'inscriptions.classe_id',
-    //             'inscriptions.annee_scolaire_id',
-    //             'eleves.nom as eleve_nom',
-    //             'eleves.prenom as eleve_prenom',
-    //             'eleves.matricule',
-    //             'eleves.sexe',
-    //             'eleves.date_naissance',
-    //             'eleves.lieu_naissance',
-    //             DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as classe_nom"),
-    //             'annee_scolaires.libelle as annee_libelle'
-    //         )->first();
-
-    //     $totalElevesClasse = DB::table('inscriptions')
-    //         ->where('classe_id', $inscription->classe_id)
-    //         ->where('annee_scolaire_id', $inscription->annee_scolaire_id)
-    //         ->count();
-
-    //     $matieres = DB::table('classe_matiere')
-    //         ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-    //         ->leftJoin('affectations', function ($join) use ($inscription) {
-    //             $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
-    //                 ->where('affectations.classe_id', '=', $inscription->classe_id);
-    //         })
-    //         ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
-    //         ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
-    //         ->where('classe_matiere.classe_id', $inscription->classe_id)
-    //         ->select('matieres.id as matiere_id', 'matieres.nom as matiere_nom', DB::raw("COALESCE(users.name, 'Non assigné') as prof_nom"))
-    //         ->get();
-
-    //     $notesBrutes = DB::table('notes')
-    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
-    //         ->where('notes.inscription_id', $inscriptionId)
-    //         ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
-    //         ->select('evaluations.matiere_id', 'evaluations.sequence_id', DB::raw('AVG(notes.valeur) as valeur'))
-    //         ->groupBy('evaluations.matiere_id', 'evaluations.sequence_id')
-    //         ->get();
-
-    //     $notes = [];
-    //     foreach ($notesBrutes as $note) {
-    //         $notes[$note->matiere_id][$note->sequence_id] = $note->valeur;
-    //     }
-
-    //     $coefficientsBruts = DB::table('moyennes')
-    //         ->where('inscription_id', $inscriptionId)
-    //         ->whereIn('sequence_id', $sequences->pluck('id'))
-    //         ->select('matiere_id', 'coefficient')->distinct()->get();
-
-    //     $coefficients = [];
-    //     foreach ($coefficientsBruts as $c) {
-    //         $coefficients[$c->matiere_id] = $c->coefficient;
-    //     }
-
-    //     // CORRECTION ICI : On cible explicitement le bilan global du trimestre
-    //     $bilan = DB::table('bilans')
-    //         ->where('inscription_id', $inscriptionId)
-    //         ->where('trimestre_id', $trimestreId)
-    //         ->whereNull('sequence_id') // ⚠️ Exclut les séquences pour prendre le vrai trimestre !
-    //         ->first();
-
-    //     return compact('inscription', 'totalElevesClasse', 'matieres', 'notes', 'coefficients', 'bilan');
-    // }
-
-
 
 
 
@@ -281,6 +318,8 @@ class BulletinPrintController extends Controller
         // 2. Récupération des matières
         $matieres = DB::table('classe_matiere')
             ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
+            // Jointure sur les groupes de matières
+            ->leftJoin('groupes_matieres', 'matieres.groupe_matiere_id', '=', 'groupes_matieres.id')
             ->leftJoin('affectations', function ($join) use ($inscription) {
                 $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
                     ->where('affectations.classe_id', '=', $inscription->classe_id);
@@ -288,8 +327,23 @@ class BulletinPrintController extends Controller
             ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
             ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
             ->where('classe_matiere.classe_id', $inscription->classe_id)
-            ->select('matieres.id as matiere_id', 'matieres.nom as matiere_nom', DB::raw("COALESCE(users.name, 'Non assigné') as prof_nom"))
-            ->get();
+            ->select(
+                'matieres.id as matiere_id',
+                'matieres.nom as matiere_nom',
+                'classe_matiere.coefficient',
+                'groupes_matieres.id as groupe_id', // Ajouté pour le groupBy
+                'groupes_matieres.nom as groupe_nom', // Ajouté pour l'affichage
+                'groupes_matieres.ordre as groupe_ordre', // Très important pour le tri
+                DB::raw("COALESCE(users.name, 'Non assigné') as prof_nom")
+            )
+            ->orderBy('groupes_matieres.ordre', 'asc') // Tri par groupe
+            ->get()
+            ->groupBy('groupe_id'); // On regroupe par ID de groupe;
+
+
+
+
+
 
         // 3. Récupération des notes (Optimisée avec le paramètre $notesEleve)
         if ($notesEleve !== null) {
@@ -329,6 +383,51 @@ class BulletinPrintController extends Controller
             ->whereNull('sequence_id')
             ->first();
 
-        return compact('inscription', 'totalElevesClasse', 'matieres', 'notes', 'coefficients', 'bilan');
+        // return compact('inscription', 'totalElevesClasse', 'matieres', 'notes', 'coefficients', 'bilan');
+
+        // À la fin de chargerDonneesBulletin
+        return [
+            'inscription' => $inscription,
+            'totalElevesClasse' => $totalElevesClasse,
+            'matieres' => $matieres,
+            'notes' => $notes,
+            'coefficients' => $coefficients,
+            'bilan' => $bilan
+        ];
+    }
+
+
+
+
+
+
+
+    // Nouvelle fonction privée qui calcule tout à partir des bulletins générés
+    private function calculerStatistiquesEnMemoire($bulletins)
+    {
+        $moyennes = [];
+        $nbReussites = 0;
+
+        foreach ($bulletins as $b) {
+            // On récupère la moyenne depuis le bulletin généré
+            // Remplacez 'moyenne_generale' par la clé exacte que votre fonction chargerDonneesBulletin utilise
+            $m = $b['bilan']['moyenne'] ?? $b['bilan']->moyenne ?? 0;
+
+            $moyennes[] = (float)$m;
+            if ($m >= 10) {
+                $nbReussites++;
+            }
+        }
+
+        $count = count($moyennes);
+        if ($count == 0) return ['min' => 0, 'max' => 0, 'moyenne' => 0, 'taux_reussite' => 0, 'total' => 0];
+
+        return [
+            'min' => number_format(min($moyennes), 2),
+            'max' => number_format(max($moyennes), 2),
+            'moyenne' => number_format(array_sum($moyennes) / $count, 2),
+            'taux_reussite' => number_format(($nbReussites / $count) * 100, 2),
+            'total_inscrits' => $count
+        ];
     }
 }

@@ -17,7 +17,7 @@ class ClasseController extends Controller
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
 
         if (!$anneeActive) {
-            return redirect()->route('settings.annees.index')
+            return redirect()->route('settings.years.index')
                 ->with('error', 'Veuillez activer une année scolaire d\'abord.');
         }
 
