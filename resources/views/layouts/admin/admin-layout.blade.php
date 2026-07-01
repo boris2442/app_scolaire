@@ -30,8 +30,9 @@
 
     {{-- 3. ASSETS (VITE) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    {{-- <link rel="stylesheet" href="{{ asset('assets/webfonts/fa-brands-400.woff2') }}"> --}}
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 </head>
 
 <body

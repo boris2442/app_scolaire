@@ -34,4 +34,25 @@ class Evaluation extends Model
     {
         return $this->hasMany(Note::class);
     }
+
+    // Dans app/Models/Evaluation.php
+
+// public function enseignant()
+// {
+//     return $this->belongsTo(Enseignant::class);
+// }
+
+
+// Dans app/Models/Evaluation.php
+
+public function enseignant()
+{
+    return $this->belongsTo(Enseignant::class);
+}
+
+// Ajoute aussi l'annee_scolaire pour ton PDF
+public function anneeScolaire()
+{
+    return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
+}
 }

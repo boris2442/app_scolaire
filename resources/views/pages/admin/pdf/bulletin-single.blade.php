@@ -469,13 +469,16 @@
             <table class="table-stats text-center">
                 <thead>
                     <tr>
-                        <th width="14%">MOY SEQ 1</th>
-                        <th width="14%">MOY SEQ 2</th>
+                        {{-- <th width="14%">MOY SEQ 1</th>
+                        <th width="14%">MOY SEQ 2</th> --}}
+                        @foreach ($sequences as $seq)
+                            <th width="14%">Moy  {{ $seq->nom }}</th>
+                        @endforeach
                         <th width="14%">MOY TRIM</th>
                         <th width="14%">Rang</th>
                         <th width="14%">Mention</th>
                         <th width="14%">Moy Classe</th>
-                        <th width="16%">Décisions</th>
+                        <th width="16%">Remarques chef ETS</th>
                     </tr>
                 </thead>
                 <tbody>

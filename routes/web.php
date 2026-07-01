@@ -191,6 +191,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
     Route::get('/evaluations/{id}/saisie', [EvaluationController::class, 'saisie'])->name('evaluations.saisie');
     Route::post('/evaluations/{id}/bulk-store', [EvaluationController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
+    Route::get('/evaluations/{id}/telecharger-stats', [EvaluationController::class, 'telechargerStats'])
+    ->name('evaluations.telecharger-stats');
 });
 
 

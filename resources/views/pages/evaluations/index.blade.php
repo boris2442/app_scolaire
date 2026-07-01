@@ -12,7 +12,7 @@
             {{-- 1. Sélection de la Séquence --}}
             <select name="sequence_id"
                 class="bg-background border-white/10 rounded-xl p-3 text-sm  outline-none focus:border-primary" required>
-                <option value="">-- Période (Séquence) --</option>
+                <option value="">-- Période (Evaluation) --</option>
                 @foreach ($sequences->groupBy('trimestre_id') as $trimestreId => $group)
                     <optgroup label="Trimestre {{ $loop->iteration }}">
                         @foreach ($group as $seq)

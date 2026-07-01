@@ -40,7 +40,7 @@ class AnneeScolaireController extends Controller
                 for ($j = 1; $j <= 2; $j++) {
                     $numSeq = ($i - 1) * 2 + $j;
                     $trimestre->sequences()->create([
-                        'nom' => "Séquence $numSeq"
+                        'nom' => "Eval $numSeq"
                     ]);
                 }
             }

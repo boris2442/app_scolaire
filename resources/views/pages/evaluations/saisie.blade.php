@@ -32,8 +32,7 @@
                 <div class="overflow-x-auto"> {{-- Permet le défilement horizontal --}}
                     <table class="w-full text-left border-collapse min-w-[700px]"> {{-- Force la largeur minimum --}}
                         <thead>
-                            <tr
-                                class="text-primary  text-[10px] tracking-widest border-b border-white/10 bg-white/5">
+                            <tr class="text-primary  text-[10px] tracking-widest border-b border-white/10 bg-white/5">
                                 <th class="p-4 text-center w-20">Matricule</th>
                                 <th class="p-4">Nom de l'élève</th>
                                 <th class="p-4 w-32 text-center">Note / 20</th>
@@ -85,6 +84,12 @@
                 </button>
             </div>
         </form>
+
+        <div class="">
+            <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}" class="btn btn-primary">
+                <i class="fas fa-file-pdf"></i> Télécharger les stats
+            </a>
+        </div>
     </div>
     <script>
         document.addEventListener('keydown', function(event) {

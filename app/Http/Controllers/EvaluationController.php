@@ -9,6 +9,7 @@ use App\Models\Inscription;
 use App\Models\Note;
 use App\Models\Sequence;
 use App\Services\ScolariteService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,14 +43,23 @@ class EvaluationController extends Controller
             $query->where('annee_scolaire_id', $anneeActive->id);
         })->get();
 
-        // $affectations = $enseignant
-        //     ? $enseignant->affectations()->with(['matiere', 'classe.niveau'])->get()
-        //     : collect();
 
-        $affectations = $enseignant
-            ->affectations()->with(['matiere', 'classe.niveau'])->get()
-            //  : collect()
-        ;
+        // $affectations = $enseignant
+        //     ->affectations()->with(['matiere', 'classe.niveau'])->get()
+        //     //  : collect()
+        // ;
+
+
+        $affectations = $enseignant->affectations()
+            ->with(['matiere', 'classe.niveau'])
+            ->whereHas('classe.matieres', function ($query) {
+                // Cette condition filtre uniquement les affectations dont la matière 
+                // existe réellement dans la configuration de la classe
+                $query->whereColumn('matieres.id', 'affectations.matiere_id');
+            })
+            ->get();
+
+
 
 
 
@@ -158,5 +168,60 @@ class EvaluationController extends Controller
 
         return redirect()->route('admin.evaluations.index')
             ->with('success', 'Félicitations ! Les notes ont été enregistrées.');
+    }
+
+
+    ///////////////// les diffferents statistiques a gerer pour les impressions
+
+    private function calculerStats($evaluation)
+    {
+        // On charge les notes, puis l'inscription, puis l'élève
+        $notes = $evaluation->notes()->with('inscription.eleve')->get();
+
+        $total = $notes->count();
+        $reussites = $notes->filter(fn($n) => $n->valeur >= 10);
+
+        $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
+        $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
+
+        return [
+            'total' => $total,
+            'moyenne' => $total > 0 ? number_format($notes->avg('valeur'), 2) : 0,
+            'reussite_globale' => $reussites->count(),
+            'taux_reussite' => $total > 0 ? number_format(($reussites->count() / $total) * 100, 2) : 0,
+
+            'garcons_count' => $garcons->count(),
+            'garcons_reussite' => $garcons->where('valeur', '>=', 10)->count(),
+
+            'filles_count' => $filles->count(),
+            'filles_reussite' => $filles->where('valeur', '>=', 10)->count(),
+        ];
+    }
+
+
+
+
+    public function telechargerStats($id)
+    {
+        // On appelle les relations qu'on vient de définir
+        $evaluation = Evaluation::with(['classe.niveau', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
+
+        $stats = $this->calculerStats($evaluation);
+
+        $data = [
+            'evaluation' => $evaluation,
+            'stats' => $stats,
+            'date_impression' => now()->format('d/m/Y à H:i')
+        ];
+
+        $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
+            ->setPaper('a4', 'portrait');
+        
+        ;
+       
+         return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf')
+   
+         ;
+
     }
 }

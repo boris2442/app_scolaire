@@ -1,3 +1,6 @@
+/* Utilise la syntaxe de Laravel pour pointer vers le dossier public */
+/* @import url("/assets/fontawesome/css/all.min.css"); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -48,7 +51,10 @@
     }
 }
 
-
-*, ::after, ::before, body{
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+*,
+::after,
+::before,
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+

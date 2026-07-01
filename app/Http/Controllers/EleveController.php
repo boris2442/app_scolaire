@@ -13,6 +13,7 @@ use App\Models\Niveau;
 use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
 use Barryvdh\DomPDF\PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -110,27 +111,76 @@ class EleveController extends Controller
 
 
 
+    // public function store(EleveRequest $request)
+    // {
+
+    //     // 1. Récupérer les données validées
+    //     $data = $request->validated();
+    //     // Gestion de l'image
+    //     if ($request->hasFile('photo')) {
+    //         // On stocke l'image dans storage/app/public/photos_eleves
+    //         $path = $request->file('photo')->store('photos_eleves', 'public');
+    //         $data['photo'] = $path;
+    //     }
+    //     $eleve = null;
+    //     // 2. Utiliser une transaction pour la sécurité des données
+    //     return DB::transaction(function () use ($data, $request) {
+
+    //         // 3. Génération du matricule "Professionnel"
+    //         $anneeActive = $this->scolarite->getAnneeActive();
+    //         $debut = Carbon::parse($anneeActive->date_debut)->format('y'); // ex: 25
+    //         $fin = Carbon::parse($anneeActive->date_fin)->format('y');     // ex: 26
+
+    //         // On génère le matricule 252600007 en utilisant l'ID unique de l'élève
+    //         $matricule = $debut . $fin . str_pad($eleve->id, 5, '0', STR_PAD_LEFT);
+
+    //         // 4. Mise à jour de l'élève avec son matricule définitif
+    //         $eleve->update(['matricule' => $matricule]);
+    //         // 3. Création de l'élève
+    //         $eleve = Eleve::create([
+    //             'matricule' => $matricule,
+    //             'nom' => strtoupper($data['nom']),
+    //             'prenom' => $data['prenom'],
+    //             'date_naissance' => $data['date_naissance'],
+    //             'sexe' => $data['sexe'],
+    //             'lieu_naissance' => $data['lieu_naissance'] ?? null,
+    //             'telephone_parent' => $data['telephone_parent'] ?? null,
+    //             'adresse' => $data['adresse'] ?? null,
+    //             'photo' => $data['photo'] ?? null,
+    //         ]);
+
+    //         // 4. Récupération de l'année scolaire active
+    //         $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+    //         if (!$anneeActive) {
+    //             throw new \Exception("Aucune année scolaire n'est définie comme active.");
+    //         }
+
+    //         // 5. Inscription immédiate
+    //         Inscription::create([
+    //             'eleve_id' => $eleve->id,
+    //             'classe_id' => $request->classe_id, // Utilise la colonne de ta table inscriptions
+    //             'annee_scolaire_id' => $anneeActive->id,
+    //             'date_inscription' => now(),
+    //             'est_redoublant' => $request->has('est_redoublant') ? true : false,
+    //         ]);
+
+    //         return redirect()->route('admin.students.index')
+    //             ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
+    //     });
+    // }
     public function store(EleveRequest $request)
     {
-        // 1. Récupérer les données validées
         $data = $request->validated();
-        // Gestion de l'image
+
         if ($request->hasFile('photo')) {
-            // On stocke l'image dans storage/app/public/photos_eleves
-            $path = $request->file('photo')->store('photos_eleves', 'public');
-            $data['photo'] = $path;
+            $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
         }
-        // 2. Utiliser une transaction pour la sécurité des données
-        return DB::transaction(function () use ($data, $request) {
 
-            // Génération du Matricule
-            $anneeSuffixe = date('y');
-            $totalEleves = Eleve::count();
-            $matricule = $anneeSuffixe . '-' . str_pad($totalEleves + 1, 4, '0', STR_PAD_LEFT);
+        // On récupère le résultat de la transaction (qui sera notre objet $eleve)
+        $eleve = DB::transaction(function () use ($data, $request) {
 
-            // 3. Création de l'élève
-            $eleve = Eleve::create([
-                'matricule' => $matricule,
+            $nouveauEleve = Eleve::create([
                 'nom' => strtoupper($data['nom']),
                 'prenom' => $data['prenom'],
                 'date_naissance' => $data['date_naissance'],
@@ -141,26 +191,35 @@ class EleveController extends Controller
                 'photo' => $data['photo'] ?? null,
             ]);
 
-            // 4. Récupération de l'année scolaire active
-            $anneeActive = AnneeScolaire::where('est_active', true)->first();
+            $anneeActive = $this->scolarite->getAnneeActive();
+      
+            $debut = Carbon::parse($anneeActive->date_debut)->format('y');
+            $fin = Carbon::parse($anneeActive->date_fin)->format('y');
 
-            if (!$anneeActive) {
-                throw new \Exception("Aucune année scolaire n'est définie comme active.");
-            }
+            $matricule = $debut . $fin . str_pad($nouveauEleve->id, 5, '0', STR_PAD_LEFT);
 
-            // 5. Inscription immédiate
+            $nouveauEleve->update(['matricule' => $matricule]);
+
             Inscription::create([
-                'eleve_id' => $eleve->id,
-                'classe_id' => $request->classe_id, // Utilise la colonne de ta table inscriptions
+                'eleve_id' => $nouveauEleve->id,
+                'classe_id' => $request->classe_id,
                 'annee_scolaire_id' => $anneeActive->id,
                 'date_inscription' => now(),
-                'est_redoublant' => $request->has('est_redoublant') ? true : false,
+                'est_redoublant' => $request->has('est_redoublant'),
             ]);
 
-            return redirect()->route('admin.students.index')
-                ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
+            // On retourne l'objet élève ici
+            return $nouveauEleve;
         });
+
+        // Maintenant, $eleve est parfaitement défini ici
+        return redirect()->route('admin.students.index')
+            ->with('success', "Inscription réussie ! Matricule : {$eleve->matricule}");
     }
+
+
+
+
 
     /**
      * Affiche le dossier complet d'un élève.
