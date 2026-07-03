@@ -43,13 +43,6 @@ class EvaluationController extends Controller
             $query->where('annee_scolaire_id', $anneeActive->id);
         })->get();
 
-
-        // $affectations = $enseignant
-        //     ->affectations()->with(['matiere', 'classe.niveau'])->get()
-        //     //  : collect()
-        // ;
-
-
         $affectations = $enseignant->affectations()
             ->with(['matiere', 'classe.niveau'])
             ->whereHas('classe.matieres', function ($query) {
@@ -58,10 +51,6 @@ class EvaluationController extends Controller
                 $query->whereColumn('matieres.id', 'affectations.matiere_id');
             })
             ->get();
-
-
-
-
 
 
         // On récupère les évaluations déjà créées par ce prof
@@ -75,7 +64,6 @@ class EvaluationController extends Controller
 
         return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
     }
-
 
 
 
@@ -215,13 +203,8 @@ class EvaluationController extends Controller
         ];
 
         $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
-            ->setPaper('a4', 'portrait');
-        
-        ;
-       
-         return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf')
-   
-         ;
+            ->setPaper('a4', 'portrait');;
 
+        return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf');
     }
 }

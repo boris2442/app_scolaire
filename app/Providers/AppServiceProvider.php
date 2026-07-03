@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\UserRole;
 use App\Models\Etablissement;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -28,10 +29,12 @@ class AppServiceProvider extends ServiceProvider
             $view->with('ecole', $ecole);
         });
 
-        // Définition de la Gate pour l'administrateur
         Gate::define('access-admin', function (User $user) {
-            return $user->role->value === 'admin';
-            // Ou $user->is_admin == 1; selon ta structure
+            return $user->role === UserRole::ADMIN;
+        });
+
+        Gate::define('access-sg', function (User $user) {
+            return $user->role === UserRole::SG;
         });
     }
 }

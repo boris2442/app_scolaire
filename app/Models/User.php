@@ -48,7 +48,20 @@ class User extends Authenticatable
     ];
 
     public function enseignant()
-{
-    return $this->hasOne(Enseignant::class, 'user_id');
-}
+    {
+        return $this->hasOne(Enseignant::class, 'user_id');
+    }
+
+
+
+    public function dashboardRoute(): string
+    {
+        return match ($this->role) {
+            UserRole::ADMIN => route('admin.statistiques.index'),
+            UserRole::SG => route('discipline.index'),
+            UserRole::ENSEIGNANT => route('admin.evaluations.index'),
+            UserRole::SECRETAIRE => route('admin.bulletins.index'),
+            default => route('dashboard'),
+        };
+    }
 }

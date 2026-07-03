@@ -25,7 +25,7 @@
                         <input type="number" 
                                name="notes[{{ $eleve->id }}][valeur]" 
                                step="0.25" min="0" max="20"
-                               class="bg-secondary/20 border border-white/10 rounded-lg p-2 text-white w-24 focus:border-primary outline-none"
+                               class="bg-secondary/20 border border-white/10 rounded p-2 text-white w-24 focus:border-primary outline-none"
                                placeholder="10.5">
                     </td>
                     <td class="p-4">

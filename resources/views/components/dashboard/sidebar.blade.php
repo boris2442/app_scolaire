@@ -136,6 +136,23 @@
                         <span class="sidebar-label ml-3">Enseignants</span>
                     </a>
                 </li>
+
+
+                <li>
+                    <a href="{{ route('admin.groupes.index') }}"title="groupement des matieres "
+                        aria-label="groupement des matieres"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
+                        <i class="fas fa-file-alt w-6 text-center"></i>
+                        <span class="sidebar-label ml-3">groupement des matieres</span>
+                    </a>
+                </li>
+                 <li>
+                <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <i class="fas fa-file-alt w-6 text-center"></i>
+                    <span class="sidebar-label ml-3">Impressions</span>
+                </a>
+            </li>
             @endcan
 
 
@@ -162,28 +179,20 @@
                     <span class="sidebar-label ml-3">Registres</span>
                 </a>
             </li> --}}
-            <li>
-                <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                    <i class="fas fa-file-alt w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">Impressions</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.groupes.index') }}"title="groupement des matieres "
-                    aria-label="groupement des matieres"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
-                    <i class="fas fa-file-alt w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">groupement des matieres</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('discipline.index') }}"title="Discipline" aria-label="Discipline"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('discipline.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
-                    <i class="fas fa-file-alt w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">Discipline</span>
-                </a>
-            </li>
+           
+
+
+
+
+            @can('access-sg')
+                <li>
+                    <a href="{{ route('discipline.index') }}"title="Discipline" aria-label="Discipline"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('discipline.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
+                        <i class="fas fa-file-alt w-6 text-center"></i>
+                        <span class="sidebar-label ml-3">Discipline</span>
+                    </a>
+                </li>
+            @endcan
 
 
 
@@ -200,16 +209,17 @@
 
 
 
-    {{-- <div class="absolute bottom-4 w-full px-3">
+    <div class="absolute bottom-4 w-full px-3">
         <div class="border-t border-border my-4"></div>
-        <form method="POST" action="#"> @csrf
+        <form method="POST" action="/logout">
+            @csrf
             <button type="submit"
                 class="flex items-center w-full px-3 py-2.5 rounded bg-danger text-white hover:opacity-90 transition-all">
                 <i class="fas fa-sign-out-alt w-6 text-center"></i>
                 <span class="sidebar-label ml-3">Déconnexion</span>
             </button>
         </form>
-    </div> --}}
+    </div>
 </aside>
 
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity" onclick="toggleSidebar()">

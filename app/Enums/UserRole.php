@@ -9,4 +9,5 @@ enum UserRole: string
     case SECRETAIRE = 'secretaire'; // Le nouveau rôle
     case PARENT = 'parent';
     case ELEVE = 'eleve';
+    case SG='surveillantGeneral';
 }

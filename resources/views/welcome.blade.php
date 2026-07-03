@@ -34,7 +34,7 @@
 
             <div class="flex items-center space-x-4">
                 @auth
-                    <a href="{{ route('admin.statistiques.index') }}"
+                    <a href="{{ auth()->user()->dashboardRoute() }}"
                         class="text-sm font-semibold text-foreground hover:text-primary transition-colors mr-2">
                         Espace Gestion
                     </a>
@@ -46,8 +46,7 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}"
-                    data-turbo="true"
+                    <a href="{{ route('login') }}" data-turbo="true"
                         class="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold shadow-lg shadow-primary/15 hover:scale-[1.02] active:scale-[0.98] transition-all">
                         Connexion
                     </a>
@@ -62,10 +61,10 @@
             class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 flex flex-col lg:flex-row items-center gap-12">
             <div class="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
                 <span
-                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary tracking-wide uppercase">
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary tracking-wide ">
                     Structure & Rigueur Pédagogique
                 </span>
-                <h1 class="text-4xl sm:text-5xl font-black text-foreground tracking-tight leading-none">
+                <h1 class="text-4xl sm:text-5xl font-black  tracking-tight leading-none">
                     Pilotez les performances de votre établissement.
                 </h1>
                 <p
@@ -76,9 +75,13 @@
                 </p>
                 <div class="flex justify-center lg:justify-start pt-2">
                     @auth
-                        <a href="{{ route('admin.statistiques.index') }}"
+                        {{-- <a href="{{ route('admin.statistiques.index') }}"
                             class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
                             Accéder à l'Espace Administration
+                        </a> --}}
+                        <a href="{{ auth()->user()->dashboardRoute() }}"
+                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
+                            Espace Gestion
                         </a>
                     @else
                         <a href="{{ route('login') }}"
@@ -194,74 +197,112 @@
                 </div>
             </div>
         </section>
-<section class="bg-secondary/40 border-y border-border py-20 transition-colors duration-300">
+        <section class="bg-secondary/40 border-y border-border py-20 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                    <h2 class="text-3xl font-black text-foreground tracking-tight">Architecture Fonctionnelle du Système</h2>
+                    <h2 class="text-3xl font-black text-foreground tracking-tight">Architecture Fonctionnelle du
+                        Système</h2>
                     <p class="text-gray-500 dark:text-gray-400 text-sm">
-                        Une couverture intégrale des besoins administratifs et pédagogiques, structurée selon une modélisation relationnelle stricte.
+                        Une couverture intégrale des besoins administratifs et pédagogiques, structurée selon une
+                        modélisation relationnelle stricte.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Multi-Établissements</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Configuration et isolation complète des données de l'établissement (Nom, contacts, logo). Gestion centralisée des paramètres fondamentaux du système.
+                            Configuration et isolation complète des données de l'établissement (Nom, contacts, logo).
+                            Gestion centralisée des paramètres fondamentaux du système.
                         </p>
                     </div>
 
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Années Scolaires & Périodes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Contrôle strict de l'année active avec dates de début et de fin. Segmentation dynamique en structures d'évaluations (Trimestres et Séquences d'examens).
+                            Contrôle strict de l'année active avec dates de début et de fin. Segmentation dynamique en
+                            structures d'évaluations (Trimestres et Séquences d'examens).
                         </p>
                     </div>
 
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Départements & Classes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Organisation hiérarchique par départements académiques, niveaux d'études et affectation des élèves dans des classes physiques aux effectifs contrôlés.
+                            Organisation hiérarchique par départements académiques, niveaux d'études et affectation des
+                            élèves dans des classes physiques aux effectifs contrôlés.
                         </p>
                     </div>
 
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292MM15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292MM15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Inscriptions & Fiches Élèves</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Gestion du registre matricule, historique des réinscriptions annuelles et suivi individuel du statut pédagogique et civil de chaque apprenant.
+                            Gestion du registre matricule, historique des réinscriptions annuelles et suivi individuel
+                            du statut pédagogique et civil de chaque apprenant.
                         </p>
                     </div>
 
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 11h.01M12 7h.01M15 11h.01M15 14h.01M13 21h-2a2 2 0 01-2-2v-1a2 2 0 00-2-2H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2h-2a2 2 0 00-2 2v1z" /></svg>
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 11h.01M12 7h.01M15 11h.01M15 14h.01M13 21h-2a2 2 0 01-2-2v-1a2 2 0 00-2-2H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2h-2a2 2 0 00-2 2v1z" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Saisie des Notes & Coeffs</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Centralisation des évaluations par matière avec application stricte des coefficients. Validation et verrouillage des notes pour éviter toute altération ultérieure.
+                            Centralisation des évaluations par matière avec application stricte des coefficients.
+                            Validation et verrouillage des notes pour éviter toute altération ultérieure.
                         </p>
                     </div>
 
-                    <div class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Moyennes & Palmarès</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Calcul automatique des moyennes séquentielles et trimestrielles. Génération instantanée des rangs, des mentions d'appréciation et des tableaux de statistiques.
+                            Calcul automatique des moyennes séquentielles et trimestrielles. Génération instantanée des
+                            rangs, des mentions d'appréciation et des tableaux de statistiques.
                         </p>
                     </div>
 

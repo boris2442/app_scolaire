@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\SGMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,9 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Enregistrement de l'alias de notre middleware admin
+        // Save Middleware
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class, // [Correction syntaxique ci-dessous]
+            'admin' => AdminMiddleware::class, 
+            'sg'=>SGMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

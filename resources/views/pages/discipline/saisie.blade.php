@@ -63,7 +63,7 @@
                                         <td class="px-2 py-2 bg-secondary/20">
                                             <input type="number" name="data[{{ $inscription->id }}][{{ $field }}]"
                                                 value="{{ $inscription->suivi->$field ?? 0 }}"
-                                                class=" border border-white/10 rounded-lg p-2  w-24 focus:border-primary outline-none"
+                                                class="w-full bg-secondary border  border-primary/50 border-white/10 rounded px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
                                                 min="0">
                                         </td>
                                     @endforeach

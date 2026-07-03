@@ -54,7 +54,7 @@
                                     <td class="p-4">
                                         <input type="number" step="0.25" name="notes[{{ $inscription->id }}][valeur]"
                                             value="{{ $maNote->valeur ?? '' }}"
-                                            class="w-full bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded-xl px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
+                                            class="w-full bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
                                             placeholder="--">
                                     </td>
                                     {{-- <td class="p-4 text-right">
@@ -85,11 +85,12 @@
             </div>
         </form>
 
-        <div class="">
-            <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}" class="btn btn-primary">
-                <i class="fas fa-file-pdf"></i> Télécharger les stats
-            </a>
-        </div>
+    </div>
+    <div class=''>
+        <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}"
+            class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black  p-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 gap-2 mb-2">
+            <i class="fas fa-file-pdf"></i> Télécharger les stats
+        </a>
     </div>
     <script>
         document.addEventListener('keydown', function(event) {
