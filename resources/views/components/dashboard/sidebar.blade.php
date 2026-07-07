@@ -143,35 +143,37 @@
                         aria-label="groupement des matieres"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
                         <i class="fas fa-file-alt w-6 text-center"></i>
-                        <span class="sidebar-label ml-3">groupement des matieres</span>
+                        <span class="sidebar-label ml-3">groupement  matieres</span>
                     </a>
                 </li>
-                 <li>
-                <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                    <i class="fas fa-file-alt w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">Impressions</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <i class="fas fa-file-alt w-6 text-center"></i>
+                        <span class="sidebar-label ml-3">Impressions</span>
+                    </a>
+                </li>
             @endcan
 
 
 
-            <li>
-                <a href="{{ route('admin.evaluations.index') }}" title="Evaluations" aria-label="Evaluations"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                    <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">Evaluations</span>
-                </a>
-            </li>
+            @can('access-enseignant')
+                <li>
+                    <a href="{{ route('admin.evaluations.index') }}" title="Evaluations" aria-label="Evaluations"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
+                        <span class="sidebar-label ml-3">Evaluations</span>
+                    </a>
+                </li>
 
-            <li>
-                <a href="{{ route('enseignant.dashboard') }}" title="Enseignants" aria-label="Enseignants"
-                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                    <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
-                    <span class="sidebar-label ml-3">Progression saisie</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('enseignant.dashboard') }}" title="Enseignants" aria-label="Enseignants"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <i class="fas fa-chalkboard-teacher w-6 text-center"></i>
+                        <span class="sidebar-label ml-3">Progression saisie</span>
+                    </a>
+                </li>
+            @endcan
             {{-- <li>
                 <a href="{{ route('admin.statistiques.registre') }}" title="RRegistre" aria-label="RRegistre"
                     class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -179,7 +181,7 @@
                     <span class="sidebar-label ml-3">Registres</span>
                 </a>
             </li> --}}
-           
+
 
 
 
@@ -209,7 +211,7 @@
 
 
 
-    <div class="absolute bottom-4 w-full px-3">
+    {{-- <div class="absolute bottom-4 w-full px-3">
         <div class="border-t border-border my-4"></div>
         <form method="POST" action="/logout">
             @csrf
@@ -219,7 +221,7 @@
                 <span class="sidebar-label ml-3">Déconnexion</span>
             </button>
         </form>
-    </div>
+    </div> --}}
 </aside>
 
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity" onclick="toggleSidebar()">

@@ -29,7 +29,39 @@ class EleveController extends Controller
     {
         $this->scolarite = $scolarite;
     }
-    private function getKpis($anneeActiveId)
+  
+  public function index(Request $request, StudentAnalyticsService $analytics)
+{
+    $anneeId = $request->input('annee_id');
+    $anneeActive = $anneeId
+        ? AnneeScolaire::findOrFail($anneeId)
+        : AnneeScolaire::where('est_active', true)->first();
+
+    $stats = $analytics->getFullDashboardStats($anneeActive->id);
+
+    // MODIFICATION ICI : On filtre la requête principale
+    $query = Eleve::whereHas('inscriptions', function ($q) use ($anneeActive) {
+        $q->where('annee_scolaire_id', $anneeActive->id);
+    })->with(['inscriptions' => function ($q) use ($anneeActive) {
+        $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
+    }]);
+
+    // ... tes filtres (Niveau, Classe, Search) restent identiques ...
+    if ($request->filled('niveau_id')) {
+        $query->whereHas('inscriptions.classe', function ($q) use ($request) {
+            $q->where('niveau_id', $request->niveau_id);
+        });
+    }
+
+    $eleves = $query->latest()->paginate(5)->withQueryString();
+
+        $niveaux = Niveau::with('classes')->get();
+
+        return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive', 'stats'));
+    }
+
+
+  private function getKpis($anneeActiveId)
     {
         // On récupère les IDs des élèves inscrits cette année pour filtrer nos stats
         $stats = Inscription::where('annee_scolaire_id', $anneeActiveId)
@@ -50,53 +82,6 @@ class EleveController extends Controller
             'pourcentage_filles' => $stats->total > 0 ? round(($stats->filles / $stats->total) * 100) : 0,
         ];
     }
-    public function index(Request $request, StudentAnalyticsService $analytics)
-    {
-        // AJOUTE CETTE LIGNE JUSTE ICI (une seule fois pour nettoyer)
-        Cache::flush();
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-
-        $stats = $analytics->getFullDashboardStats($anneeActive->id);
-
-
-        // On commence la requête avec les relations nécessaires (Eager Loading)
-        $query = Eleve::with(['inscriptions' => function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
-        }]);
-
-        // FILTRE 1 : Par Niveau
-        if ($request->filled('niveau_id')) {
-            $query->whereHas('inscriptions.classe', function ($q) use ($request) {
-                $q->where('niveau_id', $request->niveau_id);
-            });
-        }
-
-        // FILTRE 2 : Par Classe spécifique
-        if ($request->filled('classe_id')) {
-            $query->whereHas('inscriptions', function ($q) use ($request) {
-                $q->where('classe_id', $request->classe_id);
-            });
-        }
-
-        // FILTRE 3 : Recherche par Nom ou Matricule
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('nom', 'like', "%{$request->search}%")
-                    ->orWhere('matricule', 'like', "%{$request->search}%");
-            });
-        }
-
-        // PAGINATION : Crucial pour la performance (15 par page)
-        $eleves = $query->latest()->paginate(5)->withQueryString();
-
-        $niveaux = Niveau::with('classes')->get();
-
-        return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive', 'stats'));
-    }
-
-
-
     public function create()
 
     {
@@ -192,7 +177,7 @@ class EleveController extends Controller
             ]);
 
             $anneeActive = $this->scolarite->getAnneeActive();
-      
+
             $debut = Carbon::parse($anneeActive->date_debut)->format('y');
             $fin = Carbon::parse($anneeActive->date_fin)->format('y');
 

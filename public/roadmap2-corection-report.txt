@@ -34,8 +34,8 @@ Synthèse finale : La zone "Profil de la classe" (Moyenne classe, Moyenne Max, M
 Ma proposition de plan d'action
 Pour qu'on soit efficaces, je suggère qu'on règle ces problèmes un par un :
 
-Phase 1 : La structure des données (Base de données). On doit confirmer si ta table matieres a déjà une colonne groupe_id ou categorie.
+Phase 1 : La structure des données (Base de données). On doit confirmer si ta table matieres a déjà une colonne groupe_id ou categorie.  OKAYYYYY
 
-Phase 2 : Le calcul des sous-totaux. On adaptera ta requête PHP pour que le bulletin reçoive les moyennes par groupe.
+Phase 2 : Le calcul des sous-totaux. On adaptera ta requête PHP pour que le bulletin reçoive les moyennes par groupe. OKAYYYYY
 
 Phase 3 : Le "Fine-tuning" du CSS. On ajustera les marges, les polices et les largeurs de colonnes pour une copie conforme au modèle.
