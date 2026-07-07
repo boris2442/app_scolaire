@@ -9,7 +9,9 @@
         </div>
         <a href="{{ route('admin.enseignants.create') }}"
             class="bg-primary text-white px-6 py-3 rounded-xl font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-            <i class="fas fa-plus mr-2"></i> Ajouter 
+        
+            <x-lucide-plus class='mr-2 w-4 h-4'/>
+             Ajouter 
         </a>
     </div>
 
@@ -69,7 +71,9 @@
 
                                 <button type="button" onclick="toggleDropdown(event, this)"
                                     class="p-2 rounded-md text-[var(--secondary-foreground)] hover:bg-[var(--secondary)] transition focus:outline-none relative">
-                                    <i class="fas fa-ellipsis-v pointer-events-none"></i>
+                               
+                                    
+                                    <x-lucide-more-horizontal class="w-4 h-4" />
                                 </button>
 
                                 <div
@@ -78,13 +82,15 @@
 
                                     <a href="{{ route('admin.enseignants.show', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
-                                        <i class="fas fa-eye text-[var(--primary)]"></i>
+                                
+                                        <x-lucide-eye class='text-[var(--primary)] w-4 h-4'/>
                                         Voir plus
                                     </a>
 
                                     <a href="{{ route('admin.enseignants.edit', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
-                                        <i class="fas fa-edit text-[var(--primary)]"></i>
+                         
+                                        <x-lucide-edit class='text-[var(--primary)] w-4 h-4'/>
                                         Éditer
                                     </a>
 
@@ -96,7 +102,8 @@
                                         <button type="submit"
                                             onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
                                             class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
-                                            <i class="fas fa-trash"></i>
+                                       
+                                            <x-lucide-trash class='w-4 h-4' />
                                             Supprimer
                                         </button>
                                     </form>

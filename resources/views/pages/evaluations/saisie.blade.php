@@ -89,7 +89,9 @@
     <div class=''>
         <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}"
             class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black  p-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 gap-2 mb-2">
-            <i class="fas fa-file-pdf"></i> Télécharger les stats
+            {{-- <i class="fas fa-file-pdf"></i> --}}
+            <x-lucide-file-text class='w-4 h-4' />
+             Télécharger les stats
         </a>
     </div>
     <script>

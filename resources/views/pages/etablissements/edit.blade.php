@@ -71,8 +71,10 @@
 
                 <div class="mt-8 flex justify-end">
                     <button type="submit"
-                        class="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-                        <i class="fas fa-save mr-2"></i> Enregistrer les modifications
+                        class="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20 flex justify-center items-center">
+                     
+                        <x-lucide-save class='mr-2 w-4 h-4' />
+                         Enregistrer les modifications
                     </button>
                 </div>
             </div>

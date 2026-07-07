@@ -4,7 +4,7 @@
     @if ($errors->any())
         <div class="p-4 mb-4 bg-red-500/10 border border-red-500 rounded-xl text-red-600 text-[10px] font-black uppercase">
             @foreach ($errors->all() as $error)
-                <p><i class="fas fa-exclamation-triangle mr-2"></i> {{ $error }}</p>
+                <p><x-lucide-alert-triangle class="w-4 h-4 inline-block mr-2" /> {{ $error }}</p>
             @endforeach
         </div>
     @endif
@@ -17,7 +17,7 @@
             </p>
         </div>
         <a href="{{ route('admin.students.show', $eleve->id) }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
-            <i class="fas fa-arrow-left mr-2"></i> Retour
+            <x-lucide-arrow-left class="w-4 h-4 mr-2" /> Retour
         </a>
     </div>
 
@@ -30,7 +30,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-user-graduate"></i> État Civil de l'Élève
+                        <x-lucide-user-graduate class="w-4 h-4" /> État Civil de l'Élève
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -77,7 +77,7 @@
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-phone-alt"></i> Contact Urgence (Parents)
+                        <x-lucide-phone class="w-4 h-4" /> Contact Urgence (Parents)
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -97,7 +97,7 @@
             <div class="space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-school"></i> Affectation Actuelle
+                        <x-lucide-school class="w-4 h-4" /> Affectation Actuelle
                     </h2>
 
                     @php 

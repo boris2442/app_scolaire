@@ -49,7 +49,8 @@
                         @if ($eleve->photo)
                             <img src="{{ asset('storage/' . $eleve->photo) }}" class="w-full h-full object-cover">
                         @else
-                            <i class="fas fa-user text-5xl opacity-10"></i>
+                       
+                            <x-lucide-user class="w-16 h-16 opacity-10" />
                         @endif
                     </div>
                     <div class="text-center">
@@ -150,7 +151,8 @@
                     <div class="grid grid-cols-2 gap-8">
                         <div class="flex items-center gap-4 p-4 bg-secondary/30 rounded-2xl border border-border">
                             <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                <i class="fas fa-phone"></i>
+                       
+                                <x-lucide-phone-call class="w-4 h-4" />
                             </div>
                             <div>
                                 <p class="text-sm font-black tracking-widest">
@@ -162,7 +164,8 @@
                         </div>
                         <div class="flex items-center gap-4 p-4 bg-secondary/30 rounded-2xl border border-border">
                             <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                <i class="fas fa-map-marker-alt"></i>
+                  
+                                <x-lucide-map-pin class="w-4 h-4" />
                             </div>
                             <div>
                                 <p class="text-[9px] font-bold  opacity-50">Adresse / Quartier</p>

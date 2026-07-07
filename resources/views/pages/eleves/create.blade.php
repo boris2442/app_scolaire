@@ -4,7 +4,7 @@
     @if ($errors->any())
         <div class="p-4 mb-4 bg-red-500/10 border border-red-500 rounded-xl text-red-600 text-[10px] font-black uppercase">
             @foreach ($errors->all() as $error)
-                <p><i class="fas fa-exclamation-triangle mr-2"></i> {{ $error }}</p>
+                <p><x-lucide-alert-triangle class="w-4 h-4 inline-block mr-2" /> {{ $error }}</p>
             @endforeach
         </div>
     @endif
@@ -16,7 +16,7 @@
         <div class="">
             <a href="{{ route('admin.students.index') }}"
                 class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px] tracking-widest hover:bg-secondary/70 transition-all">
-                <i class="fas fa-arrow-left"></i> Retour à la liste
+                <x-lucide-arrow-left class="w-4 h-4" /> Retour à la liste
             </a>
         </div>
     </div>
@@ -28,7 +28,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-user-graduate"></i> État Civil de l'Élève
+                        <x-lucide-user-graduate class="w-4 h-4" /> État Civil de l'Élève
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -102,8 +102,7 @@
                             <div class="border border-gray-300 rounded-lg px-4 py-3 h-[50px] flex items-center">
                                 <div class="flex items-center gap-6">
                                     <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="est_redoublant" value="0" checked
-                                            class="w-4 h-4 text-primary">
+                                        <x-lucide-circle class="w-4 h-4 text-primary" />
                                         <span class="text-sm text-gray-600">Nouvel élève</span>
                                     </label>
 
@@ -128,7 +127,7 @@
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-phone-alt"></i> Contact Urgence (Parents)
+                        <x-lucide-phone class="w-4 h-4" /> Contact Urgence (Parents)
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -156,7 +155,7 @@
             <div class="space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <i class="fas fa-school"></i> Affectation
+                        <x-lucide-school class="w-4 h-4" /> Affectation
                     </h2>
 
                     <div>
@@ -189,7 +188,7 @@
                         d'identité</h2>
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mx-auto mb-4 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
-                        <i class="fas fa-camera text-2xl text-muted-foreground/30"></i>
+                        <x-lucide-camera class="w-8 h-8 text-muted-foreground/30" />
                     </div>
                     <input type="file" name="photo" class="text-[10px] text-muted-foreground">
                 </div>

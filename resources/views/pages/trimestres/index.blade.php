@@ -8,7 +8,8 @@
             {{-- FORMULAIRE DE CRÉATION --}}
             <div class="bg-secondary/10 border border-white/5 p-6 rounded-2xl backdrop-blur-sm">
                 <h2 class="text-lg text-primary mb-6 flex items-center gap-2">
-                    <i class="lucide-plus-circle"></i> Nouveau Trimestre
+                    <x-lucide-plus-circle class='w-4 h-4'/>
+                    Nouveau Trimestre
                 </h2>
 
                 <form action="{{ route('admin.trimestres.store') }}" method="POST" class="space-y-5">
@@ -42,7 +43,7 @@
 
                     <button type="submit"
                         class="w-full bg-primary hover:bg-primary/80  font-bold py-2 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 px-4">
-                        <i class="lucide-save"></i> INITIALISER LE TRIMESTRE
+                        <x-lucide-save class='w-4 h-4' /> INITIALISER LE TRIMESTRE
                     </button>
                 </form>
             </div>

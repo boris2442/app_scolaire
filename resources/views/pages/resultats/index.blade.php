@@ -19,7 +19,8 @@
         @if (session('success'))
             <div
                 class="bg-success/10 border border-success/20 text-success px-4 py-3 rounded-lg mb-6 flex items-center gap-3">
-                <i class="fas fa-check-circle"></i>
+            
+                <x-lucide-check-circle class='w-4 h-4' />
                 {{ session('success') }}
             </div>
         @endif
@@ -36,35 +37,12 @@
                             </span>
                         </div>
                         <div class="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center text-primary">
-                            <i class="fas fa-graduation-cap"></i>
+                            {{-- <i class="fas fa-graduation-cap"></i> --}}
+                            <x-lucide-graduation-cap class='w-4 h-4' />
                         </div>
                     </div>
 
-                    {{-- <div class="p-5">
-                        <form action="{{ route('admin.resultats.calculer') }}" method="POST" class="space-y-4">
-                            @csrf
-                            <input type="hidden" name="classe_id" value="{{ $classe->id }}">
-
-                            <div>
-                                <label class="block text-xs font-semibold mb-1 uppercase opacity-70">Sélectionner la
-                                    période</label>
-                                <select name="sequence_id"
-                                    class="w-full bg-background border border-input text-foreground rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-ring transition-all"
-                                    required>
-                                    <option value="">Choisir une séquence...</option>
-                                    @foreach ($sequences as $sequence)
-                                        <option value="{{ $sequence->id }}">{{ $sequence->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <button type="submit"
-                                class="w-full bg-primary text-primary-foreground hover:opacity-90 font-bold py-2.5 rounded-lg shadow-sm transition flex items-center justify-center gap-2">
-                                <i class="fas fa-calculator text-sm"></i>
-                                Lancer le calcul
-                            </button>
-                        </form>
-                    </div> --}}
+            
 
                     <form action="{{ route('admin.resultats.calculer') }}" method="POST" class="space-y-4">
                         @csrf
@@ -97,7 +75,8 @@
 
                         <button type="submit"
                             class="w-full bg-primary text-primary-foreground hover:opacity-90 font-bold py-2.5 rounded-lg shadow-sm transition flex items-center justify-center gap-2">
-                            <i class="fas fa-calculator text-sm"></i>
+                            {{-- <i class="fas fa-calculator text-sm"></i> --}}
+                            <x-lucide-calculator class='w-4 h-4' />
                             Lancer le calcul
                         </button>
                     </form>

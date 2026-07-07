@@ -32,18 +32,18 @@
 
                         <a href="{{ route('admin.students.trashed') }}"
                             class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
-                            <i class="fas fa-trash-alt mr-1 opacity-50 text-xs"></i>Voir la corbeille
+                            <x-lucide-trash-2 class="w-4 h-4" /> Voir la corbeille
                             ({{ \App\Models\Eleve::onlyTrashed()->count() }})
                         </a>
 
                         <a href="{{ route('admin.students.create') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
-                            <i class="fas fa-plus opacity-50 text-xs"></i> Add student
+                           <x-lucide-plus class="w-4 h-4" /> Add student
                         </a>
 
                         <a href="#"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
-                            <i class="fas fa-file-export opacity-50 text-xs"></i> Exporter en Excel
+                           <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
                         </a>
 
                         {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
@@ -51,7 +51,7 @@
                             <a href="{{ route('admin.eleves.imprimer', ['classe_id' => request('classe_id')]) }}"
                                 target="_blank"
                                 class="flex items-center gap-3 px-4 py-2 text-sm text-primary font-bold hover:bg-primary/10 transition-colors">
-                                <i class="fas fa-print opacity-50 text-xs"></i> Imprimer cette classe
+                                <x-lucide-printer class="w-4 h-4" /> Imprimer cette classe
                             </a>
                         @else
                             <div class="px-4 py-2 text-[10px] text-muted-foreground italic">
@@ -144,7 +144,7 @@
 
             <a href="{{ route('admin.students.create') }}"
                 class="bg-primary hover:opacity-90 text-primary-foreground px-6 py-3 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center gap-3 text-xs font-black ">
-                <i class="fas fa-plus"></i> Nouvel Élève
+                <x-lucide-plus class="w-4 h-4" /> Nouvel Élève
             </a>
         </div>
 
@@ -156,7 +156,7 @@
                         class="w-full bg-secondary border-border rounded-full pl-4 pr-12 py-3 text-xs font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all lowercase">
                     <button type="submit"
                         class="absolute right-2 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                        <i class="fas fa-search text-sm"></i>
+                        <x-lucide-search class="w-4 h-4" />
                     </button>
                 </div>
 
@@ -184,7 +184,7 @@
                         <a href="{{ route('admin.students.index') }}"
                             class="bg-danger/10 text-danger border border-danger/20 px-4 py-3 rounded-xl text-[10px] font-black  hover:bg-danger hover:text-white transition-all flex items-center justify-center"
                             title="Réinitialiser">
-                            <i class="fas fa-undo-alt"></i>
+                            <x-lucide-undo class="w-4 h-4" />
                         </a>
                     @endif
                 </div>
@@ -256,19 +256,17 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2 text-foreground/30">
                                         <a href="{{ route('admin.students.show', $eleve) }}"
-                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><i
-                                                class="fas fa-eye"></i></a>
+                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye class="w-4 h-4" /></a>
                                         <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
                                             onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700">
-                                                <i class="fas fa-trash-alt"></i> Archiver
+                                                <x-lucide-trash-2 class="w-4 h-4" /> Archiver
                                             </button>
                                         </form>
                                         <a title="Modifier les informations de l'élève"
-                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><i
-                                                class="fas fa-pen-alt"></i></a>
+                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit class="w-4 h-4" /></a>
                                     </div>
                                 </td>
                             </tr>

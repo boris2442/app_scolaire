@@ -8,14 +8,18 @@
                 Liste des élèves supprimés logiquement
             </p>
         </div>
-        <a href="{{ route('admin.students.index') }}" class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
-            <i class="fas fa-arrow-left mr-2"></i> Retour à la liste active
+        <a href="{{ route('admin.students.index') }}"
+            class="text-[10px] font-black uppercase bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
+            <x-lucide-arrow-left class="w-4 h-4 inline-block mr-1" />
+            Retour à la liste active
         </a>
     </div>
 
-    @if(session('success'))
-        <div class="p-4 mb-6 bg-green-500/10 border border-green-500 rounded-xl text-green-600 text-[10px] font-black uppercase">
-            <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
+    @if (session('success'))
+        <div
+            class="p-4 mb-6 bg-green-500/10 border border-green-500 rounded-xl text-green-600 text-[10px] font-black uppercase">
+            <x-lucide-check-circle class="w-4 h-4 inline-block mr-1" />
+            {{ session('success') }}
         </div>
     @endif
 
@@ -35,10 +39,11 @@
                         <td class="p-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-border flex items-center justify-center overflow-hidden">
-                                    @if($eleve->photo)
-                                        <img src="{{ asset('storage/'.$eleve->photo) }}" class="w-full h-full object-cover grayscale">
+                                    @if ($eleve->photo)
+                                        <img src="{{ asset('storage/' . $eleve->photo) }}"
+                                            class="w-full h-full object-cover grayscale">
                                     @else
-                                        <i class="fas fa-user text-muted-foreground/50"></i>
+                                        <x-lucide-user class="w-4 h-4 text-muted-foreground/50" />
                                     @endif
                                 </div>
                                 <div>
@@ -56,16 +61,20 @@
                                 <form action="{{ route('admin.students.restore', $eleve->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" title="Restaurer" class="p-2 bg-green-500/10 text-green-600 rounded-lg hover:bg-green-500 hover:text-white transition-all">
-                                        <i class="fas fa-undo-alt"></i>
+                                    <button type="submit" title="Restaurer"
+                                        class="p-2 bg-green-500/10 text-green-600 rounded-lg hover:bg-green-500 hover:text-white transition-all">
+                                        <x-lucide-undo class="w-4 h-4" />
                                     </button>
                                 </form>
 
-                                <form action="{{ route('admin.students.force-delete', $eleve->id) }}" method="POST" onsubmit="return confirm('ATTENTION : Cette action est irréversible. Supprimer définitivement ?')">
+                                <form action="{{ route('admin.students.force-delete', $eleve->id) }}" method="POST"
+                                    onsubmit="return confirm('ATTENTION : Cette action est irréversible. Supprimer définitivement ?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" title="Supprimer définitivement" class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-all">
-                                        <i class="fas fa-fire"></i>
+                                    <button type="submit" title="Supprimer définitivement"
+                                        class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-all">
+                                        {{-- <i class="fas fa-fire"></i> --}}
+                                        <x-lucide-fire class='w-4 h-4 inline-block mr-1' />
                                     </button>
                                 </form>
                             </div>
@@ -75,7 +84,8 @@
                     <tr>
                         <td colspan="4" class="p-12 text-center">
                             <i class="fas fa-trash-restore text-4xl text-muted-foreground/20 mb-4"></i>
-                            <p class="text-[10px] font-black uppercase text-muted-foreground tracking-widest">La corbeille est vide</p>
+                            <p class="text-[10px] font-black uppercase text-muted-foreground tracking-widest">La corbeille
+                                est vide</p>
                         </td>
                     </tr>
                 @endforelse

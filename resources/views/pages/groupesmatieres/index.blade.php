@@ -10,7 +10,9 @@
         </div>
         <a href="{{ route('admin.groupes.create') }}"
             class="inline-flex items-center px-4 py-1 bg-primary text-white rounded font-bold text-sm hover:scale-105 transition-all shadow-lg shadow-primary/20">
-            <i class="fas fa-layer-group mr-2"></i> Nouveau Groupe
+     
+            <x-lucide-layers class='mr-2 w-4 h-4' />
+             Nouveau Groupe
         </a>
     </div>
 
@@ -30,7 +32,7 @@
                     {{-- Boutons Actions (ton JS toggleMenu fonctionne ici parfaitement) --}}
                     <button type="button" onclick="toggleMenu(this)"
                         class="menu-trigger p-2 rounded-full hover:bg-secondary text-gray-400">
-                        <i class="fas fa-ellipsis-v"></i>
+                        <x-lucide-more-horizontal class='w-4 h-4' />
                     </button>
                     <div
                         class="menu-content hidden absolute right-0 mt-8 w-40 bg-card border border-border rounded-xl shadow-xl z-10">
@@ -40,7 +42,8 @@
 
                 {{-- Détail dynamique --}}
                 <div class="flex items-center text-xs text-gray-500 mb-4">
-                    <i class="fas fa-book mr-2"></i>
+                  
+                    <x-lucide-book class='mr-2 w-4 h-4' />
                     {{ $groupe->matieres_count ?? 0 }} matières dans ce groupe
                 </div>
 
