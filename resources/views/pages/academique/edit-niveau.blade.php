@@ -5,13 +5,14 @@
         {{-- Retour à la liste --}}
         <a href="{{ route('settings.academique.index') }}"
             class="text-xs text-primary font-bold uppercase mb-4 inline-block hover:underline">
-            <i class="fas fa-arrow-left mr-1"></i> Retour à la structure
+            <x-lucide-arrow-left class="w-4 h-4 inline-block mr-1" />
+            Retour à la structure
         </a>
 
         <div class="bg-card p-6 rounded-xl border border-border shadow-sm">
             <div class="flex items-center gap-3 mb-6 border-b border-border pb-4">
                 <div class="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                    <i class="fas fa-graduation-cap"></i>
+                    <x-lucide-edit-3 class="w-4 h-4" />
                 </div>
                 <div>
                     <h2 class="text-sm font-black uppercase tracking-widest text-foreground">Modifier le Niveau</h2>
@@ -56,7 +57,10 @@
                 <div class="flex gap-3 pt-2">
                     <button type="submit"
                         class="flex-1 bg-primary text-white font-bold py-3 rounded-lg hover:opacity-90 shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-save"></i> Mettre à jour
+
+                        <x-lucide-save class="w-4 h-4" />
+
+                        Mettre à jour
                     </button>
                     <a href="{{ route('settings.academique.index') }}"
                         class="px-6 bg-secondary text-foreground font-bold py-3 rounded-lg hover:bg-border transition-all text-sm flex items-center">

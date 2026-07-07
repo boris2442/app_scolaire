@@ -37,7 +37,10 @@
 
             <button type="submit"
                 class="bg-primary text-primary-foreground text-sm font-medium py-2 rounded-md hover:opacity-90 transition shadow-sm">
-                <i class="fas fa-search mr-2"></i> Vérifier l'état
+
+               
+                <x-lucide-search class="w-4 h-4 inline-block mr-1" />
+                Vérifier l'état
             </button>
         </form>
 
@@ -72,12 +75,16 @@
                                     @if ($data['pourcentage'] == 100)
                                         <span
                                             class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-success/10 text-success rounded-full text-[10px] font-bold border border-success/20">
-                                            <i class="fas fa-check-circle"></i> PRÊT
+                                       
+                                            <x-lucide-check-circle class="w-3 h-3" />
+                                             PRÊT
                                         </span>
                                     @else
                                         <span
                                             class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-warning/10 text-warning rounded-full text-[10px] font-bold border border-warning/20">
-                                            <i class="fas fa-clock"></i> INCOMPLET
+                                      
+                                            <x-lucide-clock class="w-3 h-3" />
+                                             INCOMPLET
                                         </span>
                                     @endif
                                 </td>

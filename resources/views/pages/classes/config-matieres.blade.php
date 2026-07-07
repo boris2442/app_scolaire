@@ -3,7 +3,7 @@
 @section('content')
     <div class="mb-6">
         <a href="{{ route('settings.classes.index') }}" class="text-[10px] font-black uppercase text-primary hover:underline">
-            <i class="fas fa-arrow-left mr-1"></i> Retour aux classes
+        <x-lucide-arrow-left class="w-4 h-4 mr-1" /> Retour aux classes
         </a>
         <h1 class="text-xl font-black uppercase text-foreground mt-2">Configuration : {{ $classe->nom_complet }}</h1>
         <p class="text-xs text-muted-foreground uppercase font-bold">Cochez les matières et définissez les coefficients</p>

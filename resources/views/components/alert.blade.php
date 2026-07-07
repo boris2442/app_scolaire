@@ -5,14 +5,17 @@
         @if (session('success'))
             <div
                 class="alert-item bg-card/80 backdrop-blur-md border border-success/20 border-l-4 border-l-success p-4 rounded-xl shadow-2xl flex items-start gap-3 transition-all duration-500">
-                <div class="text-success mt-0.5"><i class="fas fa-check-circle text-lg"></i></div>
+                <div class="text-success mt-0.5">
+                  <x-lucide-check-circle class="w-5 h-5" />
+                
+                </div>
                 <div class="flex-1">
                     <p class="text-[10px] font-black uppercase tracking-widest text-success">Succès</p>
                     <p class="text-sm font-medium text-foreground">{{ session('success') }}</p>
                 </div>
                 <button onclick="this.parentElement.remove()"
                     class="text-muted-foreground hover:text-foreground transition-colors">
-                    <i class="fas fa-times text-xs"></i>
+              <x-lucide-x class="w-4 h-4" />
                 </button>
             </div>
         @endif
@@ -21,7 +24,9 @@
         @if (session('error') || $errors->any())
             <div
                 class="alert-item bg-card/80 backdrop-blur-md border border-danger/20 border-l-4 border-l-danger p-4 rounded-xl shadow-2xl flex items-start gap-3">
-                <div class="text-danger mt-0.5"><i class="fas fa-exclamation-triangle text-lg"></i></div>
+                <div class="text-danger mt-0.5">
+                    <x-lucide-alert-triangle class="w-5 h-5" />
+                </div>
                 <div class="flex-1">
                     <p class="text-[10px] font-black uppercase tracking-widest text-danger">Attention</p>
                     <ul class="text-sm font-medium text-foreground list-none">
@@ -33,7 +38,7 @@
                     </ul>
                 </div>
                 <button onclick="this.parentElement.remove()" class="text-muted-foreground hover:text-foreground">
-                    <i class="fas fa-times text-xs"></i>
+                    <x-lucide-x class="w-4 h-4 text-xs" />
                 </button>
             </div>
         @endif

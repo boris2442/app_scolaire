@@ -3,7 +3,8 @@
 @section('content')
 <div class="max-w-xl mx-auto">
     <a href="{{ route('settings.academique.index') }}" class="text-xs text-primary font-bold uppercase mb-4 inline-block">
-        <i class="fas fa-arrow-left mr-1"></i> Retour à la structure
+      <x-lucide-arrow-left class="w-4 h-4 inline-block mr-1" />
+        Retour à la structure
     </a>
 
     <div class="bg-card p-6 rounded-xl border border-border shadow-sm">

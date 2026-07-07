@@ -4,7 +4,7 @@
 <div class="max-w-2xl mx-auto">
     <div class="mb-6 flex items-center gap-4">
         <a href="{{ route('settings.years.index') }}" class="p-2 bg-secondary rounded-lg hover:text-primary">
-            <i class="fas fa-arrow-left"></i>
+        <x-lucide-arrow-left class="w-4 h-4" />
         </a>
         <h1 class="text-xl font-bold">Modifier l'année : {{ $annee_scolaire->libelle }}</h1>
     </div>
@@ -36,7 +36,7 @@
 
             <div class="pt-4">
                 <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-                    <i class="fas fa-check-circle mr-2"></i> Enregistrer les modifications
+                    <x-lucide-check-circle class="w-4 h-4 mr-2" /> Enregistrer les modifications
                 </button>
             </div>
         </form>

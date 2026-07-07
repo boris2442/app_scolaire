@@ -27,7 +27,9 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-medium opacity-60 uppercase">Effectif Total</span>
-                        <div class="p-2 bg-primary/10 text-primary rounded-lg text-xs"><i class="fas fa-users"></i></div>
+                        <div class="p-2 bg-primary/10 text-primary rounded-lg text-xs">
+                            <x-lucide-users class="w-4 h-4" />
+                        </div>
                     </div>
 
                     <div class="mt-3 flex flex-col">
@@ -46,7 +48,8 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-medium opacity-60 uppercase">Taux de Réussite</span>
-                        <div class="p-2 bg-success/10 text-success rounded-lg text-xs"><i class="fas fa-chart-line"></i>
+                        <div class="p-2 bg-success/10 text-success rounded-lg text-xs">
+                            <x-lucide-chart-line class="w-4 h-4" />
                         </div>
                     </div>
                     <div class="mt-3">
@@ -65,7 +68,8 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-medium opacity-60 uppercase">Moyenne École</span>
-                        <div class="p-2 bg-warning/10 text-warning rounded-lg text-xs"><i class="fas fa-graduation-cap"></i>
+                        <div class="p-2 bg-warning/10 text-warning rounded-lg text-xs">
+                            <x-lucide-award class="w-4 h-4" />
                         </div>
                     </div>
                     <div class="mt-3">
@@ -78,7 +82,9 @@
                 <div class="bg-primary text-primary-foreground p-5 rounded-2xl shadow-lg border border-primary/20">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-medium opacity-80 uppercase">Major Établissement</span>
-                        <div class="p-2 bg-white/20 rounded-lg text-xs"><i class="fas fa-crown text-yellow-300"></i></div>
+                        <div class="p-2 bg-white/20 rounded-lg text-xs">
+                            <x-lucide-crown class="w-4 h-4 text-yellow-300" />
+                        </div>
                     </div>
                     <div class="mt-3">
                         <span class="text-xl font-bold block truncate">{{ $stats['majors'][0]->nom ?? 'N/A' }}</span>
@@ -92,7 +98,7 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between text-xs font-medium opacity-60 uppercase">
                         <span>Inscrits</span>
-                        <i class="fas fa-users text-primary"></i>
+                        <x-lucide-users class="w-4 h-4 text-primary" />
                     </div>
                     <div class="mt-3">
                         <span class="text-3xl font-bold">{{ $stats['general']->effectif_total }}</span>
@@ -107,7 +113,7 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between text-xs font-medium opacity-60 uppercase">
                         <span>Bilan Réussite</span>
-                        <i class="fas fa-check-double text-success"></i>
+                    <x-lucide-check-check class="w-4 h-4 text-success" />
                     </div>
                     <div class="mt-2 space-y-1">
                         <div class="flex justify-between items-end">
@@ -126,7 +132,7 @@
                 <div class="bg-card p-5 rounded-2xl border border-border shadow-sm">
                     <div class="flex items-center justify-between text-xs font-medium opacity-60 uppercase">
                         <span>Réussite par Sexe</span>
-                        <i class="fas fa-venus-mars text-warning"></i>
+           <x-lucide-home class="w-10 h-10 text-red-500" />
                     </div>
 
                     <div class="mt-4 space-y-3">
@@ -177,7 +183,7 @@
                                 class="text-3xl font-black">{{ number_format($stats['general']->meilleure_note, 2) }}</span>
                         </div>
                     </div>
-                    <i class="fas fa-crown absolute -right-2 -bottom-2 text-6xl opacity-10 rotate-12"></i>
+                    <x-lucide-crown class="absolute -right-2 -bottom-2 text-6xl opacity-10 rotate-12" />
                 </div>
             </div>
 
@@ -188,7 +194,7 @@
 
                 <div class="lg:col-span-1 bg-card rounded-2xl border border-border p-5">
                     <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
-                        <i class="fas fa-trophy text-warning"></i> Tableau d'Excellence
+                        <x-lucide-trophy class="w-4 h-4 text-warning" /> Tableau d'Excellence
                     </h3>
                     <div class="space-y-4">
                         @foreach ($stats['majors'] as $key => $major)
@@ -263,7 +269,7 @@
                                             {{-- Ton bouton pour voir les détails --}}
                                             <a href="{{ route('admin.statistiques.classe.detail', ['classe_id' => $c->id, 'sequence_id' => request('sequence_id')]) }}"
                                                 class="p-2 hover:bg-primary/10 text-muted-foreground hover:text-primary rounded-lg transition-colors">
-                                                <i class="fas fa-ellipsis-v"></i>
+                                            <x-lucide-more-vertical class="w-4 h-4" />
                                             </a>
                                         </td>
                                     </tr>

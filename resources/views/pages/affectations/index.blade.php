@@ -100,7 +100,7 @@
                 <div class="p-6 bg-secondary/10 border-t flex justify-end">
                     <button type="submit"
                         class="bg-primary text-white px-8 py-4 rounded font-black  text-[12px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20">
-                        <i class="fas fa-save mr-2"></i> Enregistrer tout le tableau
+                     <x-lucide-save class="w-4 h-4 mr-2" /> Enregistrer tout le tableau
                     </button>
                 </div>
             </form>

@@ -9,9 +9,7 @@
             </div>
             <a href="{{ route('admin.departments.index') }}"
                 class="flex items-center px-4 py-2 bg-secondary text-gray-700 rounded-xl border border-border hover:bg-border transition-all duration-300 shadow-sm text-sm font-medium">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
+              <x-lucide-arrow-left class="w-4 h-4 mr-2" />
                 Retour à la liste
             </a>
         </div>

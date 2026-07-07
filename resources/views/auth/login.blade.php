@@ -93,7 +93,8 @@
 
                                 <button type="button" id="togglePassword"
                                     class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors">
-                                    <i class="fa-regular fa-eye"></i>
+                                
+                                    <x-lucide-eye class="w-4 h-4" />
                                 </button>
                             </div>
 

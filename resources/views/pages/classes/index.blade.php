@@ -38,7 +38,7 @@
 
                     <button
                         class="w-full bg-primary text-white font-black py-2.5 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2  text-[10px]">
-                        <i class="fas fa-plus"></i> Créer la Classe
+                        <x-lucide-plus class="w-4 h-4" /> Créer la Classe
                     </button>
                 </form>
             </div>
@@ -71,7 +71,7 @@
                                         @empty
                                             <span
                                                 class="text-[9px] text-red-500 font-bold uppercase italic flex items-center gap-1">
-                                                <i class="fas fa-exclamation-triangle text-[8px]"></i> Aucun programme
+                                                <x-lucide-alert-triangle class="w-3 h-3" /> Aucun programme
                                                 défini
                                             </span>
                                         @endforelse
@@ -84,7 +84,7 @@
                                         <span class="text-[10px] font-black opacity-100">
                                             Configurer
                                         </span>
-                                        <i class="fas fa-book-open text-xs"></i>
+                                        <x-lucide-book-open class="w-4 h-4" />
                                     </a>
 
                                     <form action="{{ route('settings.classes.destroy', $classe) }}" method="POST"
@@ -93,7 +93,7 @@
                                         <button
                                             class="text-muted-foreground hover:text-danger p-2 opacity-0 group-hover:opacity-100 transition-all"
                                             title="Supprimer la classe {{ $niv->nom }} {{ $classe->nom }}">
-                                            <i class="fas fa-trash-alt text-xs"></i>
+                                            <x-lucide-trash-2 class="w-4 h-4" />
                                         </button>
                                     </form>
                                 </div>

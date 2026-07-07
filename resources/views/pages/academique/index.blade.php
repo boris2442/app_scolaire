@@ -28,7 +28,8 @@
                     </select>
                     <input type="text" name="nom" placeholder="ex: 6ème"
                         class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2">
-                    <button class="w-full bg-primary text-white font-bold py-2 rounded-lg hover:opacity-90 transition-all">
+                    <button
+                        class="w-full bg-primary text-white font-bold py-2 rounded hover:opacity-90 transition-all   text-xs tracking-widest">
                         Enregistrer le Niveau
                     </button>
                 </form>
@@ -37,7 +38,11 @@
 
         <div class="lg:col-span-2 space-y-4">
             <h2 class="text-sm font-bold uppercase mb-4 flex items-center gap-2 text-muted-foreground">
-                <i class="fas fa-sitemap text-primary"></i> Structure des Études
+
+                <x-lucide-network class="w-4 h-4" />
+
+
+                Structure des Études
             </h2>
 
             @forelse($cycles as $cycle)
@@ -63,14 +68,15 @@
                         <div class="flex items-center gap-2">
                             <a href="{{ route('settings.academique.cycles.edit', $cycle) }}"
                                 class="text-gray-400 hover:text-primary transition-colors">
-                                <i class="fas fa-pen text-[10px]"></i>
+                                <x-lucide-edit-3 class="w-4 h-4" />
                             </a>
 
                             <form action="{{ route('settings.academique.cycles.destroy', $cycle) }}" method="POST"
                                 onsubmit="return confirm('Attention: Cela supprimera aussi tous les niveaux de ce cycle. Continuer ?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-gray-400 hover:text-danger transition-colors px-1">
-                                    <i class="fas fa-times text-[12px]"></i>
+
+                                    <x-lucide-x class="w-4 h-4" />
                                 </button>
                             </form>
                         </div>
@@ -87,7 +93,7 @@
                                     <a href="{{ route('settings.academique.niveaux.edit', $niveau) }}"
                                         class="p-1 text-primary hover:bg-primary/10 rounded transition-colors"
                                         title="Modigier" aria-label="Modifier">
-                                        <i class="fas fa-edit text-[10px]"></i>
+                                        <x-lucide-edit-3 class="w-4 h-4" />
                                     </a>
 
                                     {{-- Bouton Supprimer --}}
@@ -96,7 +102,7 @@
                                         @csrf @method('DELETE')
                                         <button class="p-1 text-danger hover:bg-danger/10 rounded" title="Supprimer"
                                             aria-label="Supprimer">
-                                            <i class="fas fa-trash text-[10px]"></i>
+                                            <x-lucide-trash class="w-4 h-4" />
                                         </button>
                                     </form>
                                 </div>

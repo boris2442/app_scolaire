@@ -3,7 +3,9 @@
 @section('content')
     <div class="p-6 space-y-6">
         <div class="flex items-center gap-4">
-            <a href="{{route('admin.statistiques.index') }}" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{route('admin.statistiques.index') }}" class="btn-back">
+                <x-lucide-arrow-left class="w-4 h-4" />
+            </a>
             <h1 class="text-2xl font-bold text-foreground">Détails :{{ $classe->niveau->nom }} {{ $classe->nom }}</h1>
         </div>
 

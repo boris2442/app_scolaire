@@ -7,12 +7,11 @@
                 <button id="toggleSidebarMobile"
                     class="md:hidden mr-3 p-2 rounded-lg hover:bg-secondary text-gray-500 transition-colors"
                     onclick="toggleSidebar()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
 
+                    <!-- Remplacé par le composant Lucide -->
+                    <x-lucide-menu class="w-6 h-6" />
+
+                </button>
                 <div class="hidden sm:block">
                     <span class="text-sm font-semibold text-primary uppercase tracking-wider">
                         Espace Gestion <span class="text-foreground">/</span>
@@ -60,8 +59,7 @@
                                 class="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-success ring-2 ring-card"></span>
                         </div>
 
-                        <i
-                            class="fas fa-chevron-down text-[10px] text-gray-400 group-hover:text-primary transition-colors pl-1"></i>
+                    <x-lucide-chevron-down class="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
                     </button>
 
                     <div id="user-dropdown"
@@ -76,13 +74,15 @@
                         <div class="p-1.5 space-y-0.5">
                             <a href="{{ route('profile.edit') }}"
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
-                                <i class="fas fa-user-circle w-4 text-center"></i>
+
+                                <x-lucide-user class="w-4 text-center" />
                                 <span>Mon Profil</span>
                             </a>
 
                             <a href=""
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
-                                <i class="fas fa-bell w-4 text-center"></i>
+                                {{-- <i class="fas fa-bell w-4 text-center"></i> --}}
+                                <x-lucide-bell class="w-4 text-center" />
                                 <span>Notifications</span>
                                 <span
                                     class="ml-auto bg-danger text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">3</span>
@@ -90,7 +90,7 @@
 
                             <a href=""
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
-                                <i class="fas fa-cog w-4 text-center"></i>
+                                <x-lucide-cog class="w-4 text-center" />
                                 <span>Paramètres</span>
                             </a>
 
@@ -100,10 +100,11 @@
                                 class="w-full flex items-center space-x-2 px-3 py-2 text-sm rounded-lg text-gray-500 hover:bg-secondary hover:text-primary transition-all duration-300 group/theme text-left">
 
                                 <span class="w-4 flex justify-center">
-                                    <i id="theme-toggle-dark-icon"
-                                        class="fas fa-moon text-base hidden group-hover/theme:rotate-12 transition-transform"></i>
-                                    <i id="theme-toggle-light-icon"
-                                        class="fas fa-sun text-lg hidden group-hover/theme:rotate-90 transition-transform"></i>
+                                    <!-- On ajoute 'hidden' ici pour que JS prenne le relais proprement -->
+                                    <x-lucide-moon
+                                        class="w-4 text-center hidden group-hover/theme:rotate-12 transition-transform" />
+                                    <x-lucide-sun
+                                        class="w-4 text-center hidden group-hover/theme:rotate-90 transition-transform" />
                                 </span>
 
                                 <span class="text-card-foreground">Changer de mode</span>
@@ -115,7 +116,8 @@
                                 @csrf
                                 <button type="submit"
                                     class="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-500 rounded-lg hover:bg-red-500/10 transition-colors text-left">
-                                    <i class="fas fa-sign-out-alt w-4 text-center"></i>
+
+                                    <x-lucide-log-out class="w-4 text-center" />
                                     <span>Déconnexion</span>
                                 </button>
                             </form>
