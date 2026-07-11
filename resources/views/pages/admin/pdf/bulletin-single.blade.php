@@ -648,7 +648,7 @@
             </table>
 
             <!-- AJOUTE LE BLOC ICI -->
-      @if ($b['est_troisieme_trimestre'])
+            @if ($b['est_troisieme_trimestre'])
                 <table style="width:100%; margin:10px 0; border-collapse:collapse;">
                     <tr>
                         <td style="padding:10px; font-weight:bold; border:1px solid #000; width:30%;">
@@ -658,7 +658,8 @@
                             T1: <strong>{{ number_format($b['moyenne_t1'], 2) }}</strong> |
                             T2: <strong>{{ number_format($b['moyenne_t2'], 2) }}</strong> |
                             T3: <strong>{{ number_format($b['moyenne_t3'], 2) }}</strong> |
-                            ANNUELLE : <strong>{{ number_format($b['moyenne_annuelle'], 2) }}/20</strong>
+                            ANNUELLE : <strong>{{ number_format($b['moyenne_annuelle'], 2) }}/20</strong><br>
+                            Rang Annuel : <strong>{{ $b['rang_annuel'] }} / {{ count($bulletins) }}</strong>
                         </td>
                     </tr>
                 </table>
