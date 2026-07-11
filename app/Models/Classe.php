@@ -46,4 +46,24 @@ class Classe extends Model
     {
         return $this->hasMany(Inscription::class);
     }
+
+
+
+
+
+
+
+    // Dans App\Models\Classe.php
+
+    public function parametres()
+    {
+        return $this->hasMany(ParametreAcademique::class);
+    }
+
+    // Accessor pour simplifier l'affichage dans la vue
+    public function getMoyenneMinAttribute()
+    {
+        $regle = $this->parametres->where('cle', 'moyenne_min')->first();
+        return $regle ? $regle->valeur : 10; // 10 par défaut
+    }
 }

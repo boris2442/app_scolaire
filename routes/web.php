@@ -20,6 +20,7 @@ use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\ParametreAcademiqueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrimestreController;
 use Illuminate\Support\Facades\Route;
@@ -202,10 +203,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
             ->name('admin.bulletins.imprimer-eleve');
 
-   
-   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
-    ->names('admin.groupes')
-    ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
+
+        Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
+            ->names('admin.groupes')
+            ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
     });
 
 
@@ -248,14 +249,15 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
+        // Route pour afficher le formulaire de configuration
+        Route::get('/parametres-classes', [ParametreAcademiqueController::class, 'index'])
+            ->name('admin.parametres-classes.index');
 
-    // Route::prefix('discipline')->name('discipline.')->group(function () {
-    //    Route::get('/selection', [DisciplineController::class, 'index'])->name('index');
-
-    //     Route::get('/saisie', [DisciplineController::class, 'saisie'])->name('saisie');
-
-    //     Route::post('/store', [DisciplineController::class, 'store'])->name('store');
-    // })->middleware('sg');
+        // Route pour enregistrer les changements
+        Route::post('/parametres-classes', [ParametreAcademiqueController::class, 'store'])
+            ->name('admin.parametres-classes.store');
+    });
 });
 require __DIR__ . '/auth.php';

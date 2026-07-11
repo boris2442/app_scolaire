@@ -472,7 +472,7 @@
                         {{-- <th width="14%">MOY SEQ 1</th>
                         <th width="14%">MOY SEQ 2</th> --}}
                         @foreach ($sequences as $seq)
-                            <th width="14%">Moy  {{ $seq->nom }}</th>
+                            <th width="14%">Moy {{ $seq->nom }}</th>
                         @endforeach
                         <th width="14%">MOY TRIM</th>
                         <th width="14%">Rang</th>
@@ -594,6 +594,34 @@
                     </td>
                 </tr>
             </table>
+
+            <!-- AJOUTE LE BLOC ICI -->
+            @if (isset($bulletin['moyenne_annuelle']))
+                <table style="width: 100%; margin: 10px 0; border: 1px solid #000; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 10px; font-weight: bold; border: 1px solid #000; width: 30%;">
+                            BILAN ANNUEL :
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #000; text-align: left;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>T1: <strong>{{ number_format($bulletin['moyenne_t1'], 2) }}</strong></span>
+                                <span>T2: <strong>{{ number_format($bulletin['moyenne_t2'], 2) }}</strong></span>
+                                <span>T3: <strong>{{ number_format($bulletin['moyenne_calculee'], 2) }}</strong></span>
+                                <span><strong>MOYENNE ANNUELLE : {{ number_format($bulletin['moyenne_annuelle'], 2) }}
+                                        / 20</strong></span>
+                            </div>
+                            <hr>
+                            Décision du Conseil : __________________________
+                            <i style="font-size: 10px;">(À remplir au stylo)</i>
+                        </td>
+                    </tr>
+                </table>
+            @endif
+
+         
+
+
+
             <table class="table-signatures">
                 <tr>
                     <td width="33%" class="text-center">Nom et visa du Prof principal</td>
