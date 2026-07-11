@@ -48,10 +48,6 @@ class RegisteredUserController extends Controller
 
         // return redirect(route('dashboard', absolute: false));
         // Redirection dynamique selon le rôle après l'inscription
-        return redirect()->route(match ($user->role) {
-            'enseignant' => 'admin.evaluations.index',
-            'admin'      => 'settings.index',
-            default      => 'dashboard',
-        });
+        return redirect()->route('after.login.page');
     }
 }

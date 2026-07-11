@@ -30,11 +30,7 @@ class AuthenticatedSessionController extends Controller
 // dd($request->user()->role);
         // return redirect()->intended(route('dashboard', absolute: false));
         // 3. Redirection dynamique selon le rôle de l'utilisateur connecté
-        return redirect()->intended(match ($request->user()->role->value) {
-            'enseignant' => route('admin.evaluations.index', absolute: false),
-            'admin'      => route('settings.index', absolute: false),
-            default      => route('dashboard', absolute: false),
-        });
+        return redirect()->route('after.login.page');
     }
 
     /**

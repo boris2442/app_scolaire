@@ -10,8 +10,9 @@
                     @csrf
                     <input type="text" name="nom" placeholder="ex: Premier Cycle"
                         class="flex-1 bg-secondary border-border rounded-lg text-sm px-3 py-2">
-                    <button class="bg-primary text-white p-2 rounded-lg hover:opacity-90"><i
-                            class="fas fa-plus"></i></button>
+                    <button class="bg-primary text-white p-2 rounded hover:opacity-90">
+                        <x-lucide-plus class="w-4 h-4" />
+                    </button>
                 </form>
             </div>
 

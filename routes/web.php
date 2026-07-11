@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ResultatController;
 use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AffectationController;
+use App\Http\Controllers\AfterLoginController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('welcome-dashboard', [AfterLoginController::class, 'index'])->name('after.login.page');
 
 
     //Rou globale configuration middleware admin
@@ -200,7 +202,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
             ->name('admin.bulletins.imprimer-eleve');
 
-        Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
+   
+   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
+    ->names('admin.groupes')
+    ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
     });
 
 

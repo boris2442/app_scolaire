@@ -37,6 +37,21 @@
                     <div
                         class="menu-content hidden absolute right-0 mt-8 w-40 bg-card border border-border rounded-xl shadow-xl z-10">
                         {{-- Tes liens Modifier/Supprimer ici --}}
+                        <a href="{{ route('admin.groupes.edit', $groupe->id) }}"
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <x-lucide-edit class='mr-2 w-4 h-4' />
+                            Modifier
+                        </a>
+                        <form action="{{ route('admin.groupes.destroy', $groupe->id) }}" method="POST"
+                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <x-lucide-trash class='mr-2 w-4 h-4' />
+                                Supprimer
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -54,4 +69,21 @@
             </div>
         @endforeach
     </div>
+
+   <script>
+        function toggleMenu(button) {
+            const menuContent = button.nextElementSibling;
+            menuContent.classList.toggle('hidden');
+        }
+
+        // Fermer le menu si on clique en dehors
+        document.addEventListener('click', function (event) {
+            const menus = document.querySelectorAll('.menu-content');
+            menus.forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 @endsection
