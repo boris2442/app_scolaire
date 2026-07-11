@@ -111,6 +111,132 @@ class BulletinPrintController extends Controller
     // 2. NOUVEAU : Impression de TOUTE la classe d'un coup
 
 
+    // public function imprimerClasse($classeId, $trimestreId)
+    // {
+    //     $etablissement = DB::table('etablissements')->first();
+    //     $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+    //     $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+
+    //     $inscriptionIds = DB::table('inscriptions')
+    //         ->where('classe_id', $classeId)
+    //         ->where('annee_scolaire_id', $anneeActive->id)
+    //         ->pluck('id');
+
+    //     // 1. Récupération des notes en gros
+    //     $allNotes = DB::table('notes')
+    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
+    //         ->whereIn('notes.inscription_id', $inscriptionIds)
+    //         ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
+    //         ->select('notes.*', 'evaluations.matiere_id', 'evaluations.sequence_id')
+    //         ->get()
+    //         ->groupBy('inscription_id');
+
+
+
+
+
+
+
+
+
+    //     // 2. Boucle pour remplir $bulletins
+    //     $bulletins = [];
+    //     $moyennesIndividuelles = [];
+
+
+
+    //     foreach ($inscriptionIds as $id) {
+    //         // 1. Charger les données de base
+    //         $notesEleve = $allNotes->get($id, collect());
+    //         $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
+
+    //         // 2. Calculer les moyennes trimestrielles via la fonction robuste
+    //         $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
+    //         $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
+    //         $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
+    //         $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
+
+    //         $bulletin['moyenne_t1'] = $this->calculerMoyenneTrimestre($id, $idT1);
+    //         $bulletin['moyenne_t2'] = $this->calculerMoyenneTrimestre($id, $idT2);
+    //         $bulletin['moyenne_t3'] = $this->calculerMoyenneTrimestre($id, $idT3);
+
+    //         // 3. Moyenne annuelle (si besoin)
+    //         $bulletin['moyenne_annuelle'] = ($bulletin['moyenne_t1'] + $bulletin['moyenne_t2'] + $bulletin['moyenne_t3']) / 3;
+
+    //         // 4. Moyenne pour le RANG (utiliser celle du trimestre en cours)
+    //         $bulletin['moyenne_calculee'] = ($trimestreId == $idT3) ? $bulletin['moyenne_t3'] : (($trimestreId == $idT2) ? $bulletin['moyenne_t2'] : $bulletin['moyenne_t1']);
+
+    //         $bulletins[] = $bulletin;
+    //     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //     // 3. CALCUL DU RANG (APRES la boucle, une seule fois pour tout le monde)
+    //     $classement = $bulletins;
+    //     usort($classement, function ($a, $b) {
+    //         return $b['moyenne_calculee'] <=> $a['moyenne_calculee'];
+    //     });
+
+    //     $rangs = [];
+    //     $index = 1;
+    //     foreach ($classement as $i => $item) {
+    //         if ($i > 0 && $item['moyenne_calculee'] == $classement[$i - 1]['moyenne_calculee']) {
+    //             $rangs[$item['inscription']->inscription_id] = $rangs[$classement[$i - 1]['inscription']->inscription_id];
+    //         } else {
+    //             $rangs[$item['inscription']->inscription_id] = $index;
+    //         }
+    //         $index++;
+    //     }
+
+    //     foreach ($bulletins as &$b) {
+    //         $b['rang'] = $rangs[$b['inscription']->inscription_id];
+    //     }
+
+
+
+
+
+
+
+
+
+    //     // 3. Calcul des statistiques "à la volée" (votre proposition)
+
+    //     $totalEleves = count($moyennesIndividuelles);
+    //     $stats = [
+    //         'moyenne' => $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0,
+    //         'min' => $totalEleves > 0 ? min($moyennesIndividuelles) : 0,
+    //         'max' => $totalEleves > 0 ? max($moyennesIndividuelles) : 0,
+    //         'taux_reussite' => $totalEleves > 0 ? (count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10)) / $totalEleves) * 100 : 0
+    //     ];
+
+    //     // dd($stats) ;
+
+    //     $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
+
+    //     return $pdf->download("Bulletins_Classe.pdf");
+    // }
+
+
+
+
+
+
+
+
     public function imprimerClasse($classeId, $trimestreId)
     {
         $etablissement = DB::table('etablissements')->first();
@@ -123,7 +249,7 @@ class BulletinPrintController extends Controller
             ->where('annee_scolaire_id', $anneeActive->id)
             ->pluck('id');
 
-        // 1. Récupération des notes en gros
+        // 1. Récupération globale des notes pour toute la classe (performance)
         $allNotes = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
             ->whereIn('notes.inscription_id', $inscriptionIds)
@@ -132,178 +258,80 @@ class BulletinPrintController extends Controller
             ->get()
             ->groupBy('inscription_id');
 
-        // 2. Boucle pour remplir $bulletins
-        // $bulletins = [];
-        // $moyennesIndividuelles = []; // Tableau pour stocker les moyennes de tous les élèves
+        $bulletins = [];
+        $moyennesIndividuelles = [];
 
-
+        // 2. Boucle : Calcul des moyennes individuelles et stockage
         // foreach ($inscriptionIds as $id) {
         //     $notesEleve = $allNotes->get($id, collect());
         //     $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
 
-
-
-        //     // --- COLLE LE CODE ICI ---
-        //     // Remplace ton bloc de calcul actuel par ceci dans le contrôleur :
-        //     // --- COLLE LE CODE ICI ---
-        //     // --- FORCE LE CALCUL ---
+        //     // Calculs des moyennes (utilisant votre méthode robuste)
         //     $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
         //     $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
         //     $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
         //     $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
+        //     //$bullletin['est_troisieme_trimestre']=($trimestreId==$idT3);
 
-        //     // Calcule toujours la moyenne, on filtrera dans la vue
-        //     $m1 = $this->calculerMoyenneTrimestre($id, $idT1);
-        //     $m2 = $this->calculerMoyenneTrimestre($id, $idT2);
-        //     $m3 = $this->calculerMoyenneTrimestre($id, $idT3); // On force le calcul avec l'ID du T3
+        //     $bulletin['moyenne_t1'] = $this->calculerMoyenneTrimestre($id, $idT1);
+        //     $bulletin['moyenne_t2'] = $this->calculerMoyenneTrimestre($id, $idT2);
+        //     $bulletin['moyenne_t3'] = $this->calculerMoyenneTrimestre($id, $idT3);
 
-        //     $bulletin['moyenne_t1'] = $m1;
-        //     $bulletin['moyenne_t2'] = $m2;
-        //     $bulletin['moyenne_t3'] = $m3;
-        //     $bulletin['moyenne_annuelle'] = ($m1 + $m2 + $m3) / 3;
-        //     $bulletin['trimestre_id_actuel'] = $trimestre->id; // On passe l'ID à la vue
-        //     $bulletin['id_t3_attendu'] = $idT3; // On passe l'ID attendu pour comparer
+        //     $bulletin['moyenne_annuelle'] = ($bulletin['moyenne_t1'] + $bulletin['moyenne_t2'] + $bulletin['moyenne_t3']) / 3;
 
+        //     // Moyenne utilisée pour le classement
+        //     $bulletin['moyenne_calculee'] = ($trimestreId == $idT3) ? $bulletin['moyenne_t3'] : (($trimestreId == $idT2) ? $bulletin['moyenne_t2'] : $bulletin['moyenne_t1']);
 
-
-
-
-
-        //     // DÉBOGAGE : Si le bilan est null, on calcule la moyenne manuellement à partir des notes
-        //     // On ignore le bilan pour le calcul des statistiques de classe
-        //     $moyenneEleve = 0;
-
-        //     // Si votre bulletin contient des notes, calculons la moyenne ici pour les stats
-        //     if (!empty($notesEleve)) {
-        //         // Logique de calcul simplifiée : somme des notes / nombre de notes
-        //         $totalNotes = 0;
-        //         foreach ($notesEleve as $n) {
-        //             $totalNotes += $n->valeur;
-        //         }
-        //         $moyenneEleve = count($notesEleve) > 0 ? $totalNotes / count($notesEleve) : 0;
-        //     }
-
-        //     $moyennesIndividuelles[] = (float)$moyenneEleve;
-
-        //     // On injecte cette moyenne calculée dans le bulletin pour que la vue l'utilise
-        //     $bulletin['moyenne_calculee'] = $moyenneEleve;
         //     $bulletins[] = $bulletin;
-
-
-
-
-
-
-        //     // calcul de rang
-
-        //     // 1. On crée le tableau de classement
-        //     $classement = [];
-        //     foreach ($bulletins as $b) {
-        //         $classement[] = [
-        //             'id' => $b['inscription']->inscription_id,
-        //             'moyenne' => $b['moyenne_calculee']
-        //         ];
-        //     }
-
-        //     // 2. On trie par moyenne (du plus grand au plus petit)
-        //     usort($classement, function ($a, $b) {
-        //         return $b['moyenne'] <=> $a['moyenne'];
-        //     });
-
-        //     // 3. ICI : On calcule les rangs en tenant compte des ex-aequo
-        //     $rangs = [];
-        //     foreach ($classement as $index => $item) {
-        //         // Si la moyenne est identique au précédent, on prend le même rang
-        //         if ($index > 0 && $item['moyenne'] == $classement[$index - 1]['moyenne']) {
-        //             $rangs[$item['id']] = $rangs[$classement[$index - 1]['id']];
-        //         } else {
-        //             // Sinon, c'est le rang naturel
-        //             $rangs[$item['id']] = $index + 1;
-        //         }
-        //     }
-
-        //     // 4. ICI : On injecte le rang dans chaque bulletin
-        //     foreach ($bulletins as &$b) {
-        //         $b['rang'] = $rangs[$b['inscription']->inscription_id];
-        //     }
+        //     $moyennesIndividuelles[] = (float)$bulletin['moyenne_calculee'];
         // }
 
-
-
-
-
-
-
-
-
-
-        // 2. Boucle pour remplir $bulletins
-        $bulletins = [];
-        $moyennesIndividuelles = [];
 
         foreach ($inscriptionIds as $id) {
             $notesEleve = $allNotes->get($id, collect());
             $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
 
-            // --- CALCULS ANNUELS ---
+            // Calculs des moyennes
             $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
             $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
             $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
             $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
 
-            // On calcule les moyennes
-            $m1 = $this->calculerMoyenneTrimestre($id, $idT1);
-            $m2 = $this->calculerMoyenneTrimestre($id, $idT2);
-            $m3 = $this->calculerMoyenneTrimestre($id, $idT3);
+            $bulletin['moyenne_t1'] = $this->calculerMoyenneTrimestre($id, $idT1);
+            $bulletin['moyenne_t2'] = $this->calculerMoyenneTrimestre($id, $idT2);
+            $bulletin['moyenne_t3'] = $this->calculerMoyenneTrimestre($id, $idT3);
 
-            // On injecte les données dans le bulletin
-            $bulletin['moyenne_t1'] = $m1;
-            $bulletin['moyenne_t2'] = $m2;
-            $bulletin['moyenne_t3'] = $m3;
+            $bulletin['moyenne_annuelle'] = ($bulletin['moyenne_t1'] + $bulletin['moyenne_t2'] + $bulletin['moyenne_t3']) / 3;
 
-            // Condition : On n'affiche l'annuelle que si on est au 3ème trimestre
-            $bulletin['moyenne_annuelle'] = ($trimestre->id == $idT3) ? ($m1 + $m2 + $m3) / 3 : null;
+            // Moyenne utilisée pour le classement
+            $bulletin['moyenne_calculee'] = ($trimestreId == $idT3) ? $bulletin['moyenne_t3'] : (($trimestreId == $idT2) ? $bulletin['moyenne_t2'] : $bulletin['moyenne_t1']);
 
-            // Calcul de la moyenne pour le rang
-            $moyenneEleve = (!empty($notesEleve)) ? ($notesEleve->sum('valeur') / $notesEleve->count()) : 0;
-            $bulletin['moyenne_calculee'] = $moyenneEleve;
-            $moyennesIndividuelles[] = (float)$moyenneEleve;
+            // --- AJOUTEZ CETTE LIGNE ---
+            // Ce drapeau sera vrai uniquement si le trimestre actuel est le T3
+            $bulletin['est_troisieme_trimestre'] = ($trimestreId == $idT3);
+            // ---------------------------
 
             $bulletins[] = $bulletin;
+            $moyennesIndividuelles[] = (float)$bulletin['moyenne_calculee'];
         }
 
-        // 3. CALCUL DU RANG (APRES la boucle, une seule fois pour tout le monde)
+
+
+        // 3. Calcul du RANG pour tous les élèves
         $classement = $bulletins;
         usort($classement, function ($a, $b) {
             return $b['moyenne_calculee'] <=> $a['moyenne_calculee'];
         });
 
-        $rangs = [];
-        $index = 1;
-        foreach ($classement as $i => $item) {
-            if ($i > 0 && $item['moyenne_calculee'] == $classement[$i - 1]['moyenne_calculee']) {
-                $rangs[$item['inscription']->inscription_id] = $rangs[$classement[$i - 1]['inscription']->inscription_id];
-            } else {
-                $rangs[$item['inscription']->inscription_id] = $index;
-            }
-            $index++;
-        }
-
         foreach ($bulletins as &$b) {
-            $b['rang'] = $rangs[$b['inscription']->inscription_id];
+            $rang = 1;
+            foreach ($classement as $c) {
+                if ($c['moyenne_calculee'] > $b['moyenne_calculee']) $rang++;
+            }
+            $b['rang'] = $rang;
         }
 
-
-
-
-
-
-
-
-
-        // 3. Calcul des statistiques "à la volée" (votre proposition)
-        // $stats = $this->calculerStatistiquesEnMemoire($bulletins);
-        // CALCUL DYNAMIQUE ET SANS REDONDANCE
+        // 4. Calcul des STATISTIQUES DE LA CLASSE (après la boucle)
         $totalEleves = count($moyennesIndividuelles);
         $stats = [
             'moyenne' => $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0,
@@ -312,12 +340,13 @@ class BulletinPrintController extends Controller
             'taux_reussite' => $totalEleves > 0 ? (count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10)) / $totalEleves) * 100 : 0
         ];
 
-        // dd($stats) ;
-
+        // 5. Génération du PDF
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
 
         return $pdf->download("Bulletins_Classe.pdf");
     }
+
+
 
 
 
@@ -481,40 +510,95 @@ class BulletinPrintController extends Controller
         ];
     }
 
+    // private function calculerMoyenneTrimestre($inscriptionId, $trimestreId)
+    // {
+    //     // 1. Récupérer les séquences du trimestre
+    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
+
+    //     // 2. Récupérer les notes
+    //     $notes = DB::table('notes')
+    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
+    //         ->where('notes.inscription_id', $inscriptionId)
+    //         ->whereIn('evaluations.sequence_id', $sequences)
+    //         ->select('evaluations.matiere_id', DB::raw('AVG(notes.valeur) as valeur'))
+    //         ->groupBy('evaluations.matiere_id')
+    //         ->get();
+
+    //     // 3. Récupérer les coefficients pour ces matières
+    //     $coeffs = DB::table('moyennes')
+    //         ->where('inscription_id', $inscriptionId)
+    //         ->whereIn('sequence_id', $sequences)
+    //         ->select('matiere_id', 'coefficient')
+    //         ->distinct()
+    //         ->get()
+    //         ->pluck('coefficient', 'matiere_id');
+
+    //     // 4. Calculer
+    //     $totalPoints = 0;
+    //     $totalCoeffs = 0;
+    //     foreach ($notes as $n) {
+    //         $c = $coeffs[$n->matiere_id] ?? 1;
+    //         $totalPoints += $n->valeur * $c;
+    //         $totalCoeffs += $c;
+    //     }
+
+    //     return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0;
+    // }
+
+
+
+
+
+
+
     private function calculerMoyenneTrimestre($inscriptionId, $trimestreId)
     {
-        // 1. Récupérer les séquences du trimestre
+        // 1. Récupérer l'ID de la classe via l'inscription
+        $inscription = DB::table('inscriptions')->where('id', $inscriptionId)->first();
+        if (!$inscription) return 0; // Sécurité : si l'inscription n'existe pas, moyenne 0
+
+        $classeId = $inscription->classe_id;
+
+        // 2. Récupérer les IDs des séquences pour ce trimestre
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
 
-        // 2. Récupérer les notes
+        // Si aucune séquence n'est configurée, on retourne 0 pour éviter la division par zéro
+        if ($sequences->isEmpty()) return 0;
+
+        // 3. Récupérer toutes les matières officielles de la classe avec leurs coefficients
+        $matieres = DB::table('classe_matiere')
+            ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
+            ->where('classe_matiere.classe_id', $classeId)
+            ->select('matieres.id', 'classe_matiere.coefficient')
+            ->get();
+
+        // 4. Récupérer les moyennes de l'élève pour les matières où il a composé
+        // On groupe par matiere_id pour avoir la moyenne de la matière sur toutes les séquences du trimestre
         $notes = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
             ->where('notes.inscription_id', $inscriptionId)
             ->whereIn('evaluations.sequence_id', $sequences)
-            ->select('evaluations.matiere_id', DB::raw('AVG(notes.valeur) as valeur'))
+            ->select('evaluations.matiere_id', DB::raw('AVG(notes.valeur) as moyenne_matiere'))
             ->groupBy('evaluations.matiere_id')
-            ->get();
-
-        // 3. Récupérer les coefficients pour ces matières
-        $coeffs = DB::table('moyennes')
-            ->where('inscription_id', $inscriptionId)
-            ->whereIn('sequence_id', $sequences)
-            ->select('matiere_id', 'coefficient')
-            ->distinct()
             ->get()
-            ->pluck('coefficient', 'matiere_id');
+            ->pluck('moyenne_matiere', 'matiere_id');
 
-        // 4. Calculer
+        // 5. Calcul pondéré
         $totalPoints = 0;
         $totalCoeffs = 0;
-        foreach ($notes as $n) {
-            $c = $coeffs[$n->matiere_id] ?? 1;
-            $totalPoints += $n->valeur * $c;
-            $totalCoeffs += $c;
+
+        foreach ($matieres as $m) {
+            $valeur = $notes->get($m->id, 0); // Si pas de note, on prend 0
+            $totalPoints += $valeur * $m->coefficient;
+            $totalCoeffs += $m->coefficient;
         }
 
-        return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0;
+        return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0; // Division par le total des coefficients
     }
+
+
+
+
 
 
 

@@ -36,7 +36,7 @@
                     <div>
                         <label class="text-[10px] font-black uppercase ml-1">Contact</label>
                         <input type="text" name="contact" required
-                            value="{{ old('contact', $enseignant->user->contact ?? '') }}"
+                            value="{{ old('contact', $enseignant->user->phone ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                 </div>

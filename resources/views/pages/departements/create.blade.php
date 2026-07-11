@@ -26,7 +26,7 @@
                         <div class="md:col-span-2 space-y-2">
                             <label for="nom" class="text-sm font-bold text-foreground ml-1">Nom complet</label>
                             <input type="text" name="nom" id="nom" value="{{ old('nom') }}" required
-                                class="w-full px-4 py-3 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
+                                class="w-full px-4 py-3 bg-secondary border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
                                 placeholder="ex: Département d'Informatique">
                             @error('nom')
                                 <p class="text-xs text-danger mt-1">{{ $message }}</p>
@@ -36,7 +36,7 @@
                         <div class="space-y-2">
                             <label for="code" class="text-sm font-bold text-foreground ml-1">Code (Court)</label>
                             <input type="text" name="code" id="code" value="{{ old('code') }}" required
-                                class="w-full px-4 py-3 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm uppercase"
+                                class="w-full px-4 py-3 bg-secondary border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm uppercase"
                                 placeholder="ex: INFO">
                             @error('code')
                                 <p class="text-xs text-danger mt-1">{{ $message }}</p>
@@ -48,7 +48,7 @@
                         <label for="description" class="text-sm font-bold text-foreground ml-1">Missions du
                             département</label>
                         <textarea name="description" id="description" rows="4"
-                            class="w-full px-4 py-3 bg-secondary/30 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm resize-none"
+                            class="w-full px-4 py-3 bg-secondary border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm resize-none"
                             placeholder="Quelles sont les responsabilités de ce département ?">{{ old('description') }}</textarea>
                     </div>
 
@@ -60,7 +60,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-foreground">Conseil d'expert</h4>
+                            <h4 class="text-xs font-bold text-foreground">Conseil ...</h4>
                             <p class="text-[10px] text-gray-400">Utilisez des codes explicites (ex: MATH, ALL, SVT) pour
                                 faciliter les recherches futures dans les bulletins.</p>
                         </div>
@@ -69,7 +69,7 @@
 
                 <div class="p-6 bg-secondary/30 border-t border-border flex items-center justify-end">
                     <button type="submit"
-                        class="group relative px-10 py-3 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all overflow-hidden">
+                        class="group relative px-10 py-3 bg-primary text-primary-foreground rounded font-bold shadow-lg shadow-primary/20 hover:scale-[1.03] active:scale-[0.97] transition-all overflow-hidden">
                         <span class="relative z-10 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M5 13l4 4L19 7" />

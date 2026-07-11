@@ -466,11 +466,10 @@
             </table>
 
 
-            <table class="table-stats text-center">
+            {{-- <table class="table-stats text-center">
                 <thead>
                     <tr>
-                        {{-- <th width="14%">MOY SEQ 1</th>
-                        <th width="14%">MOY SEQ 2</th> --}}
+                      
                         @foreach ($sequences as $seq)
                             <th width="14%">Moy {{ $seq->nom }}</th>
                         @endforeach
@@ -482,10 +481,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($bulletins as $bulletin) --}}
+              
                     <tr>
                         @php
-                            // Formule stricte : Somme (Note * Coef) / Coefficient Total
+                          
                             $moyenneSeq1Finale =
                                 $totalCoefficientsClasse > 0 ? $totalPointsSeq1 / $totalCoefficientsClasse : 0;
                             $moyenneSeq2Finale =
@@ -498,15 +497,20 @@
 
                         <td>{{ number_format($moyenneSeq2Finale, 2) }}</td>
 
+                        
                         <td style="font-weight: bold; background-color: #f9f9f9;">
                             @php
-
+                          
                                 $moyTrimestre = $totalPointsGlobal / $totalCoeffGlobal;
                             @endphp
                             {{ number_format($moyTrimestre, 2) }}
-                            {{-- {{ number_format($stats['moyenne'], 2) }} --}}
-
                         </td>
+
+
+
+
+
+
 
                         <td style="font-size: 9px;">
                             {{ $b['rang'] }} / {{ count($bulletins) }}
@@ -531,18 +535,66 @@
 
                         <td>{{ number_format($stats['moyenne'], 2) }}
                         </td>
-                        {{-- {{ number_format($stats['moyenne'], 2) }} --}}
+                    
                         <td style="font-size: 8px; font-style: italic;">
                             {{ $moyenneTrimFinale >= 10 ? 'Ne dormez pas, du courage !' : 'Doit redoubler d\'efforts.' }}
                         </td>
                     </tr>
 
 
-                    {{-- @endforeach --}}
+               
 
 
                 </tbody>
+            </table> --}}
+
+
+
+
+            <!-- STATISTIQUES TRIMESTRIELLES -->
+            <table class="table-stats text-center">
+                <thead>
+                    <tr>
+                        <th>MOY TRIM</th>
+                        <th>Rang</th>
+                        <th>Mention</th>
+                        <th>Moy Classe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #f9f9f9;">
+                            {{ number_format($b['moyenne_calculee'], 2) }}
+                        </td>
+                        <td>{{ $b['rang'] }} / {{ $b['totalElevesClasse'] }}</td>
+                        <td>
+                            @php $moy = $b['moyenne_calculee']; @endphp
+                            @if ($moy < 10)
+                                Insuffisant
+                            @elseif ($moy < 12)
+                                Passable
+                            @elseif ($moy < 14)
+                                Assez bien
+                            @elseif ($moy < 16)
+                                Bien
+                            @elseif ($moy < 18)
+                                Très bien
+                            @else
+                                Excellent
+                            @endif
+                        </td>
+                        <td>{{ number_format($stats['moyenne'], 2) }}</td>
+                    </tr>
+                </tbody>
             </table>
+
+
+
+
+
+
+
+
 
 
 
@@ -596,29 +648,21 @@
             </table>
 
             <!-- AJOUTE LE BLOC ICI -->
-            @if (isset($bulletin['moyenne_annuelle']))
-                <table style="width: 100%; margin: 10px 0; border: 1px solid #000; border-collapse: collapse;">
+      @if ($b['est_troisieme_trimestre'])
+                <table style="width:100%; margin:10px 0; border-collapse:collapse;">
                     <tr>
-                        <td style="padding: 10px; font-weight: bold; border: 1px solid #000; width: 30%;">
+                        <td style="padding:10px; font-weight:bold; border:1px solid #000; width:30%;">
                             BILAN ANNUEL :
                         </td>
-                        <td style="padding: 10px; border: 1px solid #000; text-align: left;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>T1: <strong>{{ number_format($bulletin['moyenne_t1'], 2) }}</strong></span>
-                                <span>T2: <strong>{{ number_format($bulletin['moyenne_t2'], 2) }}</strong></span>
-                                <span>T3: <strong>{{ number_format($bulletin['moyenne_calculee'], 2) }}</strong></span>
-                                <span><strong>MOYENNE ANNUELLE : {{ number_format($bulletin['moyenne_annuelle'], 2) }}
-                                        / 20</strong></span>
-                            </div>
-                            <hr>
-                            Décision du Conseil : __________________________
-                            <i style="font-size: 10px;">(À remplir au stylo)</i>
+                        <td style="padding:10px; border:1px solid #000;">
+                            T1: <strong>{{ number_format($b['moyenne_t1'], 2) }}</strong> |
+                            T2: <strong>{{ number_format($b['moyenne_t2'], 2) }}</strong> |
+                            T3: <strong>{{ number_format($b['moyenne_t3'], 2) }}</strong> |
+                            ANNUELLE : <strong>{{ number_format($b['moyenne_annuelle'], 2) }}/20</strong>
                         </td>
                     </tr>
                 </table>
             @endif
-
-         
 
 
 
