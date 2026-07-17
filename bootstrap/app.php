@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'sg'=>SGMiddleware::class,
         ]);
     })
+   
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

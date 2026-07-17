@@ -674,7 +674,7 @@
                     <td width="34%" class="text-center">
                         Nom et visa du Principal<br><br><br><br>
                         <span style="font-weight: normal; font-size: 8px;">Fait à
-                            {{ $etablissement->ville ?? 'Bafoussam' }},
+                            {{ $etablissement->addresse ?? 'Bafoussam' }},
                             le {{ date('d/m/Y') }}</span>
                     </td>
                 </tr>

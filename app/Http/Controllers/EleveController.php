@@ -29,31 +29,31 @@ class EleveController extends Controller
     {
         $this->scolarite = $scolarite;
     }
-  
-  public function index(Request $request, StudentAnalyticsService $analytics)
-{
-    $anneeId = $request->input('annee_id');
-    $anneeActive = $anneeId
-        ? AnneeScolaire::findOrFail($anneeId)
-        : AnneeScolaire::where('est_active', true)->first();
 
-    $stats = $analytics->getFullDashboardStats($anneeActive->id);
+    public function index(Request $request, StudentAnalyticsService $analytics)
+    {
+        $anneeId = $request->input('annee_id');
+        $anneeActive = $anneeId
+            ? AnneeScolaire::findOrFail($anneeId)
+            : AnneeScolaire::where('est_active', true)->first();
 
-    // MODIFICATION ICI : On filtre la requête principale
-    $query = Eleve::whereHas('inscriptions', function ($q) use ($anneeActive) {
-        $q->where('annee_scolaire_id', $anneeActive->id);
-    })->with(['inscriptions' => function ($q) use ($anneeActive) {
-        $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
-    }]);
+        $stats = $analytics->getFullDashboardStats($anneeActive->id);
 
-    // ... tes filtres (Niveau, Classe, Search) restent identiques ...
-    if ($request->filled('niveau_id')) {
-        $query->whereHas('inscriptions.classe', function ($q) use ($request) {
-            $q->where('niveau_id', $request->niveau_id);
-        });
-    }
+        // MODIFICATION ICI : On filtre la requête principale
+        $query = Eleve::whereHas('inscriptions', function ($q) use ($anneeActive) {
+            $q->where('annee_scolaire_id', $anneeActive->id);
+        })->with(['inscriptions' => function ($q) use ($anneeActive) {
+            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
+        }]);
 
-    $eleves = $query->latest()->paginate(5)->withQueryString();
+        // ... tes filtres (Niveau, Classe, Search) restent identiques ...
+        if ($request->filled('niveau_id')) {
+            $query->whereHas('inscriptions.classe', function ($q) use ($request) {
+                $q->where('niveau_id', $request->niveau_id);
+            });
+        }
+
+        $eleves = $query->latest()->paginate(5)->withQueryString();
 
         $niveaux = Niveau::with('classes')->get();
 
@@ -61,7 +61,7 @@ class EleveController extends Controller
     }
 
 
-  private function getKpis($anneeActiveId)
+    private function getKpis($anneeActiveId)
     {
         // On récupère les IDs des élèves inscrits cette année pour filtrer nos stats
         $stats = Inscription::where('annee_scolaire_id', $anneeActiveId)
@@ -388,4 +388,6 @@ class EleveController extends Controller
         // 4. Téléchargement ou affichage
         return $pdf->download('liste_eleves_' . $classe->nom . '.pdf');
     }
+
+    
 }

@@ -9,9 +9,9 @@
         </div>
         <a href="{{ route('admin.enseignants.create') }}"
             class="bg-primary text-white px-6 py-3 rounded-xl font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-        
-            <x-lucide-plus class='mr-2 w-4 h-4'/>
-             Ajouter 
+
+            <x-lucide-plus class='mr-2 w-4 h-4' />
+            Ajouter
         </a>
     </div>
 
@@ -38,9 +38,9 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-black ">{{ $enseignant->user->name }}</p>
-                                    <p class="text-[10px] text-muted-foreground">{{ $enseignant->user->email }}</p>
+                                    <p class="text-[10px] text-muted-foreground">{{ $enseignant->user->phone }}</p>
                                     <p class="text-[10px] italic font-bold text-muted-foreground">
-                                        {{ $enseignant->matricule }}</p>
+                                        {{ $enseignant->user->email }}</p>
                                 </div>
                             </div>
                         </td>
@@ -71,8 +71,8 @@
 
                                 <button type="button" onclick="toggleDropdown(event, this)"
                                     class="p-2 rounded-md text-[var(--secondary-foreground)] hover:bg-[var(--secondary)] transition focus:outline-none relative">
-                               
-                                    
+
+
                                     <x-lucide-more-horizontal class="w-4 h-4" />
                                 </button>
 
@@ -82,15 +82,15 @@
 
                                     <a href="{{ route('admin.enseignants.show', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
-                                
-                                        <x-lucide-eye class='text-[var(--primary)] w-4 h-4'/>
+
+                                        <x-lucide-eye class='text-[var(--primary)] w-4 h-4' />
                                         Voir plus
                                     </a>
 
                                     <a href="{{ route('admin.enseignants.edit', $enseignant) }}"
                                         class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
-                         
-                                        <x-lucide-edit class='text-[var(--primary)] w-4 h-4'/>
+
+                                        <x-lucide-edit class='text-[var(--primary)] w-4 h-4' />
                                         Éditer
                                     </a>
 
@@ -102,7 +102,7 @@
                                         <button type="submit"
                                             onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
                                             class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
-                                       
+
                                             <x-lucide-trash class='w-4 h-4' />
                                             Supprimer
                                         </button>

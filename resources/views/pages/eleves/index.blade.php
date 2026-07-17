@@ -38,12 +38,12 @@
 
                         <a href="{{ route('admin.students.create') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
-                           <x-lucide-plus class="w-4 h-4" /> Add student
+                            <x-lucide-plus class="w-4 h-4" /> Add student
                         </a>
 
-                        <a href="#"
+                        <a href="{{ route('admin.students.export') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
-                           <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
+                            <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
                         </a>
 
                         {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
@@ -256,7 +256,8 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2 text-foreground/30">
                                         <a href="{{ route('admin.students.show', $eleve) }}"
-                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye class="w-4 h-4" /></a>
+                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
+                                                class="w-4 h-4" /></a>
                                         <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
                                             onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                             @csrf
@@ -266,7 +267,8 @@
                                             </button>
                                         </form>
                                         <a title="Modifier les informations de l'élève"
-                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit class="w-4 h-4" /></a>
+                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit
+                                                class="w-4 h-4" /></a>
                                     </div>
                                 </td>
                             </tr>

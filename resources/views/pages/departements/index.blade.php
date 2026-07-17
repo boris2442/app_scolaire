@@ -12,6 +12,11 @@
             <x-lucide-plus class="w-4 h-4 mr-2" />
             Ajouter un Département
         </a>
+        <a href="{{ route('admin.departments.export') }}"
+            class="inline-flex items-center px-6 py-3 bg-primary text-white rounded font-bold text-sm tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all mb-6">
+            <x-lucide-file-up class="w-4 h-4 mr-2" />
+            Exporter en excel
+        </a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ($departements as $dept)

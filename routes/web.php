@@ -18,6 +18,8 @@ use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Exports\DepartmentExportController;
+use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ParametreAcademiqueController;
@@ -38,7 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('welcome-dashboard', [AfterLoginController::class, 'index'])->name('after.login.page');
-
+    Route::get('admin/students/export/', [StudentControllerExport::class, 'export'])->name('admin.students.export');
+    Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
+    
 
     //Rou globale configuration middleware admin
     Route::middleware('admin')->group(function () {
