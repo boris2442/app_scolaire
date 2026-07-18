@@ -74,7 +74,7 @@
                                     <button type="submit" title="Supprimer définitivement"
                                         class="p-2 bg-red-500/10 text-red-600 rounded-lg hover:bg-red-500 hover:text-white transition-all">
                                         {{-- <i class="fas fa-fire"></i> --}}
-                                        <x-lucide-fire class='w-4 h-4 inline-block mr-1' />
+                                        
                                     </button>
                                 </form>
                             </div>
