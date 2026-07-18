@@ -19,7 +19,9 @@ use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\Exports\DepartmentExportController;
+use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
+use App\Http\Controllers\Exports\TeacherExportController;
 use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ParametreAcademiqueController;
@@ -42,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('welcome-dashboard', [AfterLoginController::class, 'index'])->name('after.login.page');
     Route::get('admin/students/export/', [StudentControllerExport::class, 'export'])->name('admin.students.export');
     Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
+    Route::get('admin/inscriptions/export/', [ExportInscriptionController::class, 'export'])->name('admin.inscriptions.export');
+    Route::get('admin/teachers/export/', [TeacherExportController::class, 'export'])->name('admin.teachers.export');
     
 
     //Rou globale configuration middleware admin

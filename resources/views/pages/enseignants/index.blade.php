@@ -1,18 +1,25 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
-    <div class="flex justify-between items-center mb-8">
+    <div class="">
         <div>
             <h1 class="text-xl font-black  text-foreground">Personnel Enseignant</h1>
             <p class="text-[10px] text-muted-foreground font-bold  tracking-widest">Gestion des comptes et profils
                 instructeurs</p>
         </div>
-        <a href="{{ route('admin.enseignants.create') }}"
-            class="bg-primary text-white px-6 py-3 rounded-xl font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+        <div class="flex gap-3">
+            <a href="{{ route('admin.teachers.export') }}"
+                class="bg-primary text-white px-6 py-3 rounded font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all flex">
+                <x-lucide-download class='mr-2 w-4 h-4' />
+                <span class="hidden sm:inline">Exporter en Excel</span>
+            </a>
+            <a href="{{ route('admin.enseignants.create') }}"
+                class="bg-primary text-white px-6 py-3 rounded font-black  text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all flex">
+                <x-lucide-plus class='mr-2 w-4 h-4' />
+                <span class="hidden sm:inline">Nouveau</span>
 
-            <x-lucide-plus class='mr-2 w-4 h-4' />
-            Ajouter
-        </a>
+            </a>
+        </div>
     </div>
 
     <div class="bg-card rounded-2xl border border-border shadow-sm">

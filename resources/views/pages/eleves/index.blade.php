@@ -45,6 +45,10 @@
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
                         </a>
+                        <a href="{{ route('admin.inscriptions.export') }}"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
+                            <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel les inscrits
+                        </a>
 
                         {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
                         @if (request()->filled('classe_id'))

@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Affectation extends Model
 {
     protected $fillable = [
-      'enseignant_id', 
-        'matiere_id', 
-        'classe_id', 
-        'niveau_id', 
+        'enseignant_id',
+        'matiere_id',
+        'classe_id',
+        'niveau_id',
         'annee_scolaire_id'
     ];
     public function enseignant()
