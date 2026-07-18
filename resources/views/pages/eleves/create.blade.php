@@ -28,7 +28,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <x-lucide-user-graduate class="w-4 h-4" /> État Civil de l'Élève
+                        État Civil de l'Élève
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -101,11 +101,14 @@
 
                             <div class="border border-gray-300 rounded-lg px-4 py-3 h-[50px] flex items-center">
                                 <div class="flex items-center gap-6">
+                                    <!-- Option Nouvel élève corrigée -->
                                     <label class="flex items-center gap-2 cursor-pointer">
-                                        <x-lucide-circle class="w-4 h-4 text-primary" />
+                                        <input type="radio" name="est_redoublant" value="0"
+                                            class="w-4 h-4 text-primary" checked>
                                         <span class="text-sm text-gray-600">Nouvel élève</span>
                                     </label>
 
+                                    <!-- Option Redoublant -->
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="radio" name="est_redoublant" value="1"
                                             class="w-4 h-4 text-primary">
@@ -177,7 +180,7 @@
 
                     <div class="mt-8 border-t border-border pt-6">
                         <button type="submit"
-                            class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs tracking-widest">
+                            class="w-full bg-primary text-white font-black py-4 rounded shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs tracking-widest">
                             Valider l'Inscription
                         </button>
                     </div>

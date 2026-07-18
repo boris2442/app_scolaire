@@ -30,7 +30,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
-                        <x-lucide-user-graduate class="w-4 h-4" /> État Civil de l'Élève
+                    État Civil de l'Élève
                     </h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

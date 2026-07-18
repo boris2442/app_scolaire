@@ -34,7 +34,7 @@
 
             <div class="flex items-center space-x-4">
                 @auth
-                    <a href="{{ auth()->user()->dashboardRoute() }}"
+                    <a href="{{ route('after.login.page') }}"
                         class="text-sm font-semibold text-foreground hover:text-primary transition-colors mr-2">
                         Espace Gestion
                     </a>
@@ -75,11 +75,8 @@
                 </p>
                 <div class="flex justify-center lg:justify-start pt-2">
                     @auth
-                        {{-- <a href="{{ route('admin.statistiques.index') }}"
-                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
-                            Accéder à l'Espace Administration
-                        </a> --}}
-                        <a href="{{ auth()->user()->dashboardRoute() }}"
+                       
+                        <a href="{{ route('after.login.page')}}"
                             class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
                             Espace Gestion
                         </a>

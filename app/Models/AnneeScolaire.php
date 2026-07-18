@@ -26,4 +26,12 @@ class AnneeScolaire extends Model
         self::where('id', '!=', $this->id)->update(['est_active' => false]);
         $this->update(['est_active' => true]);
     }
+
+    /**
+     * Obtenir les bilans associés à cette année scolaire.
+     */
+    public function bilans()
+    {
+        return $this->hasMany(Bilan::class, 'annee_scolaire_id');
+    }
 }

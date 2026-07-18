@@ -63,8 +63,9 @@
                 </div>
 
                 <button
-                    class="w-full bg-primary text-white text-sm font-bold py-2 rounded-lg hover:opacity-90 transition-all">
-                    <x-lucide-plus class="w-4 h-4 mr-2" /> Créer l'année
+                    class="w-full bg-primary text-white text-sm font-bold py-2 rounded hover:opacity-90 transition-all flex items-center justify-center">
+                    <x-lucide-plus class="w-4 h-4 mr-2" />
+                    <span> Créer l'année</span>
                 </button>
             </form>
         </div>
