@@ -11,6 +11,7 @@ use App\Http\Controllers\AfterLoginController;
 use App\Http\Controllers\AnneeScolaireController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
+use App\Http\Controllers\CreneauController;
 use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DisciplineController;
@@ -26,8 +27,11 @@ use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ParametreAcademiqueController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeanceController;
 use App\Http\Controllers\TrimestreController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\SGMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +40,28 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    // Créneaux horaires
+    Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
+    Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
+
+    // Emplois du temps
+    Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
+    Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
+    Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
+});
+
+
+
+
+
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,7 +72,10 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
     Route::get('admin/inscriptions/export/', [ExportInscriptionController::class, 'export'])->name('admin.inscriptions.export');
     Route::get('admin/teachers/export/', [TeacherExportController::class, 'export'])->name('admin.teachers.export');
-    
+
+
+
+
 
     //Rou globale configuration middleware admin
     Route::middleware('admin')->group(function () {
@@ -268,4 +297,8 @@ Route::middleware('auth')->group(function () {
             ->name('admin.parametres-classes.store');
     });
 });
+
+
+
+
 require __DIR__ . '/auth.php';

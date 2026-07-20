@@ -15,11 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Save Middleware
         $middleware->alias([
-            'admin' => AdminMiddleware::class, 
-            'sg'=>SGMiddleware::class,
+            'admin' => AdminMiddleware::class,
+            'sg' => SGMiddleware::class,
         ]);
     })
-   
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

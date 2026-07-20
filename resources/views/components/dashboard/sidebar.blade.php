@@ -5,7 +5,7 @@
     <div class="absolute top-6 -right-3 hidden md:block">
         <button id="toggle-collapse"
             class="flex items-center justify-center w-6 h-6 rounded-full border border-border bg-primary text-primary-foreground shadow-sm hover:scale-110 transition-transform">
-        
+
             <x-lucide-chevron-left class="w-4 h-4" id="collapse-icon" />
         </button>
     </div>
@@ -94,7 +94,7 @@
                         <span class="sidebar-label ml-3">Affectation</span>
                     </a>
                 </li>
-               
+
                 <li>
                     <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
                         aria-label="Calcul des Résultats"
@@ -111,6 +111,13 @@
                         <span class="sidebar-label ml-3">Statistiques</span>
                     </a>
                 </li>
+                {{-- <li>
+                    <a href="{{ route('emplois.index') }}" title="Emplois de temps" aria-label="Emplois de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('emplois.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-bar-chart-2 class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Gestion des EDT</span>
+                    </a>
+                </li> --}}
                 <li>
                     <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -118,10 +125,11 @@
                         <span class="sidebar-label ml-3">Départements</span>
                     </a>
                 </li>
-                
+
 
                 <li>
-                    <a href="{{ route('admin.parametres-classes.index') }}" title="Paramètre notes fin d'année" aria-label="Paramètre notes fin d'année"
+                    <a href="{{ route('admin.parametres-classes.index') }}" title="Paramètre notes fin d'année"
+                        aria-label="Paramètre notes fin d'année"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.parametres-classes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-settings class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Paramètre notes fin d'année</span>
@@ -138,7 +146,7 @@
                 <li>
                     <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-user class="w-4 h-4 text-center"/>
+                        <x-lucide-user class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Enseignants</span>
                     </a>
                 </li>
@@ -180,7 +188,7 @@
                     </a>
                 </li>
             @endcan
-        
+
 
 
 

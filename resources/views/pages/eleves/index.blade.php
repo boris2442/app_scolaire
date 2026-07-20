@@ -225,7 +225,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
                                         <div
-                                            class="h-10 w-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center  text-sm border border-primary/20">
+                                            class="h-5 w-5 bg-primary/10 text-primary rounded-full flex items-center justify-center  text-sm border border-primary/20">
                                             {{ strtoupper(substr($eleve->nom, 0, 1)) }}{{ strtoupper(substr($eleve->prenom, 0, 1)) }}
                                         </div>
                                         <div>
@@ -242,7 +242,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-6 py-2 text-center">
                                     <span class="px-2 py-1 bg-secondary rounded text-[10px] ">{{ $eleve->sexe }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
@@ -257,8 +257,9 @@
                                             attente</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex justify-end gap-2 text-foreground/30">
+                                <td class="px-6 py-2 text-right">
+                                    <div class="flex justify-center items-center gap-2 text-foreground/30">
+                                        
                                         <a href="{{ route('admin.students.show', $eleve) }}"
                                             title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>
@@ -267,7 +268,8 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700">
-                                                <x-lucide-trash-2 class="w-4 h-4" /> Archiver
+                                                <x-lucide-trash-2 class="w-4 h-4" />
+                                                {{-- Archiver --}}
                                             </button>
                                         </form>
                                         <a title="Modifier les informations de l'élève"

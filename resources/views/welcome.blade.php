@@ -7,6 +7,20 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <script>
+        (function() {
+            const theme = localStorage.getItem('color-theme') ||
+                (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches ?
+                    'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -58,7 +72,7 @@
     <main class="flex-grow">
 
         <section
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 flex flex-col lg:flex-row items-center gap-12">
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 flex flex-col lg:flex-row items-center gap-12 ">
             <div class="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
                 <span
                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary tracking-wide ">

@@ -12,11 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // On crée une colonne de type ENUM
-            // 'after' permet de placer la colonne juste après l'email dans PHPMyAdmin
-            $table->enum('role', ['admin', 'enseignant', 'secretaire'])
+            $table->enum('role', [
+                'admin',
+                'enseignant',
+                'secretaire',
+                'parent',
+                'eleve',
+                'surveillantGeneral'
+            ])
                 ->default('enseignant')
-                ->after('email');
+                ->change();
         });
     }
 
@@ -26,8 +31,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Si on annule la migration, on supprime la colonne role
-            $table->dropColumn('role');
+            //
         });
     }
 };
