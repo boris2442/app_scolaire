@@ -43,17 +43,21 @@ Route::get('/dashboard', function () {
 
 
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    // Créneaux horaires
-    Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
-    Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    // Emplois du temps
-    Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
-    Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
-    Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
-});
+        // Créneaux horaires
+        Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
+        Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
+        Route::delete('/creneaux/{creneau}', [CreneauController::class, 'destroy'])->name('creneaux.destroy');
 
+        // Emplois du temps
+        Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
+        Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
+        Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
+    });
 
 
 

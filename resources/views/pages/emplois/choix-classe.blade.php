@@ -1,21 +1,56 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">Gestion des Emplois du Temps - Choix de la classe</h1>
+    <div class="container mx-auto p-6 bg-background text-foreground min-h-screen">
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        @foreach($classes as $classe)
-            <div class="bg-white p-4 rounded-lg shadow border border-gray-200 flex justify-between items-center">
-                <div>
-                    <h2 class="font-bold text-lg text-gray-800">{{ $classe->nom }}</h2>
-                    <p class="text-sm text-gray-500">Niveau : {{ $classe->niveau->nom ?? 'Standard' }}</p>
+        <!-- En-tête -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-primary">
+                Gestion des Emplois du Temps
+            </h1>
+
+            <p class="mt-2 text-sm text-foreground/70">
+                Choisissez une classe pour consulter ou modifier son emploi du temps.
+            </p>
+        </div>
+
+        <!-- Liste des classes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+            @foreach ($classes as $classe)
+                <div
+                    class="bg-card text-card-foreground border border-border rounded-xl shadow-lg p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div>
+
+                            <h2 class="text-xl font-semibold text-primary">
+                                {{ $classe->nom }}
+                            </h2>
+
+                            <p class="mt-2 text-sm text-foreground/70">
+                                Niveau :
+                                <span class="font-medium">
+                                    {{ $classe->niveau->nom ?? 'Standard' }}
+                                </span>
+                            </p>
+
+                        </div>
+
+                        <a href="{{ route('admin.emplois.classe', $classe->id) }}"
+                            class="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow transition-all duration-300 hover:opacity-90 hover:scale-105">
+
+                            Ouvrir
+
+                        </a>
+
+                    </div>
+
                 </div>
-                <a href="{{ route('emplois.classe', $classe->id) }}" class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-                    Ouvrir
-                </a>
-            </div>
-        @endforeach
+            @endforeach
+
+        </div>
+
     </div>
-</div>
 @endsection

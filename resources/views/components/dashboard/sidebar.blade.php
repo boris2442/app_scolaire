@@ -125,6 +125,22 @@
                         <span class="sidebar-label ml-3">Départements</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.creneaux.index') }}" title="Creneaux emploies de temps"
+                        aria-label="Creneaux emploies de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.creneaux.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-clock class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Creneaux</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.emplois.classes') }}" title=" emploies de temps"
+                        aria-label=" emploies de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.emplois.classes') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-clock class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Emploies de temp classes</span>
+                    </a>
+                </li>
 
 
                 <li>

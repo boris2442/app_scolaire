@@ -13,7 +13,7 @@ class CreneauController extends Controller
     public function index()
     {
         $creneaux = Creneau::orderBy('heure_debut')->get();
-        return view('creneaux.index', compact('creneaux'));
+        return view('pages.creneaux.index', compact('creneaux'));
     }
 
     // Enregistrer un nouveau créneau horaire
@@ -28,5 +28,13 @@ class CreneauController extends Controller
         Creneau::create($validated);
 
         return redirect()->back()->with('success', 'Créneau horaire ajouté avec succès.');
+    }
+    // Supprimer un créneau
+    public function destroy($id)
+    {
+        $creneau = Creneau::findOrFail($id);
+        $creneau->delete();
+
+        return redirect()->route('creneaux.index')->with('success', 'Créneau supprimé avec succès.');
     }
 }
