@@ -12,7 +12,9 @@ use App\Models\Matiere;
 use App\Models\Seance;
 use App\Models\User;
 use App\Services\ScolariteService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SeanceController extends Controller
 {
@@ -101,4 +103,61 @@ class SeanceController extends Controller
         $classes = Classe::with('niveau')->orderBy('nom')->get();
         return view('pages.emplois.choix-classe', compact('classes'));
     }
+
+
+
+
+
+
+
+
+
+    // Afficher l'emploi du temps d'un enseignant spécifique
+    public function showByEnseignant($userId)
+    {
+        $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
+        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+        // Ajout de 'classe.niveau' dans les relations chargées
+        $seances = Seance::with(['matiere', 'classe.niveau', 'jour', 'creneau'])
+            ->where('enseignant_id', $userId)
+            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->get();
+
+        $jours = Jour::orderBy('ordre')->get();
+        $creneaux = Creneau::orderBy('heure_debut')->get();
+
+        // Optionnel : Calcul du volume horaire total (en comptant la durée des créneaux)
+        // On pourra aussi l'utiliser pour la suite
+
+        return view('pages.emplois.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'));
+    }
+
+
+
+
+// Télécharger l'emploi du temps de l'enseignant en PDF
+public function telechargerPdfEnseignant($userId)
+{
+    $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
+    $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+    $seances = Seance::with(['matiere', 'classe.niveau', 'jour', 'creneau'])
+        ->where('enseignant_id', $userId)
+        ->where('annee_scolaire_id', $anneeActive?->id)
+        ->get();
+
+    $jours = Jour::orderBy('ordre')->get();
+    $creneaux = Creneau::orderBy('heure_debut')->get();
+
+    // On charge une vue spécifique pour le PDF (ou tu ajustes l'existante)
+    $pdf = Pdf::loadView('pages.emplois.pdf.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'))
+              ->setPaper('a4', 'landscape'); // Format paysage conseillé pour les emplois du temps
+
+    return $pdf->download('emploi-du-temps-' . Str::slug($enseignant->name) . '.pdf');
+}
+
+
+
+
 }

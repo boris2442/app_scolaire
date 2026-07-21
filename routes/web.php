@@ -58,7 +58,10 @@ Route::middleware(['auth'])
         Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
         Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
     });
+Route::get('/emplois/enseignant/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
+// Emploi du temps de l'enseignant (Téléchargement PDF)
+    Route::get('/emplois/enseignant/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
 
 

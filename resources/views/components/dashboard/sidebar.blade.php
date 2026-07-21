@@ -203,6 +203,16 @@
                         <span class="sidebar-label ml-3">Progression saisie</span>
                     </a>
                 </li>
+                <li>
+           
+                    <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Emploi du temps"
+                        aria-label="Emploi du temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('emplois.enseignant') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-user class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Mon Emploi du temps</span>
+                    </a>
+                </li>
+            
             @endcan
 
 
