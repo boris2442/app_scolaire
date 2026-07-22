@@ -56,6 +56,8 @@ Route::middleware(['auth'])
         // Emplois du temps
         Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
         Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
+
+        Route::get('/emplois/classe/{classeId}/pdf', [SeanceController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
         Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
     });
 Route::get('/emplois/enseignant/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');

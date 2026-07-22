@@ -3,15 +3,49 @@
 @section('content')
     <div class="container mx-auto  bg-background text-foreground min-h-screen">
 
+        <!-- Bouton Retour -->
+        <div class="mb-4">
+            <a href="{{ route('admin.emplois.classes') }}"
+            title="retour"
+                class="inline-flex items-center gap-2 text-xs font-bold text-primary hover:opacity-85 transition-opacity bg-white/5 border border-white/10 px-3 py-2 rounded-xl">
+                <span>←</span> Retour aux classes
+            </a>
+        </div>
+
         <!-- Titre -->
-        <div class="mb-8">
+        {{-- <div class="mb-8">
             <h1 class="text-3xl font-bold text-primary">
-                Emploi du temps : {{ $classe->nom }}
+                Emploi du temps : {{ $classe->niveau->nom ?? '' }} {{ $classe->nom }}
             </h1>
+
+            <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
+                <span>Télécharger en PDF</span>
+            </a>
+
+
             <p class="text-sm text-foreground/70 mt-1">
                 Gérez et organisez les séances de cette classe.
             </p>
+        </div> --}}
+
+<div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">        Emploi du temps : {{ $classe->niveau->nom ?? '' }} {{ $classe->nom }}</h1>
+
+            <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank"
+                title="telechager le document pdf"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
+                <span>Télécharger en PDF</span>
+            </a>
         </div>
+
+<div class="">
+      <p class="text-sm text-foreground/70 mt-1">
+                Gérez et organisez les séances de cette classe.
+            </p>
+</div>
+
+
 
         <!-- Message succès -->
         @if (session('success'))
@@ -151,6 +185,16 @@
                     </button>
 
                 </div>
+                {{-- <div>
+
+                    <a href="{{ route('admin.emplois.classe.pdf') }}"
+                        class="w-full rounded-lg bg-primary text-primary-foreground py-3 font-semibold shadow transition duration-300 hover:opacity-90 hover:scale-[1.02]">
+
+                        download
+
+                    </a>
+
+                </div> --}}
 
             </form>
 

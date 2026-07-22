@@ -18,6 +18,7 @@
             <h1 class="text-2xl font-bold">Emploi du temps de l'enseignant : {{ $enseignant->name }}</h1>
 
             <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}"
+                title="telecharger le document pdf"
                 class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
                 <span>Télécharger en PDF</span>
             </a>

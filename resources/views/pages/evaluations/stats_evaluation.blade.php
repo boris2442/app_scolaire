@@ -52,8 +52,14 @@
 
     <table class="info-table">
         <tr>
-            <td><strong>Classe :</strong> {{ $evaluation->classe->nom }}</td>
-            <td><strong>Matière :</strong> {{ $evaluation->matiere->nom }}</td>
+            <td><strong>
+
+                    Niveau:</strong> {{ $evaluation->classe->niveau->nom ?? ''}}
+
+                Classe :</strong> {{ $evaluation->classe->nom }}
+            </td>
+            <td>
+                <strong>Matière :</strong> {{ $evaluation->matiere->nom }}</td>
         </tr>
         <tr>
             <td><strong>Enseignant :</strong> {{ $evaluation->enseignant->user->name ?? 'N/A' }}</td>

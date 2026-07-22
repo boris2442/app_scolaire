@@ -22,6 +22,16 @@
                 <span>Classe: {{ $evaluation->classe->nom }}</span>
                 <span>Matière: {{ $evaluation->matiere->nom }}</span>
             </div>
+            <div>
+                <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}"
+                    class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black  p-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 gap-2 mb-2 flex justify-center items-center  overflow-hidden group-hover:max-w-[200px] group-hover:px-4 group-hover:py-2 max-w-[400px]">
+                    {{-- <i class="fas fa-file-pdf"></i> --}}
+                    <x-lucide-file-text class='w-4 h-4' />
+                    <span>
+                        Télécharger les stats
+                    </span>
+                </a>
+            </div>
         </div>
 
         <form action="{{ route('admin.evaluations.bulk-store', $evaluation->id) }}" method="POST">
@@ -30,13 +40,17 @@
             {{-- CONTENEUR MAGIQUE POUR LE SCROLL MOBILE --}}
             <div class="bg-secondary/10 border border-white/5 rounded-3xl overflow-hidden">
                 <div class="overflow-x-auto"> {{-- Permet le défilement horizontal --}}
-                    <table class="w-full text-left border-collapse min-w-[700px]"> {{-- Force la largeur minimum --}}
+                    <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="text-primary  text-[10px] tracking-widest border-b border-white/10 bg-white/5">
-                                <th class="p-4 text-center w-20">Matricule</th>
-                                <th class="p-4">Nom de l'élève</th>
-                                <th class="p-4 w-32 text-center">Note / 20</th>
-                                <th class="p-4 w-64">Observation</th>
+                            <tr class="text-primary text-[10px] tracking-widest border-b border-white/10 bg-white/5">
+                                {{-- On fixe une petite largeur pour le numéro --}}
+                                <th class="py-3 px-4 text-center w-16">Numero</th>
+
+                                {{-- Le nom prend tout l'espace nécessaire mais sans s'étirer à l'infini --}}
+                                <th class="py-3 px-4">Nom de l'élève</th>
+
+                                {{-- On donne une largeur fixe raisonnable à la colonne de la note (ex: w-32 ou w-40) --}}
+                                <th class="py-3 px-4 text-center w-36">Note / 20</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
@@ -45,30 +59,20 @@
                                     $maNote = $notesExistantes->get((int) $inscription->id);
                                 @endphp
                                 <tr class="hover:bg-white/5 transition-colors">
-                                    <td class="p-4 text-center font-mono text-[10px] ">
-                                        {{ $inscription->eleve->matricule }}
+                                    <td class="py-3 px-4 text-center font-mono text-[10px]">
+                                        {{ $loop->iteration }}
                                     </td>
-                                    <td class="p-4 font-bold text-xs uppercase ">
+
+                                    <td class="py-3 px-4 font-bold text-xs uppercase">
                                         {{ $inscription->eleve->nom }} {{ $inscription->eleve->prenom }}
                                     </td>
-                                    <td class="p-4">
+
+                                    <td class="py-3 px-4 text-center">
                                         <input type="number" step="0.25" name="notes[{{ $inscription->id }}][valeur]"
                                             value="{{ $maNote->valeur ?? '' }}"
-                                            class="w-full bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
+                                            class="w-24 mx-auto bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded px-2 py-1.5 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all block"
                                             placeholder="--">
                                     </td>
-                                    {{-- <td class="p-4 text-right">
-                                      
-                                        <select name="notes[{{ $inscription->id }}][observation]" ...>
-                                            <option value="">-- Appréciation --</option>
-                                            @foreach (\App\Models\Note::APPRECIATIONS as $code => $libelle)
-                                                <option value="{{ $code }}"
-                                                    {{ ($maNote->observation ?? '') == $code ? 'selected' : '' }}>
-                                                    {{ $libelle }} ({{ $code }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -77,23 +81,18 @@
             </div>
 
             {{-- Bouton d'enregistrement --}}
-            <div class="mt-8 flex justify-center">
+            {{-- Barre d'actions fixe en bas de l'écran --}}
+            <div
+                class="sticky bottom-4 z-20 mt-8 flex justify-center bg-secondary/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-2xl">
                 <button type="submit"
-                    class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black px-12 py-4 rounded-2xl uppercase text-xs transition-all shadow-xl shadow-primary/20 flex items-center gap-2">
+                    class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black px-12 py-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 flex items-center gap-2">
                     <span>💾</span> Enregistrer les notes
                 </button>
             </div>
         </form>
 
     </div>
-    <div class=''>
-        <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}"
-            class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black  p-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 gap-2 mb-2">
-            {{-- <i class="fas fa-file-pdf"></i> --}}
-            <x-lucide-file-text class='w-4 h-4' />
-             Télécharger les stats
-        </a>
-    </div>
+
     <script>
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {

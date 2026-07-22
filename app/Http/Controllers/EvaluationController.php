@@ -71,9 +71,19 @@ class EvaluationController extends Controller
     {
         $evaluation = Evaluation::with('classe.niveau', 'matiere', 'sequence')->findOrFail($id);
 
+        // $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+        //     ->with('eleve')
+        //     ->get();
+
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
             ->with('eleve')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->orderBy('eleves.nom', 'asc')
+            ->orderBy('eleves.prenom', 'asc')
+            ->select('inscriptions.*') // Évite les conflits de colonnes si les tables partagent des noms identiques (comme 'id' ou 'created_at')
             ->get();
+
+
 
         // On force l'indexation par l'ID d'inscription en tant qu'entier
         $notesExistantes = Note::where('evaluation_id', $id)
@@ -117,7 +127,7 @@ class EvaluationController extends Controller
     }
 
 
-
+    //function pour enregistrer les notes en masse
     public function bulkStoreNotes(Request $request, $id)
     {
 

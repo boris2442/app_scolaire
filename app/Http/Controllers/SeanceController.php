@@ -7,6 +7,7 @@ use App\Models\AnneeScolaire;
 use App\Models\Classe;
 use App\Models\Creneau;
 use App\Models\Enseignant;
+use App\Models\Etablissement;
 use App\Models\Jour;
 use App\Models\Matiere;
 use App\Models\Seance;
@@ -14,15 +15,17 @@ use App\Models\User;
 use App\Services\ScolariteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SeanceController extends Controller
 {
     // Afficher l'emploi du temps d'une classe spécifique
-    // Afficher l'emploi du temps d'une classe spécifique
+
     public function showByClasse($classeId)
     {
-        $classe = Classe::findOrFail($classeId);
+        // $classe = Classe::findOrFail($classeId);
+        $classe = Classe::with('niveau')->findOrFail($classeId);
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
 
         // Récupérer toutes les séances de cette classe pour l'année en cours
@@ -36,7 +39,7 @@ class SeanceController extends Controller
 
         // 1. Récupérer uniquement les matières de cette classe via la table pivot classe_matiere
         // (Adapte le nom de la table pivot si elle s'appelle différemment, ex: classe_matiere ou matieres_classes)
-        $matieresIds = \Illuminate\Support\Facades\DB::table('classe_matiere')
+        $matieresIds = DB::table('classe_matiere')
             ->where('classe_id', $classeId)
             ->pluck('matiere_id');
 
@@ -46,7 +49,7 @@ class SeanceController extends Controller
             ->get();
 
         // 2. Récupérer uniquement les enseignants affectés à cette classe (via la table affectations)
-        $enseignantsIds = \Illuminate\Support\Facades\DB::table('affectations')
+        $enseignantsIds = DB::table('affectations')
             ->where('classe_id', $classeId)
             ->when($anneeActive, function ($q) use ($anneeActive) {
                 return $q->where('annee_scolaire_id', $anneeActive->id);
@@ -98,6 +101,42 @@ class SeanceController extends Controller
         return redirect()->back()->with('success', 'Séance planifiée avec succès.');
     }
 
+    //use Barryvdh\DomPDF\Facade\Pdf; // Si tu utilises le package barryvdh/laravel-dompdf
+
+    public function telechargerPdfClasse($classeId)
+    {
+        $classe = Classe::with('niveau')->findOrFail($classeId);
+        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+
+        // Récupération de l'établissement (prend le premier enregistrement de la table)
+        $etablissement = Etablissement::first();
+
+
+        // Même récupération des données
+        $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
+            ->where('classe_id', $classeId)
+            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->get();
+
+        $jours = Jour::orderBy('ordre')->get();
+        $creneaux = Creneau::orderBy('heure_debut')->get();
+
+        // Charger la vue PDF dédiée
+        $pdf = Pdf::loadView('pages.emplois.pdf.classe-pdf', compact('classe', 'seances', 'jours', 'creneaux', 'anneeActive', 'etablissement'));
+
+        // Optionnel : format Paysage (Landscape) car un emploi du temps est souvent large
+        $pdf->setPaper('A4', 'landscape');
+
+        // Télécharger ou afficher dans le navigateur
+        // return $pdf->stream("emploi-du-temps-{$classe->nom}.pdf");
+        return $pdf->download("emploi-du-temps-{$classe->nom}.pdf");
+    }
+
+
+
+
+
+
     public function indexClasses()
     {
         $classes = Classe::with('niveau')->orderBy('nom')->get();
@@ -136,28 +175,24 @@ class SeanceController extends Controller
 
 
 
-// Télécharger l'emploi du temps de l'enseignant en PDF
-public function telechargerPdfEnseignant($userId)
-{
-    $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
-    $anneeActive = AnneeScolaire::where('est_active', true)->first();
+    // Télécharger l'emploi du temps de l'enseignant en PDF
+    public function telechargerPdfEnseignant($userId)
+    {
+        $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
+        $anneeActive = AnneeScolaire::where('est_active', true)->first();
 
-    $seances = Seance::with(['matiere', 'classe.niveau', 'jour', 'creneau'])
-        ->where('enseignant_id', $userId)
-        ->where('annee_scolaire_id', $anneeActive?->id)
-        ->get();
+        $seances = Seance::with(['matiere', 'classe.niveau', 'jour', 'creneau'])
+            ->where('enseignant_id', $userId)
+            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->get();
 
-    $jours = Jour::orderBy('ordre')->get();
-    $creneaux = Creneau::orderBy('heure_debut')->get();
+        $jours = Jour::orderBy('ordre')->get();
+        $creneaux = Creneau::orderBy('heure_debut')->get();
 
-    // On charge une vue spécifique pour le PDF (ou tu ajustes l'existante)
-    $pdf = Pdf::loadView('pages.emplois.pdf.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'))
-              ->setPaper('a4', 'landscape'); // Format paysage conseillé pour les emplois du temps
+        // On charge une vue spécifique pour le PDF (ou tu ajustes l'existante)
+        $pdf = Pdf::loadView('pages.emplois.pdf.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'))
+            ->setPaper('a4', 'landscape'); // Format paysage conseillé pour les emplois du temps
 
-    return $pdf->download('emploi-du-temps-' . Str::slug($enseignant->name) . '.pdf');
-}
-
-
-
-
+        return $pdf->download('emploi-du-temps-' . Str::slug($enseignant->name) . '.pdf');
+    }
 }
