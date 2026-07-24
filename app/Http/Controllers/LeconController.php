@@ -21,6 +21,7 @@ class LeconController extends Controller
         // On passe les variables attendues par la vue
         return view('pages.lecons.index', compact('lessons', 'subjectId', 'classRoomId'));
     }
+    
     public function store(Request $request)
     {
         $request->validate([

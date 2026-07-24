@@ -115,7 +115,8 @@
                                                 <div class="mt-3 pt-2 border-t border-primary/20">
                                                     <a href="{{ route('lessons.index', ['subjectId' => $seance->matiere_id, 'classRoomId' => $seance->classe_id]) }}"
                                                         class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline">
-                                                        📚 Gérer le programme
+                                                        <x-lucide-book-open class="w-4 h-4" />
+                                                        Gérer le programme
                                                     </a>
                                                 </div>
                                             </div>
