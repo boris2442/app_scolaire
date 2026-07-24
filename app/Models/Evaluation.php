@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Classe;
+use App\Models\Lecon;
 use App\Models\Matiere;
 use App\Models\Note;
 use App\Models\Sequence;
@@ -37,22 +38,28 @@ class Evaluation extends Model
 
     // Dans app/Models/Evaluation.php
 
-// public function enseignant()
-// {
-//     return $this->belongsTo(Enseignant::class);
-// }
+    // public function enseignant()
+    // {
+    //     return $this->belongsTo(Enseignant::class);
+    // }
 
 
-// Dans app/Models/Evaluation.php
+    // Dans app/Models/Evaluation.php
 
-public function enseignant()
-{
-    return $this->belongsTo(Enseignant::class);
-}
+    public function enseignant()
+    {
+        return $this->belongsTo(Enseignant::class);
+    }
 
-// Ajoute aussi l'annee_scolaire pour ton PDF
-public function anneeScolaire()
-{
-    return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
-}
+    // Ajoute aussi l'annee_scolaire pour ton PDF
+    public function anneeScolaire()
+    {
+        return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
+    }
+
+
+    public function lecons()
+    {
+        return $this->belongsToMany(Lecon::class, 'evaluation_lesson', 'evaluation_id', 'lecon_id');
+    }
 }

@@ -19,6 +19,7 @@
             <h2 class="text-[10px] font-bold  text-primary tracking-widest opacity-80">Saisie des notes</h2>
             <h1 class="text-lg md:text-xl font-black leading-tight uppercase">{{ $evaluation->titre }}</h1>
             <div class="mt-2 flex gap-4 text-[10px] text-white/60 font-medium italic">
+                <span>Session: {{ $evaluation->classe->niveau->nom }}</span>
                 <span>Classe: {{ $evaluation->classe->nom }}</span>
                 <span>Matière: {{ $evaluation->matiere->nom }}</span>
             </div>
@@ -33,9 +34,83 @@
                 </a>
             </div>
         </div>
+        {{-- Section de sélection des leçons évaluées --}}
 
         <form action="{{ route('admin.evaluations.bulk-store', $evaluation->id) }}" method="POST">
             @csrf
+
+
+
+
+            <div class="bg-card border border-border rounded-2xl mb-6">
+
+                {{-- En-tête --}}
+                <button type="button" class="w-full flex items-center justify-between p-4"
+                    onclick="document.getElementById('lessons').classList.toggle('hidden')">
+
+                    <div class="text-left">
+                        <h3 class="font-semibold text-card-foreground">
+                            📚 Chapitres évalués
+                        </h3>
+
+                        <p class="text-xs text-card-foreground/60">
+                            {{ count($leconsEvalueesIds ?? []) }} chapitre(s) sélectionné(s)
+                        </p>
+                    </div>
+
+                    <x-lucide-chevron-down class="w-5 h-5 text-primary" />
+
+                </button>
+
+                {{-- Contenu --}}
+                <div id="lessons" class="hidden border-t border-border p-4">
+
+                    @if ($lecons->isEmpty())
+                        <p class="text-sm text-card-foreground/60">
+                            Aucune leçon disponible.
+                        </p>
+                    @else
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+
+                            @foreach ($lecons as $lecon)
+                                <label class="flex items-center gap-2 rounded-lg p-2 cursor-pointer hover:bg-primary/5">
+
+                                    <input type="checkbox" name="lesson_ids[]" value="{{ $lecon->id }}"
+                                        {{ in_array($lecon->id, $leconsEvalueesIds ?? []) ? 'checked' : '' }}
+                                        class="rounded border-border text-primary">
+
+                                    <span class="text-sm text-card-foreground">
+                                        <span class="font-semibold text-primary">
+                                            {{ $lecon->ordre }}.
+                                        </span>
+
+                                        {{ $lecon->titre }}
+                                    </span>
+
+                                </label>
+                            @endforeach
+
+                        </div>
+                    @endif
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             {{-- CONTENEUR MAGIQUE POUR LE SCROLL MOBILE --}}
             <div class="bg-secondary/10 border border-white/5 rounded-3xl overflow-hidden">

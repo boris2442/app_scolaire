@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Affectation;
 use App\Models\Evaluation;
 use App\Models\Inscription;
+use App\Models\Lecon;
 use App\Models\Note;
 use App\Models\Sequence;
 use App\Services\ScolariteService;
@@ -58,12 +59,56 @@ class EvaluationController extends Controller
             ->where('enseignant_id', $enseignant?->id)
             ->latest()
             ->get();
-        // dd($evaluations);
-        // $test = $affectations->first();
-        // dd($test->niveau_id, $test->niveau);
+
 
         return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
     }
+
+
+
+
+
+    // public function index()
+    // {
+    //     $anneeActive = $this->scolarite->getAnneeActive();
+    //     $enseignant = auth()->user()->enseignant;
+
+    //     if (!$enseignant) {
+    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+    //     }
+
+    //     $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
+    //         $query->where('annee_scolaire_id', $anneeActive->id);
+    //     })->get();
+
+    //     $affectations = $enseignant->affectations()
+    //         ->with(['matiere', 'classe.niveau'])
+    //         ->whereHas('classe.matieres', function ($query) {
+    //             $query->whereColumn('matieres.id', 'affectations.matiere_id');
+    //         })
+    //         ->get();
+
+    //     // On récupère les évaluations déjà créées par ce prof
+    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
+    //         ->where('enseignant_id', $enseignant?->id)
+    //         ->latest()
+    //         ->get();
+
+    //     // 👇 AJOUT : On récupère toutes les leçons de cet enseignant pour les afficher dans le formulaire
+    //     $lessons = Lecon::where('enseignant_id', $enseignant->id)->get();
+
+    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations', 'lessons'));
+    // }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -92,8 +137,26 @@ class EvaluationController extends Controller
                 return [(int)$item->inscription_id => $item];
             });
 
-        return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes'));
+
+
+        // 👇 AJOUT : Récupérer les leçons de cette matière, de cette classe et de cet enseignant
+        $lecons = Lecon::where('enseignant_id', $evaluation->enseignant_id)
+            ->where('matiere_id', $evaluation->matiere_id)
+            ->where('classe_id', $evaluation->classe_id)
+            ->orderBy('ordre')
+            ->get();
+
+        // 👇 AJOUT : Récupérer les IDs des leçons déjà cochées/associées à cette évaluation (s'il y en a)
+        $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
+
+
+
+
+
+        return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
+
+
 
     public function store(Request $request)
     {
@@ -127,46 +190,136 @@ class EvaluationController extends Controller
     }
 
 
+
+    // public function store(Request $request)
+    // {
+    //     $enseignant = auth()->user()->enseignant;
+
+    //     if (!$enseignant) {
+    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+    //     }
+
+    //     $affectation = Affectation::findOrFail($request->affectation_id);
+
+    //     // Création ou récupération de l'évaluation
+    //     $evaluation = Evaluation::firstOrCreate(
+    //         [
+    //             'sequence_id'       => $request->sequence_id,
+    //             'classe_id'         => $affectation->classe_id,
+    //             'matiere_id'        => $affectation->matiere_id,
+    //             'enseignant_id'     => $enseignant->id,
+    //             'annee_scolaire_id' => $this->anneeActive->id,
+    //         ],
+    //         [
+    //             'titre'           => $request->titre,
+    //             'date_evaluation' => now(),
+    //         ]
+    //     );
+
+    //     // ICI : On attache les leçons sélectionnées à l'évaluation
+    //     if ($request->has('lesson_ids')) {
+    //         $evaluation->lessons()->sync($request->lesson_ids);
+    //     }
+
+    //     return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
+    //         ->with('success', 'Session d\'évaluation prête et leçons associées !');
+    // }
+
+
+
+
+
+
+
+
+
+
     //function pour enregistrer les notes en masse
-    public function bulkStoreNotes(Request $request, $id)
-    {
+    // public function bulkStoreNotes(Request $request, $id)
+    // {
 
-        $evaluation = Evaluation::findOrFail($id);
+    //     $evaluation = Evaluation::findOrFail($id);
 
-        // 1. On vérifie qu'on a bien reçu le tableau 'notes'
-        if (!$request->has('notes')) {
-            return redirect()->back()->with('error', 'Aucune donnée n’a été envoyée.');
-        }
+    //     // 1. On vérifie qu'on a bien reçu le tableau 'notes'
+    //     if (!$request->has('notes')) {
+    //         return redirect()->back()->with('error', 'Aucune donnée n’a été envoyée.');
+    //     }
 
-        foreach ($request->notes as $inscriptionId => $donnees) {
+    //     foreach ($request->notes as $inscriptionId => $donnees) {
 
-            // 2. On vérifie si 'valeur' existe ET n'est pas vide dans ce sous-tableau
-            if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
+    //         // 2. On vérifie si 'valeur' existe ET n'est pas vide dans ce sous-tableau
+    //         if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
 
 
-                // Dans ton contrôleur, avant d'enregistrer
-                if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
-                    return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
-                }
+    //             // Dans ton contrôleur, avant d'enregistrer
+    //             if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
+    //                 return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
+    //             }
 
-                Note::updateOrCreate(
-                    [
-                        'evaluation_id'  => $evaluation->id,
-                        'inscription_id' => $inscriptionId,
-                    ],
-                    [
-                        // TRÈS IMPORTANT : On pointe précisément vers 'valeur' 
-                        // et non vers tout le tableau $donnees
-                        'valeur'      => $donnees['valeur'],
-                        'observation' => $donnees['observation'] ?? null,
-                    ]
-                );
-            }
-        }
+    //             Note::updateOrCreate(
+    //                 [
+    //                     'evaluation_id'  => $evaluation->id,
+    //                     'inscription_id' => $inscriptionId,
+    //                 ],
+    //                 [
+    //                     // TRÈS IMPORTANT : On pointe précisément vers 'valeur' 
+    //                     // et non vers tout le tableau $donnees
+    //                     'valeur'      => $donnees['valeur'],
+    //                     'observation' => $donnees['observation'] ?? null,
+    //                 ]
+    //             );
+    //         }
+    //     }
 
-        return redirect()->route('admin.evaluations.index')
-            ->with('success', 'Félicitations ! Les notes ont été enregistrées.');
+    //     return redirect()->route('admin.evaluations.index')
+    //         ->with('success', 'Félicitations ! Les notes ont été enregistrées.');
+    // }
+
+
+
+
+public function bulkStoreNotes(Request $request, $id)
+{
+    $evaluation = Evaluation::findOrFail($id);
+
+    // 1. Synchroniser les leçons cochées (même si aucune n'est cochée, ça nettoie)
+    $evaluation->lecons()->sync($request->input('lesson_ids', []));
+
+    // 2. On vérifie qu'on a bien reçu le tableau 'notes'
+    if (!$request->has('notes')) {
+        return redirect()->back()->with('error', 'Aucune note n’a été envoyée, mais les leçons ont été mises à jour.');
     }
+
+    foreach ($request->notes as $inscriptionId => $donnees) {
+        if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
+            if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
+                return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
+            }
+
+            Note::updateOrCreate(
+                [
+                    'evaluation_id'  => $evaluation->id,
+                    'inscription_id' => $inscriptionId,
+                ],
+                [
+                    'valeur'      => $donnees['valeur'],
+                    'observation' => $donnees['observation'] ?? null,
+                ]
+            );
+        }
+    }
+
+    return redirect()->route('admin.evaluations.index')
+        ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
+}
+
+
+
+
+
+
+
+
 
 
     ///////////////// les diffferents statistiques a gerer pour les impressions
