@@ -3,22 +3,11 @@
 @section('content')
     <div class="container mx-auto p-6 bg-background text-foreground min-h-screen">
 
-        <!-- En-tête -->
-        {{-- <div class="mb-8">
-            <h1 class="text-3xl font-bold text-primary">
-                Emploi du temps de l'enseignant
-            </h1>
 
-            <p class="mt-2 text-sm text-foreground/70">
-                Enseignant :
-                <span class="font-semibold">{{ $enseignant->name }}</span>
-            </p>
-        </div> --}}
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Emploi du temps de l'enseignant : {{ $enseignant->name }}</h1>
 
-            <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}"
-                title="telecharger le document pdf"
+            <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}" title="telecharger le document pdf"
                 class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
                 <span>Télécharger en PDF</span>
             </a>
@@ -81,7 +70,7 @@
 
                                         @endphp
 
-                                        @if ($seance)
+                                        {{-- @if ($seance)
                                             <div class="rounded-lg border border-primary/20 bg-primary/10 p-3 shadow-sm">
                                                 <div class="font-semibold text-primary">
                                                     {{ $seance->matiere->nom ?? 'Matière' }}
@@ -102,7 +91,42 @@
                                             <div class="py-4 text-xs italic text-foreground/40">
                                                 Libre
                                             </div>
+                                        @endif --}}
+
+
+                                        @if ($seance)
+                                            <div class="rounded-lg border border-primary/20 bg-primary/10 p-3 shadow-sm">
+                                                <div class="font-semibold text-primary">
+                                                    {{ $seance->matiere->nom ?? 'Matière' }}
+                                                </div>
+
+                                                <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
+                                                    <div>
+                                                        Niveau : <span
+                                                            class="font-semibold">{{ $seance->classe->niveau->nom ?? ($seance->classe->niveau ?? '-') }}</span>
+                                                    </div>
+                                                    <div>
+                                                        Classe / Groupe : <span
+                                                            class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 👇 C'est ici qu'on ajoute le lien vers la gestion du programme de cette séance ! -->
+                                                <div class="mt-3 pt-2 border-t border-primary/20">
+                                                    <a href="{{ route('lessons.index', ['subjectId' => $seance->matiere_id, 'classRoomId' => $seance->classe_id]) }}"
+                                                        class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline">
+                                                        📚 Gérer le programme
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="py-4 text-xs italic text-foreground/40">
+                                                Libre
+                                            </div>
                                         @endif
+
+
+
 
                                     </td>
                                 @endforeach

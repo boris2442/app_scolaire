@@ -16,6 +16,7 @@ use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\LeconController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
@@ -63,7 +64,7 @@ Route::middleware(['auth'])
 Route::get('/emplois/enseignant/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
 // Emploi du temps de l'enseignant (Téléchargement PDF)
-    Route::get('/emplois/enseignant/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+Route::get('/emplois/enseignant/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
 
 
@@ -309,5 +310,13 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+Route::middleware(['auth'])->group(function () {
+    // Afficher les leçons d'une matière pour une classe spécifique
+    Route::get('/lessons/{subjectId}/{classRoomId}', [LeconController::class, 'index'])->name('lessons.index');
+
+    // Enregistrer une nouvelle leçon
+    Route::post('/lessons', [LeconController::class, 'store'])->name('lessons.store');
+});
 
 require __DIR__ . '/auth.php';
