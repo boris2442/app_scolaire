@@ -61,7 +61,7 @@ Route::middleware(['auth'])
         Route::get('/emplois/classe/{classeId}/pdf', [SeanceController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
         Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
     });
-Route::get('/emplois/enseignant/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
+Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
 // Emploi du temps de l'enseignant (Téléchargement PDF)
 Route::get('/emplois/enseignant/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
@@ -299,11 +299,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
         // Route pour afficher le formulaire de configuration
-        Route::get('/parametres-classes', [ParametreAcademiqueController::class, 'index'])
+        Route::get('/settings-classes', [ParametreAcademiqueController::class, 'index'])
             ->name('admin.parametres-classes.index');
 
         // Route pour enregistrer les changements
-        Route::post('/parametres-classes', [ParametreAcademiqueController::class, 'store'])
+        Route::post('/settings-classes', [ParametreAcademiqueController::class, 'store'])
             ->name('admin.parametres-classes.store');
     });
 });

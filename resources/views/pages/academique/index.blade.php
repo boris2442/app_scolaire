@@ -9,6 +9,7 @@
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
                     <input type="text" name="nom" placeholder="ex: Premier Cycle"
+                    required
                         class="flex-1 bg-secondary border-border rounded-lg text-sm px-3 py-2">
                     <button class="bg-primary text-white p-2 rounded hover:opacity-90">
                         <x-lucide-plus class="w-4 h-4" />
@@ -28,6 +29,7 @@
                         @endforeach
                     </select>
                     <input type="text" name="nom" placeholder="ex: 6ème"
+                    required
                         class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2">
                     <button
                         class="w-full bg-primary text-white font-bold py-2 rounded hover:opacity-90 transition-all   text-xs tracking-widest">
@@ -93,7 +95,7 @@
                                     {{-- Bouton Modifier (Ouvre un prompt simple pour l'exemple, ou tu peux faire une modale) --}}
                                     <a href="{{ route('settings.academique.niveaux.edit', $niveau) }}"
                                         class="p-1 text-primary hover:bg-primary/10 rounded transition-colors"
-                                        title="Modigier" aria-label="Modifier">
+                                        title="Modifier" aria-label="Modifier">
                                         <x-lucide-edit-3 class="w-4 h-4" />
                                     </a>
 

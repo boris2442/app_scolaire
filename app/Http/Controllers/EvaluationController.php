@@ -278,40 +278,40 @@ class EvaluationController extends Controller
 
 
 
-public function bulkStoreNotes(Request $request, $id)
-{
-    $evaluation = Evaluation::findOrFail($id);
+    public function bulkStoreNotes(Request $request, $id)
+    {
+        $evaluation = Evaluation::findOrFail($id);
 
-    // 1. Synchroniser les leçons cochées (même si aucune n'est cochée, ça nettoie)
-    $evaluation->lecons()->sync($request->input('lesson_ids', []));
+        // 1. Synchroniser les leçons cochées (même si aucune n'est cochée, ça nettoie)
+        $evaluation->lecons()->sync($request->input('lesson_ids', []));
 
-    // 2. On vérifie qu'on a bien reçu le tableau 'notes'
-    if (!$request->has('notes')) {
-        return redirect()->back()->with('error', 'Aucune note n’a été envoyée, mais les leçons ont été mises à jour.');
-    }
-
-    foreach ($request->notes as $inscriptionId => $donnees) {
-        if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
-            if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
-                return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
-            }
-
-            Note::updateOrCreate(
-                [
-                    'evaluation_id'  => $evaluation->id,
-                    'inscription_id' => $inscriptionId,
-                ],
-                [
-                    'valeur'      => $donnees['valeur'],
-                    'observation' => $donnees['observation'] ?? null,
-                ]
-            );
+        // 2. On vérifie qu'on a bien reçu le tableau 'notes'
+        if (!$request->has('notes')) {
+            return redirect()->back()->with('error', 'Aucune note n’a été envoyée, mais les leçons ont été mises à jour.');
         }
-    }
 
-    return redirect()->route('admin.evaluations.index')
-        ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
-}
+        foreach ($request->notes as $inscriptionId => $donnees) {
+            if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
+                if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
+                    return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
+                }
+
+                Note::updateOrCreate(
+                    [
+                        'evaluation_id'  => $evaluation->id,
+                        'inscription_id' => $inscriptionId,
+                    ],
+                    [
+                        'valeur'      => $donnees['valeur'],
+                        'observation' => $donnees['observation'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        return redirect()->route('admin.evaluations.index')
+            ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
+    }
 
 
 
@@ -324,7 +324,38 @@ public function bulkStoreNotes(Request $request, $id)
 
     ///////////////// les diffferents statistiques a gerer pour les impressions
 
-    private function calculerStats($evaluation)
+    // private function calculerStats($evaluation)
+    // {
+    //     // On charge les notes, puis l'inscription, puis l'élève
+    //     $notes = $evaluation->notes()->with('inscription.eleve')->get();
+
+    //     $total = $notes->count();
+    //     $reussites = $notes->filter(fn($n) => $n->valeur >= 10);
+
+    //     $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
+    //     $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
+
+    //     return [
+    //         'total' => $total,
+    //         'moyenne' => $total > 0 ? number_format($notes->avg('valeur'), 2) : 0,
+    //         'reussite_globale' => $reussites->count(),
+    //         'taux_reussite' => $total > 0 ? number_format(($reussites->count() / $total) * 100, 2) : 0,
+
+    //         'garcons_count' => $garcons->count(),
+    //         'garcons_reussite' => $garcons->where('valeur', '>=', 10)->count(),
+
+    //         'filles_count' => $filles->count(),
+    //         'filles_reussite' => $filles->where('valeur', '>=', 10)->count(),
+    //     ];
+    // }
+
+
+
+
+
+
+
+private function calculerStats($evaluation)
     {
         // On charge les notes, puis l'inscription, puis l'élève
         $notes = $evaluation->notes()->with('inscription.eleve')->get();
@@ -334,6 +365,32 @@ public function bulkStoreNotes(Request $request, $id)
 
         $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
         $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
+
+        // --- CALCUL DE LA PROGRESSION DES LEÇONS ---
+        // 1. Nombre total de leçons prévues pour cette matière, classe et enseignant
+        $totalLeconsPrevues = Lecon::where('enseignant_id', $evaluation->enseignant_id)
+            ->where('matiere_id', $evaluation->matiere_id)
+            ->where('classe_id', $evaluation->classe_id)
+            ->count();
+
+        // 2. Nombre de leçons uniques déjà évaluées (via toutes les évaluations de cette matière/classe/prof)
+        // On récupère les IDs de toutes les leçons liées aux évaluations de ce contexte pour éviter les doublons
+        $leconsEvalueesIds = Evaluation::where('enseignant_id', $evaluation->enseignant_id)
+            ->where('matiere_id', $evaluation->matiere_id)
+            ->where('classe_id', $evaluation->classe_id)
+            ->where('annee_scolaire_id', $evaluation->annee_scolaire_id)
+            ->with('lecons')
+            ->get()
+            ->flatMap(function($eval) {
+                return $eval->lecons->pluck('id');
+            })
+            ->unique()
+            ->count();
+
+        // 3. Calcul du taux de progression
+        $tauxProgression = $totalLeconsPrevues > 0 
+            ? number_format(($leconsEvalueesIds / $totalLeconsPrevues) * 100, 2) 
+            : 0;
 
         return [
             'total' => $total,
@@ -346,8 +403,17 @@ public function bulkStoreNotes(Request $request, $id)
 
             'filles_count' => $filles->count(),
             'filles_reussite' => $filles->where('valeur', '>=', 10)->count(),
+
+            // --- ON AJOUTE LES DONNÉES DE PROGRESSION ICI ---
+            'lecons_faites' => $leconsEvalueesIds,
+            'lecons_totales' => $totalLeconsPrevues,
+            'taux_progression' => $tauxProgression,
         ];
     }
+
+
+
+
 
 
 
@@ -370,4 +436,7 @@ public function bulkStoreNotes(Request $request, $id)
 
         return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf');
     }
+
+
+
 }
