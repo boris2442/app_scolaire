@@ -227,28 +227,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-        // Page principale : La grille avec le choix du trimestre
-        Route::get('/admin/report', [BulletinPrintController::class, 'index'])
-            ->name('admin.bulletins.index');
 
-        Route::get('/admin/report/print/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
-            ->name('admin.bulletins.imprimer');
-
-
-
-        // // Page principale : La grille des 4 colonnes avec le choix du trimestre
-
-        // Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
-        Route::get('/admin/report/class/{classe_id}', [BulletinPrintController::class, 'classeHub'])
-            ->name('admin.bulletins.classe');
-
-        // Route pour générer le PDF de toute la classe d'un coup
-        Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
-            ->name('admin.bulletins.imprimer-classe');
-
-        // Route pour générer le PDF d'un seul élève isolé
-        Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
-            ->name('admin.bulletins.imprimer-eleve');
 
 
         Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
@@ -317,6 +296,32 @@ Route::middleware(['auth'])->group(function () {
 
     // Enregistrer une nouvelle leçon
     Route::post('/lessons', [LeconController::class, 'store'])->name('lessons.store');
+});
+
+//Route with censor and admin
+Route::middleware(['auth', 'censeur'])->group(function () {
+    // Page principale : La grille avec le choix du trimestre
+    Route::get('/admin/report', [BulletinPrintController::class, 'index'])
+        ->name('admin.bulletins.index');
+
+    Route::get('/admin/report/print/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
+        ->name('admin.bulletins.imprimer');
+
+
+
+    // // Page principale : La grille des 4 colonnes avec le choix du trimestre
+
+    // Page secondaire : Le Hub de la classe sélectionnée (Liste des élèves)
+    Route::get('/admin/report/class/{classe_id}', [BulletinPrintController::class, 'classeHub'])
+        ->name('admin.bulletins.classe');
+
+    // Route pour générer le PDF de toute la classe d'un coup
+    Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
+        ->name('admin.bulletins.imprimer-classe');
+
+    // Route pour générer le PDF d'un seul élève isolé
+    Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
+        ->name('admin.bulletins.imprimer-eleve');
 });
 
 require __DIR__ . '/auth.php';

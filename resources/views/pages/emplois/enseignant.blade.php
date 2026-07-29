@@ -4,15 +4,20 @@
     <div class="container mx-auto p-6 bg-background text-foreground min-h-screen">
 
 
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Emploi du temps de l'enseignant : {{ $enseignant->name }}</h1>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
-            <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}" title="telecharger le document pdf"
-                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
-                <span>Télécharger en PDF</span>
+            <h1 class="text-lg sm:text-2xl font-bold leading-tight">
+                Emploi du temps de l'enseignant :
+                <span class="text-primary">{{ $enseignant->name }}</span>
+            </h1>
+
+            <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}" title="Télécharger le document PDF"
+                class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold text-sm sm:text-base py-2.5 px-4 rounded shadow transition whitespace-nowrap">
+
+                📄 Télécharger PDF
             </a>
-        </div>
 
+        </div>
 
 
 

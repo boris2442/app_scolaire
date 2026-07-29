@@ -25,20 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Partager l'objet 'ecole' avec toutes les vues
-        // view()->composer('*', function ($view) {
-        //     $ecole = Etablissement::first()
-        //      ?? new Etablissement()
-        //      ;
-        //     $view->with('ecole', $ecole);
-        // });
 
+        $ecole = Cache::rememberForever('ecole', function () {
+            return Etablissement::first() ?? new Etablissement();
+        });
 
-  $ecole = Cache::rememberForever('ecole', function () {
-        return Etablissement::first() ?? new Etablissement();
-    });
-
-    View::share('ecole', $ecole);
+        View::share('ecole', $ecole);
 
 
 
@@ -53,6 +45,9 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::define('access-enseignant', function (User $user) {
             return $user->role === UserRole::ENSEIGNANT;
+        });
+        Gate::define('access-censeur', function (User $user) {
+            return $user->role === UserRole::CENSEUR;
         });
     }
 }

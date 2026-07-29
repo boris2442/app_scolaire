@@ -176,6 +176,17 @@
                         <span class="sidebar-label ml-3">groupement matieres</span>
                     </a>
                 </li>
+            @endcan
+            @canany(['access-admin', 'access-censeur'])
+                <li>
+                    <a href="{{ route('admin.bulletins.index') }}"title="impresion des bulletins" aria-label="impresion"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-file-text class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Impressions</span>
+                    </a>
+                </li>
+            @endcanany
+            {{-- @can('access-censeur')
                 <li>
                     <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -183,9 +194,7 @@
                         <span class="sidebar-label ml-3">Impressions</span>
                     </a>
                 </li>
-            @endcan
-
-
+            @endcan --}}
 
             @can('access-enseignant')
                 <li>
@@ -204,7 +213,7 @@
                     </a>
                 </li>
                 <li>
-           
+
                     <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Emploi du temps"
                         aria-label="Emploi du temps"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('emplois.enseignant') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -212,7 +221,6 @@
                         <span class="sidebar-label ml-3">Mon Emploi du temps</span>
                     </a>
                 </li>
-            
             @endcan
 
 

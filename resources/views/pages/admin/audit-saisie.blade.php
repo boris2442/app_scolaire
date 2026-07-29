@@ -38,7 +38,7 @@
             <button type="submit"
                 class="bg-primary text-primary-foreground text-sm font-medium py-2 rounded-md hover:opacity-90 transition shadow-sm">
 
-               
+
                 <x-lucide-search class="w-4 h-4 inline-block mr-1" />
                 Vérifier l'état
             </button>
@@ -59,32 +59,36 @@
                             <tr class="hover:bg-secondary/30 transition">
                                 <td class="px-4 py-4">
                                     <div class="font-bold text-foreground">{{ $data['matiere'] }}</div>
-                                    <div class="text-xs opacity-60 italic">Par : {{ $data['enseignant'] }}</div>
+                                    <div class="text-xs opacity-60 italic">Par : Mr/ Mme {{ $data['enseignant'] }}</div>
+                                    <div class="text-xs opacity-60 italic">Téléphone : {{ $data['phone'] }}</div>
                                 </td>
                                 <td class="px-4 py-4">
                                     <div class="flex items-center gap-3">
                                         <div class="flex-1 bg-secondary rounded-full h-2 overflow-hidden">
-                                            <div class="h-full rounded-full transition-all duration-500 {{ $data['pourcentage'] == 100 ? 'bg-success' : 'bg-warning' }}"
-                                                style="width: {{ $data['pourcentage'] }}%"></div>
+                                            <div class="h-2 rounded-full bg-primary transition-all duration-500"
+                                                style="width: {{ $data['pourcentage'] }}%">
+                                            </div>
                                         </div>
-                                        <span
-                                            class="text-[11px] font-mono font-bold w-10 text-right">{{ $data['pourcentage'] }}%</span>
+
+                                        <span class="text-[11px] font-mono font-bold w-10 text-right">
+                                            {{ $data['pourcentage'] }}%
+                                        </span>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-right">
                                     @if ($data['pourcentage'] == 100)
                                         <span
                                             class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-success/10 text-success rounded-full text-[10px] font-bold border border-success/20">
-                                       
+
                                             <x-lucide-check-circle class="w-3 h-3" />
-                                             PRÊT
+                                            PRÊT
                                         </span>
                                     @else
                                         <span
                                             class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-warning/10 text-warning rounded-full text-[10px] font-bold border border-warning/20">
-                                      
+
                                             <x-lucide-clock class="w-3 h-3" />
-                                             INCOMPLET
+                                            INCOMPLET
                                         </span>
                                     @endif
                                 </td>

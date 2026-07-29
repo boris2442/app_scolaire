@@ -17,8 +17,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        
-       if (!Auth::check() || Auth::user()->role != UserRole::ADMIN) {
+
+        if (!Auth::check() || Auth::user()->role != UserRole::ADMIN) {
             return redirect()
                 ->route('home')
                 ->with('error', 'Accès restreint.');

@@ -8,7 +8,7 @@
                     class="md:hidden mr-3 p-2 rounded-lg hover:bg-secondary text-gray-500 transition-colors"
                     onclick="toggleSidebar()">
 
-                    <!-- Remplacé par le composant Lucide -->
+                  
                     <x-lucide-menu class="w-6 h-6" />
 
                 </button>
