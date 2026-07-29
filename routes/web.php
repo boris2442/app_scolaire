@@ -197,11 +197,10 @@ Route::middleware('auth')->group(function () {
         Route::prefix('admin')->name('admin.')->group(function () {
             // ... tes autres routes ...
 
-            Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
+            //     Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
 
             // On pourra ajouter plus tard :
-            // Route::get('/audit-saisie/classe/{id}', [AuditSaisieController::class, 'show'])->name('audit.saisie.show');
-            // Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
+
             Route::get('/statistics', [StatistiqueController::class, 'index'])->name('statistiques.index');
             // Dans routes/web.php (dans ton groupe de middleware admin)
             Route::get('/statistics/classe/{classe_id}/{sequence_id}', [StatistiqueController::class, 'detailClasse'])
@@ -300,6 +299,10 @@ Route::middleware(['auth'])->group(function () {
 
 //Route with censor and admin
 Route::middleware(['auth', 'censeur'])->group(function () {
+    //Audit saisie
+    Route::get('/admin/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
+
+
     // Page principale : La grille avec le choix du trimestre
     Route::get('/admin/report', [BulletinPrintController::class, 'index'])
         ->name('admin.bulletins.index');
