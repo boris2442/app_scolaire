@@ -24,7 +24,7 @@ class ClassStoreRequest extends FormRequest
     {
         return [
             'nom' => 'required|string|max:50',
-            'niveau_id' => 'required|exists:niveaux,id',
+  
             'annee_scolaire_id' => 'required|exists:annee_scolaires,id'
         ];
     }

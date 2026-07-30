@@ -8,8 +8,7 @@
                 <h2 class="text-xs  text-primary mb-4 tracking-widest">1. Ajouter un Cycle</h2>
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
-                    <input type="text" name="nom" placeholder="ex: Premier Cycle"
-                    required
+                    <input type="text" name="nom" placeholder="ex: Premier Cycle" required
                         class="flex-1 bg-secondary border-border rounded-lg text-sm px-3 py-2">
                     <button class="bg-primary text-white p-2 rounded hover:opacity-90">
                         <x-lucide-plus class="w-4 h-4" />
@@ -18,22 +17,35 @@
             </div>
 
             <div class="bg-card p-6 rounded-xl border border-border shadow-sm">
-                <h2 class="text-xs   text-primary mb-4 tracking-widest text-center">2. Ajouter un Niveau
+                <h2 class="text-xs   text-primary mb-4 tracking-widest text-center">2. Ajouter un classe
                 </h2>
-                <form action="{{ route('settings.academique.niveaux.store') }}" method="POST" class="space-y-4">
+            
+
+
+                <form action="{{ route('settings.classes.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    <select name="cycle_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2">
-                        <option value="">Sélectionner le Cycle...</option>
-                        @foreach ($cycles as $cycle)
-                            <option value="{{ $cycle->id }}">{{ $cycle->nom }}</option>
-                        @endforeach
-                    </select>
-                    <input type="text" name="nom" placeholder="ex: 6ème"
-                    required
-                        class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2">
+                    <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
+
+                    <div>
+                        <label class="text-[10px] text-muted-foreground">Cycle concerné</label>
+                        <select name="cycle_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1"
+                            required>
+                            <option value="">Sélectionner un cycle...</option>
+                            @foreach ($cycles as $cycle)
+                                <option value="{{ $cycle->id }}">{{ $cycle->nom }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
+                        <input type="text" name="nom" placeholder="Ex: 6ème A"
+                            class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1" required>
+                    </div>
+
                     <button
-                        class="w-full bg-primary text-white font-bold py-2 rounded hover:opacity-90 transition-all   text-xs tracking-widest">
-                        Enregistrer le Niveau
+                        class="w-full bg-primary text-white font-black py-2.5 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 text-[10px]">
+                        <x-lucide-plus class="w-4 h-4" /> Créer la Classe
                     </button>
                 </form>
             </div>
@@ -50,12 +62,7 @@
 
             @forelse($cycles as $cycle)
                 <div class="bg-card rounded-xl border border-border overflow-hidden">
-                    {{-- <div class="bg-secondary/50 px-4 py-3 border-b border-border flex justify-between items-center">
-                        <span class="text-sm font-black text-foreground uppercase tracking-wider">{{ $cycle->nom }}</span>
-                        <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full font-bold">
-                            {{ $cycle->niveaux->count() }} Niveaux
-                        </span>
-                    </div> --}}
+
 
                     <div class="bg-secondary/50 px-4 py-3 border-b border-border flex justify-between items-center">
                         {{-- À gauche : Le nom et le badge --}}
@@ -63,7 +70,8 @@
                             <span
                                 class="text-sm font-black text-foreground uppercase tracking-wider">{{ $cycle->nom }}</span>
                             <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full font-bold">
-                                {{ $cycle->niveaux->count() }} Niveaux
+                                {{ $cycle->classes->count() }}
+                                classes
                             </span>
                         </div>
 
@@ -86,20 +94,20 @@
                     </div>
 
 
-                    <div class="p-4 flex flex-wrap gap-3">
+                    {{-- <div class="p-4 flex flex-wrap gap-3">
                         @forelse($cycle->niveaux as $niveau)
                             <div
                                 class="group flex items-center gap-3 bg-background border border-border px-3 py-2 rounded-lg hover:border-primary transition-all">
                                 <span class="text-sm font-bold text-foreground">{{ $niveau->nom }}</span>
                                 <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    {{-- Bouton Modifier (Ouvre un prompt simple pour l'exemple, ou tu peux faire une modale) --}}
+                                  
                                     <a href="{{ route('settings.academique.niveaux.edit', $niveau) }}"
                                         class="p-1 text-primary hover:bg-primary/10 rounded transition-colors"
                                         title="Modifier" aria-label="Modifier">
                                         <x-lucide-edit-3 class="w-4 h-4" />
                                     </a>
 
-                                    {{-- Bouton Supprimer --}}
+                             
                                     <form action="{{ route('settings.academique.niveaux.destroy', $niveau) }}"
                                         method="POST" onsubmit="return confirm('Supprimer ce niveau ?')">
                                         @csrf @method('DELETE')
@@ -113,7 +121,7 @@
                         @empty
                             <p class="text-xs italic text-muted-foreground">Aucun niveau défini pour ce cycle.</p>
                         @endforelse
-                    </div>
+                    </div> --}}
                 </div>
             @empty
                 <div class="bg-card p-12 rounded-xl border border-dashed border-border text-center">

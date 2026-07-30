@@ -120,7 +120,7 @@
                 </li> --}}
                 <li>
                     <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departements.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departments.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-building class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Départements</span>
                     </a>
@@ -143,14 +143,14 @@
                 </li>
 
 
-                <li>
+                {{-- <li>
                     <a href="{{ route('admin.parametres-classes.index') }}" title="Paramètre notes fin d'année"
                         aria-label="Paramètre notes fin d'année"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.parametres-classes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-settings class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Paramètre notes fin d'année</span>
                     </a>
-                </li>
+                </li> --}}
 
 
                 <li>

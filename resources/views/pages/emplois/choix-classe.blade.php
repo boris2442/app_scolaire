@@ -29,12 +29,7 @@
                                 {{ $classe->nom }}
                             </h2>
 
-                            <p class="mt-2 text-sm text-foreground/70">
-                                Niveau :
-                                <span class="font-medium">
-                                    {{ $classe->niveau->nom ?? 'Standard' }}
-                                </span>
-                            </p>
+                            
 
                         </div>
 

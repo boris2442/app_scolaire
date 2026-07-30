@@ -164,7 +164,7 @@
                     </button>
                 </div>
 
-                <select name="classe_id" onchange="this.form.submit()"
+                {{-- <select name="classe_id" onchange="this.form.submit()"
                     class="bg-secondary border-border rounded-xl px-4 py-3 text-xs font-black  outline-none cursor-pointer focus:ring-2 focus:ring-primary/20">
                     <option value="">Toutes les classes</option>
                     @foreach ($niveaux as $n)
@@ -176,8 +176,17 @@
                             @endforeach
                         </optgroup>
                     @endforeach
-                </select>
+                </select> --}}
+                <select name="classe_id" onchange="this.form.submit()"
+                    class="bg-secondary border-border rounded-xl px-4 py-3 text-xs font-black outline-none cursor-pointer focus:ring-2 focus:ring-primary/20">
+                    <option value="">Toutes les classes</option>
 
+                    @foreach ($classes as $c)
+                        <option value="{{ $c->id }}" {{ request('classe_id') == $c->id ? 'selected' : '' }}>
+                            {{ $c->nom }}
+                        </option>
+                    @endforeach
+                </select>
                 <div class="flex gap-2">
                     <button type="submit"
                         class="flex-1 bg-primary text-primary-foreground py-3 rounded-xl text-[10px] font-black  hover:opacity-90 transition-all shadow-md shadow-primary/10">
@@ -250,7 +259,7 @@
                                     @if ($ins && $ins->classe)
                                         <span
                                             class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-[9px]  uppercase">
-                                            {{ $ins->classe->niveau->nom }} {{ $ins->classe->nom }}
+                                            {{ $ins->classe->nom }}
                                         </span>
                                     @else
                                         <span class="text-danger/50 text-[9px] font-black uppercase italic">Dossier en
@@ -259,7 +268,7 @@
                                 </td>
                                 <td class="px-6 py-2 text-right">
                                     <div class="flex justify-center items-center gap-2 text-foreground/30">
-                                        
+
                                         <a href="{{ route('admin.students.show', $eleve) }}"
                                             title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>

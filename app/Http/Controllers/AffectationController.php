@@ -19,26 +19,22 @@ class AffectationController extends Controller
         $this->scolarite = $scolarite;
     }
 
-    /**
-     * Affiche la matrice d'affectation pour une salle spécifique
-     */
+  
     public function index(Request $request)
     {
         $anneeActive = $this->scolarite->getAnneeActive();
 
-        // On récupère tes classes (A, B, C...) avec leur niveau (6e, 5e...)
-        $classes = Classe::with('niveau')->orderBy('niveau_id')->get();
+        // On récupère les classes (plus de relation 'niveau', on trie par nom ou id)
+        $classes = Classe::orderBy('nom')->get();
         $enseignants = Enseignant::with('user')->get();
 
-        $classeId = $request->get('classe_id'); // On change salle_id par classe_id
+        $classeId = $request->get('classe_id');
         $matieresDuNiveau = [];
         $affectationsExistantes = [];
 
-
-
         if ($classeId) {
-            // On charge la relation 'matieres' directement depuis la classe
-            $classe = Classe::with(['matieres', 'niveau'])->findOrFail($classeId);
+            // On charge uniquement la relation 'matieres' depuis la classe (plus de 'niveau')
+            $classe = Classe::with(['matieres'])->findOrFail($classeId);
 
             // On récupère les matières de la classe
             $matieresDuNiveau = $classe->matieres;
@@ -58,7 +54,6 @@ class AffectationController extends Controller
             'affectationsExistantes'
         ));
     }
-
     /**
      * Enregistre ou met à jour une affectation
      */

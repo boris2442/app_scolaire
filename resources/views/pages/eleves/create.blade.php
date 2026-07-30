@@ -160,24 +160,20 @@
                     <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
                         <x-lucide-school class="w-4 h-4" /> Affectation
                     </h2>
-
-                    <div>
-                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de
-                            destination</label>
-                        <select name="classe_id"
-                            class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                            required>
-                            @foreach ($niveaux as $niv)
-                                <optgroup label="{{ $niv->nom }}">
-                                    @foreach ($niv->classes as $classe)
-                                        <option value="{{ $classe->id }}">{{ $niv->nom }} {{ $classe->nom }}
-                                        </option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                    </div>
-
+<div>
+    <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de destination</label>
+    <select name="classe_id"
+        class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+        required>
+        <option value="">-- Choisir une classe --</option>
+        
+        @foreach ($classes as $classe)
+            <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
+                {{ $classe->nom }}
+            </option>
+        @endforeach
+    </select>
+</div>
                     <div class="mt-8 border-t border-border pt-6">
                         <button type="submit"
                             class="w-full bg-primary text-white font-black py-4 rounded shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs tracking-widest">

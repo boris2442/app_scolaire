@@ -40,12 +40,6 @@ class StatistiqueController extends Controller
         return view('pages.admin.stats-palmares', compact('sequences', 'stats'));
     }
 
-    // --- FONCTIONS PRIVÉES D'OPTIMISATION ---
-
-
-
-    // --- FONCTIONS PRIVÉES D'OPTIMISATION ---
-
     private function getStatsGlobales($sequenceId)
     {
         $anneeId = $this->scolarite->getAnneeActive()->id;
@@ -86,20 +80,18 @@ class StatistiqueController extends Controller
         ];
     }
 
-
     private function getTopEleves($sequenceId)
     {
-        // Extraction du Top 5 basé sur la table 'bilans'
+        // Extraction du Top 5 basé sur la table 'bilans' (Sans table niveaux)
         return DB::table('bilans')
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->where('bilans.sequence_id', $sequenceId)
             ->select(
                 'eleves.nom',
                 'eleves.prenom',
-                DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as classe_complete"),
+                'classes.nom as classe_complete', // On prend directement le nom de la classe
                 'bilans.moyenne as valeur'
             )
             ->orderByDesc('bilans.moyenne')
@@ -109,20 +101,19 @@ class StatistiqueController extends Controller
 
     private function getStatsParClasse($sequenceId)
     {
-        // Statistiques par classe basées sur la table 'bilans'
+        // Statistiques par classe basées sur la table 'bilans' (Sans table niveaux)
         return DB::table('bilans')
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->where('bilans.sequence_id', $sequenceId)
             ->select(
                 'classes.id',
-                DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as nom_complet_classe"),
+                'classes.nom as nom_complet_classe', // On prend directement le nom de la classe
                 DB::raw('COUNT(*) as total'),
                 DB::raw('AVG(moyenne) as moyenne_classe'),
                 DB::raw('SUM(CASE WHEN moyenne >= 10 THEN 1 ELSE 0 END) as reussite')
             )
-            ->groupBy('classes.id', 'niveaux.nom', 'classes.nom')
+            ->groupBy('classes.id', 'classes.nom')
             ->get();
     }
 
@@ -131,9 +122,8 @@ class StatistiqueController extends Controller
         $anneeActive = $this->scolarite->getAnneeActive();
 
         $classeInfo = DB::table('classes')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->where('classes.id', $classe_id)
-            ->select('classes.nom as classe_nom', 'niveaux.nom as niveau_nom')
+            ->select('classes.nom as classe_nom')
             ->first();
 
         $totalInscrits = DB::table('inscriptions')
@@ -160,7 +150,7 @@ class StatistiqueController extends Controller
             ->get();
 
         $appreciations = [
-            'Excellent'  => $moyennes->where('valeur', '', 18)->count(), // Corrigé pour la syntaxe collection
+            'Excellent'  => $moyennes->where('valeur', '>=', 18)->count(),
             'Très Bien'  => $moyennes->where('valeur', '>=', 16)->where('valeur', '<', 18)->count(),
             'Bien'       => $moyennes->where('valeur', '>=', 14)->where('valeur', '<', 16)->count(),
             'Assez Bien' => $moyennes->where('valeur', '>=', 12)->where('valeur', '<', 14)->count(),
@@ -168,92 +158,81 @@ class StatistiqueController extends Controller
             'Médiocre'   => $moyennes->where('valeur', '<', 10)->count(),
         ];
 
-        $classe = Classe::with('niveau')->findOrFail($classe_id);
+        // Plus de relation 'niveau' ici
+        $classe = Classe::findOrFail($classe_id);
 
         return view('pages.admin.stats-classe-detail', compact('moyennes', 'appreciations', 'classe', 'totalInscrits'));
     }
 
-
-
-
-
-
-
-
-
-
-
     public function registreTrimestriel(Request $request)
-{
-    $classeId = $request->get('classe_id');
-    $trimestreId = $request->get('trimestre_id');
-    $anneeActive = $this->scolarite->getAnneeActive();
+    {
+        $classeId = $request->get('classe_id');
+        $trimestreId = $request->get('trimestre_id');
+        $anneeActive = $this->scolarite->getAnneeActive();
 
-    // 1. Récupérer les classes et trimestres pour les filtres
-    $classes = DB::table('classes')
-        ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
-        ->select('classes.id', DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as nom"))
-        ->get();
-        
-    $trimestres = DB::table('trimestres')
-        ->where('annee_scolaire_id', $anneeActive->id)
-        ->get();
-
-    $registre = null;
-
-    if ($classeId && $trimestreId) {
-        // 2. Trouver les séquences liées à ce trimestre
-        $sequences = DB::table('sequences')
-            ->where('trimestre_id', $trimestreId)
-            ->orderBy('id', 'asc')
-            ->get(); // Généralement 2 séquences par trimestre
-
-        // 3. Extraction des matières de la classe avec leur prof
-        $matieres = DB::table('classe_matiere') 
-            ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-            ->leftJoin('affectations', function($join) use ($classeId) {
-                $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
-                     ->where('affectations.classe_id', '=', $classeId);
-            })
-            ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
-            ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
-            ->where('classe_matiere.classe_id', $classeId)
-            ->select('matieres.id', 'matieres.nom as matiere_nom', DB::raw("COALESCE(users.name, 'Aucun prof') as prof_nom"))
+        // 1. Récupérer les classes et trimestres pour les filtres (Sans table niveaux)
+        $classes = DB::table('classes')
+            ->select('classes.id', 'classes.nom as nom')
+            ->get();
+            
+        $trimestres = DB::table('trimestres')
+            ->where('annee_scolaire_id', $anneeActive->id)
             ->get();
 
-        // 4. Récupérer les élèves de la classe
-        $eleves = DB::table('inscriptions')
-            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-            ->where('inscriptions.classe_id', $classeId)
-            ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
-            ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom')
-            ->orderBy('eleves.nom', 'asc')
-            ->get();
+        $registre = null;
 
-        // 5. REQUÊTE OPTIMISÉE : Prendre toutes les notes des séquences de ce trimestre
-        $notesBrutes = DB::table('moyennes')
-            ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
-            ->whereIn('sequence_id', $sequences->pluck('id'))
-            ->get();
+        if ($classeId && $trimestreId) {
+            // 2. Trouver les séquences liées à ce trimestre
+            $sequences = DB::table('sequences')
+                ->where('trimestre_id', $trimestreId)
+                ->orderBy('id', 'asc')
+                ->get();
 
-        // Structure en matrice tridimensionnelle : [Élève][Matière][Séquence] = Note
-        $grilleNotes = [];
-        $coefficientsMatieres = [];
-        
-        foreach ($notesBrutes as $note) {
-            $grilleNotes[$note->inscription_id][$note->matiere_id][$note->sequence_id] = $note->valeur;
-            $coefficientsMatieres[$note->matiere_id] = $note->coefficient;
+            // 3. Extraction des matières de la classe avec leur prof
+            $matieres = DB::table('classe_matiere') 
+                ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
+                ->leftJoin('affectations', function($join) use ($classeId) {
+                    $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
+                         ->where('affectations.classe_id', '=', $classeId);
+                })
+                ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
+                ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
+                ->where('classe_matiere.classe_id', $classeId)
+                ->select('matieres.id', 'matieres.nom as matiere_nom', DB::raw("COALESCE(users.name, 'Aucun prof') as prof_nom"))
+                ->get();
+
+            // 4. Récupérer les élèves de la classe
+            $eleves = DB::table('inscriptions')
+                ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+                ->where('inscriptions.classe_id', $classeId)
+                ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+                ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom')
+                ->orderBy('eleves.nom', 'asc')
+                ->get();
+
+            // 5. REQUÊTE OPTIMISÉE : Prendre toutes les notes des séquences de ce trimestre
+            $notesBrutes = DB::table('moyennes')
+                ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
+                ->whereIn('sequence_id', $sequences->pluck('id'))
+                ->get();
+
+            $grilleNotes = [];
+            $coefficientsMatieres = [];
+            
+            foreach ($notesBrutes as $note) {
+                $grilleNotes[$note->inscription_id][$note->matiere_id][$note->sequence_id] = $note->valeur;
+                $coefficientsMatieres[$note->matiere_id] = $note->coefficient;
+            }
+
+            $registre = [
+                'sequences' => $sequences,
+                'matieres' => $matieres,
+                'eleves' => $eleves,
+                'grille' => $grilleNotes,
+                'coefficients' => $coefficientsMatieres
+            ];
         }
 
-        $registre = [
-            'sequences' => $sequences,
-            'matieres' => $matieres,
-            'eleves' => $eleves,
-            'grille' => $grilleNotes,
-            'coefficients' => $coefficientsMatieres
-        ];
+        return view('pages.admin.statistiques.registre-trimestriel', compact('classes', 'trimestres', 'registre', 'classeId', 'trimestreId'));
     }
-
-    return view('pages.admin.statistiques.registre-trimestriel', compact('classes', 'trimestres', 'registre', 'classeId', 'trimestreId'));
-}
 }

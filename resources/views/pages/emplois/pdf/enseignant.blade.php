@@ -111,7 +111,7 @@
                                 <div class="cours">
                                     <div class="matiere">{{ $seance->matiere->nom ?? 'Matière' }}</div>
                                     <div class="classe">
-                                        {{ $seance->classe->niveau->nom ?? '' }} {{ $seance->classe->nom ?? '' }}
+                                        {{ $seance->classe->nom ?? '' }}
                                     </div>
                                 </div>
                             @else

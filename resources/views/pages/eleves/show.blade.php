@@ -67,31 +67,21 @@
                 <div class="bg-card p-6 rounded-[2.5rem] text-black shadow-xl">
                     <p class="text-[10px] font-black uppercase opacity-70 mb-2">Affectation Année 2025-2026</p>
 
-                    <div class="flex items-end gap-2">
-                        @php
-                            $derniereInsc = $eleve->inscriptions->last();
-                        @endphp
+                 <div class="flex items-end gap-2">
+    @php
+        $derniereInsc = $eleve->inscriptions->last();
+    @endphp
 
-                        @if ($derniereInsc && $derniereInsc->classe)
-                            <span class="text-5xl font-black italic">
-                                {{ $derniereInsc->classe->niveau->nom ?? 'Niveau inconnu' }}
-                            </span>
+    @if ($derniereInsc && $derniereInsc->classe)
+        <span class="text-3xl font-black italic">
+            {{ $derniereInsc->classe->nom }}
+        </span>
+    @else
+        <span class="text-2xl font-black italic uppercase">Non Inscrit</span>
+    @endif
+</div>
 
-                            <span class="text-2xl font-black opacity-80 pb-1">
-                                {{ $derniereInsc->classe->nom }}
-                            </span>
-                        @else
-                            <span class="text-2xl font-black italic uppercase">Non Inscrit</span>
-                        @endif
-                    </div>
-
-                    {{-- <div class="mt-4 pt-4 border-t border-black/10 flex justify-between items-center">
-                        <span class="text-[10px] font-bold uppercase">Statut : Occupé</span>
-                        <div class="flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-black"></span>
-                            <span class="text-[10px] font-black uppercase">Salle {{ $eleve->salle_nom ?? 'A1' }}</span>
-                        </div>
-                    </div> --}}
+                  
                 </div>
             </div>
 

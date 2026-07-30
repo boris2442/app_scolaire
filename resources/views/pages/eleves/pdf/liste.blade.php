@@ -72,11 +72,10 @@
         </tr>
     </table>
 
-    <div class="title-box">
-        <h2>LISTE DES ÉLÈVES : {{ strtoupper($classe->niveau->nom) }} {{ strtoupper($classe->nom) }}</h2>
-        <p>Année Scolaire : {{ $anneeActive->libelle }}</p>
-    </div>
-
+  <div class="title-box">
+    <h2>LISTE DES ÉLÈVES : {{ strtoupper($classe->nom) }}</h2>
+    <p>Année Scolaire : {{ $anneeActive->libelle }}</p>
+</div>
     <table>
         <thead>
             <tr>

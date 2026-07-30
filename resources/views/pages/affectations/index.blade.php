@@ -13,15 +13,14 @@
     <div class="bg-card p-6 rounded-2xl border border-border shadow-sm mb-8">
         <form action="{{ route('admin.affectations.index') }}" method="GET" class="flex items-end gap-4">
             <div class="flex-1">
-                <label class="text-[10px] font-black  text-muted-foreground ml-1">Sélectionner une salle /
-                    classe</label>
+                <label class="text-[10px] font-black text-muted-foreground ml-1">Sélectionner une salle / classe</label>
                 <select name="classe_id" onchange="this.form.submit()"
                     class="w-full px-4 py-2 rounded border border-border bg-secondary">
                     <option value="" class="text-muted-foreground dark:text-gray-900">-- Choisir une classe --
                     </option>
                     @foreach ($classes as $item)
-                        <option value="{{ $item->id }}" {{ $classeId == $item->id ? 'selected' : '' }}>
-                            {{ $item->niveau->nom }} {{ $item->nom }}
+                        <option value="{{ $item->id }}" {{ ($classeId ?? null) == $item->id ? 'selected' : '' }}>
+                            {{ optional($item->cycle)->nom }} {{ $item->nom }}
                         </option>
                     @endforeach
                 </select>
@@ -100,7 +99,7 @@
                 <div class="p-6 bg-secondary/10 border-t flex justify-end">
                     <button type="submit"
                         class="bg-primary text-white px-8 py-4 rounded font-black  text-[12px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20">
-                     <x-lucide-save class="w-4 h-4 mr-2" /> Enregistrer tout le tableau
+                        <x-lucide-save class="w-4 h-4 mr-2" /> Enregistrer tout le tableau
                     </button>
                 </div>
             </form>

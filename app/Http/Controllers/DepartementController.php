@@ -11,7 +11,7 @@ class DepartementController extends Controller
 {
     public function index()
     {
-        // $departements=Departement::with(['nom', 'code','created_at', 'description'])->get();
+      
         // Dans DepartementController.php à la ligne 12
         $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
         return view('pages.departements.index', compact('departements'));
@@ -43,7 +43,7 @@ class DepartementController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('admin.departements.index')
+        return redirect()->route('admin.departments.index')
             ->with('success', 'Département mis à jour avec succès !');
     }
 
@@ -52,7 +52,7 @@ class DepartementController extends Controller
     {
         try {
             DB::table('departements')->where('id', $id)->delete();
-            return redirect()->route('admin.departements.index')
+            return redirect()->route('admin.departments.index')
                 ->with('success', 'Département supprimé.');
         } catch (\Exception $e) {
             // En cas de classes liées au département
@@ -82,7 +82,7 @@ class DepartementController extends Controller
             // 'createur_id' => auth()->id(), 
         ]);
 
-        return redirect()->route('admin.departements.index')
+        return redirect()->route('admin.departments.index')
             ->with('success', 'Nouveau département créé avec succès !');
     }
 }

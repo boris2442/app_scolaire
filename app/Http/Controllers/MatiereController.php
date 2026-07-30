@@ -13,8 +13,7 @@ class MatiereController extends Controller
     public function index(Request $request)
     {
         $groupes = GroupeMatiere::all();
-        // $query = Matiere::query();
-        // $query = Matiere::query();
+    
         $query = Matiere::with(['groupeMatiere']); // On récupère également le groupe de chaque matière 
 
 

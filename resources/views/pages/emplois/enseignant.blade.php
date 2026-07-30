@@ -75,28 +75,7 @@
 
                                         @endphp
 
-                                        {{-- @if ($seance)
-                                            <div class="rounded-lg border border-primary/20 bg-primary/10 p-3 shadow-sm">
-                                                <div class="font-semibold text-primary">
-                                                    {{ $seance->matiere->nom ?? 'Matière' }}
-                                                </div>
-
-                                                <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
-                                                    <div>
-                                                        Niveau : <span
-                                                            class="font-semibold">{{ $seance->classe->niveau->nom ?? ($seance->classe->niveau ?? '-') }}</span>
-                                                    </div>
-                                                    <div>
-                                                        Classe / Groupe : <span
-                                                            class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="py-4 text-xs italic text-foreground/40">
-                                                Libre
-                                            </div>
-                                        @endif --}}
+                                      
 
 
                                         @if ($seance)
@@ -105,16 +84,11 @@
                                                     {{ $seance->matiere->nom ?? 'Matière' }}
                                                 </div>
 
-                                                <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
-                                                    <div>
-                                                        Niveau : <span
-                                                            class="font-semibold">{{ $seance->classe->niveau->nom ?? ($seance->classe->niveau ?? '-') }}</span>
-                                                    </div>
-                                                    <div>
-                                                        Classe / Groupe : <span
-                                                            class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
-                                                    </div>
-                                                </div>
+                                               <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
+    <div>
+        Classe / Groupe : <span class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
+    </div>
+</div>
 
                                                 <!-- 👇 C'est ici qu'on ajoute le lien vers la gestion du programme de cette séance ! -->
                                                 <div class="mt-3 pt-2 border-t border-primary/20">

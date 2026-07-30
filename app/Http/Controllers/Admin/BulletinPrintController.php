@@ -13,7 +13,7 @@ class BulletinPrintController extends Controller
     // 1. Affichage de la Grille des Classes
     public function index(Request $request)
     {
-        // On récupère l'année active (via ta logique existante)
+        // On récupère l'année active
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
         if (!$anneeActive) {
@@ -28,21 +28,19 @@ class BulletinPrintController extends Controller
         // Récupérer le trimestre sélectionné ou prendre le premier par défaut
         $trimestreId = $request->get('trimestre_id') ?? ($trimestres->first()->id ?? null);
 
-        // Récupérer toutes les classes avec le nombre d'élèves inscrits pour cette année
+        // Récupérer toutes les classes avec le nombre d'élèves inscrits pour cette année (Sans la table niveaux)
         $classes = DB::table('classes')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->leftJoin('inscriptions', function ($join) use ($anneeActive) {
                 $join->on('inscriptions.classe_id', '=', 'classes.id')
                     ->where('inscriptions.annee_scolaire_id', '=', $anneeActive->id);
             })
             ->select(
                 'classes.id',
-                'niveaux.nom as niveau_nom',
                 'classes.nom as classe_nom',
                 DB::raw('COUNT(inscriptions.id) as total_eleves')
             )
-            ->groupBy('classes.id', 'niveaux.nom', 'classes.nom')
-            ->orderBy('niveaux.nom', 'desc')
+            ->groupBy('classes.id', 'classes.nom')
+            ->orderBy('classes.nom', 'asc')
             ->get();
 
         return view('pages.admin.bulletins.index', compact('classes', 'trimestres', 'trimestreId'));
@@ -52,15 +50,12 @@ class BulletinPrintController extends Controller
     public function classeHub($classeId, Request $request)
     {
         $trimestreId = $request->get('trimestre_id');
-
-
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        // Informations de la classe
+        // Informations de la classe (On prend directement le nom de la classe)
         $classe = DB::table('classes')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->where('classes.id', $classeId)
-            ->select('classes.id', DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as nom"))
+            ->select('classes.id', 'classes.nom')
             ->first();
 
         // Liste des élèves inscrits dans cette classe
@@ -75,32 +70,16 @@ class BulletinPrintController extends Controller
         return view('pages.admin.bulletins.classe-hub', compact('classe', 'eleves', 'trimestreId'));
     }
 
-
-
-
-    // 1. Impression d'un SEUL élève
+    // 3. Impression d'un SEUL élève
     public function imprimerEleve($inscriptionId, $trimestreId)
     {
         $etablissement = DB::table('etablissements')->first();
         $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
 
-        // On récupère les données de cet élève et on les met dans un tableau []
         $bulletins = [
             $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences),
         ];
-
-        // 2. Récupérer les stats réelles de la classe de cet élève
-        $classeId = $bulletins[0]['inscription']->classe_id;
-        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
-        $inscriptionIds = DB::table('inscriptions')
-            ->where('classe_id', $classeId)
-            ->where('annee_scolaire_id', $anneeActive->id)
-            ->pluck('id');
-
-
-        // $stats = $this->calculerStatistiquesClasse([$inscriptionId], $trimestreId);
-        // AJOUTEZ CECI : Des statistiques vides par défaut pour l'impression solo
 
         $stats = $this->calculerStatistiquesEnMemoire($bulletins);
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
@@ -108,8 +87,7 @@ class BulletinPrintController extends Controller
         return $pdf->download("Bulletin_Eleve.pdf");
     }
 
-    // 2. NOUVEAU : Impression de TOUTE la classe d'un coup
-
+    // 4. Impression de TOUTE la classe d'un coup
     public function imprimerClasse($classeId, $trimestreId)
     {
         $etablissement = DB::table('etablissements')->first();
@@ -122,7 +100,6 @@ class BulletinPrintController extends Controller
             ->where('annee_scolaire_id', $anneeActive->id)
             ->pluck('id');
 
-        // 1. Récupération globale des notes pour toute la classe (performance)
         $allNotes = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
             ->whereIn('notes.inscription_id', $inscriptionIds)
@@ -134,14 +111,10 @@ class BulletinPrintController extends Controller
         $bulletins = [];
         $moyennesIndividuelles = [];
 
-        // 2. Boucle : Calcul des moyennes individuelles et stockage
-
-
         foreach ($inscriptionIds as $id) {
             $notesEleve = $allNotes->get($id, collect());
             $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
 
-            // Calculs des moyennes
             $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
             $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
             $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
@@ -152,73 +125,12 @@ class BulletinPrintController extends Controller
             $bulletin['moyenne_t3'] = $this->calculerMoyenneTrimestre($id, $idT3);
 
             $bulletin['moyenne_annuelle'] = ($bulletin['moyenne_t1'] + $bulletin['moyenne_t2'] + $bulletin['moyenne_t3']) / 3;
-
-            // Moyenne utilisée pour le classement
             $bulletin['moyenne_calculee'] = ($trimestreId == $idT3) ? $bulletin['moyenne_t3'] : (($trimestreId == $idT2) ? $bulletin['moyenne_t2'] : $bulletin['moyenne_t1']);
-
-            // --- AJOUTEZ CETTE LIGNE ---
-            // Ce drapeau sera vrai uniquement si le trimestre actuel est le T3
             $bulletin['est_troisieme_trimestre'] = ($trimestreId == $idT3);
-            // ---------------------------
 
             $bulletins[] = $bulletin;
             $moyennesIndividuelles[] = (float)$bulletin['moyenne_calculee'];
         }
-
-
-
-        // // 3. Calcul du RANG pour tous les élèves
-        // $classement = $bulletins;
-        // usort($classement, function ($a, $b) {
-        //     return $b['moyenne_calculee'] <=> $a['moyenne_calculee'];
-        // });
-
-
-
-
-        // // 2. Calcul du RANG ANNUEL (similaire mais sur la moyenne annuelle)
-        // $classementAnnuel = $bulletins;
-        // usort($classementAnnuel, function ($a, $b) {
-        //     return $b['moyenne_annuelle'] <=> $a['moyenne_annuelle'];
-        // });
-
-        // $rangsAnnuels = [];
-        // $indexAnnuel = 1;
-        // foreach ($classementAnnuel as $i => $item) {
-        //     if ($i > 0 && $item['moyenne_annuelle'] == $classementAnnuel[$i - 1]['moyenne_annuelle']) {
-        //         $rangsAnnuels[$item['inscription']->inscription_id] = $rangsAnnuels[$classementAnnuel[$i - 1]['inscription']->inscription_id];
-        //     } else {
-        //         $rangsAnnuels[$item['inscription']->inscription_id] = $indexAnnuel;
-        //     }
-        //     $indexAnnuel++;
-        // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // foreach ($bulletins as &$b) {
-        //     $rang = 1;
-        //     foreach ($classement as $c) {
-        //         if ($c['moyenne_calculee'] > $b['moyenne_calculee']) $rang++;
-        //     }
-        //     $b['rang'] = $rang;
-        // }
-
-
-
-
-
-
-        // ... Après votre boucle foreach qui remplit $bulletins ...
 
         // Calcul du RANG TRIMESTRIEL
         $classementTrim = $bulletins;
@@ -234,29 +146,19 @@ class BulletinPrintController extends Controller
 
         // Injection des rangs
         foreach ($bulletins as &$b) {
-            // Rang Trimestriel
             $rangT = 1;
             foreach ($classementTrim as $c) {
                 if ($c['moyenne_calculee'] > $b['moyenne_calculee']) $rangT++;
             }
             $b['rang'] = $rangT;
 
-            // Rang Annuel
             $rangA = 1;
             foreach ($classementAnnuel as $c) {
                 if ($c['moyenne_annuelle'] > $b['moyenne_annuelle']) $rangA++;
             }
-            $b['rang_annuel'] = $rangA; // <--- C'est ici que la clé est définie !
+            $b['rang_annuel'] = $rangA;
         }
 
-
-
-
-
-
-
-
-        // 4. Calcul des STATISTIQUES DE LA CLASSE (après la boucle)
         $totalEleves = count($moyennesIndividuelles);
         $stats = [
             'moyenne' => $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0,
@@ -265,25 +167,17 @@ class BulletinPrintController extends Controller
             'taux_reussite' => $totalEleves > 0 ? (count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10)) / $totalEleves) * 100 : 0
         ];
 
-        // 5. Génération du PDF
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
 
         return $pdf->download("Bulletins_Classe.pdf");
     }
 
-
-
-
-
-
-
     private function chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences, $notesEleve = null)
     {
-        // 1. Récupération des informations de l'élève et de l'inscription
+        // 1. Récupération des informations de l'élève et de l'inscription (Sans la table niveaux)
         $inscription = DB::table('inscriptions')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
-            ->join('niveaux', 'classes.niveau_id', '=', 'niveaux.id')
             ->join('annee_scolaires', 'inscriptions.annee_scolaire_id', '=', 'annee_scolaires.id')
             ->where('inscriptions.id', $inscriptionId)
             ->select(
@@ -296,7 +190,7 @@ class BulletinPrintController extends Controller
                 'eleves.sexe',
                 'eleves.date_naissance',
                 'eleves.lieu_naissance',
-                DB::raw("CONCAT(niveaux.nom, ' ', classes.nom) as classe_nom"),
+                'classes.nom as classe_nom', // On prend directement le nom de la classe
                 'annee_scolaires.libelle as annee_libelle'
             )->first();
 
@@ -305,23 +199,13 @@ class BulletinPrintController extends Controller
             ->where('annee_scolaire_id', $inscription->annee_scolaire_id)
             ->count();
 
-        // DEBUG : Ajoutez ceci temporairement juste avant la requête
-        //  dump($inscriptionId, $trimestreId);
-        // 2. Récupération du suivi disciplinaire pour cet élève au trimestre donné
         $suiviDisciplinaire = DB::table('suivi_disciplinaires')
             ->where('inscription_id', $inscriptionId)
-            ->where('trimestre_id', $trimestreId) // Assurez-vous d'avoir cette variable $trimestreId
+            ->where('trimestre_id', $trimestreId)
             ->first();
 
-
-        // DEBUG : Voyez-vous un objet ou NULL ?
-        // dd($suiviDisciplinaire);
-
-
-        // 2. Récupération des matières
         $matieres = DB::table('classe_matiere')
             ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-            // Jointure sur les groupes de matières
             ->leftJoin('groupes_matieres', 'matieres.groupe_matiere_id', '=', 'groupes_matieres.id')
             ->leftJoin('affectations', function ($join) use ($inscription) {
                 $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
@@ -334,26 +218,18 @@ class BulletinPrintController extends Controller
                 'matieres.id as matiere_id',
                 'matieres.nom as matiere_nom',
                 'classe_matiere.coefficient',
-                'groupes_matieres.id as groupe_id', // Ajouté pour le groupBy
-                'groupes_matieres.nom as groupe_nom', // Ajouté pour l'affichage
-                'groupes_matieres.ordre as groupe_ordre', // Très important pour le tri
+                'groupes_matieres.id as groupe_id',
+                'groupes_matieres.nom as groupe_nom',
+                'groupes_matieres.ordre as groupe_ordre',
                 DB::raw("COALESCE(users.name, 'Non assigné') as prof_nom")
             )
-            ->orderBy('groupes_matieres.ordre', 'asc') // Tri par groupe
+            ->orderBy('groupes_matieres.ordre', 'asc')
             ->get()
-            ->groupBy('groupe_id'); // On regroupe par ID de groupe;
+            ->groupBy('groupe_id');
 
-
-
-
-
-
-        // 3. Récupération des notes (Optimisée avec le paramètre $notesEleve)
         if ($notesEleve !== null) {
-            // On utilise les données déjà chargées dans le contrôleur (Mode Rapide)
             $notesBrutes = $notesEleve;
         } else {
-            // Mode Normal : on va chercher les données dans la base
             $notesBrutes = DB::table('notes')
                 ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
                 ->where('notes.inscription_id', $inscriptionId)
@@ -368,7 +244,6 @@ class BulletinPrintController extends Controller
             $notes[$note->matiere_id][$note->sequence_id] = $note->valeur;
         }
 
-        // 4. Récupération des coefficients
         $coefficientsBruts = DB::table('moyennes')
             ->where('inscription_id', $inscriptionId)
             ->whereIn('sequence_id', $sequences->pluck('id'))
@@ -379,16 +254,12 @@ class BulletinPrintController extends Controller
             $coefficients[$c->matiere_id] = $c->coefficient;
         }
 
-        // 5. Récupération du bilan
         $bilan = DB::table('bilans')
             ->where('inscription_id', $inscriptionId)
             ->where('trimestre_id', $trimestreId)
             ->whereNull('sequence_id')
             ->first();
 
-        // return compact('inscription', 'totalElevesClasse', 'matieres', 'notes', 'coefficients', 'bilan');
-
-        // À la fin de chargerDonneesBulletin
         return [
             'inscription' => $inscription,
             'totalElevesClasse' => $totalElevesClasse,
@@ -396,25 +267,16 @@ class BulletinPrintController extends Controller
             'notes' => $notes,
             'coefficients' => $coefficients,
             'bilan' => $bilan,
-            'suivi' => $suiviDisciplinaire, // Ajout du suivi disciplinaire
+            'suivi' => $suiviDisciplinaire,
         ];
     }
 
-
-
-
-
-
-
-    // Nouvelle fonction privée qui calcule tout à partir des bulletins générés
     private function calculerStatistiquesEnMemoire($bulletins)
     {
         $moyennes = [];
         $nbReussites = 0;
 
         foreach ($bulletins as $b) {
-            // On récupère la moyenne depuis le bulletin généré
-            // Remplacez 'moyenne_generale' par la clé exacte que votre fonction chargerDonneesBulletin utilise
             $m = $b['bilan']['moyenne'] ?? $b['bilan']->moyenne ?? 0;
 
             $moyennes[] = (float)$m;
@@ -435,70 +297,22 @@ class BulletinPrintController extends Controller
         ];
     }
 
-    // private function calculerMoyenneTrimestre($inscriptionId, $trimestreId)
-    // {
-    //     // 1. Récupérer les séquences du trimestre
-    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
-
-    //     // 2. Récupérer les notes
-    //     $notes = DB::table('notes')
-    //         ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
-    //         ->where('notes.inscription_id', $inscriptionId)
-    //         ->whereIn('evaluations.sequence_id', $sequences)
-    //         ->select('evaluations.matiere_id', DB::raw('AVG(notes.valeur) as valeur'))
-    //         ->groupBy('evaluations.matiere_id')
-    //         ->get();
-
-    //     // 3. Récupérer les coefficients pour ces matières
-    //     $coeffs = DB::table('moyennes')
-    //         ->where('inscription_id', $inscriptionId)
-    //         ->whereIn('sequence_id', $sequences)
-    //         ->select('matiere_id', 'coefficient')
-    //         ->distinct()
-    //         ->get()
-    //         ->pluck('coefficient', 'matiere_id');
-
-    //     // 4. Calculer
-    //     $totalPoints = 0;
-    //     $totalCoeffs = 0;
-    //     foreach ($notes as $n) {
-    //         $c = $coeffs[$n->matiere_id] ?? 1;
-    //         $totalPoints += $n->valeur * $c;
-    //         $totalCoeffs += $c;
-    //     }
-
-    //     return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0;
-    // }
-
-
-
-
-
-
-
     private function calculerMoyenneTrimestre($inscriptionId, $trimestreId)
     {
-        // 1. Récupérer l'ID de la classe via l'inscription
         $inscription = DB::table('inscriptions')->where('id', $inscriptionId)->first();
-        if (!$inscription) return 0; // Sécurité : si l'inscription n'existe pas, moyenne 0
+        if (!$inscription) return 0;
 
         $classeId = $inscription->classe_id;
-
-        // 2. Récupérer les IDs des séquences pour ce trimestre
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
 
-        // Si aucune séquence n'est configurée, on retourne 0 pour éviter la division par zéro
         if ($sequences->isEmpty()) return 0;
 
-        // 3. Récupérer toutes les matières officielles de la classe avec leurs coefficients
         $matieres = DB::table('classe_matiere')
             ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
             ->where('classe_matiere.classe_id', $classeId)
             ->select('matieres.id', 'classe_matiere.coefficient')
             ->get();
 
-        // 4. Récupérer les moyennes de l'élève pour les matières où il a composé
-        // On groupe par matiere_id pour avoir la moyenne de la matière sur toutes les séquences du trimestre
         $notes = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
             ->where('notes.inscription_id', $inscriptionId)
@@ -508,36 +322,25 @@ class BulletinPrintController extends Controller
             ->get()
             ->pluck('moyenne_matiere', 'matiere_id');
 
-        // 5. Calcul pondéré
         $totalPoints = 0;
         $totalCoeffs = 0;
 
         foreach ($matieres as $m) {
-            $valeur = $notes->get($m->id, 0); // Si pas de note, on prend 0
+            $valeur = $notes->get($m->id, 0);
             $totalPoints += $valeur * $m->coefficient;
             $totalCoeffs += $m->coefficient;
         }
 
-        return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0; // Division par le total des coefficients
+        return $totalCoeffs > 0 ? $totalPoints / $totalCoeffs : 0;
     }
-
-
-
-
-
-
-
-
 
     private function getTrimestreIdParIndex($anneeId, $index)
     {
-        // Récupère tous les trimestres de l'année, triés par ID croissant
         $trimestres = DB::table('trimestres')
             ->where('annee_scolaire_id', $anneeId)
             ->orderBy('id', 'asc')
             ->get();
 
-        // Retourne l'ID du trimestre à la position demandée (0 = T1, 1 = T2, 2 = T3)
         return $trimestres[$index]->id ?? null;
     }
 }

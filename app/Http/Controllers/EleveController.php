@@ -30,6 +30,7 @@ class EleveController extends Controller
         $this->scolarite = $scolarite;
     }
 
+   
     public function index(Request $request, StudentAnalyticsService $analytics)
     {
         $anneeId = $request->input('annee_id');
@@ -39,27 +40,27 @@ class EleveController extends Controller
 
         $stats = $analytics->getFullDashboardStats($anneeActive->id);
 
-        // MODIFICATION ICI : On filtre la requête principale
+        // MODIFICATION ICI : On charge directement la classe (plus de relation niveau)
         $query = Eleve::whereHas('inscriptions', function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id);
         })->with(['inscriptions' => function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
+            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe');
         }]);
 
-        // ... tes filtres (Niveau, Classe, Search) restent identiques ...
-        if ($request->filled('niveau_id')) {
-            $query->whereHas('inscriptions.classe', function ($q) use ($request) {
-                $q->where('niveau_id', $request->niveau_id);
+        // MODIFICATION DU FILTRE : Remplacement du filtre par niveau_id par un filtre par classe_id (ou adapté selon tes besoins)
+        if ($request->filled('classe_id')) {
+            $query->whereHas('inscriptions', function ($q) use ($request) {
+                $q->where('classe_id', $request->classe_id);
             });
         }
 
         $eleves = $query->latest()->paginate(5)->withQueryString();
 
-        $niveaux = Niveau::with('classes')->get();
+        // On récupère directement la liste des classes pour les filtres de la vue
+        $classes = Classe::all();
 
-        return view('pages.eleves.index', compact('eleves', 'niveaux', 'anneeActive', 'stats'));
+        return view('pages.eleves.index', compact('eleves', 'classes', 'anneeActive', 'stats'));
     }
-
 
     private function getKpis($anneeActiveId)
     {
@@ -82,78 +83,33 @@ class EleveController extends Controller
             'pourcentage_filles' => $stats->total > 0 ? round(($stats->filles / $stats->total) * 100) : 0,
         ];
     }
+    // public function create()
+
+    // {
+    //     //afficher le sexe
+
+    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
+    //     $niveaux = Niveau::with('classes')->get();
+    //     // On récupère les sexes depuis la structure de la BD
+    //     $sexes = Eleve::getSexeOptions();
+    //     return view('pages.eleves.create', compact('anneeActive', 'niveaux', 'sexes'));
+    // }
+
     public function create()
-
     {
-        //afficher le sexe
-
+        // Récupérer l'année active
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
-        $niveaux = Niveau::with('classes')->get();
+
+        // On récupère directement la liste des classes (plus de niveaux)
+        $classes = Classe::all();
+
         // On récupère les sexes depuis la structure de la BD
         $sexes = Eleve::getSexeOptions();
-        return view('pages.eleves.create', compact('anneeActive', 'niveaux', 'sexes'));
+
+        return view('pages.eleves.create', compact('anneeActive', 'classes', 'sexes'));
     }
 
 
-
-    // public function store(EleveRequest $request)
-    // {
-
-    //     // 1. Récupérer les données validées
-    //     $data = $request->validated();
-    //     // Gestion de l'image
-    //     if ($request->hasFile('photo')) {
-    //         // On stocke l'image dans storage/app/public/photos_eleves
-    //         $path = $request->file('photo')->store('photos_eleves', 'public');
-    //         $data['photo'] = $path;
-    //     }
-    //     $eleve = null;
-    //     // 2. Utiliser une transaction pour la sécurité des données
-    //     return DB::transaction(function () use ($data, $request) {
-
-    //         // 3. Génération du matricule "Professionnel"
-    //         $anneeActive = $this->scolarite->getAnneeActive();
-    //         $debut = Carbon::parse($anneeActive->date_debut)->format('y'); // ex: 25
-    //         $fin = Carbon::parse($anneeActive->date_fin)->format('y');     // ex: 26
-
-    //         // On génère le matricule 252600007 en utilisant l'ID unique de l'élève
-    //         $matricule = $debut . $fin . str_pad($eleve->id, 5, '0', STR_PAD_LEFT);
-
-    //         // 4. Mise à jour de l'élève avec son matricule définitif
-    //         $eleve->update(['matricule' => $matricule]);
-    //         // 3. Création de l'élève
-    //         $eleve = Eleve::create([
-    //             'matricule' => $matricule,
-    //             'nom' => strtoupper($data['nom']),
-    //             'prenom' => $data['prenom'],
-    //             'date_naissance' => $data['date_naissance'],
-    //             'sexe' => $data['sexe'],
-    //             'lieu_naissance' => $data['lieu_naissance'] ?? null,
-    //             'telephone_parent' => $data['telephone_parent'] ?? null,
-    //             'adresse' => $data['adresse'] ?? null,
-    //             'photo' => $data['photo'] ?? null,
-    //         ]);
-
-    //         // 4. Récupération de l'année scolaire active
-    //         $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-    //         if (!$anneeActive) {
-    //             throw new \Exception("Aucune année scolaire n'est définie comme active.");
-    //         }
-
-    //         // 5. Inscription immédiate
-    //         Inscription::create([
-    //             'eleve_id' => $eleve->id,
-    //             'classe_id' => $request->classe_id, // Utilise la colonne de ta table inscriptions
-    //             'annee_scolaire_id' => $anneeActive->id,
-    //             'date_inscription' => now(),
-    //             'est_redoublant' => $request->has('est_redoublant') ? true : false,
-    //         ]);
-
-    //         return redirect()->route('admin.students.index')
-    //             ->with('success', "L'élève {$eleve->nom} a été inscrit avec succès. Matricule : {$matricule}");
-    //     });
-    // }
     public function store(EleveRequest $request)
     {
         $data = $request->validated();
@@ -214,15 +170,15 @@ class EleveController extends Controller
      * @param  \App\Models\Eleve  $eleve
      */
 
+   
     public function show($id)
     {
-        $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire', 'inscriptions.classe.niveau'])
+        // On charge les inscriptions, l'année scolaire et la classe (sans la relation 'niveau')
+        $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire'])
             ->findOrFail($id);
 
         return view('pages.eleves.show', compact('eleve'));
     }
-
-
 
 
 
@@ -236,18 +192,18 @@ class EleveController extends Controller
         $anneeActive = $this->scolarite->getAnneeActive();
         $inscriptionActuelle = $this->scolarite->getClasseActuelle($eleve->id);
 
-        $niveaux = Niveau::with('classes')->get();
+        // On récupère directement les classes (plus de niveaux)
+        $classes = Classe::all();
         $sexes = Eleve::getSexeOptions();
 
         return view('pages.eleves.edit', compact(
             'eleve',
             'anneeActive',
-            'niveaux',
+            'classes',
             'sexes',
             'inscriptionActuelle'
         ));
     }
-
     public function update(EleveRequest $request, $id)
     {
         $eleve = Eleve::findOrFail($id);
@@ -358,6 +314,7 @@ class EleveController extends Controller
 
 
 
+
     public function imprimer(Request $request)
     {
         // 1. Validation : on s'assure qu'une classe est bien fournie
@@ -368,19 +325,20 @@ class EleveController extends Controller
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
         // Récupération des infos de l'école
         $etablissement = Etablissement::first();
-        // 2. Récupération des données filtrées
+
+        // 2. Récupération des données filtrées (plus de relation niveau)
         $eleves = Eleve::whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
             $q->where('classe_id', $request->classe_id)
                 ->where('annee_scolaire_id', $anneeActive->id);
         })->with(['inscriptions' => function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe.niveau');
+            $q->where('annee_scolaire_id', $anneeActive->id)->with('classe');
         }])
             ->orderBy('nom', 'asc')
             ->orderBy('prenom', 'asc')
             ->get();
 
-        // Récupération de la classe pour le titre du document
-        $classe = Classe::with('niveau')->findOrFail($request->classe_id);
+        // Récupération de la classe pour le titre du document (sans with('niveau'))
+        $classe = Classe::findOrFail($request->classe_id);
 
         // 3. Génération du PDF
         $pdf = \PDF::loadView('pages.eleves.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
@@ -388,6 +346,4 @@ class EleveController extends Controller
         // 4. Téléchargement ou affichage
         return $pdf->download('liste_eleves_' . $classe->nom . '.pdf');
     }
-
-    
 }

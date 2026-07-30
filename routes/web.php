@@ -136,6 +136,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [ClasseController::class, 'index'])->name('index');
             Route::post('/', [ClasseController::class, 'store'])->name('store');
             Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
+            Route::get('/settings/classes/{classe}/edit', [ClasseController::class, 'edit'])->name('edit');
+            Route::put('/settings/classes/{classe}', [ClasseController::class, 'update'])->name('update');
         });
 
 

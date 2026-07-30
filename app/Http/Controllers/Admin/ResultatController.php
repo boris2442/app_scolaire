@@ -22,9 +22,11 @@ class ResultatController extends Controller
         $this->scolarite = $scolarite;
     }
  
-    public function index()
+    
+public function index()
     {
-        $classes = Classe::with(['niveau'])->get();
+        // On récupère directement toutes les classes (plus de relation 'niveau')
+        $classes = Classe::all(); 
         $anneeActive = $this->scolarite->getAnneeActive();
 
         $sequences = Sequence::whereHas('trimestre', function ($q) use ($anneeActive) {
@@ -36,7 +38,6 @@ class ResultatController extends Controller
 
         return view('pages.resultats.index', compact('classes', 'sequences', 'trimestres'));
     }
-
 
 
     /**

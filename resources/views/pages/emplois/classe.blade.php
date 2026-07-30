@@ -5,8 +5,7 @@
 
         <!-- Bouton Retour -->
         <div class="mb-4">
-            <a href="{{ route('admin.emplois.classes') }}"
-            title="retour"
+            <a href="{{ route('admin.emplois.classes') }}" title="retour"
                 class="inline-flex items-center gap-2 text-xs font-bold text-primary hover:opacity-85 transition-opacity bg-white/5 border border-white/10 px-3 py-2 rounded-xl">
                 <span>←</span> Retour aux classes
             </a>
@@ -29,21 +28,20 @@
             </p>
         </div> --}}
 
-<div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">        Emploi du temps : {{ $classe->niveau->nom ?? '' }} {{ $classe->nom }}</h1>
+      <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"> Emploi du temps : {{ $classe->nom }}</h1>
 
-            <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank"
-                title="telechager le document pdf"
-                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
-                <span>Télécharger en PDF</span>
-            </a>
-        </div>
+    <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank" title="telechager le document pdf"
+        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
+        <span>Télécharger en PDF</span>
+    </a>
+</div>
 
-<div class="">
-      <p class="text-sm text-foreground/70 mt-1">
+        <div class="">
+            <p class="text-sm text-foreground/70 mt-1">
                 Gérez et organisez les séances de cette classe.
             </p>
-</div>
+        </div>
 
 
 

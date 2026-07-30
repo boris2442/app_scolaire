@@ -33,7 +33,7 @@
                             {{ $classe->total_eleves }} élèves inscrit(s)
                         </span>
                         <h3 class="text-lg font-bold text-foreground truncate">
-                            {{ $classe->niveau_nom }} {{ $classe->classe_nom }}
+                         {{ $classe->classe_nom }}
                         </h3>
                     </div>
 

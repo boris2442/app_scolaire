@@ -35,6 +35,6 @@ class CreneauController extends Controller
         $creneau = Creneau::findOrFail($id);
         $creneau->delete();
 
-        return redirect()->route('creneaux.index')->with('success', 'Créneau supprimé avec succès.');
+        return redirect()->route('admin.creneaux.index')->with('success', 'Créneau supprimé avec succès.');
     }
 }

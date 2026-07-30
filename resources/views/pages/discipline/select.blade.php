@@ -29,7 +29,7 @@
                     <form action="{{ route('discipline.saisie') }}" method="GET" class="space-y-6">
 
                         <!-- Classe -->
-                        <div>
+                        {{-- <div>
                             <label class="block text-xs font-semibold text-foreground mb-2">
                                 Classe
                             </label>
@@ -55,8 +55,31 @@
                                     </optgroup>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
+<div>
+        <label class="block text-xs font-semibold text-foreground mb-2">
+            Classe
+        </label>
 
+        <select name="classe_id"
+            class="w-full rounded-xl border border-input bg-background
+                   px-4 py-3 text-foreground
+                   focus:outline-none focus:ring-2
+                   focus:ring-primary transition duration-200"
+            required>
+
+            <option value="">
+                -- Choisir une classe --
+            </option>
+
+            {{-- On boucle directement sur les classes (en supposant que $classes est passé depuis le contrôleur) --}}
+            @foreach ($classes as $classe)
+                <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
+                    {{ $classe->nom }}
+                </option>
+            @endforeach
+        </select>
+    </div>
                         <!-- Trimestre -->
                         <div>
                             <label class="block text-xs font-semibold text-foreground mb-2">

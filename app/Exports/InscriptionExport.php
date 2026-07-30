@@ -20,11 +20,16 @@ class InscriptionExport implements FromCollection, WithHeadings
     }
     public function collection()
     {
-        // On récupère les inscriptions avec les relations élèves et classes
-        // 1. On récupère l'année active via ton service
+        // On récupère l'année active via ton service
         $annee = $this->scolariteService->getAnneeActive();
-        return Inscription::with(['eleve', 'classe', 'classe.niveau'])
-            ->where('annee_scolaire_id', $annee->id)
+
+        return Inscription::with(['eleve', 'classe', 'classe.cycle'])
+            ->where('inscriptions.annee_scolaire_id', $annee->id)
+            // Jointure avec la table eleves pour pouvoir trier proprement par nom et prénom
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->orderBy('eleves.nom', 'asc')
+            ->orderBy('eleves.prenom', 'asc')
+            ->select('inscriptions.*') // Évite les conflits de colonnes avec l'id
             ->cursor()
             ->map(function ($inscription) {
                 return [
@@ -34,18 +39,16 @@ class InscriptionExport implements FromCollection, WithHeadings
                     $inscription->eleve->date_naissance,
                     $inscription->eleve->lieu_naissance,
 
-
-                    $inscription->classe->niveau->nom, // Nom du niveau
-                    $inscription->classe->nom, // Nom de la classe
+                 
+                    $inscription->classe->nom,                  // Nom de la classe
                     $inscription->date_inscription,
                     $inscription->statut,
-                    $inscription->numero_recu,
+           
                 ];
             });
     }
-
     public function headings(): array
     {
-        return ['Matricule', 'Nom complet', 'Sexe', 'Date de naissance', 'Lieu de naissance',  'Niveau', 'Classe', 'Date Inscription', 'Statut', 'N° Reçu'];
+        return ['Matricule', 'Nom complet', 'Sexe', 'Date de naissance', 'Lieu de naissance',  'Classe', 'Date Inscription', 'Statut', ];
     }
 }

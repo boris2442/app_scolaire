@@ -29,23 +29,57 @@ class EvaluationController extends Controller
 
 
 
-    public function index()
+    // public function index()
+    // {
+    //     $anneeActive = $this->scolarite->getAnneeActive();
+    //     $enseignant = auth()->user()->enseignant;
+    //     // dd($enseignant);
+    //     if (!$enseignant) {
+    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+    //     }
+
+    //     // OPTION A : Si tu as une relation directe ou via les trimestres
+    //     // On récupère uniquement les séquences dont le trimestre appartient à l'année active
+    //     $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
+    //         $query->where('annee_scolaire_id', $anneeActive->id);
+    //     })->get();
+
+    //     $affectations = $enseignant->affectations()
+    //         ->with(['matiere', 'classe.niveau'])
+    //         ->whereHas('classe.matieres', function ($query) {
+    //             // Cette condition filtre uniquement les affectations dont la matière 
+    //             // existe réellement dans la configuration de la classe
+    //             $query->whereColumn('matieres.id', 'affectations.matiere_id');
+    //         })
+    //         ->get();
+
+
+    //     // On récupère les évaluations déjà créées par ce prof
+    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
+    //         ->where('enseignant_id', $enseignant?->id)
+    //         ->latest()
+    //         ->get();
+
+
+    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
+    // }
+
+public function index()
     {
         $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
-        // dd($enseignant);
+        
         if (!$enseignant) {
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
 
-        // OPTION A : Si tu as une relation directe ou via les trimestres
         // On récupère uniquement les séquences dont le trimestre appartient à l'année active
         $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
             $query->where('annee_scolaire_id', $anneeActive->id);
         })->get();
 
         $affectations = $enseignant->affectations()
-            ->with(['matiere', 'classe.niveau'])
+            ->with(['matiere', 'classe']) // MODIFICATION ICI : On enlève '.niveau'
             ->whereHas('classe.matieres', function ($query) {
                 // Cette condition filtre uniquement les affectations dont la matière 
                 // existe réellement dans la configuration de la classe
@@ -53,13 +87,11 @@ class EvaluationController extends Controller
             })
             ->get();
 
-
         // On récupère les évaluations déjà créées par ce prof
         $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
             ->where('enseignant_id', $enseignant?->id)
             ->latest()
             ->get();
-
 
         return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
     }
@@ -68,67 +100,18 @@ class EvaluationController extends Controller
 
 
 
-    // public function index()
-    // {
-    //     $anneeActive = $this->scolarite->getAnneeActive();
-    //     $enseignant = auth()->user()->enseignant;
-
-    //     if (!$enseignant) {
-    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
-    //     }
-
-    //     $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
-    //         $query->where('annee_scolaire_id', $anneeActive->id);
-    //     })->get();
-
-    //     $affectations = $enseignant->affectations()
-    //         ->with(['matiere', 'classe.niveau'])
-    //         ->whereHas('classe.matieres', function ($query) {
-    //             $query->whereColumn('matieres.id', 'affectations.matiere_id');
-    //         })
-    //         ->get();
-
-    //     // On récupère les évaluations déjà créées par ce prof
-    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
-    //         ->where('enseignant_id', $enseignant?->id)
-    //         ->latest()
-    //         ->get();
-
-    //     // 👇 AJOUT : On récupère toutes les leçons de cet enseignant pour les afficher dans le formulaire
-    //     $lessons = Lecon::where('enseignant_id', $enseignant->id)->get();
-
-    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations', 'lessons'));
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function saisie($id)
     {
-        $evaluation = Evaluation::with('classe.niveau', 'matiere', 'sequence')->findOrFail($id);
-
-        // $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
-        //     ->with('eleve')
-        //     ->get();
+        // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
+        $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
 
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
             ->with('eleve')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->orderBy('eleves.nom', 'asc')
             ->orderBy('eleves.prenom', 'asc')
-            ->select('inscriptions.*') // Évite les conflits de colonnes si les tables partagent des noms identiques (comme 'id' ou 'created_at')
+            ->select('inscriptions.*') // Évite les conflits de colonnes si les tables partagent des noms identiques
             ->get();
-
-
 
         // On force l'indexation par l'ID d'inscription en tant qu'entier
         $notesExistantes = Note::where('evaluation_id', $id)
@@ -137,26 +120,18 @@ class EvaluationController extends Controller
                 return [(int)$item->inscription_id => $item];
             });
 
-
-
-        // 👇 AJOUT : Récupérer les leçons de cette matière, de cette classe et de cet enseignant
+        // Récupérer les leçons de cette matière, de cette classe et de cet enseignant
         $lecons = Lecon::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->orderBy('ordre')
             ->get();
 
-        // 👇 AJOUT : Récupérer les IDs des leçons déjà cochées/associées à cette évaluation (s'il y en a)
+        // Récupérer les IDs des leçons déjà cochées/associées à cette évaluation (s'il y en a)
         $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
-
-
-
-
 
         return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
-
-
 
     public function store(Request $request)
     {
@@ -191,92 +166,7 @@ class EvaluationController extends Controller
 
 
 
-    // public function store(Request $request)
-    // {
-    //     $enseignant = auth()->user()->enseignant;
-
-    //     if (!$enseignant) {
-    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
-    //     }
-
-    //     $affectation = Affectation::findOrFail($request->affectation_id);
-
-    //     // Création ou récupération de l'évaluation
-    //     $evaluation = Evaluation::firstOrCreate(
-    //         [
-    //             'sequence_id'       => $request->sequence_id,
-    //             'classe_id'         => $affectation->classe_id,
-    //             'matiere_id'        => $affectation->matiere_id,
-    //             'enseignant_id'     => $enseignant->id,
-    //             'annee_scolaire_id' => $this->anneeActive->id,
-    //         ],
-    //         [
-    //             'titre'           => $request->titre,
-    //             'date_evaluation' => now(),
-    //         ]
-    //     );
-
-    //     // ICI : On attache les leçons sélectionnées à l'évaluation
-    //     if ($request->has('lesson_ids')) {
-    //         $evaluation->lessons()->sync($request->lesson_ids);
-    //     }
-
-    //     return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
-    //         ->with('success', 'Session d\'évaluation prête et leçons associées !');
-    // }
-
-
-
-
-
-
-
-
-
-
-    //function pour enregistrer les notes en masse
-    // public function bulkStoreNotes(Request $request, $id)
-    // {
-
-    //     $evaluation = Evaluation::findOrFail($id);
-
-    //     // 1. On vérifie qu'on a bien reçu le tableau 'notes'
-    //     if (!$request->has('notes')) {
-    //         return redirect()->back()->with('error', 'Aucune donnée n’a été envoyée.');
-    //     }
-
-    //     foreach ($request->notes as $inscriptionId => $donnees) {
-
-    //         // 2. On vérifie si 'valeur' existe ET n'est pas vide dans ce sous-tableau
-    //         if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
-
-
-    //             // Dans ton contrôleur, avant d'enregistrer
-    //             if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
-    //                 return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
-    //             }
-
-    //             Note::updateOrCreate(
-    //                 [
-    //                     'evaluation_id'  => $evaluation->id,
-    //                     'inscription_id' => $inscriptionId,
-    //                 ],
-    //                 [
-    //                     // TRÈS IMPORTANT : On pointe précisément vers 'valeur' 
-    //                     // et non vers tout le tableau $donnees
-    //                     'valeur'      => $donnees['valeur'],
-    //                     'observation' => $donnees['observation'] ?? null,
-    //                 ]
-    //             );
-    //         }
-    //     }
-
-    //     return redirect()->route('admin.evaluations.index')
-    //         ->with('success', 'Félicitations ! Les notes ont été enregistrées.');
-    // }
-
-
-
+   
 
     public function bulkStoreNotes(Request $request, $id)
     {
@@ -417,11 +307,10 @@ private function calculerStats($evaluation)
 
 
 
-
-    public function telechargerStats($id)
+public function telechargerStats($id)
     {
-        // On appelle les relations qu'on vient de définir
-        $evaluation = Evaluation::with(['classe.niveau', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
+        // On charge les relations nécessaires (plus de .niveau sur la classe)
+        $evaluation = Evaluation::with(['classe', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
 
         $stats = $this->calculerStats($evaluation);
 
@@ -432,11 +321,9 @@ private function calculerStats($evaluation)
         ];
 
         $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
-            ->setPaper('a4', 'portrait');;
+            ->setPaper('a4', 'portrait');
 
         return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf');
     }
-
-
 
 }

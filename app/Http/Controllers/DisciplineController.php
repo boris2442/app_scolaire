@@ -20,14 +20,18 @@ class DisciplineController extends Controller
         $this->scolarite = $scolarite;
     }
 
-    // 1. Affiche le formulaire de sélection (Classe + Trimestre)
+ 
     public function index()
     {
         $annee = $this->scolarite->getAnneeActive();
-        $niveaux = Niveau::with('classes')->get();
+        
+        // On récupère directement toutes les classes (ou filtrées selon ton besoin)
+        $classes = Classe::all(); 
+        
         $trimestres = $annee->trimestres;
 
-        return view('pages.discipline.select', compact('niveaux', 'trimestres'));
+        // On passe $classes à la vue à la place de $niveaux
+        return view('pages.discipline.select', compact('classes', 'trimestres'));
     }
 
     public function saisie(Request $request)
@@ -41,14 +45,7 @@ class DisciplineController extends Controller
         $classe = Classe::findOrFail($request->classe_id);
         $trimestre = Trimestre::findOrFail($request->trimestre_id);
 
-        // 2. Récupération des inscriptions
-        // $inscriptions = Inscription::where('classe_id', $request->classe_id)
-        //     ->where('annee_scolaire_id', $this->scolarite->getAnneeActive()->id)
-        //     ->with(['eleve', 'suivi' => function ($query) use ($request) {
-        //         $query->where('trimestre_id', $request->trimestre_id);
-        //     }])
-
-        //     ->get();
+       
 
         // 2. Récupération des inscriptions triées par nom et prénom
         $inscriptions = Inscription::where('classe_id', $request->classe_id)

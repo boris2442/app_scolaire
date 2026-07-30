@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Classe; // <-- On importe Classe au lieu de Niveau
 use App\Models\Evaluation;
 use App\Models\Inscription;
-use App\Models\Niveau;
 use App\Models\Note;
 use App\Models\Sequence;
 use Illuminate\Http\Request;
@@ -15,25 +14,19 @@ use App\Services\ScolariteService;
 
 class AuditSaisieController extends Controller
 {
-
-
-    // 1. Déclare la propriété
     protected $scolarite;
 
-    // 2. Injecte le service via le constructeur
     public function __construct(ScolariteService $scolarite)
     {
         $this->scolarite = $scolarite;
     }
 
-
-
     public function index(Request $request)
     {
         $anneeActive = $this->scolarite->getAnneeActive();
 
-        // Groupement par niveau pour la clarté
-        $niveaux = Niveau::with('classes')->get();
+        // On récupère directement toutes les classes (plus de niveaux)
+        $classes = Classe::all();
 
         // On récupère les séquences de l'année en cours (sans doublons)
         $sequences = Sequence::whereHas('trimestre', function ($q) use ($anneeActive) {
@@ -66,7 +59,7 @@ class AuditSaisieController extends Controller
                 ->where('sequence_id', $sequenceId)
                 ->whereIn('matiere_id', $matiereIds)
                 ->get()
-                ->keyBy('matiere_id'); // Permet de les indexer par matiere_id
+                ->keyBy('matiere_id');
 
             $evaluationsIds = $evaluations->pluck('id');
 
@@ -79,7 +72,6 @@ class AuditSaisieController extends Controller
             foreach ($matieres as $matiere) {
                 $evaluation = $evaluations->get($matiere->id);
 
-                // On récupère le nombre de notes via notre tableau préchargé (0 si l'évaluation n'existe pas)
                 $nbNotes = $evaluation ? ($notesCounts[$evaluation->id] ?? 0) : 0;
 
                 $pourcentage = 0;
@@ -95,10 +87,10 @@ class AuditSaisieController extends Controller
                     'attendu' => $effectif,
                     'pourcentage' => $pourcentage
                 ];
-             //   dd($auditData[0]['phone']); // Débogage pour vérifier les données avant de les passer à la vue
             }
         }
 
-        return view('pages.admin.audit-saisie', compact('niveaux', 'sequences', 'auditData'));
+        // On passe $classes à la vue au lieu de $niveaux
+        return view('pages.admin.audit-saisie', compact('classes', 'sequences', 'auditData'));
     }
 }

@@ -14,15 +14,14 @@
             <select name="classe_id" class="text-sm bg-background border-input text-foreground rounded-md focus:ring-ring"
                 required>
                 <option value="">Sélectionner la Classe</option>
-                @foreach ($niveaux as $niveau)
-                    <optgroup label="{{ $niveau->nom }}" class="text-primary font-bold">
-                        @foreach ($niveau->classes as $classe)
-                            <option value="{{ $classe->id }}" {{ request('classe_id') == $classe->id ? 'selected' : '' }}>
-                                {{ $classe->nom }}
-                            </option>
-                        @endforeach
-                    </optgroup>
+                @foreach ($classes as $classe)
+                    <option value="{{ $classe->id }}" {{ request('classe_id') == $classe->id ? 'selected' : '' }}>
+                        {{ $classe->nom }}
+
+                    </option>
                 @endforeach
+            
+          
             </select>
 
             <select name="sequence_id" class="text-sm bg-background border-input text-foreground rounded-md focus:ring-ring"

@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassStoreRequest;
 use App\Models\AnneeScolaire;
 use App\Models\Classe;
+use App\Models\Cycle;
 use App\Models\Niveau;
+use Illuminate\Http\Request;
 
 
 class ClasseController extends Controller
 {
+
     public function index()
     {
         // On récupère l'année active (très important !)
@@ -21,15 +24,13 @@ class ClasseController extends Controller
                 ->with('error', 'Veuillez activer une année scolaire d\'abord.');
         }
 
-        // On charge les classes de l'année active groupées par niveau
-        $niveaux = Niveau::with(['classes' => function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id)
-                ->with('matieres'); // On charge aussi les matières pour chaque classe
-        }])->get();
+        // On charge directement les classes de l'année active avec leurs matières
+        $classes = Classe::where('annee_scolaire_id', $anneeActive->id)
+            ->with('matieres')
+            ->get();
 
-        return view('pages.classes.index', compact('niveaux', 'anneeActive'));
+        return view('pages.classes.index', compact('classes', 'anneeActive'));
     }
-
     public function store(ClassStoreRequest $request)
     {
         $request->validated();
@@ -42,6 +43,31 @@ class ClasseController extends Controller
     public function destroy(Classe $classe)
     {
         $classe->delete();
-        return back()->with('success', 'Classe supprimée.');
+        return redirect()->route('settings.classes.index')->with('success', 'Classe supprimée.');
+    }
+
+    public function edit($id)
+    {
+        $classe = Classe::findOrFail($id);
+        $cycles = Cycle::all(); // Pour alimenter le menu déroulant des cycles
+
+        return view('pages.academique.classes-edit', compact('classe', 'cycles'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'cycle_id' => 'required|exists:cycles,id',
+        ]);
+
+        $classe = Classe::findOrFail($id);
+        $classe->update([
+            'nom' => $request->nom,
+            'cycle_id' => $request->cycle_id,
+        ]);
+
+        return redirect()->route('settings.academique.index') // Ajuste selon la route de redirection de ta liste
+            ->with('success', 'Classe mise à jour avec succès.');
     }
 }

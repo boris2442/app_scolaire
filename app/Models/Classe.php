@@ -5,20 +5,19 @@ namespace App\Models;
 use App\Models\AnneeScolaire;
 use App\Models\Inscription;
 use App\Models\Matiere;
-use App\Models\Niveau;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
 class Classe extends Model
 {
-    protected $fillable = ['nom', 'niveau_id', 'annee_scolaire_id'];
+    protected $fillable = ['nom','cycle_id', 'annee_scolaire_id'];
 
-    public function niveau()
-    {
-        return $this->belongsTo(Niveau::class);
-    }
-
+public function cycle()
+{
+    return $this->belongsTo(Cycle::class);
+}
     public function anneeScolaire()
     {
         return $this->belongsTo(AnneeScolaire::class);
@@ -33,12 +32,10 @@ class Classe extends Model
     }
 
 
-    // Petit "Accessor" pratique pour afficher le nom complet partout
-    public function getNomCompletAttribute()
-    {
-        return $this->niveau->nom . ' ' . $this->nom;
-    }
-
+   public function getNomCompletAttribute()
+{
+    return $this->nom;
+}
     /**
      * Récupérer toutes les inscriptions pour cette classe.
      */
@@ -47,6 +44,10 @@ class Classe extends Model
         return $this->hasMany(Inscription::class);
     }
 
+    // public function classes()
+    // {
+    //     return $this->hasMany(Classe::class);
+    // }
 
 
 
