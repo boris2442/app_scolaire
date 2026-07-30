@@ -18,10 +18,10 @@
                         <label class="block text-sm font-medium mb-2">Nom officiel de l'établissement</label>
                         <input type="text" name="nom" value="{{ old('nom', $etablissement->nom) }}"
                             class="w-full bg-secondary border-border rounded-lg focus:ring-primary focus:border-primary px-4 py-2.5"
-                            placeholder="Ex: Lycée Classique de Bafoussam">
+                            placeholder="Ex: Lycée Classique de .....">
                     </div>
 
-                   
+
 
 
                     <div class="mb-4">
@@ -67,14 +67,28 @@
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             value="{{ old('code_ecole', $etablissement->code_ecole) }}">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nom Etablissement en Anglais</label>
+                        <input type="text" name="english_name"
+                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
+                            placeholder="School Name in English"
+                            value="{{ old('english_name', $etablissement->english_name) }}">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Slogan Ecole en anglais</label>
+                        <input type="text" name="english_slogan" required
+                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
+                            value="{{ old('english_slogan', $etablissement->english_slogan) }}">
+                    </div>
                 </div>
 
                 <div class="mt-8 flex justify-end">
                     <button type="submit"
                         class="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20 flex justify-center items-center">
-                     
+
                         <x-lucide-save class='mr-2 w-4 h-4' />
-                         Enregistrer les modifications
+                        Enregistrer les modifications
                     </button>
                 </div>
             </div>

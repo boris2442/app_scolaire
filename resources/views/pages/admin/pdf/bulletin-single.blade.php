@@ -269,10 +269,10 @@
                     REPUBLIC OF CAMEROON<br>
                     Peace-Work-Fatherland<br>
                     MINISTRY OF SECONDARY EDUCATION<br>
-                    <span style="text-transform: uppercase;">{{ $etablissement->nom ?? 'School Complex' }}</span><br>
+                    <span style="text-transform: uppercase;">{{ $etablissement->english_name ?? 'School Complex' }}</span><br>
                     <span
-                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->slogan }}"</span><br>
-                    <span style="font-weight: normal; font-size: 7.5px;">📩 {{ $etablissement->email }}</span>
+                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span><br>
+                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->email }}</span>
                 </div>
                 <div class="clear"></div>
             </div>

@@ -41,6 +41,7 @@
                             <th class="p-4">Matricule</th>
                             <th class="p-4">Nom & Prénom</th>
                             <th class="p-4 text-center">Date de Naissance</th>
+                            <th class="p-4 text-center">Lieu de Naissance</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border">
@@ -49,6 +50,7 @@
                                 <td class="p-4 font-mono text-xs text-foreground/70">{{ $eleve->matricule ?? 'N/A' }}</td>
                                 <td class="p-4 font-medium text-foreground">{{ $eleve->nom }} {{ $eleve->prenom }}</td>
                                 <td class="p-4 font-medium text-foreground">{{ $eleve->date_naissance ?? 'N/A' }}</td>
+                                <td class="p-4 font-medium text-foreground">{{ $eleve->lieu_naissance ?? 'N/A' }}</td>
                                 {{-- <td class="p-4 text-center">
                                  
                                     <a href="{{ route('admin.bulletins.imprimer-eleve', ['inscription_id' => $eleve->inscription_id, 'trimestre_id' => $trimestreId]) }}"

@@ -67,7 +67,7 @@
             <td class="header-col">
                 <strong>Republic of Cameroon</strong><br>Peace - Work - Fatherland<br>
                 <strong>Ministry of Secondary Education</strong><br>
-                {{ $etablissement->nom }}<br><em>"{{ $etablissement->slogan }}"</em>
+                {{ $etablissement->english_name }}<br><em>"{{ $etablissement->english_slogan }}"</em>
             </td>
         </tr>
     </table>

@@ -20,7 +20,7 @@ class UpdateEtablissementRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-public function rules(): array
+    public function rules(): array
     {
         return [
             'nom'       => 'required|string|max:255',
@@ -30,6 +30,8 @@ public function rules(): array
             'code_ecole' => 'nullable|string|max:50',
             'email'     => 'nullable|email',
             'logo'      => 'nullable|image|mimes:jpg,jpeg,png|max:1024', // 1Mo max
+            'english_name' => 'nullable|string|max:255',
+            'english_slogan' => 'nullable|string|max:255',
         ];
     }
 
@@ -42,6 +44,10 @@ public function rules(): array
             'nom.required' => 'Le nom de l\'établissement est obligatoire pour les bulletins.',
             'logo.image'   => 'Le fichier doit être une image (jpg, jpeg ou png).',
             'logo.max'     => 'Le logo est trop lourd (maximum 1 Mo).',
+            'email.email'  => 'L\'adresse email doit être valide.',
+            'english_name.max' => 'Le nom en anglais ne doit pas dépasser 255 caractères.',
+            'english_slogan.max' => 'Le slogan en anglais ne doit pas dépasser 255 caractères.',
+
         ];
     }
 }

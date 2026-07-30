@@ -13,6 +13,8 @@ class Etablissement extends Model
         'telephone',
         'logo',
         'code_ecole',
-        'slogan'
+        'slogan',
+        'english_slogan',
+        'english_name'
     ];
 }

@@ -68,7 +68,7 @@ class BulletinPrintController extends Controller
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classeId)
             ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
-            ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom', 'eleves.matricule')
+            ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom', 'eleves.matricule', 'eleves.sexe', 'eleves.date_naissance', 'eleves.lieu_naissance')
             ->orderBy('eleves.nom', 'asc')
             ->get();
 
