@@ -294,7 +294,7 @@
             <tr>
                 <td style="width: 50%;"></td>
                 <td style="width: 50%; text-align: center;">
-                    <strong>Le Censeur / La Direction</strong><br><br><br><br>
+                    <strong> La Direction</strong><br><br><br><br>
                     __________________________________
                 </td>
             </tr>

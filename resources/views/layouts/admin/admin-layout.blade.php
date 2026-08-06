@@ -67,7 +67,7 @@
 
             {{-- Footer Simple --}}
             <footer class="py-4 px-6 border-t border-border bg-card/50 text-center text-xs text-gray-500">
-                &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.
+                &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.(+237) 679 13 51 77 / 694 22 35 03
             </footer>
 
         </div>

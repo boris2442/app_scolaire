@@ -328,7 +328,7 @@
             <div class="flex items-center space-x-2">
                 <span class="font-bold text-foreground">Academia<span class="text-primary">Pro</span></span>
                 <span>—</span>
-                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77</span>
+                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 694 22 35 03</span>
             </div>
             <div class="text-gray-500 font-normal normal-case text-center sm:text-right">
                 &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.
