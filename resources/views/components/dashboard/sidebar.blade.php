@@ -143,14 +143,14 @@
                 </li>
 
 
-                {{-- <li>
-                    <a href="{{ route('admin.parametres-classes.index') }}" title="Paramètre notes fin d'année"
-                        aria-label="Paramètre notes fin d'année"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.parametres-classes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-settings class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Paramètre notes fin d'année</span>
+          <li>
+                    <a href="{{ route('admin.users.index') }}" title="Utilisateurse"
+                        aria-label="Utilisateurse"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.users.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-users class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Utilisateurs</span>
                     </a>
-                </li> --}}
+                </li> 
 
 
                 <li>

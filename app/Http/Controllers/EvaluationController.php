@@ -29,40 +29,7 @@ class EvaluationController extends Controller
 
 
 
-    // public function index()
-    // {
-    //     $anneeActive = $this->scolarite->getAnneeActive();
-    //     $enseignant = auth()->user()->enseignant;
-    //     // dd($enseignant);
-    //     if (!$enseignant) {
-    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
-    //     }
-
-    //     // OPTION A : Si tu as une relation directe ou via les trimestres
-    //     // On récupère uniquement les séquences dont le trimestre appartient à l'année active
-    //     $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
-    //         $query->where('annee_scolaire_id', $anneeActive->id);
-    //     })->get();
-
-    //     $affectations = $enseignant->affectations()
-    //         ->with(['matiere', 'classe.niveau'])
-    //         ->whereHas('classe.matieres', function ($query) {
-    //             // Cette condition filtre uniquement les affectations dont la matière 
-    //             // existe réellement dans la configuration de la classe
-    //             $query->whereColumn('matieres.id', 'affectations.matiere_id');
-    //         })
-    //         ->get();
-
-
-    //     // On récupère les évaluations déjà créées par ce prof
-    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
-    //         ->where('enseignant_id', $enseignant?->id)
-    //         ->latest()
-    //         ->get();
-
-
-    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
-    // }
+  
 
 public function index()
     {

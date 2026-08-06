@@ -26,12 +26,7 @@ class CenseurMiddleware
 
         $user = Auth::user();
         // Affiche l'utilisateur connecté et son rôle, puis arrête l'exécution
-        // dd([
-        //     'is_logged' => Auth::check(),
-        //     'user_name' => $user?->name,
-        //     'user_role' => $user?->role,
-        //     'role_type' => gettype($user?->role),
-        // ]);
+      
         // Adapte cette condition selon ton stockage en BD (Enum ou string)
         // Par exemple, si ton champ role est une string ou un Enum :
         $isCenseur = $user->role === UserRole::CENSEUR || $user->role === 'censeur';

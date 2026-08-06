@@ -22,49 +22,7 @@ class SeanceController extends Controller
 {
     // Afficher l'emploi du temps d'une classe spécifique
 
-    // public function showByClasse($classeId)
-    // {
-    //     // $classe = Classe::findOrFail($classeId);
-    //     $classe = Classe::with('niveau')->findOrFail($classeId);
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
-
-    //     // Récupérer toutes les séances de cette classe pour l'année en cours
-    //     $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
-    //         ->where('classe_id', $classeId)
-    //         ->where('annee_scolaire_id', $anneeActive?->id)
-    //         ->get();
-
-    //     $jours = Jour::orderBy('ordre')->get();
-    //     $creneaux = Creneau::orderBy('heure_debut')->get();
-
-    //     // 1. Récupérer uniquement les matières de cette classe via la table pivot classe_matiere
-    //     // (Adapte le nom de la table pivot si elle s'appelle différemment, ex: classe_matiere ou matieres_classes)
-    //     $matieresIds = DB::table('classe_matiere')
-    //         ->where('classe_id', $classeId)
-    //         ->pluck('matiere_id');
-
-    //     $matieres = Matiere::whereIn('id', $matieresIds)
-    //         ->select('id', 'nom')
-    //         ->orderBy('nom')
-    //         ->get();
-
-    //     // 2. Récupérer uniquement les enseignants affectés à cette classe (via la table affectations)
-    //     $enseignantsIds = DB::table('affectations')
-    //         ->where('classe_id', $classeId)
-    //         ->when($anneeActive, function ($q) use ($anneeActive) {
-    //             return $q->where('annee_scolaire_id', $anneeActive->id);
-    //         })
-    //         ->pluck('enseignant_id');
-
-    //     $enseignants = User::where('role', 'enseignant')
-    //         ->whereIn('id', $enseignantsIds)
-    //         ->select('id', 'name')
-    //         ->orderBy('name')
-    //         ->get();
-
-    //     return view('pages.emplois.classe', compact('classe', 'seances', 'jours', 'creneaux', 'matieres', 'enseignants'));
-    // }
-
+   
 public function showByClasse($classeId)
     {
         // MODIFICATION ICI : On récupère la classe directement sans charger le niveau

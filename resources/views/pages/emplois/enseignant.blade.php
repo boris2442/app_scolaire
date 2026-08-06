@@ -75,7 +75,7 @@
 
                                         @endphp
 
-                                      
+
 
 
                                         @if ($seance)
@@ -84,11 +84,12 @@
                                                     {{ $seance->matiere->nom ?? 'Matière' }}
                                                 </div>
 
-                                               <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
-    <div>
-        Classe / Groupe : <span class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
-    </div>
-</div>
+                                                <div class="mt-2 text-xs text-foreground/70 space-y-0.5">
+                                                    <div>
+                                                        Classe / Groupe : <span
+                                                            class="font-semibold">{{ $seance->classe->nom ?? '-' }}</span>
+                                                    </div>
+                                                </div>
 
                                                 <!-- 👇 C'est ici qu'on ajoute le lien vers la gestion du programme de cette séance ! -->
                                                 <div class="mt-3 pt-2 border-t border-primary/20">

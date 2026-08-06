@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Affectation;
 use App\Models\Evaluation;
+use App\Models\Sequence;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardTeacherController extends Controller
 {
+
+
+
     // public function index(ScolariteService $scolarite)
     // {
     //     $enseignant = Auth::user()->enseignant;
@@ -22,8 +26,6 @@ class DashboardTeacherController extends Controller
     //         ->with(['classe.inscriptions', 'matiere'])
     //         ->get();
 
-    //     // DashboardTeacherController.php
-
     //     $statsSaisie = $affectations->map(function ($affectation) {
     //         $totalEleves = $affectation->classe->inscriptions->count();
 
@@ -34,7 +36,6 @@ class DashboardTeacherController extends Controller
 
     //         return [
     //             'classe' => $affectation->classe->nom,
-    //             'niveau' => $affectation->classe->niveau->nom ?? 'N/A', // Vérifie si c'est 'nom' ou 'libelle'
     //             'matiere' => $affectation->matiere->nom,
     //             'total' => $totalEleves,
     //             'saisies' => $evaluation ? $evaluation->notes_count : 0,
@@ -43,40 +44,70 @@ class DashboardTeacherController extends Controller
     //             'derniere_date' => $evaluation ? $evaluation->updated_at->diffForHumans() : null,
     //         ];
     //     });
+
     //     return view('pages.enseignants.dashboard', compact('statsSaisie', 'enseignant', 'anneeActive'));
     // }
 
+public function index(Request $request, ScolariteService $scolarite)
+{
+    $anneeActive = $scolarite->getAnneeActive();
+    $enseignant = auth()->user()->enseignant;
 
-    public function index(ScolariteService $scolarite)
-    {
-        $enseignant = Auth::user()->enseignant;
-        $anneeActive = $scolarite->getAnneeActive();
+    if (!$enseignant) {
+        return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+    }
 
-        // 1. Récupérer les affectations avec les relations nécessaires
-        $affectations = Affectation::where('enseignant_id', $enseignant->id)
-            ->where('annee_scolaire_id', $anneeActive->id)
-            ->with(['classe.inscriptions', 'matiere'])
-            ->get();
+    // 1. Récupérer uniquement les séquences de l'année active
+    $sequences = \App\Models\Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
+        $query->where('annee_scolaire_id', $anneeActive->id);
+    })->get();
 
-        $statsSaisie = $affectations->map(function ($affectation) {
-            $totalEleves = $affectation->classe->inscriptions->count();
+    $sequenceId = $request->input('sequence_id', $sequences->first()?->id);
 
-            $evaluation = Evaluation::where([
-                'classe_id' => $affectation->classe_id,
-                'matiere_id' => $affectation->matiere_id,
-            ])->withCount('notes')->first();
+    // 2. Récupérer les affectations valides pour l'année active
+    $affectations = $enseignant->affectations()
+        ->where('annee_scolaire_id', $anneeActive->id)
+        ->with(['matiere', 'classe.inscriptions'])
+        ->whereHas('classe.matieres', function ($query) {
+            $query->whereColumn('matieres.id', 'affectations.matiere_id');
+        })
+        ->get();
 
-            return [
-                'classe' => $affectation->classe->nom,
-                'matiere' => $affectation->matiere->nom,
-                'total' => $totalEleves,
-                'saisies' => $evaluation ? $evaluation->notes_count : 0,
-                'pourcentage' => $totalEleves > 0 ? round((($evaluation?->notes_count ?? 0) / $totalEleves) * 100) : 0,
-                'evaluation_id' => $evaluation?->id,
-                'derniere_date' => $evaluation ? $evaluation->updated_at->diffForHumans() : null,
-            ];
+    // 3. Charger UNIQUEMENT les évaluations créées par cet enseignant pour la séquence choisie
+    $evaluations = \App\Models\Evaluation::where('enseignant_id', $enseignant->id)
+        ->where('sequence_id', $sequenceId)
+        ->withCount('notes')
+        ->get()
+        ->keyBy(function ($item) {
+            // Clé unique pour associer sans erreur : "classe_id-matiere_id"
+            return $item->classe_id . '-' . $item->matiere_id;
         });
 
-        return view('pages.enseignants.dashboard', compact('statsSaisie', 'enseignant', 'anneeActive'));
-    }
+    // 4. Construction des statistiques pour le tableau de bord
+    $statsSaisie = $affectations->map(function ($affectation) use ($evaluations) {
+        $totalEleves = $affectation->classe->inscriptions->count();
+
+        // Récupération instantanée depuis la mémoire
+        $key = $affectation->classe_id . '-' . $affectation->matiere_id;
+        $evaluation = $evaluations->get($key);
+
+        return [
+            'classe' => $affectation->classe->nom,
+            'matiere' => $affectation->matiere->nom,
+            'total' => $totalEleves,
+            'saisies' => $evaluation ? $evaluation->notes_count : 0,
+            'pourcentage' => $totalEleves > 0 ? round((($evaluation?->notes_count ?? 0) / $totalEleves) * 100) : 0,
+            'evaluation_id' => $evaluation?->id,
+            'derniere_date' => $evaluation ? $evaluation->updated_at->diffForHumans() : null,
+        ];
+    });
+
+    return view('pages.enseignants.dashboard', compact(
+        'statsSaisie',
+        'sequences',
+        'sequenceId',
+        'enseignant',
+        'anneeActive'
+    ));
+}
 }

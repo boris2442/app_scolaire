@@ -16,7 +16,6 @@ use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\EleveController;
-use App\Http\Controllers\LeconController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\EvaluationController;
@@ -25,14 +24,16 @@ use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\Exports\TeacherExportController;
 use App\Http\Controllers\GroupeMatiereController;
+use App\Http\Controllers\LeconController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ParametreAcademiqueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeanceController;
 use App\Http\Controllers\TrimestreController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\SGMiddleware;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,22 +50,19 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
 
-        // Créneaux horaires
-        Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
-        Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
-        Route::delete('/creneaux/{creneau}', [CreneauController::class, 'destroy'])->name('creneaux.destroy');
+        // Groupe de routes pour l'administration des utilisateurs
 
-        // Emplois du temps
-        Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
-        Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
-
-        Route::get('/emplois/classe/{classeId}/pdf', [SeanceController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
-        Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])
+            ->name('users.destroy');
     });
-Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
-// Emploi du temps de l'enseignant (Téléchargement PDF)
-Route::get('/emplois/enseignant/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+
+
+
+
+
 
 
 
@@ -291,16 +289,11 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::middleware(['auth'])->group(function () {
-    // Afficher les leçons d'une matière pour une classe spécifique
-    Route::get('/lessons/{subjectId}/{classRoomId}', [LeconController::class, 'index'])->name('lessons.index');
-
-    // Enregistrer une nouvelle leçon
-    Route::post('/lessons', [LeconController::class, 'store'])->name('lessons.store');
-});
+Route::middleware(['auth'])->group(function () {});
 
 //Route with censor and admin
-Route::middleware(['auth', 'censeur'])->group(function () {
+
+
     //Audit saisie
     Route::get('/admin/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
 
@@ -327,6 +320,48 @@ Route::middleware(['auth', 'censeur'])->group(function () {
     // Route pour générer le PDF d'un seul élève isolé
     Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
         ->name('admin.bulletins.imprimer-eleve');
+
+
+
+
+
+
+    Route::middleware(['auth'])
+        ->prefix('admin')
+        ->name('admin.')
+        ->group(function () {
+
+            // Créneaux horaires
+            Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
+            Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
+            Route::delete('/creneaux/{creneau}', [CreneauController::class, 'destroy'])->name('creneaux.destroy');
+
+            // Emplois du temps
+            Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
+            Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
+
+            Route::get('/emplois/classe/{classeId}/pdf', [SeanceController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
+            Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
+        });
+// });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
+
+    // Emploi du temps de l'enseignant (Téléchargement PDF)
+    Route::get('/emplois/teacher/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+
+    // Route::middleware(['auth', 'censeur'])->group(function () {
+
+    // Afficher les leçons d'une matière pour une classe spécifique
+    Route::get('/lessons/{subjectId}/{classRoomId}', [LeconController::class, 'index'])->name('lessons.index');
+
+    // Enregistrer une nouvelle leçon
+    Route::post('/lessons', [LeconController::class, 'store'])->name('lessons.store');
 });
+// Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
+
+// // Emploi du temps de l'enseignant (Téléchargement PDF)
+// Route::get('/emplois/teacher/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
 require __DIR__ . '/auth.php';

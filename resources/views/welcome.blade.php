@@ -61,7 +61,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}" data-turbo="true"
-                        class="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold shadow-lg shadow-primary/15 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        class="px-5 py-2.5 bg-primary text-primary-foreground rounded text-sm font-bold shadow-lg shadow-primary/15 hover:scale-[1.02] active:scale-[0.98] transition-all">
                         Connexion
                     </a>
                 @endauth
@@ -136,11 +136,11 @@
                                 class="bg-secondary px-3 py-2 font-bold text-secondary-foreground border-b border-border">
                                 Top 3 des élèves - Palmarès National</div>
                             <div class="divide-y divide-border bg-card">
-                                <div class="px-3 py-2 flex justify-between"><span>1. Simo Boris</span> <span
+                                <div class="px-3 py-2 flex justify-between"><span>1. Hello One</span> <span
                                         class="font-bold text-success">18.42</span></div>
                                 <div class="px-3 py-2 flex justify-between"><span>2. Ombason Hilaire</span> <span
                                         class="font-bold text-success">16.15</span></div>
-                                <div class="px-3 py-2 flex justify-between"><span>3. Sunier Pierre</span> <span
+                                <div class="px-3 py-2 flex justify-between"><span>3. Hello pro</span> <span
                                         class="font-bold text-success">15.80</span></div>
                             </div>
                         </div>
@@ -299,7 +299,7 @@
                             Centralisation des évaluations par matière avec application stricte des coefficients.
                             Validation et verrouillage des notes pour éviter toute altération ultérieure.
                         </p>
-                    </div>
+                    </div>sidebar
 
                     <div
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
@@ -324,11 +324,11 @@
 
     <footer class="bg-card border-t border-border mt-auto transition-colors duration-300">
         <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-400 uppercase tracking-wider">
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-400  tracking-wider">
             <div class="flex items-center space-x-2">
                 <span class="font-bold text-foreground">Academia<span class="text-primary">Pro</span></span>
                 <span>—</span>
-                <span>Gestion de Scolarité</span>
+                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77</span>
             </div>
             <div class="text-gray-500 font-normal normal-case text-center sm:text-right">
                 &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.
