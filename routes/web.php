@@ -322,6 +322,9 @@ Route::middleware(['auth'])->group(function () {});
         ->name('admin.bulletins.imprimer-eleve');
 
 
+        Route::get('/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
+    ->name('admin.bulletins.download-stats');
+
 
 
 

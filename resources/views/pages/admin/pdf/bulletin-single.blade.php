@@ -269,7 +269,8 @@
                     REPUBLIC OF CAMEROON<br>
                     Peace-Work-Fatherland<br>
                     MINISTRY OF SECONDARY EDUCATION<br>
-                    <span style="text-transform: uppercase;">{{ $etablissement->english_name ?? 'School Complex' }}</span><br>
+                    <span
+                        style="text-transform: uppercase;">{{ $etablissement->english_name ?? 'School Complex' }}</span><br>
                     <span
                         style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span><br>
                     <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->email }}</span>
@@ -465,88 +466,6 @@
                 </tbody>
             </table>
 
-
-            {{-- <table class="table-stats text-center">
-                <thead>
-                    <tr>
-                      
-                        @foreach ($sequences as $seq)
-                            <th width="14%">Moy {{ $seq->nom }}</th>
-                        @endforeach
-                        <th width="14%">MOY TRIM</th>
-                        <th width="14%">Rang</th>
-                        <th width="14%">Mention</th>
-                        <th width="14%">Moy Classe</th>
-                        <th width="16%">Remarques chef ETS</th>
-                    </tr>
-                </thead>
-                <tbody>
-              
-                    <tr>
-                        @php
-                          
-                            $moyenneSeq1Finale =
-                                $totalCoefficientsClasse > 0 ? $totalPointsSeq1 / $totalCoefficientsClasse : 0;
-                            $moyenneSeq2Finale =
-                                $totalCoefficientsClasse > 0 ? $totalPointsSeq2 / $totalCoefficientsClasse : 0;
-                            $moyenneTrimFinale =
-                                $totalCoefficientsClasse > 0 ? $totalPointsTrimestre / $totalCoefficientsClasse : 0;
-                        @endphp
-
-                        <td>{{ number_format($moyenneSeq1Finale, 2) }}</td>
-
-                        <td>{{ number_format($moyenneSeq2Finale, 2) }}</td>
-
-                        
-                        <td style="font-weight: bold; background-color: #f9f9f9;">
-                            @php
-                          
-                                $moyTrimestre = $totalPointsGlobal / $totalCoeffGlobal;
-                            @endphp
-                            {{ number_format($moyTrimestre, 2) }}
-                        </td>
-
-
-
-
-
-
-
-                        <td style="font-size: 9px;">
-                            {{ $b['rang'] }} / {{ count($bulletins) }}
-                        </td>
-                        <td style="font-size: 9px;">
-                            @if ($moyTrimestre < 10)
-                                Insuffisant
-                            @elseif ($moyTrimestre < 12)
-                                Passable
-                            @elseif ($moyTrimestre < 14)
-                                Assez bien
-                            @elseif ($moyTrimestre < 16)
-                                Bien
-                            @elseif ($moyTrimestre < 18)
-                                Très bien
-                            @elseif ($moyTrimestre < 19)
-                                Excellent
-                            @else
-                                Parfait
-                            @endif
-                        </td>
-
-                        <td>{{ number_format($stats['moyenne'], 2) }}
-                        </td>
-                    
-                        <td style="font-size: 8px; font-style: italic;">
-                            {{ $moyenneTrimFinale >= 10 ? 'Ne dormez pas, du courage !' : 'Doit redoubler d\'efforts.' }}
-                        </td>
-                    </tr>
-
-
-               
-
-
-                </tbody>
-            </table> --}}
 
 
 

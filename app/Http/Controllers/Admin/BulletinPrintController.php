@@ -343,4 +343,142 @@ class BulletinPrintController extends Controller
 
         return $trimestres[$index]->id ?? null;
     }
+
+
+
+
+public function imprimerStatsClasse($classeId, $trimestreId)
+{
+    $etablissement = DB::table('etablissements')->first();
+    $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+    $classe = DB::table('classes')->where('id', $classeId)->first();
+    $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+    $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+
+    // Récupérer les inscriptions avec les informations des élèves directement
+    $inscriptionsEleves = DB::table('inscriptions')
+        ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+        ->where('inscriptions.classe_id', $classeId)
+        ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+        ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom')
+        ->get();
+
+    $inscriptionIds = $inscriptionsEleves->pluck('inscription_id');
+
+    $allNotes = DB::table('notes')
+        ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
+        ->whereIn('notes.inscription_id', $inscriptionIds)
+        ->whereIn('evaluations.sequence_id', $sequences->pluck('id'))
+        ->select('notes.*', 'evaluations.matiere_id', 'evaluations.sequence_id')
+        ->get()
+        ->groupBy('inscription_id');
+
+    $resultatsEleves = [];
+
+    foreach ($inscriptionsEleves as $eleve) {
+        $id = $eleve->inscription_id;
+        $notesEleve = $allNotes->get($id, collect());
+        $bulletin = $this->chargerDonneesBulletin($id, $trimestreId, $sequences, $notesEleve);
+
+        $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
+        $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
+        $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
+        $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
+
+        $moyenneCalculee = match((int)$trimestreId) {
+            (int)$idT3 => $this->calculerMoyenneTrimestre($id, $idT3),
+            (int)$idT2 => $this->calculerMoyenneTrimestre($id, $idT2),
+            default => $this->calculerMoyenneTrimestre($id, $idT1),
+        };
+
+        $resultatsEleves[] = [
+            'nom' => $eleve->nom,
+            'prenom' => $eleve->prenom,
+            'moyenne' => (float)$moyenneCalculee,
+        ];
+    }
+
+    $totalEleves = count($resultatsEleves);
+    $moyennesIndividuelles = array_column($resultatsEleves, 'moyenne');
+
+    // 1. Statistiques Générales
+    $moyenneClasse = $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0;
+    $noteMax = $totalEleves > 0 ? max($moyennesIndividuelles) : 0;
+    $noteMin = $totalEleves > 0 ? min($moyennesIndividuelles) : 0;
+    
+    $admis = count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10));
+    $refuses = $totalEleves - $admis;
+    $tauxReussite = $totalEleves > 0 ? ($admis / $totalEleves) * 100 : 0;
+
+    // 2. Détection automatique du Major de la classe
+    $majorNom = 'Aucun';
+    $majorPrenom = '';
+    if ($totalEleves > 0) {
+        // Tri par ordre décroissant pour placer le premier en haut
+        usort($resultatsEleves, fn($a, $b) => $b['moyenne'] <=> $a['moyenne']);
+        $majorNom = $resultatsEleves[0]['nom'];
+        $majorPrenom = $resultatsEleves[0]['prenom'];
+    }
+
+    // 3. Répartition par Tranches de Moyennes
+    $tranches = [
+        'excellence' => 0, // [16 - 20]
+        'bien' => 0,       // [14 - 15.99]
+        'assez_bien' => 0, // [12 - 13.99]
+        'passable' => 0,   // [10 - 11.99]
+        'echec' => 0       // [< 10]
+    ];
+
+    foreach ($moyennesIndividuelles as $m) {
+        if ($m >= 16) {
+            $tranches['excellence']++;
+        } elseif ($m >= 14) {
+            $tranches['bien']++;
+        } elseif ($m >= 12) {
+            $tranches['assez_bien']++;
+        } elseif ($m >= 10) {
+            $tranches['passable']++;
+        } else {
+            $tranches['echec']++;
+        }
+    }
+
+    $statsGlobales = [
+        'total_eleves' => $totalEleves,
+        'moyenne_generale' => number_format($moyenneClasse, 2),
+        'note_max' => number_format($noteMax, 2),
+        'note_min' => number_format($noteMin, 2),
+        'major_nom' => $majorNom,
+        'major_prenom' => $majorPrenom,
+        'admis' => $admis,
+        'refuses' => $refuses,
+        'taux_reussite' => number_format($tauxReussite, 2),
+        'tranches' => $tranches
+    ];
+
+    $pdf = Pdf::loadView('pages.admin.pdf.stats-classe', compact('classe', 'trimestre', 'etablissement', 'statsGlobales'))
+             ->setPaper('a4', 'portrait');
+
+    return $pdf->download("Statistiques_{$classe->nom}.pdf");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

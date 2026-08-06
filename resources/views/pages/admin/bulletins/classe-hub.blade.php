@@ -13,7 +13,7 @@
                 Retour aux classes
             </a>
 
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-5">
+            {{-- <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-5">
                 <div>
                     <h1 class="text-2xl font-bold text-foreground">Gestion des Bulletins — {{ $classe->nom }}</h1>
                     <p class="text-sm text-foreground/60">Générez le livret de notes global de la classe ou ciblez un élève
@@ -26,7 +26,35 @@
 
                     <span>Imprimer TOUS les Bulletins</span>
                 </a>
-            </div>
+            </div> --}}
+
+
+
+
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-5">
+    <div>
+        <h1 class="text-2xl font-bold text-foreground">Gestion des Bulletins — {{ $classe->nom }}</h1>
+        <p class="text-sm text-foreground/60">Générez le livret de notes global de la classe ou ciblez un élève précis.</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+        <!-- Bouton pour imprimer les Statistiques de la classe -->
+        <a href="{{ route('admin.bulletins.download-stats', [$classe->id, $trimestreId]) }}" target="_blank"
+            data-turbo="false"
+            class="inline-flex items-center justify-center px-4 py-3 bg-secondary text-secondary-foreground hover:bg-secondary/80 text-sm font-semibold rounded-lg transition shadow-sm gap-2 border border-border">
+            <x-lucide-bar-chart-3 class="w-4 h-4" />
+            <span>Imprimer les Statistiques</span>
+        </a>
+
+        <!-- Bouton existant pour imprimer tous les bulletins -->
+        <a href="{{ route('admin.bulletins.imprimer-classe', [$classe->id, $trimestreId]) }}" target="_blank"
+            data-turbo="false"
+            class="inline-flex items-center justify-center px-5 py-3 bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold rounded-lg transition shadow-sm gap-2">
+            <span>Imprimer TOUS les Bulletins</span>
+        </a>
+    </div>
+</div>
         </div>
 
         <div class="bg-card text-card-foreground rounded-xl border border-border shadow-sm overflow-hidden">
