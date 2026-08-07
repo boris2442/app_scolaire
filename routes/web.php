@@ -156,6 +156,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
             Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
             Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
+            Route::post('/importer', [EleveController::class, 'importer'])->name('importer');
         });
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EleveRequest;
+use App\Imports\StudentImport;
 use App\Models\AnneeScolaire;
 use App\Models\Classe;
 use App\Models\Eleve;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EleveController extends Controller
 {
@@ -30,7 +32,7 @@ class EleveController extends Controller
         $this->scolarite = $scolarite;
     }
 
-   
+
     public function index(Request $request, StudentAnalyticsService $analytics)
     {
         $anneeId = $request->input('annee_id');
@@ -119,39 +121,76 @@ class EleveController extends Controller
         }
 
         // On récupère le résultat de la transaction (qui sera notre objet $eleve)
+        // $eleve = DB::transaction(function () use ($data, $request) {
+
+        //     $nouveauEleve = Eleve::create([
+        //         'nom' => strtoupper($data['nom']),
+        //         'prenom' => $data['prenom'],
+        //         'date_naissance' => $data['date_naissance'],
+        //         'sexe' => $data['sexe'],
+        //         'lieu_naissance' => $data['lieu_naissance'] ?? null,
+        //         'telephone_parent' => $data['telephone_parent'] ?? null,
+        //         'adresse' => $data['adresse'] ?? null,
+        //         'photo' => $data['photo'] ?? null,
+        //     ]);
+
+        //     $anneeActive = $this->scolarite->getAnneeActive();
+
+        //     $debut = Carbon::parse($anneeActive->date_debut)->format('y');
+        //     $fin = Carbon::parse($anneeActive->date_fin)->format('y');
+
+        //     $matricule = $debut . $fin . str_pad($nouveauEleve->id, 5, '0', STR_PAD_LEFT);
+
+        //     $nouveauEleve->update(['matricule' => $matricule]);
+
+        //     Inscription::create([
+        //         'eleve_id' => $nouveauEleve->id,
+        //         'classe_id' => $request->classe_id,
+        //         'annee_scolaire_id' => $anneeActive->id,
+        //         'date_inscription' => now(),
+        //         'est_redoublant' => $request->has('est_redoublant'),
+        //     ]);
+
+        //     // On retourne l'objet élève ici
+        //     return $nouveauEleve;
+        // });
+
+
+
+
+
         $eleve = DB::transaction(function () use ($data, $request) {
 
             $nouveauEleve = Eleve::create([
-                'nom' => strtoupper($data['nom']),
-                'prenom' => $data['prenom'],
-                'date_naissance' => $data['date_naissance'],
-                'sexe' => $data['sexe'],
-                'lieu_naissance' => $data['lieu_naissance'] ?? null,
+                'nom'              => strtoupper($data['nom']),
+                'prenom'           => $data['prenom'],
+                'date_naissance'   => $data['date_naissance'],
+                'sexe'             => $data['sexe'],
+                'lieu_naissance'   => $data['lieu_naissance'] ?? null,
                 'telephone_parent' => $data['telephone_parent'] ?? null,
-                'adresse' => $data['adresse'] ?? null,
-                'photo' => $data['photo'] ?? null,
+                'adresse'          => $data['adresse'] ?? 'Non renseigné',
+                'photo'            => $data['photo'] ?? null,
+                'est_actif'        => true,
             ]);
 
             $anneeActive = $this->scolarite->getAnneeActive();
 
-            $debut = Carbon::parse($anneeActive->date_debut)->format('y');
-            $fin = Carbon::parse($anneeActive->date_fin)->format('y');
-
-            $matricule = $debut . $fin . str_pad($nouveauEleve->id, 5, '0', STR_PAD_LEFT);
-
-            $nouveauEleve->update(['matricule' => $matricule]);
+            // UTILISATION DE LA NOUVELLE FONCTION DE MATRICULE
+            Eleve::genererEtAttribuerMatricule($nouveauEleve, $anneeActive->id);
 
             Inscription::create([
-                'eleve_id' => $nouveauEleve->id,
-                'classe_id' => $request->classe_id,
+                'eleve_id'          => $nouveauEleve->id,
+                'classe_id'         => $request->classe_id,
                 'annee_scolaire_id' => $anneeActive->id,
-                'date_inscription' => now(),
-                'est_redoublant' => $request->has('est_redoublant'),
+                'date_inscription'  => now(),
+                'est_redoublant'    => $request->has('est_redoublant'),
             ]);
 
-            // On retourne l'objet élève ici
             return $nouveauEleve;
         });
+
+
+
 
         // Maintenant, $eleve est parfaitement défini ici
         return redirect()->route('admin.students.index')
@@ -170,7 +209,7 @@ class EleveController extends Controller
      * @param  \App\Models\Eleve  $eleve
      */
 
-   
+
     public function show($id)
     {
         // On charge les inscriptions, l'année scolaire et la classe (sans la relation 'niveau')
@@ -345,5 +384,28 @@ class EleveController extends Controller
 
         // 4. Téléchargement ou affichage
         return $pdf->download('liste_eleves_' . $classe->nom . '.pdf');
+    }
+
+
+    // Dans ton Contrôleur
+    public function importer(Request $request)
+    {
+        $request->validate([
+            'fichier_excel' => 'required|mimes:xlsx,xls,csv',
+            'classe_id'     => 'required|exists:classes,id',
+            'annee_id'      => 'required|exists:annee_scolaires,id', // Note bien le nom du champ du formulaire : 'annee_id'
+        ]);
+
+        try {
+            // Ordre strict : Classe d'abord, Année ensuite
+            Excel::import(
+                new StudentImport($request->classe_id, $request->annee_id),
+                $request->file('fichier_excel')
+            );
+
+            return redirect()->back()->with('success', 'Importation réussie !');
+        } catch (\Exception $e) {
+            dd("Erreur critique : " . $e->getMessage());
+        }
     }
 }

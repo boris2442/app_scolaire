@@ -49,6 +49,19 @@
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel les inscrits
                         </a>
+                        {{-- <a href="{{ route('admin.inscriptions.export') }}"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
+                            <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel les inscrits
+                        </a> --}}
+                        {{-- <a href="{{ route('admin.students.importer') }}"
+                            class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
+                            <x-lucide-file-up class="w-4 h-4" /> Importer depuis Excel
+                        </a> --}}
+
+
+
+
+
 
                         {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
                         @if (request()->filled('classe_id'))
@@ -150,13 +163,147 @@
                 class="bg-primary hover:opacity-90 text-primary-foreground px-6 py-3 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center gap-3 text-xs font-black ">
                 <x-lucide-plus class="w-4 h-4" /> Nouvel Élève
             </a>
+
+
+
+            <details class="group mb-6 bg-card rounded-2xl border border-border shadow-sm overflow-hidden transition-all">
+                <!-- Bouton Déclencheur (Toggle natif) -->
+                <summary
+                    class="cursor-pointer p-4 font-semibold text-sm flex items-center justify-between bg-card hover:bg-secondary/40 transition select-none list-none">
+                    <span class="flex items-center gap-2 text-foreground">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Importer des élèves (Excel)
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200 text-foreground/60"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </summary>
+
+                <!-- Contenu qui s'affiche au dépliement -->
+                <div class="p-6 border-t border-border space-y-6 bg-secondary/10">
+                    <div>
+                        <h3 class="text-lg font-bold text-foreground">Assistant d'importation massive</h3>
+                        <p class="text-xs text-foreground/60">Sélectionnez la classe cible, joignez votre fichier Excel et
+                            assurez-vous qu'il respecte la structure ci-dessous.</p>
+                    </div>
+
+                    <!-- Formulaire d'importation -->
+                    <form action="{{ route('admin.students.importer') }}" method="POST" enctype="multipart/form-data"
+                        class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        @csrf
+                        <input type="hidden" name="annee_id" value="{{ $anneeActive->id }}">
+
+                        <!-- Choix de la classe -->
+                        <div>
+                            <label class="block text-xs font-semibold text-foreground/70 mb-1">Classe de destination <span
+                                    class="text-red-500">*</span></label>
+                            <select name="classe_id" required
+                                class="w-full px-3 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg border border-border focus:ring-2 focus:ring-primary">
+                                <option value="">-- Choisir la classe --</option>
+                                @foreach ($classes as $classe)
+                                    <option value="{{ $classe->id }}">{{ $classe->nom }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Fichier Excel -->
+                        <div>
+                            <label class="block text-xs font-semibold text-foreground/70 mb-1">Fichier Excel (.xlsx, .xls,
+                                .csv) <span class="text-red-500">*</span></label>
+                            <input type="file" name="fichier_excel" accept=".xlsx, .xls, .csv" required
+                                class="w-full text-xs text-foreground/70 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90">
+                        </div>
+
+                        <!-- Bouton de soumission -->
+                        <div>
+                            <button type="submit"
+                                class="w-full px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition shadow">
+                                Lancer l'importation
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Aperçu visuel / Maquette du template Excel attendu -->
+                    <div class="pt-4 border-t border-border">
+                        <h4
+                            class="text-xs font-bold text-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Modèle de structure requis pour les colonnes de votre fichier Excel :
+                        </h4>
+
+                        <div class="overflow-x-auto rounded-xl border border-border bg-secondary/20">
+                            <table class="w-full text-left text-xs font-mono">
+                                <thead class="bg-secondary text-secondary-foreground font-sans font-semibold">
+                                    <tr>
+                                        <th class="p-2 border-r border-border">matricule <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(Optionnel)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border text-red-500">nom <span
+                                                class="font-sans font-normal text-[10px] block text-foreground/50">(Requis)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border">prenom <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(Optionnel)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border">sexe <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(M ou F)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border">date_naissance <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(AAAA-MM-JJ)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border">lieu_naissance <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(Optionnel)</span>
+                                        </th>
+                                        <th class="p-2 border-r border-border">telephone_parent <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(Optionnel)</span>
+                                        </th>
+                                        <th class="p-2">est_redoublant <span
+                                                class="text-foreground/40 font-normal text-[10px] block">(0 ou 1)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-foreground/70">
+                                    <tr class="border-t border-border bg-card/50">
+                                        <td class="p-2 border-r border-border italic text-foreground/40">Généré auto si
+                                            vide</td>
+                                        <td class="p-2 border-r border-border font-semibold text-foreground">Simo</td>
+                                        <td class="p-2 border-r border-border">Boris Aubin</td>
+                                        <td class="p-2 border-r border-border">M</td>
+                                        <td class="p-2 border-r border-border">2005-04-12</td>
+                                        <td class="p-2 border-r border-border">Bafoussam</td>
+                                        <td class="p-2 border-r border-border">690000000</td>
+                                        <td class="p-2">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-foreground/50 mt-2">
+                            💡 Note : La première ligne de votre fichier Excel doit impérativement contenir ces noms exacts
+                            de colonnes en minuscules pour que le système puisse les lire correctement.
+                        </p>
+                    </div>
+                </div>
+            </details>
+
+
+
         </div>
 
         <form action="{{ route('admin.students.index') }}" method="GET" class="space-y-4 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <div class="relative flex items-center">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="NOM OU MATRICULE..."
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="NOM OU MATRICULE..."
                         class="w-full bg-secondary border-border rounded-full pl-4 pr-12 py-3 text-xs font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all lowercase">
                     <button type="submit"
                         class="absolute right-2 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
