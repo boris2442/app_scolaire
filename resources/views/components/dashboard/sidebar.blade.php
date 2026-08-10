@@ -54,6 +54,95 @@
                         <span class="sidebar-label ml-3">Années</span>
                     </a>
                 </li>
+
+
+                {{-- <li>
+                    <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
+                        aria-label="Calcul des Résultats"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-calculator class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Calcul des Résultats</span>
+                    </a>
+                </li> --}}
+
+                {{-- <li>
+                    <a href="{{ route('admin.statistiques.index') }}" title="Statistiques" aria-label="Statistiques"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-bar-chart-2 class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Statistiques</span>
+                    </a>
+                </li> --}}
+                {{-- <li>
+                    <a href="{{ route('emplois.index') }}" title="Emplois de temps" aria-label="Emplois de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('emplois.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-bar-chart-2 class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Gestion des EDT</span>
+                    </a>
+                </li> --}}
+            @endcan
+            @canany(['access-admin', 'access-censeur'])
+                <li>
+                    <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departments.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-building class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Départements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.creneaux.index') }}" title="Creneaux emploies de temps"
+                        aria-label="Creneaux emploies de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.creneaux.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-clock class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Creneaux</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.emplois.classes') }}" title=" emploies de temps"
+                        aria-label=" emploies de temps"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.emplois.classes') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-clock class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Emploies de temp classes</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{{ route('admin.users.index') }}" title="Utilisateurse" aria-label="Utilisateurse"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.users.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-users class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Utilisateurs</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-user class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Enseignants</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{{ route('admin.groupes.index') }}"title="groupement des matieres "
+                        aria-label="groupement des matieres"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
+                        <x-lucide-users class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">groupement matieres</span>
+                    </a>
+                </li>
+
+
+
+
+
+
+
+
+
+
+
                 <li>
 
                     <a href="{{ route('settings.academique.index') }}" title="Niveaux et cycles"
@@ -95,83 +184,13 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="{{ route('admin.resultats.index') }}" title="Calcul des Résultats"
-                        aria-label="Calcul des Résultats"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.resultats.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-calculator class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Calcul des Résultats</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.statistiques.index') }}" title="Statistiques" aria-label="Statistiques"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-bar-chart-2 class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Statistiques</span>
-                    </a>
-                </li>
-                {{-- <li>
-                    <a href="{{ route('emplois.index') }}" title="Emplois de temps" aria-label="Emplois de temps"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('emplois.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-bar-chart-2 class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Gestion des EDT</span>
-                    </a>
-                </li> --}}
-                <li>
-                    <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departments.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-building class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Départements</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.creneaux.index') }}" title="Creneaux emploies de temps"
-                        aria-label="Creneaux emploies de temps"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.creneaux.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-clock class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Creneaux</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.emplois.classes') }}" title=" emploies de temps"
-                        aria-label=" emploies de temps"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.emplois.classes') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-clock class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Emploies de temp classes</span>
-                    </a>
-                </li>
 
 
-          <li>
-                    <a href="{{ route('admin.users.index') }}" title="Utilisateurse"
-                        aria-label="Utilisateurse"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.users.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-users class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Utilisateurs</span>
-                    </a>
-                </li> 
 
 
-                <li>
-                    <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-user class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Enseignants</span>
-                    </a>
-                </li>
 
 
-                <li>
-                    <a href="{{ route('admin.groupes.index') }}"title="groupement des matieres "
-                        aria-label="groupement des matieres"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.groupes.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }} text-sm">
-                        <x-lucide-users class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">groupement matieres</span>
-                    </a>
-                </li>
-            @endcan
-            @canany(['access-admin', 'access-censeur'])
+
                 <li>
                     <a href="{{ route('admin.bulletins.index') }}"title="impresion des bulletins" aria-label="impresion"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
