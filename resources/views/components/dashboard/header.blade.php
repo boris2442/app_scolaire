@@ -8,7 +8,7 @@
                     class="md:hidden mr-3 p-2 rounded-lg hover:bg-secondary text-gray-500 transition-colors"
                     onclick="toggleSidebar()">
 
-                  
+
                     <x-lucide-menu class="w-6 h-6" />
 
                 </button>
@@ -59,7 +59,8 @@
                                 class="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-success ring-2 ring-card"></span>
                         </div>
 
-                    <x-lucide-chevron-down class="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                        <x-lucide-chevron-down
+                            class="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
                     </button>
 
                     <div id="user-dropdown"
@@ -101,10 +102,29 @@
 
                                 <span class="w-4 flex justify-center">
                                     <!-- On ajoute 'hidden' ici pour que JS prenne le relais proprement -->
-                                    <x-lucide-moon
+                                    {{-- <x-lucide-moon
                                         class="w-4 text-center hidden group-hover/theme:rotate-12 transition-transform" />
                                     <x-lucide-sun
-                                        class="w-4 text-center hidden group-hover/theme:rotate-90 transition-transform" />
+                                        class="w-4 text-center hidden group-hover/theme:rotate-90 transition-transform" /> --}}
+
+
+
+
+
+
+
+                                    <svg class="theme-icon-moon w-4 hidden" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 12.79A9 9 0 1 1 11.21 3A7 7 0 0 0 21 12.79Z" />
+                                    </svg>
+
+                                    <svg class="theme-icon-sun w-4 hidden" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <path stroke-linecap="round"
+                                            d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" />
+                                    </svg>
                                 </span>
 
                                 <span class="text-card-foreground">Changer de mode</span>

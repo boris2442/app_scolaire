@@ -19,7 +19,7 @@
             <h2 class="text-[10px] font-bold  text-primary tracking-widest opacity-80">Saisie des notes</h2>
             <h1 class="text-lg md:text-xl font-black leading-tight uppercase">{{ $evaluation->titre }}</h1>
             <div class="mt-2 flex gap-4 text-[10px] text-white/60 font-medium italic">
-                <span>Session: {{ $evaluation->classe->niveau->nom }}</span>
+                {{-- <span>Session: {{ $evaluation->classe->niveau->nom }}</span> --}}
                 <span>Classe: {{ $evaluation->classe->nom }}</span>
                 <span>Matière: {{ $evaluation->matiere->nom }}</span>
             </div>

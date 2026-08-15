@@ -1,23 +1,35 @@
 // Remplacez vos variables d'icônes par des sélecteurs d'icônes Lucide
-function updateThemeIcons(isDark) {
-    const sunIcon = document.querySelector("svg.lucide-sun");
-    const moonIcon = document.querySelector("svg.lucide-moon");
+// function updateThemeIcons(isDark) {
+//     const sunIcon = document.querySelector("svg.lucide-sun");
+//     const moonIcon = document.querySelector("svg.lucide-moon");
 
-    // Vérification de sécurité : si les éléments n'existent pas, on arrête tout
+//     // Vérification de sécurité : si les éléments n'existent pas, on arrête tout
+//     if (!sunIcon || !moonIcon) {
+//         console.warn(
+//             "Les icônes Lucide ne sont pas encore chargées dans le DOM.",
+//         );
+//         return;
+//     }
+
+//     if (isDark) {
+//         sunIcon.classList.remove("hidden");
+//         moonIcon.classList.add("hidden");
+//     } else {
+//         sunIcon.classList.add("hidden");
+//         moonIcon.classList.remove("hidden");
+//     }
+// }
+
+function updateThemeIcons(isDark) {
+    const sunIcon = document.querySelector(".theme-icon-sun");
+    const moonIcon = document.querySelector(".theme-icon-moon");
+
     if (!sunIcon || !moonIcon) {
-        console.warn(
-            "Les icônes Lucide ne sont pas encore chargées dans le DOM.",
-        );
         return;
     }
 
-    if (isDark) {
-        sunIcon.classList.remove("hidden");
-        moonIcon.classList.add("hidden");
-    } else {
-        sunIcon.classList.add("hidden");
-        moonIcon.classList.remove("hidden");
-    }
+    sunIcon.classList.toggle("hidden", !isDark);
+    moonIcon.classList.toggle("hidden", isDark);
 }
 // 1. Initialisation
 const themeToggleBtn = document.getElementById("theme-toggle");

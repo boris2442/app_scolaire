@@ -181,35 +181,7 @@ public function index()
 
     ///////////////// les diffferents statistiques a gerer pour les impressions
 
-    // private function calculerStats($evaluation)
-    // {
-    //     // On charge les notes, puis l'inscription, puis l'élève
-    //     $notes = $evaluation->notes()->with('inscription.eleve')->get();
-
-    //     $total = $notes->count();
-    //     $reussites = $notes->filter(fn($n) => $n->valeur >= 10);
-
-    //     $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
-    //     $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
-
-    //     return [
-    //         'total' => $total,
-    //         'moyenne' => $total > 0 ? number_format($notes->avg('valeur'), 2) : 0,
-    //         'reussite_globale' => $reussites->count(),
-    //         'taux_reussite' => $total > 0 ? number_format(($reussites->count() / $total) * 100, 2) : 0,
-
-    //         'garcons_count' => $garcons->count(),
-    //         'garcons_reussite' => $garcons->where('valeur', '>=', 10)->count(),
-
-    //         'filles_count' => $filles->count(),
-    //         'filles_reussite' => $filles->where('valeur', '>=', 10)->count(),
-    //     ];
-    // }
-
-
-
-
-
+  
 
 
 private function calculerStats($evaluation)

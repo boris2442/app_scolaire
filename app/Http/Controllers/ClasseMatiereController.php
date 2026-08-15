@@ -13,7 +13,7 @@ class ClasseMatiereController extends Controller
     public function edit(Classe $classe)
     {
         $allMatieres = Matiere::orderBy('nom')->get();
-        
+
         // On récupère les IDs des matières déjà attribuées pour cocher les cases
         $matieresAttribuees = $classe->matieres->pluck('id')->toArray();
 

@@ -139,7 +139,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
         Route::get('/evaluations/{id}/saisie', [EvaluationController::class, 'saisie'])->name('evaluations.saisie');
         Route::post('/evaluations/{id}/bulk-store', [EvaluationController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
-        Route::get('/evaluations/{id}/telecharger-stats', [EvaluationController::class, 'telechargerStats'])
+        Route::get('/evaluations/{id}/download-stats', [EvaluationController::class, 'telechargerStats'])
             ->name('evaluations.telecharger-stats');
     });
 
@@ -219,10 +219,11 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         ->name('admin.bulletins.imprimer-eleve');
 
 
-    Route::get('/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
+    Route::get('/admin/report/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
         ->name('admin.bulletins.download-stats');
 
-
+    Route::get('/admin/reports/tableau-honneur/{classeId}/{trimestreId}', [BulletinPrintController::class, 'imprimerTableauHonneur'])
+        ->name('admin.bulletins.tableau-honneur');
 
 
 
