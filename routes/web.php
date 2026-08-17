@@ -27,8 +27,10 @@ use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\LeconController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ParametreAcademiqueController;
+use App\Http\Controllers\PresenceAndServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeanceController;
+use App\Http\Controllers\TeacherProfileController;
 use App\Http\Controllers\TrimestreController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -76,9 +78,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('welcome-dashboard', [AfterLoginController::class, 'index'])->name('after.login.page');
+    Route::patch('/teacher-profile', [TeacherProfileController::class, 'update'])
+        ->name('enseignant.profile.update');
 
-
-
+    // Route pour télécharger l'attestation de présence effective
+    Route::get('presence/{id}/attestation-presence', [PresenceAndServiceController::class, 'generateAttestationPresence'])
+        ->name('teacher.attestation.presence');
 
 
 

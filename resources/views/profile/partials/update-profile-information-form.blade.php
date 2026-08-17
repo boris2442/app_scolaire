@@ -5,7 +5,7 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Mettez à jour les informations de votre profil et votre adresse email.") }}
+            {{ __('Mettez à jour les informations de votre profil et votre adresse email.') }}
         </p>
     </header>
 
@@ -13,9 +13,33 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+
+        <!-- Aperçu de la photo actuelle (Optionnel mais recommandé) -->
+        @if ($user->avatar)
+            <div class="flex items-center gap-4">
+                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
+                    class="w-16 h-16 rounded-full object-cover border border-gray-300 dark:border-gray-700">
+                <span class="text-sm text-gray-500">Photo actuelle</span>
+            </div>
+        @endif
+
+        <!-- Champ d'upload d'image -->
+        <div>
+            <x-input-label for="avatar" :value="__('Photo de profil')" />
+            <input id="avatar" name="avatar" type="file"
+                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-gray-700 dark:file:text-gray-300"
+                accept="image/png, image/jpeg, image/jpg" />
+            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+        </div>
+
+
+
+
+
 
         <div>
             <x-input-label for="name" :value="__('Nom')" />

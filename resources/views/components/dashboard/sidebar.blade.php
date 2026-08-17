@@ -10,9 +10,10 @@
         </button>
     </div>
 
+    <!-- 1. Ton bloc Logo actuel -->
     <div class="flex items-center px-6 mb-8 gap-3">
         <div class="flex-shrink-0">
-            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-10 h-10 rounded shadow-sm">
+            <img src="{{ asset('images/logo.png') }}" alt="logo" class="w-10 h-10 rounded-full shadow-sm">
         </div>
         <div class="sidebar-label transition-opacity duration-300">
             <h1 class="font-bold text-lg leading-none tracking-tight">ACADEMIA<span
@@ -20,6 +21,37 @@
             <p class="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Management System</p>
         </div>
     </div>
+
+    <!-- 2. COLLE TON BLOC UTILISATEUR ICI -->
+    <div class="flex items-center px-6 py-4 mb-4 gap-3 border-b border-border/50">
+        <div class="flex-shrink-0">
+            <a href="{{ route('profile.edit') }}" title="Voir le profil" aria-label="Voir le profil">
+                @if (auth()->user()->avatar)
+                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
+                        class="w-12 h-12 rounded-full object-cover border-2 border-primary shadow-sm">
+                @else
+                    <div
+                        class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm border-2 border-primary shadow-sm">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                    </div>
+                @endif
+            </a>
+        </div>
+        <div class="sidebar-label transition-opacity duration-300">
+            <p class="text-[11px] text-muted-foreground leading-none">Bienvenue,</p>
+            <h2 class="font-bold text-sm tracking-tight text-foreground mt-1 truncate max-w-[140px]">
+                <a href="{{ route('profile.edit') }}" title="Voir le profil" aria-label="Voir le profil">
+                    {{ auth()->user()->name }}
+                </a>
+            </h2>
+            <p class="text-[10px] text-primary uppercase tracking-widest mt-1 font-bold">
+                {{ auth()->user()->role ?? 'UTILISATEUR' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- 3. Ta navigation commence ici -->
+
 
 
 
@@ -101,7 +133,7 @@
                         aria-label=" emploies de temps"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.emplois.classes') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-clock class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Emploies de temp classes</span>
+                        <span class="sidebar-label ml-3">Emplois de temps classes</span>
                     </a>
                 </li>
 

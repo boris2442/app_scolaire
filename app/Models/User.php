@@ -45,6 +45,7 @@ class User extends Authenticatable
         'password',
         'role', // INDISPENSABLE
         'phone',
+        'avatar',
     ];
 
     public function enseignant()

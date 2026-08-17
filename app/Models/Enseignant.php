@@ -14,9 +14,30 @@ class Enseignant extends Model
     // C'est ici que ça se passe !
     protected $fillable = [
         'user_id',
+
+        'departement_id', // <--- IL DOIT ÊTRE ICI
+        'enseignant_id',
+
         'matricule',
-        'departement_id' ,// <--- IL DOIT ÊTRE ICI
-        'enseignant_id'
+        'grade',
+        'birth_date',
+        'birth_place',
+        'marital_status',
+        'previous_position',
+        'previous_school',
+        'appointment_document_number',
+        'appointment_date',
+        'service_assumption_date',
+        'quality',
+        'diploma',
+        'matiere_id',
+        'public_service_first_date',
+        'school_first_date',
+        'interruption_reason',
+        'interruption_start_date',
+        'interruption_end_date',
+        'secondary_phone',
+        'address',
     ];
 
     public function user()
@@ -37,5 +58,11 @@ class Enseignant extends Model
     {
         // Assure-toi que la clé étrangère dans la table affectations est bien 'enseignant_id'
         return $this->hasMany(Affectation::class, 'enseignant_id');
+    }
+
+
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class);
     }
 }
