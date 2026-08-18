@@ -22,6 +22,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 8px;
+            text-transform: uppercase;
             font-weight: bold;
         }
 
@@ -30,9 +31,11 @@
             vertical-align: bottom;
             padding-bottom: 1px;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         .header-table td {
+            text-transform: uppercase;
             vertical-align: top;
             font-size: 7.5px;
             font-weight: bold;
@@ -167,13 +170,13 @@
 
                     Peace-Work-Fatherland </i><br>
                 *******<br>
-                {{ $etablissement->region }} REGION<br>
+                {{ $etablissement->english_region }} REGION<br>
                 *******<br>
-                {{ $etablissement->department }} DIVISION<br>
+                {{ $etablissement->english_department }} DIVISION<br>
                 *******<br>
                 DIVISIONAL DELEGATION FOR SECONDARY EDUCATION<br>
                 *******<br>
-                {{ $etablissement->sub_division }} SUB DIVISION<br>
+                {{ $etablissement->english_sub_division }} SUB DIVISION<br>
                 *******<br>
                 <strong>{{ $etablissement->english_name }}</strong><br>
                 PO-BOX : - - PHONE : {{ $etablissement->telephone }}<br>
@@ -210,7 +213,7 @@
 
     <table>
         <tr>
-            <td style="width: 12%;" class="label-fr">PROVISEUR</td>
+            <td style="width: 12%;" class="label-fr">PROVISEUR / PRINCIPAL</td>
             <td style="width: 3%; font-size: 8.5px;">du</td>
             <td style="width: 35%;" class="line-underline">&nbsp;</td>
             <td style="width: 3%; font-size: 8.5px; text-align: center;">du</td>
@@ -502,7 +505,7 @@
 
     <!-- PIED DE PAGE TECHNIQUE -->
     <div class="footer-divider">
-        AcademiaPro SARL 2026 | AcademiaPro HIGH SCHOOL | Email: academiapro@gmail.com | 679135177 / 694223503 | Date
+        AcademiaPro 2026 | AcademiaPro HIGH SCHOOL | Email: academiapro237@gmail.com | 679135177 / 694223503 | Date
         d'édition :
         {{ ucfirst(\Carbon\Carbon::now()->locale('fr')->isoFormat('dddd D MMMM YYYY à HH[H] mm[Min] ss[S]')) }} | Page
         1/1

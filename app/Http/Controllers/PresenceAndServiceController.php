@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Etablissement;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,9 @@ class PresenceAndServiceController extends Controller
 {
     public function generateAttestationPresence($id)
     {
-        $etablissement= Etablissement::first(); // Récupérer le premier établissement
+        $etablissement = Etablissement::first(); // Récupérer le premier établissement
         // Récupérer l'utilisateur et sa relation enseignant
-        $user = \App\Models\User::with('enseignant.matiere')->findOrFail($id);
+        $user = User::with('enseignant.matiere')->findOrFail($id);
         $enseignant = $user->enseignant;
 
         // Charger la vue PDF avec les données

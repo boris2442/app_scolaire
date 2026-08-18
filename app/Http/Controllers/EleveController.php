@@ -56,7 +56,16 @@ class EleveController extends Controller
             });
         }
 
-        $eleves = $query->latest()->paginate(5)->withQueryString();
+        // $eleves = $query->latest()->paginate(5)->withQueryString();
+        $eleves = $query
+            ->join('inscriptions', 'eleves.id', '=', 'inscriptions.eleve_id')
+            ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+            ->orderBy('classes.nom', 'asc')
+            ->orderBy('eleves.nom', 'asc')
+            ->orderBy('eleves.prenom', 'asc')
+            ->select('eleves.*')
+            ->paginate(25)
+            ->withQueryString();
 
         // On récupère directement la liste des classes pour les filtres de la vue
         $classes = Classe::all();
