@@ -94,11 +94,22 @@
                                 <x-lucide-cog class="w-4 text-center" />
                                 <span>Paramètres</span>
                             </a>
-                            <a href="{{ route('teacher.attestation.presence', auth()->user()->id) }}"
-                                target="_blank"
+                            <a href="{{ route('teacher.attestation.presence', auth()->user()->id) }}" target="_blank"
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
                                 <x-lucide-cog class="w-4 text-center" />
                                 <span>Presence</span>
+                            </a>
+                            <a href="{{ route('teacher.attestation.take-service', auth()->user()->id) }}"
+                                target="_blank"
+                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
+                                <x-lucide-clipboard class="w-4 text-center" />
+                                <span>Prise de service</span>
+                            </a>
+                            <a href="{{ route('teacher.attestation.reprise-service', auth()->user()->id) }}"
+                                target="_blank"
+                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
+                                <x-lucide-clipboard class="w-4 text-center" />
+                                <span>Reprise de service</span>
                             </a>
 
                             <div class="border-t border-border my-1"></div>

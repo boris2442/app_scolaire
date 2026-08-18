@@ -85,6 +85,13 @@ Route::middleware('auth')->group(function () {
     Route::get('presence/{id}/attestation-presence', [PresenceAndServiceController::class, 'generateAttestationPresence'])
         ->name('teacher.attestation.presence');
 
+Route::get('presence/{id}/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
+        ->name('teacher.attestation.take-service');
+// });
+//attestation reprise de service
+Route::get('presence/{id}/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
+        ->name('teacher.attestation.reprise-service');
+
 
 
     //Rou globale configuration middleware admin
