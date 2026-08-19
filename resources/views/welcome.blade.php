@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'AcademoaPro ') }}</title>
+    <title>{{ config('app.name', 'AcademiaPro ') }}</title>
 
     <script>
         (function() {
@@ -89,8 +89,8 @@
                 </p>
                 <div class="flex justify-center lg:justify-start pt-2">
                     @auth
-                       
-                        <a href="{{ route('after.login.page')}}"
+
+                        <a href="{{ route('after.login.page') }}"
                             class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
                             Espace Gestion
                         </a>

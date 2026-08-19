@@ -284,25 +284,25 @@
     {{-- =========================================================
          JE SOUSSIGNÉ
     ========================================================== --}}
-  <table>
-    <tr>
-        <td style="width: 15%;" class="label-fr">
-            Je soussigné :
-        </td>
+    <table>
+        <tr>
+            <td style="width: 15%;" class="label-fr">
+                Je soussigné :
+            </td>
 
-        <td style="width: 85%;">
-            --------------------------------------------------------------
-        </td>
-    </tr>
+            <td style="width: 85%;">
+                --------------------------------------------------------------
+            </td>
+        </tr>
 
-    <tr>
-        <td class="label-en">
-            I, the undersigned
-        </td>
+        <tr>
+            <td class="label-en">
+                I, the undersigned
+            </td>
 
-        <td></td>
-    </tr>
-</table>
+            <td></td>
+        </tr>
+    </table>
 
     {{-- =========================================================
          PROVISEUR / PRINCIPAL
