@@ -19,7 +19,14 @@ class EnseignantController extends Controller
     public function index()
     {
         // On ajoute 'departement' dans le with()
-        $enseignants = Enseignant::with(['user', 'departement'])->latest()->get();
+        // $enseignants = Enseignant::with(['user', 'departement'])->latest()->get();
+        //afficher les enseignants avec pagination par ordre alphabetique
+        // $enseignants=Enseignant::with(['user', 'departement'])
+        $enseignants = Enseignant::select('enseignants.*')
+            ->join('users', 'users.id', '=', 'enseignants.user_id')
+            ->with(['user', 'departement'])
+            ->orderBy('users.name', 'asc') // Ordre alphabétique A -> Z
+            ->paginate(10); // Nombre d'éléments par page
 
         return view('pages.enseignants.index', compact('enseignants'));
     }
@@ -48,7 +55,8 @@ class EnseignantController extends Controller
 
             Enseignant::create([
                 'user_id' => $user->id,
-                'matricule' => $request->matricule,
+                // 'matricule' => $request->matricule,
+                'matricule' => Enseignant::generateMatricule(), // Génère un matricule unique
                 'departement_id' => $request->departement_id, // On enregistre l'ID
             ]);
         });

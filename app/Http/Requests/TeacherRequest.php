@@ -25,7 +25,7 @@ class TeacherRequest extends FormRequest
         return [
           'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'matricule' => 'required|unique:enseignants,matricule',
+           // 'matricule' => 'required|unique:enseignants,matricule',
             'departement_id' => 'required|exists:departements,id', // Validation de l'existence
         ];
     }

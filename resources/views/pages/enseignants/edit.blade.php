@@ -47,12 +47,12 @@
                         Profil Enseignant
                     </h3>
 
-                    <div>
+                    {{-- <div>
                         <label class="text-[10px] font-black uppercase ml-1">Matricule</label>
                         <input type="text" name="matricule" required
                             value="{{ old('matricule', $enseignant->matricule) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
-                    </div>
+                    </div> --}}
 
                     <div>
                         <label class="text-[10px] font-black uppercase ml-1 text-primary">

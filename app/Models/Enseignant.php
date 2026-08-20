@@ -40,6 +40,30 @@ class Enseignant extends Model
         'address',
     ];
 
+
+
+
+
+    public static function generateMatricule(): string
+    {
+        $prefix = 'ENS';
+        $year = date('Y');
+
+        // Compte le nombre d'enseignants créés l'année en cours
+        $count = self::whereYear('created_at', $year)->count() + 1;
+
+        // Formate le numéro séquentiel sur 4 chiffres (ex: 1 -> 0001)
+        $sequence = str_pad($count, 4, '0', STR_PAD_LEFT);
+
+        return "{$prefix}-{$year}-{$sequence}";
+    }
+
+
+
+
+
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -38,12 +38,12 @@
                 <div class="space-y-4">
                     <h3 class="text-[10px] font-black  text-primary border-b border-border pb-2">Profil Enseignant
                     </h3>
-                    <div>
+                    {{-- <div>
                         <label class="text-[10px] font-black  ml-1">Matricule</label>
                         <input type="text" name="matricule" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium  focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="ENS-2026-001">
-                    </div>
+                    </div> --}}
                     <div>
                         <label class="text-[10px] font-black  ml-1 text-primary">Département d'attache</label>
                         <select name="departement_id" required

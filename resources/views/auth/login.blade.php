@@ -71,10 +71,10 @@
 
                         <div class="w-full space-y-1.5">
                             <label for="login" class="text-xs font-medium text-gray-500 block">
-                                Email ou Numéro de téléphone
+                                Login
                             </label>
                             <input id="login" type="text" name="login" value="{{ old('login') }}" required
-                                autofocus placeholder="Ex: nom@email.com ou 6XXXXXXXX"
+                                autofocus placeholder="Ex:  ou 6XXXXXXXX"
                                 class="block w-full px-3 py-2.5 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
                             @error('login')
                                 <p class="text-[11px] font-medium text-danger mt-1">{{ $message }}</p>
