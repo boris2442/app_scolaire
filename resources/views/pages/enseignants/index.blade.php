@@ -22,8 +22,8 @@
         </div>
     </div>
 
-    <div class="bg-card rounded-2xl border border-border shadow-sm">
-        <table class="w-full text-left border-collapse">
+    <div class="bg-card rounded-2xl border border-border shadow-sm overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[650px]">
             <thead>
                 <tr class="bg-secondary/50 border-b border-border">
                     <th class="p-4 text-[10px] font-black  text-muted-foreground rounded-tl-2xl">Enseignant</th>

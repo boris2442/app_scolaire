@@ -225,7 +225,7 @@
 
                 <li>
                     <a href="{{ route('admin.bulletins.index') }}"title="impresion des bulletins" aria-label="impresion"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.bulletins.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-file-text class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Impressions</span>
                     </a>

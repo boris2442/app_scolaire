@@ -32,10 +32,10 @@ class UserController extends Controller
             });
         }
 
-    $users = $query->orderBy('name', 'asc')
-               ->orderBy('created_at', 'desc')
-               ->paginate(10)
-               ->withQueryString();
+        $users = $query->orderBy('name', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(25)
+            ->withQueryString();
 
         // Récupération dynamique des rôles
         $roles = $this->getEnumRoles();
@@ -60,14 +60,14 @@ class UserController extends Controller
     }
 
     public function destroy(User $user)
-{
-    // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même si besoin
-    if ($user->id === auth()->id()) {
-        return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+    {
+        // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même si besoin
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
-
-    $user->delete();
-
-    return redirect()->route('admin.users.index')->with('success', 'Utilisateur supprimé avec succès.');
-}
 }

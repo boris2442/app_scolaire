@@ -20,7 +20,7 @@
 
                 <button type="submit"
                     class="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-primary text-muted-foreground transition-colors">
-                 
+
                     <x-lucide-arrow-right class='w-4 h-4' />
                 </button>
             </div>
@@ -40,7 +40,7 @@
         <div class="lg:col-span-1">
             <div class="bg-card p-6 rounded-2xl border border-border shadow-sm sticky top-24">
                 <h2 class="text-[10px] font-black  text-primary mb-5 tracking-widest flex items-center gap-2">
-                  <x-lucide-plus class='w-4 h-4'/>
+                    <x-lucide-plus class='w-4 h-4' />
                     Ajouter une matière
                 </h2>
 
@@ -126,18 +126,19 @@
                                         <a href="{{ route('settings.matieres.edit', $matiere->id) }}"
                                             class="text-muted-foreground hover:text-primary transition-colors p-2">
                                             {{-- <i class="fas fa-edit text-xs"></i> --}}
-                                        <x-lucide-edit class='w-4 h-4'/>
-                                            Modifier
+                                            <x-lucide-edit class='w-4 h-4' />
+
                                         </a>
 
                                         {{-- Delete --}}
                                         <form action="{{ route('settings.matieres.destroy', $matiere) }}" method="POST"
                                             onsubmit="return confirm('Supprimer cette matière du catalogue ?')">
                                             @csrf @method('DELETE')
-                                            <button class="text-muted-foreground hover:text-danger transition-colors p-2">
+                                            <button
+                                                class="text-muted-foreground hover:text-danger text-danger transition-colors p-2">
                                                 {{-- <i class="fas fa-trash-alt text-xs"></i> --}}
-                                                <x-lucide-trash class='w-4 h-4'/>
-                                                Supprimer
+                                                <x-lucide-trash class='w-4 h-4' />
+
                                             </button>
                                         </form>
                                     </div>

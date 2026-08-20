@@ -20,8 +20,8 @@
 
                     </option>
                 @endforeach
-            
-          
+
+
             </select>
 
             <select name="sequence_id" class="text-sm bg-background border-input text-foreground rounded-md focus:ring-ring"
@@ -44,8 +44,8 @@
         </form>
 
         @if (!empty($auditData))
-            <div class="bg-card rounded-xl border border-border shadow-sm overflow-hidden text-card-foreground">
-                <table class="w-full text-sm">
+            <div class="bg-card rounded-xl border border-border shadow-sm overflow-auto text-card-foreground">
+                <table class="w-full text-sm min-w-[680px]">
                     <thead class="bg-secondary/50 text-secondary-foreground uppercase text-[10px] tracking-wider">
                         <tr>
                             <th class="px-4 py-3 font-semibold text-left">Matière & Enseignant</th>
