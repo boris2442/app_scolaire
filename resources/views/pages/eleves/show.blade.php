@@ -24,11 +24,11 @@
             </div>
 
             <div class="flex items-center gap-2 w-full sm:w-auto">
-                <button type="button" onclick="window.print()"
+                {{-- <button type="button" onclick="window.print()"
                     class="flex-1 sm:flex-none px-4 py-2 bg-secondary border border-border rounded-lg text-xs font-semibold hover:bg-accent transition-colors flex items-center justify-center gap-2">
                     <x-lucide-printer class="w-4 h-4" />
                     Imprimer
-                </button>
+                </button> --}}
 
                 <a href="{{ route('admin.students.edit', $eleve->id) }}"
                     class="flex-1 sm:flex-none px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm">

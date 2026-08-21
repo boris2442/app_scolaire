@@ -102,18 +102,19 @@
                                     </a>
 
                                     <div class="border-t border-[var(--border)] my-1"></div>
+                                    @can('access-admin')
+                                        <form action="{{ route('admin.enseignants.destroy', $enseignant) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
+                                                class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
 
-                                    <form action="{{ route('admin.enseignants.destroy', $enseignant) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
-                                            class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
-
-                                            <x-lucide-trash class='w-4 h-4' />
-                                            Supprimer
-                                        </button>
-                                    </form>
+                                                <x-lucide-trash class='w-4 h-4' />
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </div>
                             </div>
                         </td>

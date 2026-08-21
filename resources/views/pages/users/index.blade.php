@@ -79,16 +79,18 @@
                                     </select>
                                 </form>
                             </td>
-                       <td class="p-4 text-right">
-    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" 
-          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="text-destructive hover:text-red-700 transition">
-            <x-lucide-trash-2 class="w-4 h-4" />
-        </button>
-    </form>
-</td>
+                            @can('access-admin')
+                                <td class="p-4 text-right">
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-destructive hover:text-red-700 transition">
+                                            <x-lucide-trash-2 class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                </td>
+                            @endcan
                         </tr>
                     @empty
                         <tr>

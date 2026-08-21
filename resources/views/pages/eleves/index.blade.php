@@ -419,6 +419,7 @@
                                         <a href="{{ route('admin.students.show', $eleve) }}"
                                             title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>
+                                                  @can('access-admin')
                                         <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
                                             onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                             @csrf
@@ -428,6 +429,7 @@
                                                 {{-- Archiver --}}
                                             </button>
                                         </form>
+                                        @endcan
                                         <a title="Modifier les informations de l'élève"
                                             href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit
                                                 class="w-4 h-4" /></a>

@@ -112,7 +112,7 @@
                     </a>
                 </li> --}}
             @endcan
-            @canany(['access-admin', 'access-censeur'])
+            @canany(['access-admin', 'access-censeur', 'access-secretaire'])
                 <li>
                     <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departments.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -224,7 +224,7 @@
 
 
                 <li>
-                    <a href="{{ route('admin.bulletins.index') }}"title="impresion des bulletins" aria-label="impresion"
+                    <a href="{{ route('admin.bulletins.index') }}"title="impression des bulletins" aria-label="impression"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.bulletins.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-file-text class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Impressions</span>

@@ -26,13 +26,14 @@ class CenseurMiddleware
 
         $user = Auth::user();
         // Affiche l'utilisateur connecté et son rôle, puis arrête l'exécution
-      
+
         // Adapte cette condition selon ton stockage en BD (Enum ou string)
         // Par exemple, si ton champ role est une string ou un Enum :
         $isCenseur = $user->role === UserRole::CENSEUR || $user->role === 'censeur';
         $isAdmin   = $user->role === UserRole::ADMIN   || $user->role === 'admin';
+        $isSecretaire   = $user->role === UserRole::SECRETAIRE   || $user->role === 'secretaire';
 
-        if (!$isCenseur && !$isAdmin) {
+        if (!$isCenseur && !$isAdmin && !$isSecretaire) {
             return redirect()
                 ->route('home')
                 ->with('error', 'Accès restreint.');

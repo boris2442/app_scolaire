@@ -49,5 +49,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('access-censeur', function (User $user) {
             return $user->role === UserRole::CENSEUR;
         });
+        Gate::define('access-secretaire', function (User $user) {
+            return $user->role === UserRole::SECRETAIRE;
+        });
     }
 }

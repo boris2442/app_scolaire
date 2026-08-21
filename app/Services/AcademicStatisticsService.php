@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class AcademicStatisticsService
 {
@@ -197,7 +198,7 @@ class AcademicStatisticsService
             ->get();
 
         // 🔍 DEBUG : Affiche les bilans trouvés
-        \Log::info('DEBUG attribuerRangsClasseForTrimestre', [
+        Log::info('DEBUG attribuerRangsClasseForTrimestre', [
             'trimestre_id' => $trimestreId,
             'classe_id' => $classeId,
             'bilans_count' => $bilans->count(),
