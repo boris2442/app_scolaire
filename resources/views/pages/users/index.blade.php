@@ -49,8 +49,10 @@
                         class="border-b border-border bg-secondary/50 text-[10px] text-muted-foreground uppercase tracking-wider">
                         <th class="p-4">Utilisateur</th>
                         <th class="p-4">Email / Contact</th>
+                        @can('access-admin')
                         <th class="p-4">Rôle Actuel</th>
                         <th class="p-4 text-right">Actions</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-border text-sm">
@@ -61,24 +63,28 @@
                                 {{ $user->email }}<br>
                                 {{ $user->phone }}
                             </td>
-                            <td class="p-4">
-                                <form action="{{ route('admin.users.update-role', $user) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <select name="role" onchange="this.form.submit()"
-                                        class="bg-secondary border border-border text-xs rounded-lg px-2 py-1.5 text-foreground font-medium focus:ring-1 focus:ring-primary">
-                                        @foreach ($roles as $roleValue)
-                                            @php
-                                                $val = is_object($roleValue) ? $roleValue->value : $roleValue;
-                                                $userVal = is_object($user->role) ? $user->role->value : $user->role;
-                                            @endphp
-                                            <option value="{{ $val }}" {{ $userVal === $val ? 'selected' : '' }}>
-                                                {{ ucfirst($val) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
-                            </td>
+                            @can('access-admin')
+                                <td class="p-4">
+                                    <form action="{{ route('admin.users.update-role', $user) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <select name="role" onchange="this.form.submit()"
+                                            class="bg-secondary border border-border text-xs rounded-lg px-2 py-1.5 text-foreground font-medium focus:ring-1 focus:ring-primary">
+                                            @foreach ($roles as $roleValue)
+                                                @php
+                                                    $val = is_object($roleValue) ? $roleValue->value : $roleValue;
+                                                    $userVal = is_object($user->role)
+                                                        ? $user->role->value
+                                                        : $user->role;
+                                                @endphp
+                                                <option value="{{ $val }}" {{ $userVal === $val ? 'selected' : '' }}>
+                                                    {{ ucfirst($val) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+                                </td>
+                            @endcan
                             @can('access-admin')
                                 <td class="p-4 text-right">
                                     <form action="{{ route('admin.users.destroy', $user) }}" method="POST"

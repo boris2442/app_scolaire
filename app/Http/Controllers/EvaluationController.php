@@ -29,13 +29,13 @@ class EvaluationController extends Controller
 
 
 
-  
 
-public function index()
+
+    public function index()
     {
         $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
-        
+
         if (!$enseignant) {
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
@@ -129,11 +129,13 @@ public function index()
 
         return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
             ->with('success', 'Session d\'évaluation prête !');
+        //on finit on reste sur la meme page pour le telechargement des stats
+        //   return redirect()->back()->with('success', 'Session d\'évaluation prête ! Vous pouvez maintenant saisir les notes ou télécharger les statistiques.');
     }
 
 
 
-   
+
 
     public function bulkStoreNotes(Request $request, $id)
     {
@@ -166,8 +168,9 @@ public function index()
             }
         }
 
-        return redirect()->route('admin.evaluations.index')
-            ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
+        // return redirect()->route('admin.evaluations.index')
+        //     ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
+        return redirect()->back()->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées. telecharger les statistiques pour cette evaluation');
     }
 
 
@@ -181,10 +184,10 @@ public function index()
 
     ///////////////// les diffferents statistiques a gerer pour les impressions
 
-  
 
 
-private function calculerStats($evaluation)
+
+    private function calculerStats($evaluation)
     {
         // On charge les notes, puis l'inscription, puis l'élève
         $notes = $evaluation->notes()->with('inscription.eleve')->get();
@@ -210,15 +213,15 @@ private function calculerStats($evaluation)
             ->where('annee_scolaire_id', $evaluation->annee_scolaire_id)
             ->with('lecons')
             ->get()
-            ->flatMap(function($eval) {
+            ->flatMap(function ($eval) {
                 return $eval->lecons->pluck('id');
             })
             ->unique()
             ->count();
 
         // 3. Calcul du taux de progression
-        $tauxProgression = $totalLeconsPrevues > 0 
-            ? number_format(($leconsEvalueesIds / $totalLeconsPrevues) * 100, 2) 
+        $tauxProgression = $totalLeconsPrevues > 0
+            ? number_format(($leconsEvalueesIds / $totalLeconsPrevues) * 100, 2)
             : 0;
 
         return [
@@ -246,7 +249,7 @@ private function calculerStats($evaluation)
 
 
 
-public function telechargerStats($id)
+    public function telechargerStats($id)
     {
         // On charge les relations nécessaires (plus de .niveau sur la classe)
         $evaluation = Evaluation::with(['classe', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
@@ -264,5 +267,4 @@ public function telechargerStats($id)
 
         return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf');
     }
-
 }

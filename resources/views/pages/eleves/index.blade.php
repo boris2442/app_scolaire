@@ -29,12 +29,13 @@
                             class="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest border-b border-border mb-1">
                             Actions
                         </header>
-
-                        <a href="{{ route('admin.students.trashed') }}"
-                            class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
-                            <x-lucide-trash-2 class="w-4 h-4" /> Voir la corbeille
-                            ({{ \App\Models\Eleve::onlyTrashed()->count() }})
-                        </a>
+                        @can('access-admin')
+                            <a href="{{ route('admin.students.trashed') }}"
+                                class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
+                                <x-lucide-trash-2 class="w-4 h-4" /> Voir la corbeille
+                                ({{ \App\Models\Eleve::onlyTrashed()->count() }})
+                            </a>
+                        @endcan
 
                         <a href="{{ route('admin.students.create') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
@@ -56,7 +57,7 @@
                         {{-- <a href="{{ route('admin.students.importer') }}"
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Importer depuis Excel
-                        </a> --}}
+                        </a> }}
 
 
 
@@ -419,16 +420,16 @@
                                         <a href="{{ route('admin.students.show', $eleve) }}"
                                             title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>
-                                                  @can('access-admin')
-                                        <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
-                                            onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700">
-                                                <x-lucide-trash-2 class="w-4 h-4" />
-                                                {{-- Archiver --}}
-                                            </button>
-                                        </form>
+                                        @can('access-admin')
+                                            <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
+                                                onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                                    <x-lucide-trash-2 class="w-4 h-4" />
+                                                    {{-- Archiver --}}
+                                                </button>
+                                            </form>
                                         @endcan
                                         <a title="Modifier les informations de l'élève"
                                             href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit

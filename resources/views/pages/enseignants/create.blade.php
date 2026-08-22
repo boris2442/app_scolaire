@@ -4,7 +4,8 @@
     <div class="max-w-4xl mx-auto">
         <div class="mb-8">
             <h1 class="text-xl font-black  text-foreground">Nouveau Personnel Enseignant</h1>
-            <p class="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">Création du compte d'accès et du
+            <p class="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">Création du compte d'accès et
+                du
                 profil professionnel</p>
         </div>
 
@@ -23,7 +24,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
-                        <input type="email" name="email" required
+                        <input type="email" name="email"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="enseignant@academiapro.com">
                     </div>
