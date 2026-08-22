@@ -25,12 +25,11 @@
             </div>
             <div>
                 <a href="{{ route('admin.evaluations.telecharger-stats', $evaluation->id) }}"
-                    class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black  p-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 gap-2 mb-2 flex justify-center items-center  overflow-hidden group-hover:max-w-[200px] group-hover:px-4 group-hover:py-2 max-w-[400px]">
-                    {{-- <i class="fas fa-file-pdf"></i> --}}
-                    <x-lucide-file-text class='w-4 h-4' />
-                    <span>
-                        Télécharger les stats
-                    </span>
+                    class="inline-flex items-center justify-center gap-2 px-3 py-2
+               bg-primary text-secondary text-xs font-semibold
+               rounded-md hover:opacity-90 transition">
+                    <x-lucide-file-text class="w-4 h-4" />
+                    <span>Télécharger les stats</span>
                 </a>
             </div>
         </div>
@@ -50,7 +49,7 @@
 
                     <div class="text-left">
                         <h3 class="font-semibold text-card-foreground">
-                            📚 Chapitres évalués
+                            Chapitres évalués
                         </h3>
 
                         <p class="text-xs text-card-foreground/60">
@@ -157,11 +156,15 @@
 
             {{-- Bouton d'enregistrement --}}
             {{-- Barre d'actions fixe en bas de l'écran --}}
-            <div
-                class="sticky bottom-4 z-20 mt-8 flex justify-center bg-secondary/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-2xl">
+            <div class="sticky bottom-4 z-20 mt-8 flex justify-center">
                 <button type="submit"
-                    class="bg-primary hover:scale-105 active:scale-95 text-secondary font-black px-12 py-4 rounded  text-xs transition-all shadow-xl shadow-primary/20 flex items-center gap-2">
-                    <span>💾</span> Enregistrer les notes
+                    class="inline-flex items-center justify-center gap-2
+               bg-primary text-secondary
+               px-5 py-2.5 rounded-md
+               text-xs font-semibold
+               hover:opacity-90 transition">
+                    <x-lucide-save class="w-4 h-4" />
+                    <span>Enregistrer les notes</span>
                 </button>
             </div>
         </form>

@@ -170,7 +170,7 @@ class EvaluationController extends Controller
 
         // return redirect()->route('admin.evaluations.index')
         //     ->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées.');
-        return redirect()->back()->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées. telecharger les statistiques pour cette evaluation');
+        return redirect()->back()->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées. Vous pouvez maintenant télécharger les statistiques de cette évaluation.');
     }
 
 

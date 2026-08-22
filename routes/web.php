@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AfterLoginController;
 use App\Http\Controllers\AnneeScolaireController;
+use App\Http\Controllers\CheckProgramController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClasseMatiereController;
 use App\Http\Controllers\CreneauController;
@@ -440,4 +441,8 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 // // Emploi du temps de l'enseignant (Téléchargement PDF)
 // Route::get('/emplois/teacher/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
+
+Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('avancement.index');
 require __DIR__ . '/auth.php';

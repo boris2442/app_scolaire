@@ -224,7 +224,8 @@
 
 
                 <li>
-                    <a href="{{ route('admin.bulletins.index') }}"title="impression des bulletins" aria-label="impression"
+                    <a href="{{ route('admin.bulletins.index') }}"title="impression des bulletins"
+                        aria-label="impression"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.bulletins.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-file-text class="w-4 h-4 text-center" />
                         <span class="sidebar-label ml-3">Impressions</span>
@@ -249,14 +250,6 @@
             @endcan --}}
 
             @can('access-enseignant')
-                <li>
-                    <a href="{{ route('admin.evaluations.index') }}" title="Evaluations" aria-label="Evaluations"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-calculator class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Evaluations</span>
-                    </a>
-                </li>
-
                 <li>
                     <a href="{{ route('enseignant.dashboard') }}" title="Enseignants" aria-label="Enseignants"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -289,7 +282,13 @@
                 </li>
             @endcan
 
-
+            <li>
+                <a href="{{ route('admin.evaluations.index') }}" title="Evaluations" aria-label="Evaluations"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <x-lucide-calculator class="w-4 h-4 text-center" />
+                    <span class="sidebar-label ml-3">Evaluations</span>
+                </a>
+            </li>
 
 
 

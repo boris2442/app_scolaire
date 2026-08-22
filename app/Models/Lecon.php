@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lecon extends Model
 {
-protected $fillable = [
+    protected $fillable = [
         'titre',
         'description',
         'matiere_id',
@@ -14,6 +14,13 @@ protected $fillable = [
         'enseignant_id',
         'ordre',
     ];
+
+
+    public function evaluations()
+    {
+        return $this->belongsToMany(Evaluation::class, 'evaluation_lesson', 'lecon_id', 'evaluation_id');
+    }
+
 
     public function matiere()
     {
