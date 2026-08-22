@@ -44,7 +44,7 @@
                     {{ auth()->user()->name }}
                 </a>
             </h2>
-            <p class="text-[10px] text-primary uppercase tracking-widest mt-1 font-bold">
+            <p class="text-[10px] text-primary uppercase  mt-1 font-bold">
                 {{ auth()->user()->role ?? 'UTILISATEUR' }}
             </p>
         </div>
@@ -133,7 +133,15 @@
                         aria-label=" emploies de temps"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.emplois.classes') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         <x-lucide-clock class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Emplois de temps classes</span>
+                        <span class="sidebar-label ml-3">Emplois de temps </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('avancement.index') }}" title="Evaluations" aria-label="Evaluations"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('avancement.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-book-open-check class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3">Suivie des cours</span>
                     </a>
                 </li>
 
@@ -292,6 +300,7 @@
 
 
 
+
         </ul>
 
     </nav>
@@ -314,6 +323,19 @@
             </button>
         </form>
     </div> --}}
+
+    <!-- 3. Bouton Déconnexion (Fixé en bas grâce à mt-auto) -->
+    <div class="pt-4 border-t border-border mt-auto">
+        <form method="POST" action="/logout">
+            @csrf
+            <button type="submit"
+            title="Déconnexion" aria-label="Déconnexion"
+                class="flex items-center w-full px-3 py-2.5 rounded bg-danger text-white hover:opacity-90 transition-all">
+                <x-lucide-log-out class="w-4 h-4 text-center" />
+                <span class="sidebar-label ml-3">Déconnexion</span>
+            </button>
+        </form>
+    </div>
 </aside>
 
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden transition-opacity" onclick="toggleSidebar()">
