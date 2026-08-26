@@ -360,7 +360,7 @@
                     collapseIcon.className = 'fas fa-angle-left text-xs';
                     sidebar.dataset.collapsed = 'false';
                 } else {
-                    // RÉDUIRE (Largeur 20)
+                  
                     sidebar.classList.remove('w-64');
                     sidebar.classList.add('w-20');
                     labels.forEach(el => el.classList.add('hidden'));
