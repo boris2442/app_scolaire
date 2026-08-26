@@ -41,7 +41,7 @@
                         <div>
                             <h3 class="font-bold text-lg text-card-foreground">Matiere: {{ $item['matiere']->nom ?? 'Matière' }}</h3>
                             <p class="text-xs text-card-foreground/60">
-                                Enseignant : <span class="font-medium text-card-foreground">{{ $item['enseignant']->nom ?? 'Non assigné' }} {{ $item['enseignant']->prenom ?? '' }}</span>
+                                Enseignant : <span class="font-medium text-card-foreground">{{ $item['enseignant']?->prenom }} {{ $item['enseignant']?->name }}</span>
                             </p>
                         </div>
                         <span class="px-3 py-1 text-xs font-semibold rounded-full 
