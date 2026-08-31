@@ -34,8 +34,9 @@ class TeacherProfileController extends Controller
             'interruption_end_date' => ['nullable', 'date'],
             'secondary_phone' => ['nullable', 'string', 'max:50'],
             'address' => ['nullable', 'string', 'max:255'],
+            'number_of_children' => ['nullable', 'integer', 'min:0', 'max:30'],
         ]);
-
+        // dd($validated);
         // Enregistrement ou mise à jour relié à l'utilisateur connecté
         $user->enseignant()->updateOrCreate(
             ['user_id' => $user->id],

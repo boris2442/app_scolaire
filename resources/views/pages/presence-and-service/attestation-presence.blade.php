@@ -293,7 +293,7 @@
         <tr>
             <td style="width: 22%;" class="label-fr">Situation matrimoniale:</td>
             <td style="width: 26%; text-align: center;" class="line-underline val-text">
-                {{ $enseignant->marital_status ?? '' }}</td>
+                {{ $enseignant->marital_status ?? '' }} / {{ $enseignant->number_of_children ?? 0 }}</td>
             <td style="width: 2%;"></td>
             <td style="width: 16%;" class="label-fr">Poste antérieur:</td>
             <td style="width: 34%; text-align: center;" class="line-underline val-text">

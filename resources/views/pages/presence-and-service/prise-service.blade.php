@@ -529,7 +529,7 @@
             "
                 class="line-underline val-text">
 
-                {{ $enseignant->marital_status ?? '' }}
+                {{ $enseignant->marital_status ?? '' }} / {{ $enseignant->number_of_children ?? 0 }}
 
             </td>
 

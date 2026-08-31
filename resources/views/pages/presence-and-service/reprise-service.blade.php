@@ -348,18 +348,20 @@
     {{-- =========================================================
          PROVISEUR / PRINCIPAL
     ========================================================== --}}
-  <table>
-    <tr>
-        <td style="width: 25%; font-weight: bold;" class="label-fr">PROVISEUR / PRINCIPAL</td>
-        <td style="width: 5%; font-size: 8.5px;">du</td>
-        <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $etablissement->nom }}</td>
-    </tr>
-    <tr>
-        <td style="width: 25%;" class="label-en">PRINCIPAL</td>
-        <td style="width: 5%; font-size: 8.5px;" class="label-en">of</td>
-        <td style="width: 70%; text-align: center;" class="label-en">{{ $etablissement->english_name ?? $etablissement->nom }}</td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td style="width: 25%; font-weight: bold;" class="label-fr">PROVISEUR / PRINCIPAL</td>
+            <td style="width: 5%; font-size: 8.5px;">du</td>
+            <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $etablissement->nom }}
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 25%;" class="label-en">PRINCIPAL</td>
+            <td style="width: 5%; font-size: 8.5px;" class="label-en">of</td>
+            <td style="width: 70%; text-align: center;" class="label-en">
+                {{ $etablissement->english_name ?? $etablissement->nom }}</td>
+        </tr>
+    </table>
 
 
     {{-- =========================================================
@@ -542,7 +544,7 @@
             "
                 class="line-underline val-text">
 
-                {{ $enseignant->marital_status ?? '' }}
+                {{ $enseignant->marital_status ?? '' }} / {{ $enseignant->number_of_children ?? 0 }}
 
             </td>
 
@@ -1151,7 +1153,7 @@
         AcademiaPro HIGH SCHOOL |
         Email: academiapro237@gmail.com |
         (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01 |
-      
+
 
         | Page 1/1
 
