@@ -36,7 +36,7 @@
                 @csrf
                 <div>
                     <label class="text-xs font-medium">Libellé (ex: 2025-2026)</label>
-                    <input type="text" name="libelle" value="{{ old('libelle') }}"
+                    <input required type="text" name="libelle" value="{{ old('libelle') }}" 
                         class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('libelle') border-danger @else border-border @enderror">
                     @error('libelle')
                         <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>
@@ -46,7 +46,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs font-medium">Début</label>
-                        <input type="date" name="date_debut" value="{{ old('date_debut') }}"
+                        <input required type="date" name="date_debut" value="{{ old('date_debut') }}"
                             class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('date_debut') border-danger @else border-border @enderror">
                         @error('date_debut')
                             <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>
@@ -54,7 +54,7 @@
                     </div>
                     <div>
                         <label class="text-xs font-medium">Fin</label>
-                        <input type="date" name="date_fin" value="{{ old('date_fin') }}"
+                        <input required type="date" name="date_fin" value="{{ old('date_fin') }}"
                             class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('date_fin') border-danger @else border-border @enderror">
                         @error('date_fin')
                             <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>

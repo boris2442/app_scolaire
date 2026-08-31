@@ -80,24 +80,13 @@
                                 <span>Mon Profil</span>
                             </a>
 
-                            <a href=""
-                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
-                                {{-- <i class="fas fa-bell w-4 text-center"></i> --}}
-                                <x-lucide-bell class="w-4 text-center" />
-                                <span>Notifications</span>
-                                <span
-                                    class="ml-auto bg-danger text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">3</span>
-                            </a>
 
-                            <a href=""
-                                class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
-                                <x-lucide-cog class="w-4 text-center" />
-                                <span>Paramètres</span>
-                            </a>
+
+
                             <a href="{{ route('teacher.attestation.presence', auth()->user()->id) }}" target="_blank"
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
                                 <x-lucide-cog class="w-4 text-center" />
-                                <span>Presence</span>
+                                <span>Presence effective</span>
                             </a>
                             <a href="{{ route('teacher.attestation.take-service', auth()->user()->id) }}"
                                 target="_blank"

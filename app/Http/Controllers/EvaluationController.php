@@ -28,77 +28,151 @@ class EvaluationController extends Controller
 
 
 
-
-
-
     public function index()
     {
-        $anneeActive = $this->scolarite->getAnneeActive();
         $enseignant = auth()->user()->enseignant;
 
         if (!$enseignant) {
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
 
-        // On récupère uniquement les séquences dont le trimestre appartient à l'année active
-        $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
-            $query->where('annee_scolaire_id', $anneeActive->id);
+        // 1. Récupérer les séquences de l'année active (utilise $this->anneeActive)
+        $sequences = Sequence::whereHas('trimestre', function ($query) {
+            $query->where('annee_scolaire_id', $this->anneeActive->id);
         })->get();
 
+        // 2. Affectations de l'enseignant
+        // FILTRE AJOUTÉ ICI : annee_scolaire_id sur les affectations
         $affectations = $enseignant->affectations()
-            ->with(['matiere', 'classe']) // MODIFICATION ICI : On enlève '.niveau'
+            ->where('annee_scolaire_id', $this->anneeActive->id)
+            ->with(['matiere', 'classe'])
             ->whereHas('classe.matieres', function ($query) {
-                // Cette condition filtre uniquement les affectations dont la matière 
-                // existe réellement dans la configuration de la classe
                 $query->whereColumn('matieres.id', 'affectations.matiere_id');
             })
             ->get();
 
-        // On récupère les évaluations déjà créées par ce prof
+        // 3. Évaluations filtrées STRICTEMENT sur l'année active
         $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
-            ->where('enseignant_id', $enseignant?->id)
+            ->where('enseignant_id', $enseignant->id)
+            ->whereHas('sequence.trimestre', function ($query) {
+                $query->where('annee_scolaire_id', $this->anneeActive->id);
+            })
             ->latest()
             ->get();
 
-        return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
+        return view('pages.evaluations.index', [
+            'evaluations'  => $evaluations,
+            'sequences'    => $sequences,
+            'anneeActive'  => $this->anneeActive,
+            'affectations' => $affectations,
+        ]);
     }
 
 
+    // public function index()
+    // {
+    //     $anneeActive = $this->scolarite->getAnneeActive();
+    //     $enseignant = auth()->user()->enseignant;
 
+    //     if (!$enseignant) {
+    //         return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+    //     }
+
+    //     // On récupère uniquement les séquences dont le trimestre appartient à l'année active
+    //     $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
+    //         $query->where('annee_scolaire_id', $anneeActive->id);
+    //     })->get();
+
+    //     $affectations = $enseignant->affectations()
+    //         ->with(['matiere', 'classe']) // MODIFICATION ICI : On enlève '.niveau'
+    //         ->whereHas('classe.matieres', function ($query) {
+    //             // Cette condition filtre uniquement les affectations dont la matière 
+    //             // existe réellement dans la configuration de la classe
+    //             $query->whereColumn('matieres.id', 'affectations.matiere_id');
+    //         })
+    //         ->get();
+
+    //     // On récupère les évaluations déjà créées par ce prof
+    //     $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
+    //         ->where('enseignant_id', $enseignant?->id)
+    //         ->latest()
+    //         ->get();
+
+    //     return view('pages.evaluations.index', compact('evaluations', 'sequences', 'anneeActive', 'affectations'));
+    // }
+
+
+
+
+
+    // public function saisie($id)
+    // {
+    //     // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
+    //     $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
+
+    //     $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+    //         ->with('eleve')
+    //         ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+    //         ->orderBy('eleves.nom', 'asc')
+    //         ->orderBy('eleves.prenom', 'asc')
+    //         ->select('inscriptions.*') // Évite les conflits de colonnes si les tables partagent des noms identiques
+    //         ->get();
+
+    //     // On force l'indexation par l'ID d'inscription en tant qu'entier
+    //     $notesExistantes = Note::where('evaluation_id', $id)
+    //         ->get()
+    //         ->mapWithKeys(function ($item) {
+    //             return [(int)$item->inscription_id => $item];
+    //         });
+
+    //     // Récupérer les leçons de cette matière, de cette classe et de cet enseignant
+    //     $lecons = Lecon::where('enseignant_id', $evaluation->enseignant_id)
+    //         ->where('matiere_id', $evaluation->matiere_id)
+    //         ->where('classe_id', $evaluation->classe_id)
+    //         ->orderBy('ordre')
+    //         ->get();
+
+    //     // Récupérer les IDs des leçons déjà cochées/associées à cette évaluation (s'il y en a)
+    //     $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
+
+    //     return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
+    // }
 
 
     public function saisie($id)
     {
-        // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
 
+        // Conservé : la table 'inscriptions' utilise bien annee_scolaire_id
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+            ->where('annee_scolaire_id', $this->anneeActive->id)
             ->with('eleve')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->orderBy('eleves.nom', 'asc')
             ->orderBy('eleves.prenom', 'asc')
-            ->select('inscriptions.*') // Évite les conflits de colonnes si les tables partagent des noms identiques
+            ->select('inscriptions.*')
             ->get();
 
-        // On force l'indexation par l'ID d'inscription en tant qu'entier
         $notesExistantes = Note::where('evaluation_id', $id)
             ->get()
             ->mapWithKeys(function ($item) {
                 return [(int)$item->inscription_id => $item];
             });
 
-        // Récupérer les leçons de cette matière, de cette classe et de cet enseignant
+        // Retrait de 'annee_scolaire_id' qui n'existe pas dans la table 'lecons'
         $lecons = Lecon::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->orderBy('ordre')
             ->get();
 
-        // Récupérer les IDs des leçons déjà cochées/associées à cette évaluation (s'il y en a)
         $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
 
         return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
+
+
+
 
     public function store(Request $request)
     {
@@ -189,7 +263,6 @@ class EvaluationController extends Controller
 
     private function calculerStats($evaluation)
     {
-        // On charge les notes, puis l'inscription, puis l'élève
         $notes = $evaluation->notes()->with('inscription.eleve')->get();
 
         $total = $notes->count();
@@ -198,28 +271,28 @@ class EvaluationController extends Controller
         $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
         $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
 
-        // --- CALCUL DE LA PROGRESSION DES LEÇONS ---
-        // 1. Nombre total de leçons prévues pour cette matière, classe et enseignant
+        $garconsCount = $garcons->count();
+        $garconsReussite = $garcons->where('valeur', '>=', 10)->count();
+
+        $fillesCount = $filles->count();
+        $fillesReussite = $filles->where('valeur', '>=', 10)->count();
+
+        // Progression des leçons
         $totalLeconsPrevues = Lecon::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->count();
 
-        // 2. Nombre de leçons uniques déjà évaluées (via toutes les évaluations de cette matière/classe/prof)
-        // On récupère les IDs de toutes les leçons liées aux évaluations de ce contexte pour éviter les doublons
         $leconsEvalueesIds = Evaluation::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->where('annee_scolaire_id', $evaluation->annee_scolaire_id)
             ->with('lecons')
             ->get()
-            ->flatMap(function ($eval) {
-                return $eval->lecons->pluck('id');
-            })
+            ->flatMap(fn($eval) => $eval->lecons->pluck('id'))
             ->unique()
             ->count();
 
-        // 3. Calcul du taux de progression
         $tauxProgression = $totalLeconsPrevues > 0
             ? number_format(($leconsEvalueesIds / $totalLeconsPrevues) * 100, 2)
             : 0;
@@ -230,21 +303,19 @@ class EvaluationController extends Controller
             'reussite_globale' => $reussites->count(),
             'taux_reussite' => $total > 0 ? number_format(($reussites->count() / $total) * 100, 2) : 0,
 
-            'garcons_count' => $garcons->count(),
-            'garcons_reussite' => $garcons->where('valeur', '>=', 10)->count(),
+            'garcons_count' => $garconsCount,
+            'garcons_reussite' => $garconsReussite,
+            'garcons_taux' => $garconsCount > 0 ? number_format(($garconsReussite / $garconsCount) * 100, 1) : 0,
 
-            'filles_count' => $filles->count(),
-            'filles_reussite' => $filles->where('valeur', '>=', 10)->count(),
+            'filles_count' => $fillesCount,
+            'filles_reussite' => $fillesReussite,
+            'filles_taux' => $fillesCount > 0 ? number_format(($fillesReussite / $fillesCount) * 100, 1) : 0,
 
-            // --- ON AJOUTE LES DONNÉES DE PROGRESSION ICI ---
             'lecons_faites' => $leconsEvalueesIds,
             'lecons_totales' => $totalLeconsPrevues,
             'taux_progression' => $tauxProgression,
         ];
     }
-
-
-
 
 
 

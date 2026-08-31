@@ -55,7 +55,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit"
-                            class="px-4 py-2 bg-secondary text-secondary-foreground rounded-xl text-sm font-bold border border-border hover:bg-danger/10 hover:text-danger hover:border-danger/20 transition-all">
+                            class="px-4 py-2 bg-secondary text-secondary-foreground rounded text-sm font-bold border border-border hover:bg-danger/10 hover:text-danger hover:border-danger/20 transition-all">
                             Déconnexion
                         </button>
                     </form>
@@ -91,7 +91,7 @@
                     @auth
 
                         <a href="{{ route('after.login.page') }}"
-                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
+                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
                             Espace Gestion
                         </a>
                     @else
@@ -113,20 +113,19 @@
                             <span class="w-3 h-3 rounded-full bg-success/20 border border-success/40"></span>
                             <span class="text-xs font-mono text-gray-400 pl-2">Aperçu Synoptique</span>
                         </div>
-                        <span
-                            class="text-[10px] font-bold bg-success/10 text-success px-2 py-0.5 rounded uppercase">Session
+                        <span class="text-[10px] font-bold bg-success/10 text-success px-2 py-0.5 rounded ">Session
                             active</span>
                     </div>
 
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-secondary/50 p-4 rounded-xl border border-border">
-                                <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Taux
+                                <span class="text-[10px]  font-bold text-gray-400 tracking-wider">Taux
                                     d'admission (Moy ≥ 10)</span>
                                 <div class="text-2xl font-black mt-1 text-foreground">78.4 %</div>
                             </div>
                             <div class="bg-secondary/50 p-4 rounded-xl border border-border">
-                                <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Major de
+                                <span class="text-[10px]  font-bold text-gray-400 tracking-wider">Major de
                                     Séquence</span>
                                 <div class="text-2xl font-black mt-1 text-primary">18.42/20</div>
                             </div>
@@ -205,6 +204,8 @@
                             moyennes et listes d'excellence par période d'évaluation.
                         </p>
                     </div>
+
+                
                 </div>
             </div>
         </section>
@@ -221,21 +222,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                    <div
-                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                        <div
-                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-foreground mb-2">Multi-Établissements</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                            Configuration et isolation complète des données de l'établissement (Nom, contacts, logo).
-                            Gestion centralisée des paramètres fondamentaux du système.
-                        </p>
-                    </div>
+
 
                     <div
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
@@ -299,7 +286,7 @@
                             Centralisation des évaluations par matière avec application stricte des coefficients.
                             Validation et verrouillage des notes pour éviter toute altération ultérieure.
                         </p>
-                    </div>sidebar
+                    </div>
 
                     <div
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
@@ -317,6 +304,109 @@
                         </p>
                     </div>
 
+                    <!-- Bulletin PDF & Relevés -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Bulletins PDF & Documents</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Génération instantanée des bulletins périodiques et annuels en PDF sécurisé, fiches de
+                            présence et procès-verbaux d'évaluations.
+                        </p>
+                    </div>
+
+                    <!-- Import/Export Excel -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Import & Export Excel</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Intégration et exportation massives des listes d'élèves et des grilles de notes via tableurs
+                            pour accélérer le travail administratif.
+                        </p>
+                    </div>
+
+                    <!-- Matières & Groupes -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Matières & Unités d'Enseignement</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Regroupement par groupes disciplinaires, affectation sur mesure des coefficients selon la
+                            série et répartition dans les salles.
+                        </p>
+                    </div>
+
+                    <!-- Corps Enseignant -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Gestion des Enseignants</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Suivi des affectations par classe, désignation des professeurs principaux et gestion de la
+                            charge horaire pédagogique.
+                        </p>
+                    </div>
+
+                    <!-- Discipline -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Discipline & Assiduité</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Suivi des heures d'absence, retards, avertissements et punitions synchronisés directement
+                            sur le bulletin périodique.
+                        </p>
+                    </div>
+
+
+                        <!-- Tableau d'Honneur & Distinctions -->
+                    <div
+                        class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-foreground mb-2">Tableau d'Honneur & Mentions</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                            Attribution automatique des distinctions (Tableau d'Honneur, Encouragements, Félicitations)
+                            selon la moyenne générale et la conduite de l'élève.
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -328,7 +418,7 @@
             <div class="flex items-center space-x-2">
                 <span class="font-bold text-foreground">Academia<span class="text-primary">Pro</span></span>
                 <span>—</span>
-                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 694 22 35 03</span>
+                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01</span>
             </div>
             <div class="text-gray-500 font-normal normal-case text-center sm:text-right">
                 &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.

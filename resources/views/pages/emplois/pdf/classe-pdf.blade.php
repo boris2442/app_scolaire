@@ -165,10 +165,10 @@
     </div>
 
     <!-- TITRE DE L'EMPLOI DU TEMPS -->
-  <div class="title-block">
-    <h2>Emploi du temps - Classe : {{ $classe->nom }}</h2>
-    <p>Gestion officielle des séances de cours</p>
-</div>
+    <div class="title-block">
+        <h2>Emploi du temps - Classe : {{ $classe->nom }}</h2>
+        <p>Gestion officielle des séances de cours</p>
+    </div>
 
     <!-- TABLEAU DE L'EMPLOI DU TEMPS -->
     <table class="emploi-table">
@@ -204,7 +204,7 @@
                                     {{ $seance->matiere->nom ?? 'Matière' }}
                                 </div>
                                 <div class="enseignant">
-                                    {{ $seance->enseignant->name ?? '' }} {{ $seance->enseignant->prenom ?? '' }}
+                               M / Mme     {{ $seance->enseignant->user->name ?? '' }}
                                 </div>
                             @else
                                 <span class="libre">Libre</span>

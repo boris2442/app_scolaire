@@ -38,6 +38,7 @@ class Enseignant extends Model
         'interruption_end_date',
         'secondary_phone',
         'address',
+        'number_of_children', // <--- IL DOIT ÊTRE ICI
     ];
 
 

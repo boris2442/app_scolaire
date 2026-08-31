@@ -4,22 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Classe;
 use App\Models\Lecon;
+use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
 class CheckProgramController extends Controller
 {
+    protected $scolarite;
+
+    public function __construct(ScolariteService $scolarite)
+    {
+        $this->scolarite = $scolarite;
+    }
     public function index(Request $request)
     {
+        $anneeActive = $this->scolarite->getAnneeActive();
         $classes = Classe::orderBy('nom')->get();
         $selectedClasseId = $request->input('classe_id');
 
         $progressionData = [];
 
         if ($selectedClasseId) {
-            // Récupère toutes les leçons de la classe avec l'état 'evaluations_exists' (true/false)
+            // Filtrage des évaluations uniquement sur l'année scolaire active
             $leconsGrouped = Lecon::where('classe_id', $selectedClasseId)
                 ->with(['matiere', 'enseignant'])
-                ->withExists('evaluations') // Vérifie automatiquement si la leçon est liée à au moins une évaluation
+                ->withExists(['evaluations' => function ($query) use ($anneeActive) {
+                    $query->whereHas('sequence.trimestre', function ($q) use ($anneeActive) {
+                        $q->where('annee_scolaire_id', $anneeActive->id);
+                    });
+                }])
                 ->orderBy('ordre')
                 ->get()
                 ->groupBy('matiere_id');

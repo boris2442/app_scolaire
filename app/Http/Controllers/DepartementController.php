@@ -11,7 +11,7 @@ class DepartementController extends Controller
 {
     public function index()
     {
-      
+
         // Dans DepartementController.php à la ligne 12
         $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
         return view('pages.departements.index', compact('departements'));
@@ -85,4 +85,10 @@ class DepartementController extends Controller
         return redirect()->route('admin.departments.index')
             ->with('success', 'Nouveau département créé avec succès !');
     }
+
+
+    public function show(Departement $department)
+{
+    return redirect()->route('admin.departments.index');
+}
 }

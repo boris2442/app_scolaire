@@ -86,11 +86,11 @@ Route::middleware('auth')->group(function () {
     Route::get('presence/{id}/attestation-presence', [PresenceAndServiceController::class, 'generateAttestationPresence'])
         ->name('teacher.attestation.presence');
 
-Route::get('presence/{id}/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
+    Route::get('presence/{id}/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
         ->name('teacher.attestation.take-service');
-// });
-//attestation reprise de service
-Route::get('presence/{id}/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
+    // });
+    //attestation reprise de service
+    Route::get('presence/{id}/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
         ->name('teacher.attestation.reprise-service');
 
 
@@ -251,7 +251,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
 
 
-
+    Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
 
 
 
@@ -259,7 +259,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
 
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::resource('/departments', DepartementController::class);
+        Route::resource('/departments', DepartementController::class)->except(['show']);
     });
 
 
@@ -282,7 +282,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
 
     Route::get('admin/students/export/', [StudentControllerExport::class, 'export'])->name('admin.students.export');
-    Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
+
     Route::get('admin/inscriptions/export/', [ExportInscriptionController::class, 'export'])->name('admin.inscriptions.export');
     Route::get('admin/teachers/export/', [TeacherExportController::class, 'export'])->name('admin.teachers.export');
 

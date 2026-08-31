@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Attestation de Prise de Service</title>
+    <title>Certificat de Prise de Service</title>
 
     <style>
         @page {
@@ -263,11 +263,11 @@
         <div class="title-box">
 
             <h2>
-                ATTESTATION DE PRISE DE SERVICE
+                CERTIFICAT DE PRISE DE SERVICE
             </h2>
 
             <div class="en-title">
-                ATTESTATION OF ASSUMPTION OF DUTY
+                CERTIFICATE OF ASSUMPTION OF DUTY
             </div>
 
         </div>
@@ -1093,10 +1093,8 @@
         AcademiaPro 2026 |
         AcademiaPro HIGH SCHOOL |
         Email: academiapro237@gmail.com |
-        679135177 / 694223503 |
-        Date d'édition :
-
-        {{ ucfirst(\Carbon\Carbon::now()->locale('fr')->isoFormat('dddd D MMMM YYYY à HH[H] mm[Min] ss[S]')) }}
+        (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01
+        
 
         | Page 1/1
 

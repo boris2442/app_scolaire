@@ -70,41 +70,36 @@
     {{-- Bloc de Suivi de la Progression du Programme --}}
     <table class="stats-table" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <thead>
-            {{-- Ligne des grandes catégories --}}
             <tr>
                 <th colspan="3"
                     style="background-color: #e6e6e6; border: 1px solid #333; text-align: center; padding: 8px;">
-                    PROGRESSION</th>
-                <th colspan="4"
-                    style="background-color: #f2f2f2; border: 1px solid #333; text-align: center; padding: 8px;">
-                    PERFORMANCES (Moy >= 10)</th>
-                <th colspan="3"
-                    style="background-color: #e6e6e6; border: 1px solid #333; text-align: center; padding: 8px;">
-                    EFFECTIFS / TAUX</th>
-            </tr>
-            {{-- Ligne des sous-colonnes --}}
-            <tr>
-                {{-- Sous-colonnes Progression --}}
-                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">NLP
-                    <span style="font-size: 7px;">
-                        <i>
-                            (Nombre Leçons Prevus)
-                        </i></span>
+                    PROGRESSION
                 </th>
-
-                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">NLF <span style="font-size: 7px;">
-                        <i>
-                            (Nombre Leçons Finies)
-                        </i></span></th>
+                <th colspan="3"
+                    style="background-color: #f2f2f2; border: 1px solid #333; text-align: center; padding: 8px;">
+                    PERFORMANCES (Moy >= 10 / Total)
+                </th>
+                <th colspan="3"
+                    style="background-color: #e6e6e6; border: 1px solid #333; text-align: center; padding: 8px;">
+                    TAUX DE RÉUSSITE
+                </th>
+            </tr>
+            <tr>
+                <!-- Sous-colonnes Progression -->
+                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">
+                    NLP <span style="font-size: 7px;"><i>(Prévus)</i></span>
+                </th>
+                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">
+                    NLF <span style="font-size: 7px;"><i>(Finies)</i></span>
+                </th>
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">Taux</th>
 
-                {{-- Sous-colonnes Performances --}}
+                <!-- Sous-colonnes Performances (Format X / Y) -->
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">G</th>
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">F</th>
-                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">T</th>
-                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">Effectif Total</th>
+                <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">Total</th>
 
-                {{-- Sous-colonnes Taux de réussite / Global --}}
+                <!-- Sous-colonnes Taux -->
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">G (%)</th>
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">F (%)</th>
                 <th style="border: 1px solid #333; padding: 6px; font-size: 11px;">Total (%)</th>
@@ -112,31 +107,29 @@
         </thead>
         <tbody>
             <tr>
-                {{-- Données Progression --}}
+                <!-- Données Progression -->
                 <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['lecons_totales'] }}
                 </td>
                 <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['lecons_faites'] }}</td>
                 <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['taux_progression'] }}%
                 </td>
 
-                {{-- Données Performances (Réussites >= 10) --}}
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['garcons_reussite'] }}
+                <!-- Données Performances sous forme de fraction (ex: 10 / 15) -->
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
+                    <b>{{ $stats['garcons_reussite'] }}</b> / {{ $stats['garcons_count'] }}
                 </td>
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['filles_reussite'] }}
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
+                    <b>{{ $stats['filles_reussite'] }}</b> / {{ $stats['filles_count'] }}
                 </td>
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['reussite_globale'] }}
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
+                    <b>{{ $stats['reussite_globale'] }}</b> / {{ $stats['total'] }}
                 </td>
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['total'] }}</td>
 
-                {{-- Données Taux --}}
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
-                    {{ $stats['garcons_count'] > 0 ? number_format(($stats['garcons_reussite'] / $stats['garcons_count']) * 100, 1) : 0 }}%
+                <!-- Données Taux -->
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['garcons_taux'] }}%
                 </td>
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
-                    {{ $stats['filles_count'] > 0 ? number_format(($stats['filles_reussite'] / $stats['filles_count']) * 100, 1) : 0 }}%
-                </td>
-                <td style="border: 1px solid #333; text-align: center; padding: 8px;">
-                    {{ $stats['taux_reussite'] }}%
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['filles_taux'] }}%</td>
+                <td style="border: 1px solid #333; text-align: center; padding: 8px;">{{ $stats['taux_reussite'] }}%
                 </td>
             </tr>
         </tbody>

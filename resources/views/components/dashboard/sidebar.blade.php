@@ -61,7 +61,16 @@
             Tableau de Bord
         </div>
         <ul>
+  <li>
 
+
+                    <a href="{{ route('home') }}" title="Accueil"
+                        aria-label="Accueil"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('home') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-home class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3 font-medium">Accueil</span>
+                    </a>
+                </li>
             @can('access-admin')
                 <li>
 
@@ -312,17 +321,7 @@
 
 
 
-    {{-- <div class="absolute bottom-4 w-full px-3">
-        <div class="border-t border-border my-4"></div>
-        <form method="POST" action="/logout">
-            @csrf
-            <button type="submit"
-                class="flex items-center w-full px-3 py-2.5 rounded bg-danger text-white hover:opacity-90 transition-all">
-                <x-lucide-log-out class="w-4 h-4 text-center" />
-                <span class="sidebar-label ml-3">Déconnexion</span>
-            </button>
-        </form>
-    </div> --}}
+
 
     <!-- 3. Bouton Déconnexion (Fixé en bas grâce à mt-auto) -->
     <div class="pt-4 border-t border-border mt-auto">

@@ -14,7 +14,7 @@
             @csrf
             @method('PUT') <div>
                 <label class="block text-sm font-medium mb-2">Libellé de l'année</label>
-                <input type="text" name="libelle" 
+                <input type="text" name="libelle" required
                        value="{{ old('libelle', $annee_scolaire->libelle) }}" 
                        class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 focus:ring-primary">
             </div>
@@ -22,13 +22,13 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium mb-2">Date de début</label>
-                    <input type="date" name="date_debut" 
+                    <input type="date" name="date_debut"  required
                            value="{{ old('date_debut', $annee_scolaire->date_debut->format('Y-m-d')) }}" 
                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Date de fin</label>
-                    <input type="date" name="date_fin" 
+                    <input type="date" name="date_fin"  required
                            value="{{ old('date_fin', $annee_scolaire->date_fin->format('Y-m-d')) }}" 
                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5">
                 </div>

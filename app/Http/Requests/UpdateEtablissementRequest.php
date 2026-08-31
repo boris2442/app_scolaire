@@ -39,6 +39,7 @@ class UpdateEtablissementRequest extends FormRequest
             'english_region'       => 'nullable|string|max:255',
             'english_department'   => 'nullable|string|max:255',
             'english_sub_division' => 'nullable|string|max:255',
+            'number_of_children' => 'nullable|integer|min:0|max:30',
         ];
     }
 

@@ -25,17 +25,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="hidden md:block">
+            {{-- <div class="hidden md:block">
                 <button type="submit"
                     class="bg-primary text-white px-6 py-3 rounded-xl font-black  text-[10px] tracking-widest hover:scale-105 transition-all">
                     Charger la liste
                 </button>
-            </div>
+            </div> --}}
         </form>
     </div>
 
     @if ($classeId)
-        <div class="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+        <div class="bg-card rounded-2xl border border-border shadow-sm overflow-auto">
             {{-- UN SEUL FORMULAIRE QUI ENVELOPPE TOUT --}}
             <form action="{{ route('admin.affectations.bulk-store') }}" method="POST">
                 @csrf
@@ -71,7 +71,7 @@
                                 <td class="p-4">
                                     {{-- LE NOM DU SELECT EST CRUCIAL --}}
                                     <select name="affectations[{{ $matiere->id }}]"
-                                        class="bg-card p-2 rounded-2xl border border-border shadow-sm mb-2">
+                                        class="bg-card p-2 rounded border border-border shadow-sm mb-2">
                                         <option value="">-- Non affecté --</option>
                                         @foreach ($enseignants as $enseignant)
                                             <option value="{{ $enseignant->id }}"
@@ -99,7 +99,7 @@
                 <div class="p-6 bg-secondary/10 border-t flex justify-end">
                     <button type="submit"
                         class="bg-primary text-white px-8 py-4 rounded font-black  text-[12px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20">
-                        <x-lucide-save class="w-4 h-4 mr-2" /> Enregistrer tout le tableau
+          Enregistrer tout le tableau
                     </button>
                 </div>
             </form>

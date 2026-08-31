@@ -25,9 +25,15 @@ class ClasseController extends Controller
         }
 
         // On charge directement les classes de l'année active avec leurs matières
-        $classes = Classe::where('annee_scolaire_id', $anneeActive->id)
-            ->with('matieres')
-            ->get();
+        // $classes = Classe::where('annee_scolaire_id', $anneeActive->id)
+        //     ->with('matieres')
+        //     ->get();
+
+
+
+        // On récupère TOUTES les classes de l'établissement (sans filtrer par année)
+        $classes = Classe::with('matieres')->get();
+
 
         return view('pages.classes.index', compact('classes', 'anneeActive'));
     }

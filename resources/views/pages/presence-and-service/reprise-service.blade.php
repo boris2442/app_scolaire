@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Attestation de Reprise de Service</title>
+    <title>Certificat de Reprise de Service</title>
 
     <style>
         @page {
@@ -301,7 +301,7 @@
         <div class="title-box">
 
             <h2>
-                ATTESTATION DE REPRISE DE SERVICE
+                CERTIFICAT DE REPRISE DE SERVICE
             </h2>
 
             <div class="en-title">
@@ -348,72 +348,18 @@
     {{-- =========================================================
          PROVISEUR / PRINCIPAL
     ========================================================== --}}
-    <table>
-
-        <tr>
-
-            <td style="width: 12%;" class="label-fr">
-                PROVISEUR / PRINCIPAL
-            </td>
-
-            <td style="
-                width: 3%;
-                font-size: 8.5px;
-            ">
-                du
-            </td>
-
-            <td style="
-                width: 35%;
-            " class="line-underline">
-
-                &nbsp;
-
-            </td>
-
-            <td
-                style="
-                width: 3%;
-                font-size: 8.5px;
-                text-align: center;
-            ">
-                du
-            </td>
-
-            <td style="
-                width: 47%;
-                text-align: center;
-            " class="label-fr">
-
-                {{ $etablissement->nom }}
-
-            </td>
-
-        </tr>
-
-        <tr>
-
-            <td class="label-en">
-                PRINCIPAL
-            </td>
-
-            <td class="label-en">
-                of
-            </td>
-
-            <td></td>
-
-            <td></td>
-
-            <td style="text-align: center;" class="label-en">
-
-                {{ $etablissement->english_name }}
-
-            </td>
-
-        </tr>
-
-    </table>
+  <table>
+    <tr>
+        <td style="width: 25%; font-weight: bold;" class="label-fr">PROVISEUR / PRINCIPAL</td>
+        <td style="width: 5%; font-size: 8.5px;">du</td>
+        <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $etablissement->nom }}</td>
+    </tr>
+    <tr>
+        <td style="width: 25%;" class="label-en">PRINCIPAL</td>
+        <td style="width: 5%; font-size: 8.5px;" class="label-en">of</td>
+        <td style="width: 70%; text-align: center;" class="label-en">{{ $etablissement->english_name ?? $etablissement->nom }}</td>
+    </tr>
+</table>
 
 
     {{-- =========================================================
@@ -1204,10 +1150,8 @@
         AcademiaPro 2026 |
         AcademiaPro HIGH SCHOOL |
         Email: academiapro237@gmail.com |
-        679135177 / 694223503 |
-        Date d'édition :
-
-        {{ ucfirst(\Carbon\Carbon::now()->locale('fr')->isoFormat('dddd D MMMM YYYY à HH[H] mm[Min] ss[S]')) }}
+        (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01 |
+      
 
         | Page 1/1
 

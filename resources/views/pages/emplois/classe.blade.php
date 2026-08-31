@@ -11,22 +11,7 @@
             </a>
         </div>
 
-        <!-- Titre -->
-        {{-- <div class="mb-8">
-            <h1 class="text-3xl font-bold text-primary">
-                Emploi du temps : {{ $classe->niveau->nom ?? '' }} {{ $classe->nom }}
-            </h1>
-
-            <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank"
-                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
-                <span>Télécharger en PDF</span>
-            </a>
-
-
-            <p class="text-sm text-foreground/70 mt-1">
-                Gérez et organisez les séances de cette classe.
-            </p>
-        </div> --}}
+    
 
       <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold"> Emploi du temps : {{ $classe->nom }}</h1>
@@ -276,7 +261,7 @@
 
                                                 <div class="text-xs text-foreground/70 mt-1">
 
-                                                    {{ $seance->enseignant->user->name ?? 'Enseignant' }}
+                                               M/Mme     {{ $seance->enseignant->user->name ?? 'Enseignant' }}
 
                                                     {{ $seance->enseignant->prenom ?? '' }}
 

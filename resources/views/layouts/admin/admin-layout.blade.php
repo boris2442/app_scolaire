@@ -21,7 +21,7 @@
             }
         })();
     </script>
-   
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -67,7 +67,8 @@
 
             {{-- Footer Simple --}}
             <footer class="py-4 px-6 border-t border-border bg-card/50 text-center text-xs text-gray-500">
-                &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.(+237) 679 13 51 77 / 694 22 35 03
+                &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.(+237) 679 13 51 77 / 689 58 72 79 / 694 22
+                35 03 / 675 06 60 01
             </footer>
 
         </div>

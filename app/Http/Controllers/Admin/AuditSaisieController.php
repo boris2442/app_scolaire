@@ -25,10 +25,8 @@ class AuditSaisieController extends Controller
     {
         $anneeActive = $this->scolarite->getAnneeActive();
 
-        // On récupère directement toutes les classes (plus de niveaux)
+        // Classes et Séquences filtrées
         $classes = Classe::all();
-
-        // On récupère les séquences de l'année en cours (sans doublons)
         $sequences = Sequence::whereHas('trimestre', function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id);
         })->get();
@@ -38,23 +36,30 @@ class AuditSaisieController extends Controller
         $auditData = [];
 
         if ($classeId && $sequenceId) {
-            $effectif = Inscription::where('classe_id', $classeId)->count();
+            // 1. CORRECTION EFFECTIF : Filtrer uniquement sur l'année en cours
+            $effectif = Inscription::where('classe_id', $classeId)
+                ->where('annee_scolaire_id', $anneeActive->id)
+                ->count();
 
-            // Récupération des matières + l'enseignant affecté
+            // 2. CORRECTION AFFECTATION : Filtrer les professeurs affectés à cette année
+            // 2. Récupération des matières + l'enseignant affecté (Correction de la jointure)
             $matieres = DB::table('classe_matiere')
                 ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-                ->leftJoin('affectations', function ($join) use ($classeId) {
+                ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
                     $join->on('matieres.id', '=', 'affectations.matiere_id')
-                        ->where('affectations.classe_id', '=', $classeId);
+                        ->where('affectations.classe_id', '=', $classeId)
+                        ->where('affectations.annee_scolaire_id', '=', $anneeActive->id);
                 })
-                ->leftJoin('users', 'affectations.enseignant_id', '=', 'users.id')
+                // Jointure sur la table enseignants puis sur users
+                ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
+                ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
                 ->where('classe_matiere.classe_id', $classeId)
                 ->select('matieres.id', 'matieres.nom', 'users.name as enseignant', 'users.phone')
                 ->get();
 
             $matiereIds = $matieres->pluck('id');
 
-            // 1. On récupère TOUTES les évaluations d'un coup pour cette classe et cette séquence
+            // 3. Récupération des évaluations
             $evaluations = Evaluation::where('classe_id', $classeId)
                 ->where('sequence_id', $sequenceId)
                 ->whereIn('matiere_id', $matiereIds)
@@ -63,7 +68,7 @@ class AuditSaisieController extends Controller
 
             $evaluationsIds = $evaluations->pluck('id');
 
-            // 2. On compte TOUTES les notes d'un coup groupées par evaluation_id
+            // 4. Décompte des notes
             $notesCounts = Note::whereIn('evaluation_id', $evaluationsIds)
                 ->select('evaluation_id', DB::raw('count(*) as total'))
                 ->groupBy('evaluation_id')
@@ -71,7 +76,6 @@ class AuditSaisieController extends Controller
 
             foreach ($matieres as $matiere) {
                 $evaluation = $evaluations->get($matiere->id);
-
                 $nbNotes = $evaluation ? ($notesCounts[$evaluation->id] ?? 0) : 0;
 
                 $pourcentage = 0;
@@ -90,7 +94,6 @@ class AuditSaisieController extends Controller
             }
         }
 
-        // On passe $classes à la vue au lieu de $niveaux
         return view('pages.admin.audit-saisie', compact('classes', 'sequences', 'auditData'));
     }
 }
