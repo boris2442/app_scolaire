@@ -30,9 +30,21 @@ class LoginRequest extends FormRequest
         return [
             // 'email' => ['required', 'string', 'email'],
             'login' => ['required', 'string'],
+            'auth.failed' => 'Identifiant ou mot de passe incorrect.',
             'password' => ['required', 'string'],
         ];
     }
+
+public function messages(): array
+{
+    return [
+        'login.required' => 'Le champ identifiant est obligatoire.',
+        'login.string'   => 'L\'identifiant doit être une chaîne de caractères.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.string'   => 'Le mot de passe doit être une chaîne de caractères.',
+    ];
+}
+
 
     /**
      * Attempt to authenticate the request's credentials.

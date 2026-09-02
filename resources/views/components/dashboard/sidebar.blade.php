@@ -61,16 +61,15 @@
             Tableau de Bord
         </div>
         <ul>
-  <li>
+            <li>
 
 
-                    <a href="{{ route('home') }}" title="Accueil"
-                        aria-label="Accueil"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('home') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-home class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3 font-medium">Accueil</span>
-                    </a>
-                </li>
+                <a href="{{ route('home') }}" title="Accueil" aria-label="Accueil"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('home') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <x-lucide-home class="w-4 h-4 text-center" />
+                    <span class="sidebar-label ml-3 font-medium">Accueil</span>
+                </a>
+            </li>
             @can('access-admin')
                 <li>
 
@@ -164,13 +163,7 @@
                 </li>
 
 
-                <li>
-                    <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-user class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Enseignants</span>
-                    </a>
-                </li>
+
 
 
                 <li>
@@ -308,7 +301,13 @@
             </li>
 
 
-
+            <li>
+                <a href="{{ route('admin.enseignants.index') }}" title="Enseignants" aria-label="Enseignants"
+                    class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.enseignants.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                    <x-lucide-user class="w-4 h-4 text-center" />
+                    <span class="sidebar-label ml-3">Enseignants</span>
+                </a>
+            </li>
 
         </ul>
 
@@ -327,8 +326,7 @@
     <div class="pt-4 border-t border-border mt-auto">
         <form method="POST" action="/logout">
             @csrf
-            <button type="submit"
-            title="Déconnexion" aria-label="Déconnexion"
+            <button type="submit" title="Déconnexion" aria-label="Déconnexion"
                 class="flex items-center w-full px-3 py-2.5 rounded bg-danger text-white hover:opacity-90 transition-all">
                 <x-lucide-log-out class="w-4 h-4 text-center" />
                 <span class="sidebar-label ml-3">Déconnexion</span>
@@ -359,7 +357,7 @@
                     collapseIcon.className = 'fas fa-angle-left text-xs';
                     sidebar.dataset.collapsed = 'false';
                 } else {
-                  
+
                     sidebar.classList.remove('w-64');
                     sidebar.classList.add('w-20');
                     labels.forEach(el => el.classList.add('hidden'));

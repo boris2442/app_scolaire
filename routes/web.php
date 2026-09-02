@@ -52,13 +52,8 @@ Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-
-        // Groupe de routes pour l'administration des utilisateurs
-
-        // Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        // Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
-        // Route::delete('/users/{user}', [UserController::class, 'destroy'])
-        //     ->name('users.destroy');
+        Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
+        
     });
 
 
@@ -360,7 +355,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
 
         // --- MODULE ENSEIGNANTS ---
-        Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
+        // Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
         Route::get('teachers/create', [EnseignantController::class, 'create'])->name('enseignants.create');
         Route::post('teachers', [EnseignantController::class, 'store'])->name('enseignants.store');
         Route::get('teachers/{enseignant}/edit', [EnseignantController::class, 'edit'])->name('enseignants.edit');
