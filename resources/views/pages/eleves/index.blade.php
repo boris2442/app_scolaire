@@ -377,13 +377,17 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/50">
-                        @forelse($eleves as $eleve)
+                        {{-- @forelse($eleves as $eleve) --}}
+                        @forelse ($eleves as $index => $eleve)
+                            {{--      @foreach ($eleves as $index => $eleve) --}}
                             <tr class="hover:bg-secondary/30 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="h-5 w-5 bg-primary/10 text-primary rounded-full flex items-center justify-center  text-sm border border-primary/20">
-                                            {{ strtoupper(substr($eleve->nom, 0, 1)) }}{{ strtoupper(substr($eleve->prenom, 0, 1)) }}
+                                            {{-- {{ strtoupper(substr($eleve->nom, 0, 1)) }}{{ strtoupper(substr($eleve->prenom, 0, 1)) }} --}}
+                                            {{-- {{ $index +1 }} --}}
+                                            {{ $eleves->firstItem() + $index }}
                                         </div>
                                         <div>
                                             <p class="text-sm  uppercase">

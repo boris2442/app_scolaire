@@ -20,13 +20,36 @@ class TeacherRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    // public function rules(): array
+    // {
+    //     return [
+    //       'name' => 'required|string|max:255',
+    //         'email' => 'required|email|unique:users,email',
+    //        // 'matricule' => 'required|unique:enseignants,matricule',
+    //         'departement_id' => 'required|exists:departements,id', // Validation de l'existence
+    //     ];
+    // }
     public function rules(): array
-    {
-        return [
-          'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-           // 'matricule' => 'required|unique:enseignants,matricule',
-            'departement_id' => 'required|exists:departements,id', // Validation de l'existence
-        ];
-    }
+{
+    return [
+        'name' => ['required', 'string', 'max:255'],
+
+        'email' => [
+            // 'required',
+            'email',
+            'unique:users,email',
+        ],
+
+        'phone' => [
+            'required',
+            'string',
+            'max:30',
+        ],
+
+        'departement_id' => [
+            'required',
+            'exists:departements,id',
+        ],
+    ];
+}
 }

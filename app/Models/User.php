@@ -36,6 +36,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+               'must_change_password' => 'boolean',
         ];
     }
 
@@ -46,6 +47,7 @@ class User extends Authenticatable
         'role', // INDISPENSABLE
         'phone',
         'avatar',
+           'must_change_password',
     ];
 
     public function enseignant()

@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 class EnseignantController extends Controller
@@ -18,8 +19,7 @@ class EnseignantController extends Controller
 
     public function index()
     {
-        // On ajoute 'departement' dans le with()
-        // $enseignants = Enseignant::with(['user', 'departement'])->latest()->get();
+
         //afficher les enseignants avec pagination par ordre alphabetique
         // $enseignants=Enseignant::with(['user', 'departement'])
         $enseignants = Enseignant::select('enseignants.*')
@@ -39,30 +39,89 @@ class EnseignantController extends Controller
         $departements = Departement::orderBy('nom')->get();
         return view('pages.enseignants.create', compact('departements'));
     }
+    // public function store(TeacherRequest $request)
+    // {
+    //     $request->validated();
+
+
+    //     DB::transaction(function () use ($request) {
+    //         $password = Str::password(12);
+    //         $user = User::create([
+    //             'name' => $request->name,
+    //             'email' => $request->email,
+    //             // 'password' => Hash::make('12345678'),
+    //             'password' => $password,
+    //             'role' => UserRole::ENSEIGNANT,
+    //             'phone' => $request->phone, // Nouveau !
+    //         ]);
+
+    //         Enseignant::create([
+    //             'user_id' => $user->id,
+    //             // 'matricule' => $request->matricule,
+    //             'matricule' => Enseignant::generateMatricule(), // Génère un matricule unique
+    //             'departement_id' => $request->departement_id, // On enregistre l'ID
+    //         ]);
+    //     });
+
+    //     return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant créé avec succès !');
+    // }
+
+
+
+
+
     public function store(TeacherRequest $request)
     {
-        $request->validated();
+        $validated = $request->validated();
 
+        // Génération du mot de passe temporaire
+        $temporaryPassword = Str::password(12);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($validated, $temporaryPassword) {
+
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make('12345678'),
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => $temporaryPassword,
                 'role' => UserRole::ENSEIGNANT,
-                'phone' => $request->phone, // Nouveau !
+                'phone' => $validated['phone'] ?? null,
+                'must_change_password' => true,
             ]);
 
             Enseignant::create([
                 'user_id' => $user->id,
-                // 'matricule' => $request->matricule,
-                'matricule' => Enseignant::generateMatricule(), // Génère un matricule unique
-                'departement_id' => $request->departement_id, // On enregistre l'ID
+                'matricule' => Enseignant::generateMatricule(),
+                'departement_id' => $validated['departement_id'],
             ]);
         });
 
-        return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant créé avec succès !');
+        // return redirect()
+        //     ->route('admin.enseignants.index')
+        //     ->with([
+        //         'success' => 'Enseignant créé avec succès !',
+        //         'temporary_password' => $temporaryPassword,
+        //         'teacher_email' => $validated['email'],
+        //         'teacher_name' => $validated['name'],
+        //     ]);
+
+        return redirect()
+            ->route('admin.enseignants.index')
+            ->with('success', 'Enseignant créé avec succès !')
+            ->with('credentials', [
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'password' => $temporaryPassword,
+            ]);
     }
+
+
+
+
+
+
+
+
+
 
     public function edit(Enseignant $enseignant)
     {
@@ -74,7 +133,7 @@ class EnseignantController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $enseignant->user_id,
-            'matricule' => 'required|unique:enseignants,matricule,' . $enseignant->id,
+            // 'matricule' => 'unique:enseignants,matricule,' . $enseignant->id,
             'departement_id' => 'required|exists:departements,id',
         ]);
 
@@ -88,7 +147,7 @@ class EnseignantController extends Controller
 
             // Mise à jour de l'enseignant
             $enseignant->update([
-                'matricule' => $request->matricule,
+                // 'matricule' => $request->matricule,
                 'departement_id' => $request->departement_id,
             ]);
         });

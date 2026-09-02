@@ -1,7 +1,7 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
-    <div class="">
+    {{-- <div class="">
         <div>
             <h1 class="text-xl font-black  text-foreground">Personnel Enseignant</h1>
             <p class="text-[10px] text-muted-foreground font-bold  tracking-widest">Gestion des comptes et profils
@@ -20,7 +20,215 @@
 
             </a>
         </div>
+    </div> --}}
+
+
+
+
+    {{-- En-tête --}}
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-xl font-black text-foreground">
+                Personnel Enseignant
+            </h1>
+
+            <p class="text-[10px] text-muted-foreground font-bold tracking-widest">
+                Gestion des comptes et profils instructeurs
+            </p>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="{{ route('admin.teachers.export') }}"
+                class="bg-primary text-white px-6 py-3 rounded font-black text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all flex items-center">
+                <x-lucide-download class="mr-2 w-4 h-4" />
+                <span class="hidden sm:inline">Exporter en Excel</span>
+            </a>
+
+            <a href="{{ route('admin.enseignants.create') }}"
+                class="bg-primary text-white px-6 py-3 rounded font-black text-[10px] tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all flex items-center">
+                <x-lucide-plus class="mr-2 w-4 h-4" />
+                <span class="hidden sm:inline">Nouveau</span>
+            </a>
+        </div>
     </div>
+
+
+    {{-- Notification de création + identifiants --}}
+  @if (session('success') && session('credentials'))
+
+    <div class="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm">
+
+        {{-- Notification --}}
+        <div class="flex items-start gap-3">
+
+            <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--success)_12%,transparent)]">
+                <x-lucide-circle-check class="h-5 w-5 text-[var(--success)]" />
+            </div>
+
+            <div>
+                <h3 class="text-sm font-black text-[var(--foreground)]">
+                    {{ session('success') }}
+                </h3>
+
+                <p class="mt-1 text-xs font-medium text-[color-mix(in_srgb,var(--foreground)_65%,transparent)]">
+                    Le compte de l'enseignant a été créé avec succès.
+                </p>
+            </div>
+
+        </div>
+
+        {{-- Carte des identifiants --}}
+        <div class="mt-5 rounded-xl border border-[var(--border)] bg-[var(--background)] p-5">
+
+            <div class="mb-5">
+                <h4 class="text-xs font-black uppercase tracking-widest text-[var(--foreground)]">
+                    Identifiants de connexion
+                </h4>
+
+                <p class="mt-1 text-[11px] text-[color-mix(in_srgb,var(--foreground)_55%,transparent)]">
+                    Communiquez ces informations à l'enseignant.
+                </p>
+            </div>
+
+            {{-- Login --}}
+            <div class="mb-4">
+
+                <label
+                    class="mb-1.5 block text-[10px] font-black  tracking-wider text-[color-mix(in_srgb,var(--foreground)_55%,transparent)]">
+                    Login
+                </label>
+
+                <div class="flex items-center gap-2">
+
+                    <div
+                        class="flex-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 py-2.5">
+                        <span
+                            id="teacher-login"
+                            class="font-mono text-sm font-bold text-[var(--foreground)]">
+                            {{ session('credentials.phone') }}
+                        </span>
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="copyCredential('teacher-login', this)"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] text-[color-mix(in_srgb,var(--foreground)_65%,transparent)] transition hover:bg-[var(--secondary)] hover:text-[var(--foreground)]"
+                        title="Copier le login">
+
+                        <x-lucide-copy class="h-4 w-4" />
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            {{-- Mot de passe --}}
+            <div>
+
+                <label
+                    class="mb-1.5 block text-[10px] font-black  tracking-wider text-[color-mix(in_srgb,var(--foreground)_55%,transparent)]">
+                    Mot de passe
+                </label>
+
+                <div class="flex items-center gap-2">
+
+                    <div
+                        class="flex-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 py-2.5">
+
+                        <span
+                            id="teacher-password"
+                            class="font-mono text-sm font-bold tracking-wider text-[var(--foreground)]">
+                            {{ session('credentials.password') }}
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="copyCredential('teacher-password', this)"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--card)] text-[color-mix(in_srgb,var(--foreground)_65%,transparent)] transition hover:bg-[var(--secondary)] hover:text-[var(--foreground)]"
+                        title="Copier le mot de passe">
+
+                        <x-lucide-copy class="h-4 w-4" />
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            {{-- Avertissement --}}
+            <div
+                class="mt-5 flex items-start gap-2 rounded-lg border border-[color-mix(in_srgb,var(--warning)_25%,transparent)] bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] p-3">
+
+                <x-lucide-triangle-alert
+                    class="mt-0.5 h-4 w-4 shrink-0 text-[var(--warning)]" />
+
+                <p
+                    class="text-[11px] font-medium leading-relaxed text-[color-mix(in_srgb,var(--foreground)_75%,transparent)]">
+                    Conservez soigneusement ces identifiants et transmettez-les à l'enseignant.
+                    {{-- Le mot de passe n'est pas enregistré en clair dans la base de données. --}}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+@endif
+
+
+    {{-- Script pour copier les identifiants --}}
+    <script>
+        function copyCredential(elementId, button) {
+
+            const element = document.getElementById(elementId);
+
+            if (!element) {
+                return;
+            }
+
+            const text = element.innerText.trim();
+
+            navigator.clipboard.writeText(text).then(() => {
+
+                const originalContent = button.innerHTML;
+
+                button.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                </svg>
+            `;
+
+                button.classList.add('text-green-600');
+
+                setTimeout(() => {
+
+                    button.innerHTML = originalContent;
+                    button.classList.remove('text-green-600');
+
+                }, 1500);
+
+            }).catch(() => {
+
+                alert('Impossible de copier automatiquement.');
+
+            });
+        }
+    </script>
+
+
 
     <div class="bg-card rounded-2xl border border-border shadow-sm overflow-x-auto">
         <table class="w-full text-left border-collapse min-w-[650px]">

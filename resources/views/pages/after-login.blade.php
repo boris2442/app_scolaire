@@ -8,7 +8,14 @@
             <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
 
             <div class="relative z-10">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground"><i
+                        class='text-2xl '>
+                        {{-- <div class='flex gap-2 items-center'> --}}
+                            <span> Hey {{ auth()->user()->name }}</span>👋🙂...
+                            ;
+                        {{-- </div> --}}
+                    </i>
+                    <br />
                     Bienvenue au <br>
                     <span class="text-primary">{{ $etablissement->nom ?? 'votre établissement' }}</span>
                 </h1>
@@ -21,6 +28,6 @@
             </div>
         </div>
 
-     
+
     </div>
 @endsection
