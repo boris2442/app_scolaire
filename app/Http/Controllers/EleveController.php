@@ -130,39 +130,8 @@ class EleveController extends Controller
         }
 
         // On récupère le résultat de la transaction (qui sera notre objet $eleve)
-        // $eleve = DB::transaction(function () use ($data, $request) {
-
-        //     $nouveauEleve = Eleve::create([
-        //         'nom' => strtoupper($data['nom']),
-        //         'prenom' => $data['prenom'],
-        //         'date_naissance' => $data['date_naissance'],
-        //         'sexe' => $data['sexe'],
-        //         'lieu_naissance' => $data['lieu_naissance'] ?? null,
-        //         'telephone_parent' => $data['telephone_parent'] ?? null,
-        //         'adresse' => $data['adresse'] ?? null,
-        //         'photo' => $data['photo'] ?? null,
-        //     ]);
-
-        //     $anneeActive = $this->scolarite->getAnneeActive();
-
-        //     $debut = Carbon::parse($anneeActive->date_debut)->format('y');
-        //     $fin = Carbon::parse($anneeActive->date_fin)->format('y');
-
-        //     $matricule = $debut . $fin . str_pad($nouveauEleve->id, 5, '0', STR_PAD_LEFT);
-
-        //     $nouveauEleve->update(['matricule' => $matricule]);
-
-        //     Inscription::create([
-        //         'eleve_id' => $nouveauEleve->id,
-        //         'classe_id' => $request->classe_id,
-        //         'annee_scolaire_id' => $anneeActive->id,
-        //         'date_inscription' => now(),
-        //         'est_redoublant' => $request->has('est_redoublant'),
-        //     ]);
-
-        //     // On retourne l'objet élève ici
-        //     return $nouveauEleve;
-        // });
+      
+        
 
 
 
@@ -180,6 +149,9 @@ class EleveController extends Controller
                 'adresse'          => $data['adresse'] ?? 'Non renseigné',
                 'photo'            => $data['photo'] ?? null,
                 'est_actif'        => true,
+                // 'matricule'        => $data['matricule'] ?? null,
+                'name_father'      => $data['name_father'] ?? null,
+                'name_mother'      => $data['name_mother'] ?? null,
             ]);
 
             $anneeActive = $this->scolarite->getAnneeActive();
@@ -278,6 +250,8 @@ class EleveController extends Controller
                 'telephone_parent' => $data['telephone_parent'] ?? $eleve->telephone_parent,
                 'adresse' => $data['adresse'] ?? $eleve->adresse,
                 'photo' => $data['photo'] ?? $eleve->photo,
+                'name_father' => $data['name_father'] ?? $eleve->name_father,
+                'name_mother' => $data['name_mother'] ?? $eleve->name_mother,
             ]);
 
             // 3. Mise à jour de la Classe (Inscription)

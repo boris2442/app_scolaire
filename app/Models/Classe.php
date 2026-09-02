@@ -12,12 +12,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Classe extends Model
 {
-    protected $fillable = ['nom','cycle_id', 'annee_scolaire_id'];
+    protected $fillable = ['nom', 'cycle_id', 'annee_scolaire_id', 'section'];
+    // Helper pour vérifier rapidement la section
+    public function isAnglophone(): bool
+    {
+        return $this->section === 'anglophone';
+    }
 
-public function cycle()
-{
-    return $this->belongsTo(Cycle::class);
-}
+    public function isFrancophone(): bool
+    {
+        return $this->section === 'francophone';
+    }
+
+
+    public function cycle()
+    {
+        return $this->belongsTo(Cycle::class);
+    }
     public function anneeScolaire()
     {
         return $this->belongsTo(AnneeScolaire::class);
@@ -32,10 +43,10 @@ public function cycle()
     }
 
 
-   public function getNomCompletAttribute()
-{
-    return $this->nom;
-}
+    public function getNomCompletAttribute()
+    {
+        return $this->nom;
+    }
     /**
      * Récupérer toutes les inscriptions pour cette classe.
      */

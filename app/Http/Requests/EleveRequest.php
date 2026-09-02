@@ -32,6 +32,10 @@ class EleveRequest extends FormRequest
             'telephone_parent' => 'nullable|string',
             'adresse' => 'nullable|string',
             'est_redoublant' => 'nullable|boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Limite de 2MB
+
+            'name_father' => 'nullable|string|max:255',
+            'name_mother' => 'nullable|string|max:255',
         ];
     }
 }

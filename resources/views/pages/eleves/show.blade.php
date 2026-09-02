@@ -170,6 +170,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3 p-3.5 bg-secondary/40 rounded-xl border border-border">
+                            <div class="p-2.5 rounded-lg bg-primary/10 text-primary shrink-0">
+                                <x-lucide-phone-call class="w-4 h-4" />
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs text-muted-foreground">Nom du Père</p>
+                                <p class="text-sm font-semibold text-foreground truncate">
+                                    {{ $eleve->name_father ?? 'Non renseigné' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-secondary/40 rounded-xl border border-border">
+                            <div class="p-2.5 rounded-lg bg-primary/10 text-primary shrink-0">
+                                <x-lucide-phone-call class="w-4 h-4" />
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs text-muted-foreground">Nom de la Mère</p>
+                                <p class="text-sm font-semibold text-foreground truncate">
+                                    {{ $eleve->name_mother ?? 'Non renseigné' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>

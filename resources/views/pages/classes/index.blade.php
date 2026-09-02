@@ -28,6 +28,9 @@
 
                             <div class="flex flex-col flex-1">
                                 <span class="text-sm font-bold text-foreground">{{ $classe->nom }}</span>
+                                <span class="text-[10px] text-muted-foreground">
+                                   {{ $classe->cycle?->nom ?? 'Sans cycle' }} - {{ ucfirst($classe->section ?? 'hh') }}
+                                </span>
 
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     @forelse($classe->matieres as $m)

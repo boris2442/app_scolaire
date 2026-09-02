@@ -9,7 +9,7 @@
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
                     <input type="text" name="nom" placeholder="ex: Premier Cycle" required
-                        class="flex-1 bg-secondary border-border rounded-lg text-sm px-3 py-2">
+                        class="flex-1 bg-secondary border-border rounded text-sm px-3 py-2">
                     <button class="bg-primary text-white p-2 rounded hover:opacity-90">
                         <x-lucide-plus class="w-4 h-4" />
                     </button>
@@ -19,7 +19,7 @@
             <div class="bg-card p-6 rounded-xl border border-border shadow-sm">
                 <h2 class="text-xs   text-primary mb-4 tracking-widest text-center">2. Ajouter un classe
                 </h2>
-            
+
 
 
                 <form action="{{ route('settings.classes.store') }}" method="POST" class="space-y-4">
@@ -28,7 +28,7 @@
 
                     <div>
                         <label class="text-[10px] text-muted-foreground">Cycle concerné</label>
-                        <select name="cycle_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1"
+                        <select name="cycle_id" class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1"
                             required>
                             <option value="">Sélectionner un cycle...</option>
                             @foreach ($cycles as $cycle)
@@ -40,9 +40,31 @@
                     <div>
                         <label class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
                         <input type="text" name="nom" placeholder="Ex: 6ème A"
-                            class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1" required>
+                            class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1" required>
                     </div>
+                    <div class="space-y-2">
+                        <label for="section" class="block text-sm font-medium text-foreground flex items-center gap-1.5">
+                            <x-lucide-languages class="w-4 h-4 text-primary" />
+                            Section d'enseignement
+                        </label>
 
+                        <select name="section" id="section"
+                            class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1 focus:ring-2 focus:ring-primary focus:outline-none" required>
+                            <option value="">Sélectionner une section...</option>   
+                            <option value="francophone"
+                                {{ old('section', $classe->section ?? '') == 'francophone' ? 'selected' : '' }}>
+                                Subdivision Francophone (Séquences / Trimestres)
+                            </option>
+                            <option value="anglophone"
+                                {{ old('section', $classe->section ?? '') == 'anglophone' ? 'selected' : '' }}>
+                                Subdivision Anglophone (Terms / Assessment)
+                            </option>
+                        </select>
+
+                        @error('section')
+                            <p class="text-xs text-destructive mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <button
                         class="w-full bg-primary text-white font-black py-2.5 rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 text-[10px]">
                         <x-lucide-plus class="w-4 h-4" /> Créer la Classe
@@ -94,34 +116,7 @@
                     </div>
 
 
-                    {{-- <div class="p-4 flex flex-wrap gap-3">
-                        @forelse($cycle->niveaux as $niveau)
-                            <div
-                                class="group flex items-center gap-3 bg-background border border-border px-3 py-2 rounded-lg hover:border-primary transition-all">
-                                <span class="text-sm font-bold text-foreground">{{ $niveau->nom }}</span>
-                                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  
-                                    <a href="{{ route('settings.academique.niveaux.edit', $niveau) }}"
-                                        class="p-1 text-primary hover:bg-primary/10 rounded transition-colors"
-                                        title="Modifier" aria-label="Modifier">
-                                        <x-lucide-edit-3 class="w-4 h-4" />
-                                    </a>
-
-                             
-                                    <form action="{{ route('settings.academique.niveaux.destroy', $niveau) }}"
-                                        method="POST" onsubmit="return confirm('Supprimer ce niveau ?')">
-                                        @csrf @method('DELETE')
-                                        <button class="p-1 text-danger hover:bg-danger/10 rounded" title="Supprimer"
-                                            aria-label="Supprimer">
-                                            <x-lucide-trash class="w-4 h-4" />
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-xs italic text-muted-foreground">Aucun niveau défini pour ce cycle.</p>
-                        @endforelse
-                    </div> --}}
+                 
                 </div>
             @empty
                 <div class="bg-card p-12 rounded-xl border border-dashed border-border text-center">

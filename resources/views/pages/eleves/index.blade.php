@@ -14,7 +14,7 @@
 
             <div class="relative inline-block text-left menu-wrapper">
                 <button class="menu-trigger p-2 hover:bg-secondary rounded-full transition-colors">
-                  <x-lucide-more-vertical class="w-5 h-5" />
+                    <x-lucide-more-vertical class="w-5 h-5" />
                 </button>
 
                 <div

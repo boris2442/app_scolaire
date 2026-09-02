@@ -20,7 +20,9 @@ class Eleve extends Model
         'telephone_parent',
         'adresse',
         'photo', // <--- Ajoute ceci
-        'matricule'
+        'matricule',
+        'name_father',
+        'name_mother',
     ];
 
 

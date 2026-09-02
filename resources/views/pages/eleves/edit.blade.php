@@ -101,6 +101,18 @@
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                     </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom du Père</label>
+                            <input type="text" name="name_father" value="{{ old('name_father', $eleve->name_father) }}"
+                                class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de la Mère</label>
+                            <input type="text" name="name_mother" value="{{ old('name_mother', $eleve->name_mother) }}"
+                                class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                    </div>
                 </div>
             </div>
 

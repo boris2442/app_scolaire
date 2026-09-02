@@ -297,12 +297,17 @@
                     <td>
                         <table style="width:100%; margin:0; border:none;">
                             <tr style="border:none;">
-                                <td style="border:none; padding:0;" width="33%"><strong>CLASSE :</strong>
-                                    {{ $inscription->classe_nom }}</td>
-                                <td style="border:none; padding:0;" width="33%"><strong>SEXE :</strong>
-                                    {{ $inscription->sexe ?? 'N/A' }}</td>
-                                <td style="border:none; padding:0;" width="34%"><strong>MATRICULE :</strong>
-                                    {{ $inscription->matricule ?? 'N/A' }}</td>
+                                <td style="border:none; padding:0;" width="33%">
+                                    <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
+                                    <em
+                                        style="font-style: italic; font-size: 0.9em; opacity: 0.85;">({{ ucfirst($inscription->section ?? ($inscription->classe?->section ?? '')) }})</em>
+                                </td>
+                                <td style="border:none; padding:0;" width="33%">
+                                    <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
+                                </td>
+                                <td style="border:none; padding:0;" width="34%">
+                                    <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
+                                </td>
                             </tr>
                         </table>
                     </td>

@@ -2,7 +2,7 @@
 
 @section('content')
     @if ($errors->any())
-        <div class="p-4 mb-4 bg-red-500/10 border border-red-500 rounded-xl text-red-600 text-[10px] font-black uppercase">
+        <div class="p-4 mb-4 bg-red-500/10 border border-red-500 rounded-xl text-red-600 text-[10px] font-black ">
             @foreach ($errors->all() as $error)
                 <p><x-lucide-alert-triangle class="w-4 h-4 inline-block mr-2" /> {{ $error }}</p>
             @endforeach
@@ -15,7 +15,7 @@
             {{ $anneeActive->libelle }}</p>
         <div class="">
             <a href="{{ route('admin.students.index') }}"
-                class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px] tracking-widest hover:bg-secondary/70 transition-all">
+                class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px]  hover:bg-secondary/70 transition-all">
                 <x-lucide-arrow-left class="w-4 h-4" /> Retour à la liste
             </a>
         </div>
@@ -27,7 +27,7 @@
 
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
-                    <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
+                    <h2 class="text-[10px] font-black  text-primary mb-6  flex items-center gap-2">
                         État Civil de l'Élève
                     </h2>
 
@@ -129,7 +129,7 @@
 
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
-                    <h2 class="text-[10px] font-black  text-primary mb-6 tracking-widest flex items-center gap-2">
+                    <h2 class="text-[10px] font-black  text-primary mb-6  flex items-center gap-2">
                         <x-lucide-phone class="w-4 h-4" /> Contact Urgence (Parents)
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -152,38 +152,58 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom du Père</label>
+
+                            <input type="text" name="name_father" placeholder="ex: John Doe"
+                                class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        @error('name_father')
+                            <span class="text-xs text-danger mt-1">{{ $message }}</span>
+                        @enderror
+                        <div>
+                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de la Mère</label>
+                            <input type="text" name="name_mother" placeholder="ex: Jane Doe"
+                                class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                            @error('name_mother')
+                                <span class="text-xs text-danger mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="space-y-6">
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm">
-                    <h2 class="text-[10px] font-black uppercase text-primary mb-6 tracking-widest flex items-center gap-2">
+                    <h2 class="text-[10px] font-black  text-primary mb-6  flex items-center gap-2">
                         <x-lucide-school class="w-4 h-4" /> Affectation
                     </h2>
-<div>
-    <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de destination</label>
-    <select name="classe_id"
-        class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-        required>
-        <option value="">-- Choisir une classe --</option>
-        
-        @foreach ($classes as $classe)
-            <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
-                {{ $classe->nom }}
-            </option>
-        @endforeach
-    </select>
-</div>
+                    <div>
+                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de destination</label>
+                        <select name="classe_id"
+                            class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                            required>
+                            <option value="">-- Choisir une classe --</option>
+
+                            @foreach ($classes as $classe)
+                                <option value="{{ $classe->id }}"
+                                    {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
+                                    {{ $classe->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="mt-8 border-t border-border pt-6">
                         <button type="submit"
-                            class="w-full bg-primary text-white font-black py-4 rounded shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs tracking-widest">
+                            class="w-full bg-primary text-white font-black py-4 rounded shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all  text-xs ">
                             Valider l'Inscription
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm text-center">
-                    <h2 class="text-[10px] font-black  text-muted-foreground mb-4 tracking-widest text-left">Photo
+                    <h2 class="text-[10px] font-black  text-muted-foreground mb-4  text-left">Photo
                         d'identité</h2>
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mx-auto mb-4 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
