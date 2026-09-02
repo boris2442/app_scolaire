@@ -14,12 +14,7 @@
 
             <div class="relative inline-block text-left menu-wrapper">
                 <button class="menu-trigger p-2 hover:bg-secondary rounded-full transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="1" />
-                        <circle cx="12" cy="5" r="1" />
-                        <circle cx="12" cy="19" r="1" />
-                    </svg>
+                  <x-lucide-more-vertical class="w-5 h-5" />
                 </button>
 
                 <div
@@ -172,18 +167,13 @@
                 <summary
                     class="cursor-pointer p-4 font-semibold text-sm flex items-center justify-between bg-card hover:bg-secondary/40 transition select-none list-none">
                     <span class="flex items-center gap-2 text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
+                        <x-lucide-upload class="w-5 h-5" />
                         Importer des élèves (Excel)
                     </span>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200 text-foreground/60"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <span
+                        class="transition-transform duration-300 group-open:rotate-180 text-muted-foreground flex items-center">
+                        <x-lucide-chevron-down class="w-4 h-4" />
+                    </span>
                 </summary>
 
                 <!-- Contenu qui s'affiche au dépliement -->
@@ -234,11 +224,7 @@
                     <div class="pt-4 border-t border-border">
                         <h4
                             class="text-xs font-bold text-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <x-lucide-file-text class="w-4 h-4 text-primary" />
                             Modèle de structure requis pour les colonnes de votre fichier Excel :
                         </h4>
 

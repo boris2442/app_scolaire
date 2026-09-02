@@ -6,10 +6,7 @@
         <div class="mb-6">
             <a href="{{ route('admin.evaluations.index') }}"
                 class="inline-flex items-center text-[10px] tracking-widest font-black hover:text-primary transition-all text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-                </svg>
+                <x-lucide-arrow-left class="w-4 h-4 mr-1" />
                 Retour aux evaluations
             </a>
         </div>

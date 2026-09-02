@@ -56,9 +56,7 @@
                     </div>
 
                     <div class="p-4 bg-primary/5 border border-primary/10 rounded-xl flex items-start space-x-3">
-                        <svg class="w-5 h-5 text-primary mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                <x-lucide-info class="w-5 h-5 text-primary mt-0.5" />
                         <p class="text-xs text-gray-500 leading-relaxed">
                             Toute modification sera immédiatement répercutée sur les classes et enseignants rattachés à ce
                             département. Assurez-vous que le <strong>Code</strong> reste unique.

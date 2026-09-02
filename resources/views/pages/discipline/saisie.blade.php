@@ -6,12 +6,7 @@
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-foreground">
                 <a href="{{ route('discipline.index') }}" title="Retour à la liste des classes"
-                    aria-label="Retour à la liste des classes" class="text-primary hover:underline"><svg
-                        class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg></a>
+                    aria-label="Retour à la liste des classes" class="text-primary hover:underline"><x-lucide-arrow-left class="inline-block w-5 h-5 mr-2" /></a>
                 Saisie Disciplinaire
             </h2>
             <p class="text-sm text-muted-foreground mt-1">

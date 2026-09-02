@@ -5,9 +5,40 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'AcademiaPro ') }}</title>
+    <title>{{ config('app.name', 'AcademiaPro | Logiciel de Gestion Scolaire & Suivi Académique ') }}</title>
+<meta name="description" content="AcademiaPro est la solution tout-en-un pour les établissements scolaires : gestion des notes, calcul automatique des moyennes, imports Excel et génération rapide des bulletins PDF.">
+    <meta name="keywords" content="gestion scolaire, bulletins de notes, calcul moyennes, logiciel école, gestion élèves, Cameroun, AcademiaPro">
+    <meta name="author" content="AcademiaPro">
+    <meta name="robots" content="index, follow">
 
-    <script>
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://boris.espacecameroun.com">
+   <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boris.espacecameroun.com">
+    <meta property="og:title" content="AcademiaPro | Simplifiez la Gestion Académique de votre Établissement">
+    <meta property="og:description" content="Saisie des notes, calculs automatisés, gestion des absences et impression des bulletins en quelques clics.">
+    <meta property="og:image" content="https://boris.espacecameroun.com/images/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://boris.espacecameroun.com">
+    <meta name="twitter:title" content="AcademiaPro | Logiciel de Gestion Scolaire">
+    <meta name="twitter:description" content="Découvrez AcademiaPro : la plateforme moderne de gestion des notes et bulletins scolaires.">
+    <meta name="twitter:image" content="https://boris.espacecameroun.com/images/logo.png">
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.png') }}">
+   
+   
+   
+   
+   <script>
         (function() {
             const theme = localStorage.getItem('color-theme') ||
                 (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches ?
@@ -19,7 +50,8 @@
             }
         })();
     </script>
-
+    
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -163,10 +195,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
+                           <x-lucide-users class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Inscriptions & Niveaux</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -178,10 +207,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 11h.01M12 7h.01M15 11h.01M15 14h.01M13 21h-2a2 2 0 01-2-2v-1a2 2 0 00-2-2H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2h-2a2 2 0 00-2 2v1z" />
-                            </svg>
+                            <x-lucide-calculator class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Moyennes & Séquences</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -193,10 +219,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
+                            <x-lucide-bar-chart-3 class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Palmarès & Statistiques</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -205,7 +228,7 @@
                         </p>
                     </div>
 
-                
+
                 </div>
             </div>
         </section>
@@ -228,10 +251,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                          <x-lucide-calendar class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Années Scolaires & Périodes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -244,10 +264,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                            </svg>
+                           <x-lucide-list class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Départements & Classes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -260,10 +277,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292MM15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+                           <x-lucide-users class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Inscriptions & Fiches Élèves</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -276,10 +290,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 11h.01M12 7h.01M15 11h.01M15 14h.01M13 21h-2a2 2 0 01-2-2v-1a2 2 0 00-2-2H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2h-2a2 2 0 00-2 2v1z" />
-                            </svg>
+                            <x-lucide-edit-3 class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Saisie des Notes & Coeffs</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -292,10 +303,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
+                        <x-lucide-bar-chart-3 class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Moyennes & Palmarès</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -309,10 +317,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
+                            <x-lucide-file-text class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Bulletins PDF & Documents</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -326,10 +331,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
+                            <x-lucide-upload class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Import & Export Excel</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -343,10 +345,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
+                            <x-lucide-book-open class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Matières & Unités d'Enseignement</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -360,10 +359,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
+                            <x-lucide-briefcase class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Gestion des Enseignants</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -377,10 +373,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
+                         <x-lucide-triangle-alert class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Discipline & Assiduité</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -390,15 +383,12 @@
                     </div>
 
 
-                        <!-- Tableau d'Honneur & Distinctions -->
+                    <!-- Tableau d'Honneur & Distinctions -->
                     <div
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
+                            <x-lucide-sparkles class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Tableau d'Honneur & Mentions</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -418,7 +408,8 @@
             <div class="flex items-center space-x-2">
                 <span class="font-bold text-foreground">Academia<span class="text-primary">Pro</span></span>
                 <span>—</span>
-                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01</span>
+                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06
+                    60 01</span>
             </div>
             <div class="text-gray-500 font-normal normal-case text-center sm:text-right">
                 &copy; {{ date('Y') }} AcademiaPro. Tous droits réservés.

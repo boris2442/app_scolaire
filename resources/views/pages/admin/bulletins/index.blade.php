@@ -40,9 +40,7 @@
                     <a href="{{ route('admin.bulletins.classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimestreId]) }}"
                         class="w-full text-center inline-flex items-center justify-center px-4 py-2.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 text-sm font-medium rounded-lg transition">
                         <span>Ouvrir </span>
-                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
+                      <x-lucide-chevron-right class="w-4 h-4 ml-1.5" />
                     </a>
                 </div>
             @endforeach

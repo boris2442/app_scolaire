@@ -39,10 +39,7 @@
                     <div class="relative inline-block text-left">
                         <button type="button" onclick="toggleMenu(this)"
                             class="menu-trigger p-2 rounded-full hover:bg-secondary text-gray-400 hover:text-foreground transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                            </svg>
+                          <x-lucide-more-vertical class="w-5 h-5" />
                         </button>
 
                         <div
@@ -80,10 +77,7 @@
                 <div
                     class="pt-4 border-t border-border flex justify-between items-center text-[10px] text-gray-400  font-semibold italic tracking-widest">
                     <div class="flex items-center">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <x-lucide-calendar class="w-3 h-3 mr-1" />
                         Créé le : {{ \Carbon\Carbon::parse($dept->created_at)->format('d/m/Y') }}
                     </div>
                     {{-- <div class="flex items-center">
