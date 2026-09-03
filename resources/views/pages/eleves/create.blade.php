@@ -34,7 +34,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de famille</label>
-                            <input type="text" name="nom" placeholder="ex: SIMO"
+                            <input type="text" name="nom" placeholder="ex: Hey"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
 
@@ -42,7 +42,7 @@
 
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Prénoms</label>
-                            <input type="text" name="prenom" placeholder="ex: Boris Aubin"
+                            <input type="text" name="prenom" placeholder="ex: Hello Joe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                             @error('prenom')
                                 <span class="text-xs text-danger mt-1">{{ $message }}</span>

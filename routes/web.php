@@ -53,7 +53,6 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
         Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
-        
     });
 
 

@@ -75,7 +75,7 @@ class EnseignantController extends Controller
         $validated = $request->validated();
 
         // Génération du mot de passe temporaire
-        $temporaryPassword = Str::password(12);
+        $temporaryPassword = Str::password(6);
 
         DB::transaction(function () use ($validated, $temporaryPassword) {
 
@@ -95,14 +95,7 @@ class EnseignantController extends Controller
             ]);
         });
 
-        // return redirect()
-        //     ->route('admin.enseignants.index')
-        //     ->with([
-        //         'success' => 'Enseignant créé avec succès !',
-        //         'temporary_password' => $temporaryPassword,
-        //         'teacher_email' => $validated['email'],
-        //         'teacher_name' => $validated['name'],
-        //     ]);
+
 
         return redirect()
             ->route('admin.enseignants.index')

@@ -71,7 +71,7 @@
 
             <div class="flex items-center space-x-3">
                 <div
-                    class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-md shadow-primary/20">
+                    class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-md shadow-primary/20">
                     A
                 </div>
                 <span class="text-lg font-bold tracking-tight text-foreground">Academia<span

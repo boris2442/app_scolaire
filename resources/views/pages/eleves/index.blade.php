@@ -8,7 +8,7 @@
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">Registre des élèves</h1>
-                <p class="text-sm text-muted-foreground">{{ $stats['total'] }} apprenants enregistrés cette année</p>
+                <p class="text-sm text-muted-foreground">{{ $eleves->total() }} apprenants enregistrés cette année</p>
             </div>
 
 
@@ -107,12 +107,12 @@
                 <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
                     <p class="text-[11px] font-medium text-muted-foreground  tracking-wider mb-1">Apprenants</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-bold">{{ $stats['total'] }}</span>
+                        <span class="text-2xl font-bold">{{ $eleves->total() }}</span>
                         <span class="text-[10px] text-primary font-medium">Inscrits</span>
                     </div>
                 </div>
 
-                <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
+                {{-- <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
                     <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Parité F/G</p>
                     <div class="flex flex-col gap-2">
                         <span class="text-lg font-semibold">{{ $stats['filles'] }}f · {{ $stats['garcons'] }}g</span>
@@ -122,11 +122,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
 
 
-                <div class="bg-card p-5 rounded-xl border border-border shadow-sm col-span-2 lg:col-span-1">
+                {{-- <div class="bg-card p-5 rounded-xl border border-border shadow-sm col-span-2 lg:col-span-1">
                     <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Répartition
                         cycles</p>
                     <div class="flex flex-wrap gap-3">
@@ -137,7 +137,7 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>
@@ -262,8 +262,8 @@
                                     <tr class="border-t border-border bg-card/50">
                                         <td class="p-2 border-r border-border italic text-foreground/40">Généré auto si
                                             vide</td>
-                                        <td class="p-2 border-r border-border font-semibold text-foreground">Simo</td>
-                                        <td class="p-2 border-r border-border">Boris Aubin</td>
+                                        <td class="p-2 border-r border-border font-semibold text-foreground">Joe</td>
+                                        <td class="p-2 border-r border-border">Jean</td>
                                         <td class="p-2 border-r border-border">M</td>
                                         <td class="p-2 border-r border-border">2005-04-12</td>
                                         <td class="p-2 border-r border-border">Bafoussam</td>
