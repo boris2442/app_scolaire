@@ -183,6 +183,8 @@ class BulletinPrintController extends Controller
             ->select(
                 'inscriptions.id as inscription_id',
                 'inscriptions.classe_id',
+                //colonne de inscription table est_redoublant
+                'inscriptions.est_redoublant',
                 'inscriptions.annee_scolaire_id',
                 'eleves.nom as eleve_nom',
                 'eleves.prenom as eleve_prenom',
@@ -191,6 +193,7 @@ class BulletinPrintController extends Controller
                 'eleves.date_naissance',
                 'eleves.lieu_naissance',
                 'classes.nom as classe_nom', // On prend directement le nom de la classe
+                'classes.section', // <-- Ajouté ici
                 'annee_scolaires.libelle as annee_libelle'
             )->first();
 
@@ -355,7 +358,6 @@ class BulletinPrintController extends Controller
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        // Récupérer les inscriptions avec les informations des élèves directement
         $inscriptionsEleves = DB::table('inscriptions')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classeId)
@@ -373,7 +375,23 @@ class BulletinPrintController extends Controller
             ->get()
             ->groupBy('inscription_id');
 
-        $resultatsEleves = [];
+        $totalEleves = $inscriptionsEleves->count();
+
+        // Initialisations des accumulateurs
+        $sommeMoyennes = 0;
+        $admis = 0;
+        $noteMax = -1;
+        $noteMin = 21;
+        $majorNom = $majorPrenom = 'Aucun';
+        $dernierNom = $dernierPrenom = 'Aucun';
+
+        $tranches = [
+            'excellence' => 0,
+            'bien'       => 0,
+            'assez_bien' => 0,
+            'passable'   => 0,
+            'echec'      => 0
+        ];
 
         foreach ($inscriptionsEleves as $eleve) {
             $id = $eleve->inscription_id;
@@ -385,75 +403,62 @@ class BulletinPrintController extends Controller
             $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
             $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
 
-            $moyenneCalculee = match ((int)$trimestreId) {
+            $m = (float) match ((int)$trimestreId) {
                 (int)$idT3 => $this->calculerMoyenneTrimestre($id, $idT3),
                 (int)$idT2 => $this->calculerMoyenneTrimestre($id, $idT2),
-                default => $this->calculerMoyenneTrimestre($id, $idT1),
+                default    => $this->calculerMoyenneTrimestre($id, $idT1),
             };
 
-            $resultatsEleves[] = [
-                'nom' => $eleve->nom,
-                'prenom' => $eleve->prenom,
-                'moyenne' => (float)$moyenneCalculee,
-            ];
-        }
+            // 1. Accumulation globale
+            $sommeMoyennes += $m;
 
-        $totalEleves = count($resultatsEleves);
-        $moyennesIndividuelles = array_column($resultatsEleves, 'moyenne');
+            // 2. Admis & Tranches
+            if ($m >= 10) $admis++;
 
-        // 1. Statistiques Générales
-        $moyenneClasse = $totalEleves > 0 ? array_sum($moyennesIndividuelles) / $totalEleves : 0;
-        $noteMax = $totalEleves > 0 ? max($moyennesIndividuelles) : 0;
-        $noteMin = $totalEleves > 0 ? min($moyennesIndividuelles) : 0;
+            if ($m >= 16)      $tranches['excellence']++;
+            elseif ($m >= 14) $tranches['bien']++;
+            elseif ($m >= 12) $tranches['assez_bien']++;
+            elseif ($m >= 10) $tranches['passable']++;
+            else              $tranches['echec']++;
 
-        $admis = count(array_filter($moyennesIndividuelles, fn($m) => $m >= 10));
-        $refuses = $totalEleves - $admis;
-        $tauxReussite = $totalEleves > 0 ? ($admis / $totalEleves) * 100 : 0;
+            // 3. Recherche du Major (Max)
+            if ($m > $noteMax) {
+                $noteMax = $m;
+                $majorNom = $eleve->nom;
+                $majorPrenom = $eleve->prenom;
+            }
 
-        // 2. Détection automatique du Major de la classe
-        $majorNom = 'Aucun';
-        $majorPrenom = '';
-        if ($totalEleves > 0) {
-            // Tri par ordre décroissant pour placer le premier en haut
-            usort($resultatsEleves, fn($a, $b) => $b['moyenne'] <=> $a['moyenne']);
-            $majorNom = $resultatsEleves[0]['nom'];
-            $majorPrenom = $resultatsEleves[0]['prenom'];
-        }
-
-        // 3. Répartition par Tranches de Moyennes
-        $tranches = [
-            'excellence' => 0, // [16 - 20]
-            'bien' => 0,       // [14 - 15.99]
-            'assez_bien' => 0, // [12 - 13.99]
-            'passable' => 0,   // [10 - 11.99]
-            'echec' => 0       // [< 10]
-        ];
-
-        foreach ($moyennesIndividuelles as $m) {
-            if ($m >= 16) {
-                $tranches['excellence']++;
-            } elseif ($m >= 14) {
-                $tranches['bien']++;
-            } elseif ($m >= 12) {
-                $tranches['assez_bien']++;
-            } elseif ($m >= 10) {
-                $tranches['passable']++;
-            } else {
-                $tranches['echec']++;
+            // 4. Recherche du Dernier (Min)
+            if ($m < $noteMin) {
+                $noteMin = $m;
+                $dernierNom = $eleve->nom;
+                $dernierPrenom = $eleve->prenom;
             }
         }
 
+        // Réajustement si la classe est vide
+        if ($totalEleves === 0) {
+            $noteMax = 0;
+            $noteMin = 0;
+        }
+
+        $moyenneClasse = $totalEleves > 0 ? $sommeMoyennes / $totalEleves : 0;
+        $refuses = $totalEleves - $admis;
+        $tauxReussite = $totalEleves > 0 ? ($admis / $totalEleves) * 100 : 0;
+
         $statsGlobales = [
-            'total_eleves' => $totalEleves,
+            'total_eleves'     => $totalEleves,
             'moyenne_generale' => number_format($moyenneClasse, 2),
-            'note_max' => number_format($noteMax, 2),
-            'note_min' => number_format($noteMin, 2),
-            'major_nom' => $majorNom,
-            'major_prenom' => $majorPrenom,
-            'admis' => $admis,
-            'refuses' => $refuses,
-            'taux_reussite' => number_format($tauxReussite, 2),
-            'tranches' => $tranches
+            'note_max'         => number_format($noteMax, 2),
+            'note_min'         => number_format($noteMin, 2),
+            'major_nom'        => $majorNom,
+            'major_prenom'     => $majorPrenom,
+            'dernier_nom'      => $dernierNom,
+            'dernier_prenom'   => $dernierPrenom,
+            'admis'            => $admis,
+            'refuses'          => $refuses,
+            'taux_reussite'    => number_format($tauxReussite, 2),
+            'tranches'         => $tranches
         ];
 
         $pdf = Pdf::loadView('pages.admin.pdf.stats-classe', compact('classe', 'trimestre', 'etablissement', 'statsGlobales'))
@@ -461,7 +466,6 @@ class BulletinPrintController extends Controller
 
         return $pdf->download("Statistiques_{$classe->nom}.pdf");
     }
-
 
 
 

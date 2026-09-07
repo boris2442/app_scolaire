@@ -285,28 +285,43 @@
 
             <table class="table-eleve">
                 <tr>
-                    <td width="60%"><strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
-                        {{ $inscription->eleve_prenom }}</td>
-                    <td width="40%"><strong>NÉ(E) LE :</strong>
+                    <td width="60%">
+                        <strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
+                        {{ $inscription->eleve_prenom }}
+                    </td>
+                    <td width="40%">
+                        <strong>NÉ(E) LE :</strong>
                         {{ $inscription->date_naissance ? date('d/m/Y', strtotime($inscription->date_naissance)) : 'N/A' }}
                         À
-                        {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}</td>
+                        {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
+                    </td>
                 </tr>
                 <tr>
-                    <td><strong>Redoublant :</strong> {{ $inscription->inscription->est_redoublant ?? 'N/A' }}</td>
-                    <td>
+                    <td width="60%">
                         <table style="width:100%; margin:0; border:none;">
                             <tr style="border:none;">
-                                <td style="border:none; padding:0;" width="33%">
-                                    <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
-                                    <em
-                                        style="font-style: italic; font-size: 0.9em; opacity: 0.85;">({{ ucfirst($inscription->section ?? ($inscription->classe?->section ?? '')) }})</em>
+                                <td style="border:none; padding:0;" width="50%">
+                                    <strong>REDOUBLANT :</strong> {{ $inscription->est_redoublant ? 'Oui' : 'Non' }}
                                 </td>
-                                <td style="border:none; padding:0;" width="33%">
-                                    <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
-                                </td>
-                                <td style="border:none; padding:0;" width="34%">
+                                <td style="border:none; padding:0;" width="50%">
                                     <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="40%">
+                        <table style="width:100%; margin:0; border:none;">
+                            <tr style="border:none;">
+                                <td style="border:none; padding:0;" width="60%">
+                                    <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
+                                    @if (!empty($inscription->section))
+                                        <em style="font-style: italic; font-size: 0.9em; opacity: 0.85;">
+                                            ({{ ucfirst($inscription->section) }})
+                                        </em>
+                                    @endif
+                                </td>
+                                <td style="border:none; padding:0;" width="40%">
+                                    <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
                                 </td>
                             </tr>
                         </table>

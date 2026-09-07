@@ -192,7 +192,7 @@
     <!-- Indicateurs Clés de Performance (KPIs) -->
     <!-- Indicateurs Clés de Performance (KPIs) -->
     <div class="section-title">Indicateurs Principaux de la Classe</div>
-    <table class="kpi-table">
+    {{-- <table class="kpi-table">
         <thead>
             <tr>
                 <th>Moyenne Générale</th>
@@ -216,7 +216,40 @@
                 </td>
             </tr>
         </tbody>
+    </table> --}}
+
+    <table class="kpi-table">
+        <thead>
+            <tr>
+                <th>Moyenne Générale</th>
+                <th>Note Maximale (Major)</th>
+                <th>Note Minimale (Dernier)</th>
+                <th>Taux de Réussite</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="color: #2563eb;">{{ $statsGlobales['moyenne_generale'] }} / 20</td>
+                <td style="color: #16a34a;">
+                    <strong>{{ $statsGlobales['note_max'] }} / 20</strong><br>
+                    <span style="font-size: 10px; color: #475569; font-weight: normal;">
+                        ({{ $statsGlobales['major_nom'] }} {{ $statsGlobales['major_prenom'] }})
+                    </span>
+                </td>
+                <td style="color: #dc2626;">
+                    <strong>{{ $statsGlobales['note_min'] }} / 20</strong><br>
+                    <span style="font-size: 10px; color: #475569; font-weight: normal;">
+                        ({{ $statsGlobales['dernier_nom'] }} {{ $statsGlobales['dernier_prenom'] }})
+                    </span>
+                </td>
+                <td style="color: {{ $statsGlobales['taux_reussite'] >= 50 ? '#16a34a' : '#dc2626' }};">
+                    {{ $statsGlobales['taux_reussite'] }} %
+                </td>
+            </tr>
+        </tbody>
     </table>
+
+
 
     <!-- Synthèse Admis / Refusés -->
     <table class="kpi-table" style="margin-top: 10px;">
