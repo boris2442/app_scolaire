@@ -222,7 +222,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         ->name('admin.bulletins.imprimer-classe');
 
     // Route pour générer le PDF d'un seul élève isolé
-    Route::get('/admin/report/student/{inscription_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerEleve'])
+    Route::get('/admin/report/student/{inscriptionId}/print/{trimestreId}', [BulletinPrintController::class, 'imprimerEleve'])
         ->name('admin.bulletins.imprimer-eleve');
 
 

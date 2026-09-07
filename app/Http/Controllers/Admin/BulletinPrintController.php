@@ -71,21 +71,105 @@ class BulletinPrintController extends Controller
     }
 
     // 3. Impression d'un SEUL élève
+    // public function imprimerEleve($inscriptionId, $trimestreId)
+    // {
+    //     $etablissement = DB::table('etablissements')->first();
+    //     $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+    //     $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+
+    //     $bulletins = [
+    //         $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences),
+    //     ];
+
+    //     $stats = $this->calculerStatistiquesEnMemoire($bulletins);
+    //     $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
+
+    //     return $pdf->download("Bulletin_Eleve.pdf");
+    // }
+
+
+    // 3. Impression d'un SEUL élève (avec rang et statistiques de la classe calculés)
+    // 3. Impression d'un SEUL élève (Optimisée pour la RAM)
     public function imprimerEleve($inscriptionId, $trimestreId)
     {
         $etablissement = DB::table('etablissements')->first();
         $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
         $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
 
-        $bulletins = [
-            $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences),
+        // 1. Charger uniquement les données complètes de CET élève
+        $bulletin = $this->chargerDonneesBulletin($inscriptionId, $trimestreId, $sequences);
+
+        $anneeActiveId = $bulletin['inscription']->annee_scolaire_id;
+        $classeId = $bulletin['inscription']->classe_id;
+
+        $idT1 = $this->getTrimestreIdParIndex($anneeActiveId, 0);
+        $idT2 = $this->getTrimestreIdParIndex($anneeActiveId, 1);
+        $idT3 = $this->getTrimestreIdParIndex($anneeActiveId, 2);
+
+        $bulletin['moyenne_t1'] = $this->calculerMoyenneTrimestre($inscriptionId, $idT1);
+        $bulletin['moyenne_t2'] = $this->calculerMoyenneTrimestre($inscriptionId, $idT2);
+        $bulletin['moyenne_t3'] = $this->calculerMoyenneTrimestre($inscriptionId, $idT3);
+
+        $bulletin['moyenne_annuelle'] = ($bulletin['moyenne_t1'] + $bulletin['moyenne_t2'] + $bulletin['moyenne_t3']) / 3;
+        $bulletin['moyenne_calculee'] = ($trimestreId == $idT3) ? $bulletin['moyenne_t3'] : (($trimestreId == $idT2) ? $bulletin['moyenne_t2'] : $bulletin['moyenne_t1']);
+        $bulletin['est_troisieme_trimestre'] = ($trimestreId == $idT3);
+
+        // 2. Récupérer uniquement les identifiants de ses camarades de classe
+        $inscriptionsClasse = DB::table('inscriptions')
+            ->where('classe_id', $classeId)
+            ->where('annee_scolaire_id', $anneeActiveId)
+            ->pluck('id');
+
+        // 3. Calculer légèrements les moyennes des camarades (sans tout charger en RAM)
+        $moyennesClasse = [];
+        $rangTrimestriel = 1;
+        $rangAnnuel = 1;
+
+        foreach ($inscriptionsClasse as $id) {
+            $moyT1 = $this->calculerMoyenneTrimestre($id, $idT1);
+            $moyT2 = $this->calculerMoyenneTrimestre($id, $idT2);
+            $moyT3 = $this->calculerMoyenneTrimestre($id, $idT3);
+
+            $moyAnnuelle = ($moyT1 + $moyT2 + $moyT3) / 3;
+            $moyCalculee = ($trimestreId == $idT3) ? $moyT3 : (($trimestreId == $idT2) ? $moyT2 : $moyT1);
+
+            $moyennesClasse[] = (float)$moyCalculee;
+
+            // Calcul du rang en comparant directement les chiffres
+            if ($id != $inscriptionId) {
+                if ($moyCalculee > $bulletin['moyenne_calculee']) {
+                    $rangTrimestriel++;
+                }
+                if ($moyAnnuelle > $bulletin['moyenne_annuelle']) {
+                    $rangAnnuel++;
+                }
+            }
+        }
+
+        $bulletin['rang'] = $rangTrimestriel;
+        $bulletin['rang_annuel'] = $rangAnnuel;
+
+        // 4. Statistiques légères de la classe
+        $totalEleves = count($moyennesClasse);
+        $stats = [
+            'moyenne' => $totalEleves > 0 ? array_sum($moyennesClasse) / $totalEleves : 0,
+            'min' => $totalEleves > 0 ? min($moyennesClasse) : 0,
+            'max' => $totalEleves > 0 ? max($moyennesClasse) : 0,
+            'taux_reussite' => $totalEleves > 0 ? (count(array_filter($moyennesClasse, fn($m) => $m >= 10)) / $totalEleves) * 100 : 0
         ];
 
-        $stats = $this->calculerStatistiquesEnMemoire($bulletins);
-        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))->setPaper('a4', 'portrait');
+        $bulletins = [$bulletin];
 
-        return $pdf->download("Bulletin_Eleve.pdf");
+        // Génération du PDF
+        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download("Bulletin_{$bulletin['inscription']->eleve_nom}.pdf");
     }
+
+
+
+
 
     // 4. Impression de TOUTE la classe d'un coup
     public function imprimerClasse($classeId, $trimestreId)
