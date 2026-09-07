@@ -8,9 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sequence extends Model
 {
-protected $fillable = ['nom', 'trimestre_id'];
+    protected $fillable = [
+        'nom',
+        'trimestre_id',
+        'submission_deadline',
+        'is_closed',
+    ];
 
-/**
+    /**
      * Une séquence appartient à un trimestre
      */
     public function trimestre(): BelongsTo

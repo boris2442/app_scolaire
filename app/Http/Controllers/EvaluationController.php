@@ -143,6 +143,20 @@ class EvaluationController extends Controller
     {
         $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
 
+
+        // --- VERIFICATION DE CLOTURE ---
+        $sequence = $evaluation->sequence;
+
+        if ($sequence->is_closed || ($sequence->submission_deadline && now()->greaterThan($sequence->submission_deadline))) {
+            return redirect()->route('admin.evaluations.index')
+                ->with('error', 'La saisie des notes pour cette évaluation est verrouillée (séquence clôturée ou date limite dépassée).');
+        }
+        //
+
+
+
+
+
         // Conservé : la table 'inscriptions' utilise bien annee_scolaire_id
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
             ->where('annee_scolaire_id', $this->anneeActive->id)
@@ -183,6 +197,21 @@ class EvaluationController extends Controller
             return back()->with('error', "Action impossible : profil enseignant non trouvé.");
         }
 
+        // --- VERIFICATION DE CLOTURE ---
+        $sequence = Sequence::findOrFail($request->sequence_id);
+
+        if ($sequence->is_closed) {
+            return back()->with('error', "Impossible de créer une évaluation : la période pour la {$sequence->nom} est clôturée par l'administration.");
+        }
+
+        if ($sequence->submission_deadline && now()->greaterThan($sequence->submission_deadline)) {
+            return back()->with('error', "Impossible de créer une évaluation : la date limite de saisie pour la {$sequence->nom} est dépassée.");
+        }
+
+
+
+
+
         $affectation = Affectation::findOrFail($request->affectation_id);
 
         // ICI : On cherche si cette évaluation existe déjà pour ne pas perdre les notes
@@ -214,6 +243,16 @@ class EvaluationController extends Controller
     public function bulkStoreNotes(Request $request, $id)
     {
         $evaluation = Evaluation::findOrFail($id);
+
+
+        // --- VERIFICATION DE CLOTURE ---
+        $sequence = $evaluation->sequence;
+
+        if ($sequence->is_closed || ($sequence->submission_deadline && now()->greaterThan($sequence->submission_deadline))) {
+            return redirect()->route('admin.evaluations.index')
+                ->with('error', 'Enregistrement refusé : la période de saisie pour cette séquence est fermée.');
+        }
+
 
         // 1. Synchroniser les leçons cochées (même si aucune n'est cochée, ça nettoie)
         $evaluation->lecons()->sync($request->input('lesson_ids', []));

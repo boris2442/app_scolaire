@@ -70,6 +70,12 @@
                     <span class="sidebar-label ml-3 font-medium">Accueil</span>
                 </a>
             </li>
+
+
+
+
+
+
             @can('access-admin')
                 <li>
 
@@ -121,6 +127,18 @@
                 </li> --}}
             @endcan
             @canany(['access-admin', 'access-censeur', 'access-secretaire'])
+                <li>
+
+
+                    <a href="{{ route('admin.sequences.index') }}" title="Verouillage des evaluations"
+                        aria-label="Verouillage des evaluations"
+                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.sequences.') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
+                        <x-lucide-lock class="w-4 h-4 text-center" />
+                        <span class="sidebar-label ml-3 font-medium">Clôture Séquences</span>
+                    </a>
+                </li>
+
+
                 <li>
                     <a href="{{ route('admin.departments.index') }}" title="Départements" aria-label="Départements"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.departments.index') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
@@ -196,7 +214,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('settings.classes.index') }}" title="Clases et salles" aria-label="Clases et salles"
+                    <a href="{{ route('settings.classes.index') }}" title="Clases et salles"
+                        aria-label="Clases et salles"
                         class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
                         {{-- <i class="fas fa-school w-6 text-center"></i> --}}
                         <x-lucide-building class="w-4 h-4 text-center" />
@@ -249,15 +268,7 @@
                     </a>
                 </li>
             @endcanany
-            {{-- @can('access-censeur')
-                <li>
-                    <a href="{{ route('admin.bulletins.index') }}"title="impresion" aria-label="impresion"
-                        class="flex items-center px-3 py-2.5 rounded transition-colors group {{ request()->routeIs('admin.statistiques.registre') ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-secondary hover:text-primary' }}">
-                        <x-lucide-file-text class="w-4 h-4 text-center" />
-                        <span class="sidebar-label ml-3">Impressions</span>
-                    </a>
-                </li>
-            @endcan --}}
+
 
             @can('access-enseignant')
                 <li>

@@ -31,6 +31,7 @@ use App\Http\Controllers\ParametreAcademiqueController;
 use App\Http\Controllers\PresenceAndServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeanceController;
+use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\TeacherProfileController;
 use App\Http\Controllers\TrimestreController;
 use App\Http\Controllers\UserController;
@@ -194,6 +195,12 @@ Route::middleware(['auth'])->group(function () {});
 //Route with censor and admin
 
 Route::middleware(['auth', 'censeur'])->group(function () {
+
+    // Routes de gestion du verrouillage des séquences
+    Route::get('/sequences', [SequenceController::class, 'index'])->name('admin.sequences.index');
+    Route::put('/sequences/{id}', [SequenceController::class, 'update'])->name('admin.sequences.update');
+
+
 
     Route::get('/admin/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
     // Page principale : La grille avec le choix du trimestre
