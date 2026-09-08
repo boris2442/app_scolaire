@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -68,6 +70,28 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'Utilisateur supprimé avec succès.');
+        return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
+
+
+    /**
+     * Réinitialise le mot de passe d'un enseignant par l'administrateur.
+     */
+    public function resetPassword(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+
+        $plainPassword = Str::random(8);
+
+        $user->update([
+            'password' => Hash::make($plainPassword),
+            'must_change_password' => true,
+        ]);
+
+        return back()
+            ->with('success', "Mot de passe réinitialisé pour {$user->name} !")
+            ->with('generated_password', $plainPassword);
     }
 }

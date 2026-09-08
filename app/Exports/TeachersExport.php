@@ -22,12 +22,12 @@ class TeachersExport implements FromCollection, WithHeadings
                     $enseignant->matricule,
                     $enseignant->user->name,
                     $enseignant->user->phone,
-
                     $enseignant->user->email,
                     $enseignant->departement ? $enseignant->departement->nom : '',
                 ];
             });
     }
+    
     public function headings(): array
     {
         return ['ID', 'Matricule', 'Nom complet', 'Téléphone', 'Email', 'Département'];

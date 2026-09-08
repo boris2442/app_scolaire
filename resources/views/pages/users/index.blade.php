@@ -1,6 +1,32 @@
 @extends('layouts.admin.admin-layout')
 
 @section('content')
+    <script>
+        window.copyGeneratedPassword = function(buttonElement) {
+            const passwordText = document.getElementById('passwordValue').textContent.trim();
+
+            navigator.clipboard.writeText(passwordText).then(() => {
+                const iconCopy = buttonElement.querySelector('.icon-copy');
+                const iconCheck = buttonElement.querySelector('.icon-check');
+                const textSpan = buttonElement.querySelector('.btn-text');
+
+                // Bascule vers l'état "Copié !"
+                if (iconCopy) iconCopy.classList.add('hidden');
+                if (iconCheck) iconCheck.classList.remove('hidden');
+                if (textSpan) textSpan.textContent = 'Copié !';
+
+                // Retour à l'état initial après 2 secondes
+                setTimeout(() => {
+                    if (iconCopy) iconCopy.classList.remove('hidden');
+                    if (iconCheck) iconCheck.classList.add('hidden');
+                    if (textSpan) textSpan.textContent = 'Copier';
+                }, 2000);
+            }).catch(err => {
+              
+            });
+        };
+    </script>
+
     <!-- En-tête avec le titre et le compteur -->
     <div class="flex justify-between items-center mb-6">
         <div>
@@ -14,7 +40,37 @@
             </p>
         </div>
     </div>
+    @if (session('generated_password'))
+        <div
+            class="p-4 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] text-sm space-y-3 shadow-sm">
+            <div class="flex items-center gap-2 text-[var(--success)] font-semibold">
+                <x-lucide-check-circle-2 class="w-5 h-5" />
+                <span>{{ session('success') }}</span>
+            </div>
 
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border)]">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 dark:text-slate-400">Nouveau mot de passe généré :</span>
+                    <code id="passwordValue"
+                        class="px-3 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--primary)] font-mono font-bold text-base tracking-wider border border-[var(--border)]">
+                        {{ session('generated_password') }}
+                    </code>
+                </div>
+
+                <!-- Bouton de copie avec icônes Blade -->
+                <button type="button" onclick="copyGeneratedPassword(this)"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold hover:opacity-90 active:scale-95 transition cursor-pointer shadow-sm">
+                    <span class="icon-copy flex items-center">
+                        <x-lucide-copy class="w-3.5 h-3.5" />
+                    </span>
+                    <span class="icon-check hidden flex items-center">
+                        <x-lucide-check class="w-3.5 h-3.5 text-emerald-300" />
+                    </span>
+                    <span class="btn-text">Copier</span>
+                </button>
+            </div>
+        </div>
+    @endif
     <!-- Barre de recherche -->
     <form method="GET" action="{{ route('admin.users.index') }}" class="mb-6 flex gap-3 items-center">
         <div class="relative flex-1">
@@ -50,8 +106,8 @@
                         <th class="p-4">Utilisateur</th>
                         <th class="p-4">Email / Contact</th>
                         @can('access-admin')
-                        <th class="p-4">Rôle Actuel</th>
-                        <th class="p-4 text-right">Actions</th>
+                            <th class="p-4">Rôle Actuel</th>
+                            <th class="p-4 text-right">Actions</th>
                         @endcan
                     </tr>
                 </thead>
@@ -96,6 +152,20 @@
                                         </button>
                                     </form>
                                 </td>
+                                <td class="p-4 text-right">
+                                    <form method="POST" action="{{ route('admin.enseignants.reset-password', $user->id) }}"
+                                        class="inline">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <button type="submit"
+                                            onclick="return confirm('Générer un nouveau mot de passe pour {{ $user->name }} ?')"
+                                            class="p-2 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-lg transition"
+                                            title="Générer un mot de passe">
+                                            <x-lucide-key-round class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                </td>
                             @endcan
                         </tr>
                     @empty
@@ -113,4 +183,24 @@
     <div class="mt-4">
         {{ $users->links() }}
     </div>
+    <script>
+        window.closeResetModal = function() {
+            const modal = document.getElementById('resetPasswordModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+
+       
+    </script>
 @endsection

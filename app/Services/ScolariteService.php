@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Cache;
 class ScolariteService
 {
     /**
-     * Récupère l'année scolaire active.
-     * On utilise le cache (optionnel) pour ne pas harceler la base de données.
+   
      */
     public function getAnneeActive()
     {

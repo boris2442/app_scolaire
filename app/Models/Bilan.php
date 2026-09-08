@@ -12,7 +12,7 @@ class Bilan extends Model
         'annee_scolaire_id',
         'total_points',
         'total_coefs',
-        'moyenne', // <--- ASSURE-TOI QUE CECI EST BIEN ICI
+        'moyenne', 
         'effectif_classe',
         'mention',
         'rang',
