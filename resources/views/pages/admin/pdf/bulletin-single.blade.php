@@ -5,24 +5,28 @@
     <meta charset="UTF-8">
     <title>Bulletin - {{ $bulletins[0]['inscription']->eleve_nom ?? 'Classe' }}</title>
     <style>
-        /* Configuration de la page A4 et marges minimales pour forcer la page unique */
+        /* Configuration de la page A4 et marges minimales */
         @page {
-            margin: 15px 20px;
+            margin: 10mm 12mm 10mm 12mm;
         }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 10px;
+            font-size: 9.5px;
             line-height: 1.15;
             color: #000;
             margin: 0;
             padding: 0;
         }
 
+        /* td {
+            padding: 6px 0 !important;
+        } */
+
         /* En-tête officiel MINESEC */
         .en-tete {
             width: 100%;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .bloc-gauche {
@@ -38,11 +42,6 @@
             float: left;
             width: 20%;
             text-align: center;
-        }
-
-        .bloc-centre img {
-            max-height: 40px;
-            max-width: 60px;
         }
 
         .bloc-droite {
@@ -61,66 +60,60 @@
         /* Titre du Bulletin */
         .titre-bulletin {
             text-align: center;
-            margin: 5px 0;
+            margin: 8px 0 10px 0;
+            /* au lieu de 4px 0 6px 0 */
+            padding: 4px 0;
             border-top: 1.5px solid #000;
             border-bottom: 1.5px solid #000;
-            padding: 3px 0;
+
         }
 
         .titre-bulletin h2 {
             margin: 0;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .titre-bulletin p {
             margin: 1px 0 0 0;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
         }
 
-        /* ==========================================================================
-           MODIFICATIONS ICI : Protection contre le débordement de page
-           ========================================================================== */
-
-        /* Tableaux de structures */
+        /* Tableaux généraux */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 5px;
-            /* Réduit de 6px à 5px */
+            margin-bottom: 10px;
+            /* au lieu de 5px */
             page-break-inside: avoid;
-            /* RECOMMANDÉ : Empêche un tableau de se couper en deux */
         }
 
         th,
         td {
             border: 1px solid #000;
-            padding: 3px 4px;
+            padding: 2px 4px;
             vertical-align: middle;
         }
 
         /* Infos élève */
         .table-eleve td {
-            font-size: 9.5px;
+            font-size: 9px;
             padding: 2px 4px;
         }
 
         /* Tableau des Notes */
         .table-notes th {
-            background-color: #ffffff;
-            font-size: 10px;
+            background-color: #f4f4f4;
+            font-size: 9px;
             font-weight: bold;
+            text-align: center;
         }
 
         .table-notes td {
-            font-size: 9.5px;
-        }
-
-        .bg-groupe {
-            background-color: #f0f4f8;
-            font-weight: bold;
+            font-size: 9px;
+            padding: 6px 4px;
         }
 
         .text-left {
@@ -135,81 +128,36 @@
             text-align: right;
         }
 
-        /* Bloc Statistiques & Décisions */
+        /* Bloc Discipline & Stats */
         .table-stats th {
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: bold;
+            background-color: #f4f4f4;
         }
 
         .table-stats td {
-            font-size: 10px;
-            padding: 4px;
-            /* Réduit de 5px à 4px */
-            font-weight: bold;
+            font-size: 9px;
+            padding: 3px;
         }
 
-        /* Discipline */
         .table-discipline td {
-            font-size: 9px;
-            padding: 4px;
+            font-size: 8.5px;
+            padding: 3px;
             text-transform: uppercase;
-            font-weight: bold;
         }
 
         /* Signatures (Bas de page) */
         .table-signatures td {
             border: 1px solid #000;
-            height: 55px;
-            /* IMPORTANT : Réduit de 75px à 55px pour laisser respirer le bas de page */
+            height: 90px;
+            /* Espace suffisant pour les cachets officiels */
             vertical-align: top;
-            padding: 4px;
-            font-size: 9.5px;
+            padding: 15px;
+            font-size: 9px;
             font-weight: bold;
         }
 
-        /* Gestion de la structure de page par étudiant */
         .page-bulletin {
-
-            page-break-inside: avoid;
-            /* CRITIQUE : Dit à DomPDF que TOUT le bulletin doit tenir sur une seule page */
-        }
-
-        .page-bulletin:last-child {
-            page-break-after: avoid !important;
-            /* Supprime la page blanche finale du document */
-        }
-
-
-
-
-
-
-
-        @page {
-            margin: 10mm 15mm 10mm 15mm;
-            /* Réduit un peu les marges haut/bas de la feuille */
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .page-bulletin {
-
-            /* Fait un saut de page après chaque élève */
-            page-break-inside: avoid;
-            /* Interdit de couper un bulletin en deux */
-        }
-
-        /* LA SÉCURITÉ : Désactive le saut de page pour le tout dernier élève */
-        .page-bulletin:last-child {
-            page-break-after: avoid !important;
-            break-after: avoid !important;
-        }
-
-        /* Empêche les tableaux de sauter une page à l'intérieur s'ils manquent de place */
-        table {
             page-break-inside: avoid;
         }
     </style>
@@ -219,39 +167,49 @@
 
     @foreach ($bulletins as $b)
         @php
-
-            // On extrait les variables pour que ton code en dessous ne change pas
             $inscription = $b['inscription'];
             $totalElevesClasse = $b['totalElevesClasse'];
             $matieres = $b['matieres'];
             $notes = $b['notes'];
             $coefficients = $b['coefficients'];
-            $bilan = $b['bilan'];
+            $suivi = $b['suivi'];
+
+            // Variables calculées dynamiquement
+            $moyenneEleve = $b['moyenneEleve'] ?? 0;
+            $rangEleve = $b['rang'] ?? 'N/A';
         @endphp
+
+
+
 
         <div class="page-bulletin">
 
-
-
-
-
-
-            <div class="en-tete">
-                <div class="bloc-gauche">
-                    REPUBLIQUE DU CAMEROUN<br>
-                    Paix-Travail-Patrie<br>
-                    MINISTERE DES ENSEIGNEMENTS SECONDAIRES<br>
-                    <span
-                        style="text-transform: uppercase;">{{ $etablissement->nom ?? 'Établissement Scolaire' }}</span><br>
-                    <span
-                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->slogan }}"</span><br>
-                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->adresse }} —
-                        {{ $etablissement->telephone }}</span>
+            <!-- EN-TÊTE OFFICIEL -->
+            <!-- EN-TÊTE OFFICIEL -->
+            <div class="en-tete" style="line-height: 1.45;">
+                <div class="bloc-gauche" style="line-height: 1.45;">
+                    <div>REPUBLIQUE DU CAMEROUN</div>
+                    <div>Paix-Travail-Patrie</div>
+                    <div>MINISTERE DES ENSEIGNEMENTS SECONDAIRES</div>
+                    <div>
+                        <span
+                            style="text-transform: uppercase; font-weight: bold;">{{ $etablissement->nom ?? 'Établissement Scolaire' }}</span>
+                    </div>
+                    @if (!empty($etablissement->slogan))
+                        <div>
+                            <span
+                                style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->slogan }}"</span>
+                        </div>
+                    @endif
+                    <div>
+                        <span style="font-weight: normal; font-size: 7.5px;">{{ $etablissement->adresse ?? '' }} —
+                            {{ $etablissement->telephone ?? '' }}</span>
+                    </div>
                 </div>
 
                 <div class="bloc-centre">
                     @php
-                        $vraiCheminDansPublic = 'storage/' . $etablissement->logo;
+                        $vraiCheminDansPublic = 'storage/' . ($etablissement->logo ?? '');
                     @endphp
 
                     @if ($etablissement->logo && file_exists(public_path($vraiCheminDansPublic)))
@@ -265,35 +223,46 @@
                     @endif
                 </div>
 
-                <div class="bloc-droite">
-                    REPUBLIC OF CAMEROON<br>
-                    Peace-Work-Fatherland<br>
-                    MINISTRY OF SECONDARY EDUCATION<br>
-                    <span
-                        style="text-transform: uppercase;">{{ $etablissement->english_name ?? 'School Complex' }}</span><br>
-                    <span
-                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span><br>
-                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->email }}</span>
+                <div class="bloc-droite" style="line-height: 1.45;">
+                    <div>REPUBLIC OF CAMEROON</div>
+                    <div>Peace-Work-Fatherland</div>
+                    <div>MINISTRY OF SECONDARY EDUCATION</div>
+                    <div>
+                        <span
+                            style="text-transform: uppercase; font-weight: bold;">{{ $etablissement->english_name ?? 'School Complex' }}</span>
+                    </div>
+                    @if (!empty($etablissement->english_slogan))
+                        <div>
+                            <span
+                                style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span>
+                        </div>
+                    @endif
+                    <div>
+                        <span style="font-weight: normal; font-size: 7.5px;">{{ $etablissement->email ?? '' }}</span>
+                    </div>
                 </div>
                 <div class="clear"></div>
             </div>
 
+
+
+            <!-- TITRE DU BULLETIN -->
             <div class="titre-bulletin">
                 <h2>BULLETIN DE NOTES DU {{ $trimestre->nom }}</h2>
                 <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
             </div>
 
+            <!-- INFOS ÉLÈVE -->
             <table class="table-eleve">
                 <tr>
-                    <td width="60%">
+                    <td width="60%" style="text-transform:uppercase">
                         <strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
                         {{ $inscription->eleve_prenom }}
                     </td>
                     <td width="40%">
                         <strong>NÉ(E) LE :</strong>
                         {{ $inscription->date_naissance ? date('d/m/Y', strtotime($inscription->date_naissance)) : 'N/A' }}
-                        À
-                        {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
+                        À {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
                     </td>
                 </tr>
                 <tr>
@@ -329,110 +298,76 @@
                 </tr>
             </table>
 
+            <!-- TABLEAU DES NOTES -->
             <table class="table-notes">
                 <thead>
                     <tr>
                         <th width="28%">Matières</th>
                         @foreach ($sequences as $seq)
-                            <th width="9%">{{ $seq->nom }}</th>
+                            <th width="8%">{{ $seq->nom }}</th>
                         @endforeach
-                        <th width="10%">Moy/20</th>
+                        <th width="9%">Moy/20</th>
                         <th width="6%">Coeff</th>
                         <th width="10%">Total (N*C)</th>
-                        <th width="13%">Compétences</th>
-                        <th width="15%">Professeur & Visa</th>
+                        <th width="14%">Compétences</th>
+                        <th width="17%">Professeur & Visa</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        // 1. Initialisation des totaux globaux du bulletin
-                        // 1. Initialisation des variables pour éviter l'erreur "Undefined variable"
-                        $totalPointsSeq1 = 0;
-                        $totalPointsSeq2 = 0;
-                        $totalPointsTrimestre = 0;
-                        $totalCoefficientsClasse = 0;
-
-                        // Initialisation des totaux globaux pour toutes les matières
                         $totalPointsGlobal = 0;
                         $totalCoeffGlobal = 0;
 
-                        // 2. Récupération sécurisée des IDs des séquences
                         $seq1 = $sequences->values()->get(0);
                         $seq2 = $sequences->values()->get(1);
                         $seq1Id = $seq1 ? $seq1->id : null;
                         $seq2Id = $seq2 ? $seq2->id : null;
-
                     @endphp
 
-                    {{-- Boucle 1 : On parcourt les groupes --}}
                     @foreach ($matieres as $groupeId => $matieresDuGroupe)
                         @php
                             $sousTotalPoints = 0;
                             $sousTotalCoeffs = 0;
                         @endphp
-                        {{-- Ligne de titre du groupe --}}
-                        {{-- On utilise le premier élément du groupe pour récupérer le nom du groupe --}}
+
                         <tr style="background-color: #e5e7eb;">
-                            <td colspan="8" style="font-weight: 800;">
-                                {{ $matieresDuGroupe->first()->groupe_nom ?? 'AUTRES MATIÈRES' }}
+                            <td colspan="8" style="font-weight: bold; font-size: 9px;">
+                                {{ $matieresDuGroupe->first()->groupe_nom ?? 'MATIÈRES DIVERSE' }}
                             </td>
                         </tr>
 
-                        {{-- Boucle 2 : On parcourt les matières DANS le groupe --}}
                         @foreach ($matieresDuGroupe as $matiere)
                             @php
                                 $idMat = $matiere->matiere_id;
                                 $coef = $matiere->coefficient ?? 1;
 
-                                // Récupération des notes
                                 $noteSeq1 = $seq1Id && isset($notes[$idMat][$seq1Id]) ? $notes[$idMat][$seq1Id] : null;
                                 $noteSeq2 = $seq2Id && isset($notes[$idMat][$seq2Id]) ? $notes[$idMat][$seq2Id] : null;
 
-                                $valNoteSeq1 = $noteSeq1 ?? 0;
-                                $valNoteSeq2 = $noteSeq2 ?? 0;
-
-                                // Calcul moyenne matière
                                 if ($noteSeq1 !== null && $noteSeq2 !== null) {
-                                    $moyenneMatiere20 = ($valNoteSeq1 + $valNoteSeq2) / 2;
+                                    $moyenneMatiere20 = ($noteSeq1 + $noteSeq2) / 2;
                                 } else {
                                     $moyenneMatiere20 = $noteSeq1 ?? ($noteSeq2 ?? 0);
                                 }
 
-                                $pointsMatiere = $moyenneMatiere20 * $matiere->coefficient;
+                                $pointsMatiere = $moyenneMatiere20 * $coef;
 
-                                // Calcul séquence 1
-                                if ($noteSeq1 !== null) {
-                                    $totalPointsSeq1 += $noteSeq1 * $coef;
-                                }
-
-                                // Calcul séquence 2
-                                if ($noteSeq2 !== null) {
-                                    $totalPointsSeq2 += $noteSeq2 * $coef;
-                                }
-
-                                // Calcul trimestre
-                                $totalPointsTrimestre += $moyenneMatiere20 * $coef;
-
-                                // Total des coefficients
-                                $totalCoefficientsClasse += $coef;
-
-                                // Cumul pour le sous-total du groupe
                                 $sousTotalPoints += $pointsMatiere;
-                                $sousTotalCoeffs += $matiere->coefficient;
+                                $sousTotalCoeffs += $coef;
                             @endphp
 
                             <tr>
-                                <td class="text-left" style="padding-left: 20px;">{{ $matiere->matiere_nom }}</td>
+                                <td class="text-left" style="padding-left: 8px;">{{ $matiere->matiere_nom }}</td>
                                 <td class="text-center">{{ $noteSeq1 !== null ? number_format($noteSeq1, 2) : '-' }}
                                 </td>
                                 <td class="text-center">{{ $noteSeq2 !== null ? number_format($noteSeq2, 2) : '-' }}
                                 </td>
-                                <td class="text-center" style="font-weight: bold; background-color: #f9f9f9;">
+                                <td class="text-center" style="font-weight: bold; background-color: #fafafa;">
                                     {{ number_format($moyenneMatiere20, 2) }}
                                 </td>
                                 <td class="text-center">{{ $coef }}</td>
-                                <td class="text-center">{{ number_format($moyenneMatiere20 * $coef, 2) }}</td>
-                                <td class="text-center" style="font-size: 8px; font-style: italic;">
+                                <td class="text-center">{{ number_format($pointsMatiere, 2) }}</td>
+                                <td class="text-center" style="font-size: 7.5px; font-style: italic;">
                                     @if ($noteSeq1 === null && $noteSeq2 === null)
                                         -
                                     @elseif($moyenneMatiere20 >= 14)
@@ -443,40 +378,30 @@
                                         Non acquis
                                     @endif
                                 </td>
-
-
-
-                                <td class="text-left" style="font-size: 8px;">M /
-                                    Mme{{ $matiere->prof_nom ?? 'Non assigné' }}
+                                <td class="text-left" style="font-size: 7.5px;">
+                                    M / Mme {{ $matiere->prof_nom ?? 'Non assigné' }}
                                 </td>
-
-
                             </tr>
                         @endforeach
 
-                        {{-- LIGNE DU SOUS-TOTAL DU GROUPE --}}
+                        <!-- SOUS-TOTAL DU GROUPE -->
                         <tr style="background-color: #f9f9f9; font-weight: bold;">
-                            {{-- On utilise colspan="5" pour sauter : Nom, Seq1, Seq2, Moy/20, Coeff --}}
-                            {{-- Total coef sous groupe --}}
-
-                            <td colspan="4" class="text-right">SOUS-TOTAL
-                                {{ $matieresDuGroupe->first()->groupe_nom }}</td>
+                            <td colspan="4" class="text-right" style="font-size: 8.5px;">
+                                SOUS-TOTAL {{ strtoupper($matieresDuGroupe->first()->groupe_nom) }}
+                            </td>
                             <td class="text-center">{{ $sousTotalCoeffs }}</td>
-                            {{-- Affiche la somme des Points (Total N*C) --}}
                             <td class="text-center">{{ number_format($sousTotalPoints, 2) }}</td>
-
-                            {{-- Le reste des colonnes vides --}}
                             <td colspan="2"></td>
                         </tr>
+
                         @php
-                            // C'est ICI que vous ajoutez les sous-totaux au total global
                             $totalPointsGlobal += $sousTotalPoints;
                             $totalCoeffGlobal += $sousTotalCoeffs;
                         @endphp
                     @endforeach
 
-                    {{-- Ligne Totale finale --}}
-                    <tr style="font-weight: bold; background-color: #f4f4f4;">
+                    <!-- TOTAL GÉNÉRAL -->
+                    <tr style="font-weight: bold; background-color: #eaeaea;">
                         <td class="text-left" style="text-transform: uppercase;">TOTAL GÉNÉRAL</td>
                         <td colspan="3"></td>
                         <td class="text-center">{{ $totalCoeffGlobal }}</td>
@@ -487,140 +412,132 @@
             </table>
 
 
+            @php
+                // Calcul de secours si $bilan->moyenne n'est pas encore en BDD
+                if ($moyenneEleve === null || $moyenneEleve == 0) {
+                    $moyenneEleve = $totalCoeffGlobal > 0 ? $totalPointsGlobal / $totalCoeffGlobal : 0;
+                }
+            @endphp
 
-
-
-            <!-- STATISTIQUES TRIMESTRIELLES -->
+            <!-- RECAPITULATIF ELEVE & STATISTIQUES DE CLASSE -->
             <table class="table-stats text-center">
                 <thead>
                     <tr>
-                        <th>MOY TRIM</th>
-                        <th>Rang</th>
-                        <th>Mention</th>
-                        <th>Moy Classe</th>
+                        <th width="15%">MOY TRIM</th>
+                        <th width="15%">RANG</th>
+                        <th width="20%">MENTION</th>
+                        <th width="12.5%">MOY CLASSE</th>
+                        <th width="12.5%">MOY MAX</th>
+                        <th width="12.5%">MOY MIN</th>
+                        <th width="12.5%">RÉUSSITE</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="font-weight: bold; background-color: #f9f9f9;">
-                            {{ number_format($b['moyenne_calculee'], 2) }}
+                        {{-- <td style="font-weight: bold; font-size: 11px; background-color: #f4f4f4;">
+                            {{ number_format($moyenneEleve, 2) }} / 20
+                        </td> --}}
+
+                        <td style="font-weight: bold; font-size: 10px;">
+                            {{ number_format($moyenneEleve, 2, ',', ' ') }} / 20
                         </td>
-                        <td>{{ $b['rang'] }} / {{ $b['totalElevesClasse'] }}</td>
-                        <td>
-                            @php $moy = $b['moyenne_calculee']; @endphp
-                            @if ($moy < 10)
+
+
+                        {{-- <td style="font-weight: bold; font-size: 10px;">
+                            @if ($rangEleve !== 'N/A' && is_numeric($rangEleve))
+                                {{ $rangEleve }}{{ $rangEleve == 1 ? 'er' : 'ème' }} / {{ $totalElevesClasse }}
+                            @else
+                                N/A
+                            @endif
+                        </td> --}}
+
+                        <td style="font-weight: bold; font-size: 10px;">
+                            {{ $rangEleve }}{{ $rangEleve == 1 ? 'er' : 'ème' }} / {{ $totalElevesClasse }}
+                        </td>
+                        <td style="font-weight: bold;">
+                            @if ($moyenneEleve < 10)
                                 Insuffisant
-                            @elseif ($moy < 12)
+                            @elseif ($moyenneEleve < 12)
                                 Passable
-                            @elseif ($moy < 14)
-                                Assez bien
-                            @elseif ($moy < 16)
+                            @elseif ($moyenneEleve < 14)
+                                Assez Bien
+                            @elseif ($moyenneEleve < 16)
                                 Bien
-                            @elseif ($moy < 18)
-                                Très bien
+                            @elseif ($moyenneEleve < 18)
+                                Très Bien
                             @else
                                 Excellent
                             @endif
                         </td>
-                        <td>{{ number_format($stats['moyenne'], 2) }}</td>
+                        <td>{{ number_format($stats['moyenne'] ?? 0, 2) }}</td>
+                        <td>{{ number_format($stats['max'] ?? 0, 2) }}</td>
+                        <td>{{ number_format($stats['min'] ?? 0, 2) }}</td>
+                        <td>{{ number_format($stats['taux_reussite'] ?? 0, 2) }}%</td>
                     </tr>
                 </tbody>
             </table>
 
-
-
-
-
-
-
-
-
-
-
-            <div class="stats-footer">
-                <table border="1" style="width: 100%; text-align: center; margin-top: 10px;">
-                    <tr>
-                        <td>Moyenne Classe : {{ number_format($stats['moyenne'], 2) }}</td>
-                        <td>Moyenne Max : {{ number_format($stats['max'], 2) }}</td>
-                        <td>Moyenne Min : {{ number_format($stats['min'], 2) }}</td>
-                        <td>Taux de réussite : {{ number_format($stats['taux_reussite'], 2) }}%</td>
-                    </tr>
-                </table>
-            </div>
-
-
-            <br />
-
-
-            <table class="table-discipline text-center font-style: italic; font-size: 9px; margin-top: 10px;">
+            <!-- DISCIPLINE & TABLEAU D'HONNEUR -->
+            <table style="width: 100%; border: none; margin-top: 4px;">
                 <tr>
-                    <td width="(100/6)%" style="font-style: italic; font-size: 9px;">Retards (Heure) :
-                        {{-- {{ $suivi->retards ?? 0 }} --}}
-                        {{ $b['suivi']->retards ?? 0 }}
+                    <td width="70%" style="border: none; padding: 0 5px 0 0;">
+                        <table class="table-discipline text-center">
+                            <tr style="background-color: #f4f4f4; font-weight: bold; font-size: 8px;">
+                                <td width="16.6%">Retards (h)</td>
+                                <td width="16.6%">Absences (h)</td>
+                                <td width="16.6%">Suspensions</td>
+                                <td width="16.6%">Avertiss.</td>
+                                <td width="16.6%">Blâmes</td>
+                                <td width="16.6%">Exclusions</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $suivi->retards ?? 0 }}</td>
+                                <td>{{ $suivi->absences ?? 0 }}</td>
+                                <td>{{ $suivi->suspensions ?? 0 }}</td>
+                                <td>{{ $suivi->avertissements ?? 0 }}</td>
+                                <td>{{ $suivi->blames ?? 0 }}</td>
+                                <td>{{ $suivi->exclusions ?? 0 }}</td>
+                            </tr>
+                        </table>
                     </td>
-                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;">Absences :
-                        {{ $b['suivi']->absences ?? 0 }}</td>
-                    <td width="(100/6)%  " style="font-style: italic; font-size: 9px;"> Suspensions(Fois) :
-                        {{ $b['suivi']->suspensions ?? 0 }}</td>
-                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;">Avertissementsc:
-                        {{ $b['suivi']->avertissements ?? 0 }}</td>
-                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;"> Blames :
-                        {{ $b['suivi']->blames ?? 0 }}</td>
-                    <td width="(100/6)% " style="font-style: italic; font-size: 9px;"> Exclusion(Jours) :
-                        {{ $b['suivi']->exclusions ?? 0 }}</td>
-                </tr>
-            </table>
-
-            <br />
-            <table class="table-honneur" style="margin-bottom:10px;">
-                <tr>
-                    <td style="font-size: 10px; font-weight: bold;">
-                        Tableau d'honneur :
-                    </td>
-                    <td style="text-align: center;">
-                        Oui
-                    </td>
-                    <td style="text-align: center;">
-                        Non
+                    <td width="30%" style="border: none; padding: 0;">
+                        <table class="table-stats text-center">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">TABLEAU D'HONNEUR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td width="50%">
+                                        <strong>OUI :</strong> {{ $moyenneEleve >= 12 ? '[ X ]' : '[   ]' }}
+                                    </td>
+                                    <td width="50%">
+                                        <strong>NON :</strong> {{ $moyenneEleve < 12 ? '[ X ]' : '[   ]' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             </table>
 
-            <!-- AJOUTE LE BLOC ICI -->
-            @if ($b['est_troisieme_trimestre'])
-                <table style="width:100%; margin:10px 0; border-collapse:collapse;">
-                    <tr>
-                        <td style="padding:10px; font-weight:bold; border:1px solid #000; width:30%;">
-                            BILAN ANNUEL :
-                        </td>
-                        <td style="padding:10px; border:1px solid #000;">
-                            T1: <strong>{{ number_format($b['moyenne_t1'], 2) }}</strong> |
-                            T2: <strong>{{ number_format($b['moyenne_t2'], 2) }}</strong> |
-                            T3: <strong>{{ number_format($b['moyenne_t3'], 2) }}</strong> |
-                            ANNUELLE : <strong>{{ number_format($b['moyenne_annuelle'], 2) }}/20</strong><br>
-                            Rang Annuel : <strong>{{ $b['rang_annuel'] }} / {{ count($bulletins) }}</strong>
-                        </td>
-                    </tr>
-                </table>
-            @endif
-
-
-
-            <table class="table-signatures">
+            <!-- SIGNATURES -->
+            <table class="table-signatures" style="margin-top: 6px;">
                 <tr>
-                    <td width="33%" class="text-center">Nom et visa du Prof principal</td>
-                    <td width="33%" class="text-center">Visa du Parent</td>
+                    <td width="33%" class="text-center">Nom et Visa du Titulaire</td>
+                    <td width="33%" class="text-center">Visa du Parent / Tuteur</td>
                     <td width="34%" class="text-center">
-                        Nom et visa du Principal<br><br><br><br>
-                        <span style="font-weight: normal; font-size: 8px;">Fait à
-                            {{ $etablissement->addresse ?? 'Bafoussam' }},
-                            le {{ date('d/m/Y') }}</span>
+                        Le Chef d'Établissement<br><br><br>
+                        <span style="font-weight: normal; font-size: 7.5px;">
+                            Fait à {{ $etablissement->adresse ?? 'Bafoussam' }}, le {{ date('d/m/Y') }}
+                        </span>
                     </td>
                 </tr>
             </table>
-
 
         </div>
+
         @if (!$loop->last)
             <div style="page-break-after: always;"></div>
         @endif

@@ -32,11 +32,11 @@
                     </label>
 
                     <select name="sequence_id"
-                        class="w-full bg-background border border-border rounded-xl p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                        class="w-full bg-background border border-border rounded p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                         required>
 
                         <option value="">
-                            -- Choisir une séquence --
+                            -- Choisir une Evaluation --
                         </option>
 
                         @foreach ($sequences->groupBy('trimestre_id') as $trimestreId => $group)
@@ -65,7 +65,7 @@
                     </label>
 
                     <select name="affectation_id"
-                        class="w-full bg-background border border-border rounded-xl p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                        class="w-full bg-background border border-border rounded p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                         required>
 
 
@@ -102,7 +102,7 @@
 
 
                 <button type="submit"
-                    class="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm
+                    class="px-6 py-3 rounded bg-primary text-primary-foreground font-semibold text-sm
                 hover:opacity-90 transition-all shadow-lg shadow-primary/20">
 
                     Créer & saisir les notes

@@ -448,4 +448,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
     ->middleware(['auth'])
     ->name('avancement.index');
+
+Route::post('/sequences/{sequence}/classes/{classe}/calculate', [SequenceController::class, 'calculateClassAverages'])
+    ->name('admin.sequences.calculate');
 require __DIR__ . '/auth.php';

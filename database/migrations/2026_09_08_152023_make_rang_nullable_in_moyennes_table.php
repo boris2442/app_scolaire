@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('must_change_password')->default(false)->after('password');
+        Schema::table('moyennes', function (Blueprint $table) {
+            $table->integer('rang')->nullable()->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('must_change_password');
+        Schema::table('moyennes', function (Blueprint $table) {
+            $table->integer('rang')->change();
         });
     }
 };

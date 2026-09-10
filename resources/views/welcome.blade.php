@@ -6,18 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ config('app.name', 'AcademiaPro | Logiciel de Gestion Scolaire & Suivi Académique ') }}</title>
-<meta name="description" content="AcademiaPro est la solution tout-en-un pour les établissements scolaires : gestion des notes, calcul automatique des moyennes, imports Excel et génération rapide des bulletins PDF.">
-    <meta name="keywords" content="gestion scolaire, bulletins de notes, calcul moyennes, logiciel école, gestion élèves, Cameroun, AcademiaPro">
+    <meta name="description"
+        content="AcademiaPro est la solution tout-en-un pour les établissements scolaires : gestion des notes, calcul automatique des moyennes, imports Excel et génération rapide des bulletins PDF.">
+    <meta name="keywords"
+        content="gestion scolaire, bulletins de notes, calcul moyennes, logiciel école, gestion élèves, Cameroun, AcademiaPro">
     <meta name="author" content="AcademiaPro">
     <meta name="robots" content="index, follow">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://boris.espacecameroun.com">
-   <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://boris.espacecameroun.com">
     <meta property="og:title" content="AcademiaPro | Simplifiez la Gestion Académique de votre Établissement">
-    <meta property="og:description" content="Saisie des notes, calculs automatisés, gestion des absences et impression des bulletins en quelques clics.">
+    <meta property="og:description"
+        content="Saisie des notes, calculs automatisés, gestion des absences et impression des bulletins en quelques clics.">
     <meta property="og:image" content="https://boris.espacecameroun.com/images/logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -27,18 +30,19 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://boris.espacecameroun.com">
     <meta name="twitter:title" content="AcademiaPro | Logiciel de Gestion Scolaire">
-    <meta name="twitter:description" content="Découvrez AcademiaPro : la plateforme moderne de gestion des notes et bulletins scolaires.">
+    <meta name="twitter:description"
+        content="Découvrez AcademiaPro : la plateforme moderne de gestion des notes et bulletins scolaires.">
     <meta name="twitter:image" content="https://boris.espacecameroun.com/images/logo.png">
 
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.png') }}">
-   
-   
-   
-   
-   <script>
+
+
+
+
+    <script>
         (function() {
             const theme = localStorage.getItem('color-theme') ||
                 (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches ?
@@ -50,7 +54,7 @@
             }
         })();
     </script>
-    
+
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Fonts -->
@@ -128,7 +132,7 @@
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
+                            class="px-6 py-3.5 bg-primary text-primary-foreground font-bold rounded-full shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all text-center">
                             Ouvrir la session de travail
                         </a>
                     @endauth
@@ -183,7 +187,8 @@
         <section class="bg-secondary/40 border-y border-border py-20 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                    <h2 class="text-3xl font-black text-foreground tracking-tight">Modules de Traitement Académique</h2>
+                    <h2 class="text-3xl font-black text-foreground tracking-tight">Modules de Traitement Académique
+                    </h2>
                     <p class="text-gray-500 dark:text-gray-400 text-sm">
                         Chaque entité du système répond aux exigences des structures d'évaluation modernes, assurant une
                         intégrité parfaite des données.
@@ -195,7 +200,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                           <x-lucide-users class="w-5 h-5" />
+                            <x-lucide-users class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Inscriptions & Niveaux</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -251,7 +256,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                          <x-lucide-calendar class="w-5 h-5" />
+                            <x-lucide-calendar class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Années Scolaires & Périodes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -264,7 +269,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                           <x-lucide-list class="w-5 h-5" />
+                            <x-lucide-list class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Départements & Classes</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -277,7 +282,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                           <x-lucide-users class="w-5 h-5" />
+                            <x-lucide-users class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Inscriptions & Fiches Élèves</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -303,7 +308,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                        <x-lucide-bar-chart-3 class="w-5 h-5" />
+                            <x-lucide-bar-chart-3 class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Moyennes & Palmarès</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
@@ -373,7 +378,7 @@
                         class="bg-card border border-border rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
                         <div
                             class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
-                         <x-lucide-triangle-alert class="w-5 h-5" />
+                            <x-lucide-triangle-alert class="w-5 h-5" />
                         </div>
                         <h3 class="text-lg font-bold text-foreground mb-2">Discipline & Assiduité</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">

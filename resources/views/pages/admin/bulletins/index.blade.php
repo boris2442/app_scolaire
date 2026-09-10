@@ -22,7 +22,12 @@
                 </select>
             </form>
         </div>
-
+        @if (session('error'))
+            <div class="alert alert-danger"
+                style="padding: 12px; background-color: #f8d7da; color: #721c24; border-radius: 6px; margin-bottom: 15px;">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach ($classes as $classe)
                 <div
@@ -33,14 +38,14 @@
                             {{ $classe->total_eleves }} élèves inscrit(s)
                         </span>
                         <h3 class="text-lg font-bold text-foreground truncate">
-                         {{ $classe->classe_nom }}
+                            {{ $classe->classe_nom }}
                         </h3>
                     </div>
 
                     <a href="{{ route('admin.bulletins.classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimestreId]) }}"
                         class="w-full text-center inline-flex items-center justify-center px-4 py-2.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 text-sm font-medium rounded-lg transition">
                         <span>Ouvrir </span>
-                      <x-lucide-chevron-right class="w-4 h-4 ml-1.5" />
+                        <x-lucide-chevron-right class="w-4 h-4 ml-1.5" />
                     </a>
                 </div>
             @endforeach

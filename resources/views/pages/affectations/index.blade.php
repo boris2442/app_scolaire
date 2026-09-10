@@ -12,6 +12,8 @@
         Sélectionnez une classe pour voir ou modifier les affectations existantes.</p>
     <div class="bg-card p-6 rounded-2xl border border-border shadow-sm mb-8">
         <form action="{{ route('admin.affectations.index') }}" method="GET" class="flex items-end gap-4">
+            {{-- Conserver l'année active dans le filtre --}}
+            <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
             <div class="flex-1">
                 <label class="text-[10px] font-black text-muted-foreground ml-1">Sélectionner une salle / classe</label>
                 <select name="classe_id" onchange="this.form.submit()"
@@ -35,17 +37,19 @@
     </div>
 
     @if ($classeId)
-        <div class="bg-card rounded-2xl border border-border shadow-sm overflow-auto">
+        <div class="bg-card rounded-2xl border border-border shadow-sm overflow-auto relative">
             {{-- UN SEUL FORMULAIRE QUI ENVELOPPE TOUT --}}
             <form action="{{ route('admin.affectations.bulk-store') }}" method="POST">
                 @csrf
+                {{-- Sécurité : passer l'ID de l'année à la soumission --}}
+                <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
                 <input type="hidden" name="classe_id" value="{{ $classeId }}">
 
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-secondary/50 border-b border-border">
                             <th class="p-4 text-[10px] font-black  text-muted-foreground">Matière</th>
-                            <th class="p-4 text-[10px] font-black  text-muted-foreground text-center">Code</th>
+                            {{-- <th class="p-4 text-[10px] font-black  text-muted-foreground text-center">Code</th> --}}
                             <th class="p-4 text-[10px] font-black  text-muted-foreground">Enseignant Responsable
                             </th>
                             <th class="p-4 text-[10px] font-black  text-muted-foreground text-right">Statut</th>
@@ -62,12 +66,12 @@
                                         Coeff: {{ $matiere->pivot->coefficient ?? '1' }}
                                     </span>
                                 </td>
-                                <td class="p-4 text-center">
+                                {{-- <td class="p-4 text-center">
                                     <code
                                         class="text-[10px] font-bold bg-secondary px-2 py-1 rounded text-muted-foreground ">
                                         {{ $matiere->code }}
                                     </code>
-                                </td>
+                                </td> --}}
                                 <td class="p-4">
                                     {{-- LE NOM DU SELECT EST CRUCIAL --}}
                                     <select name="affectations[{{ $matiere->id }}]"
@@ -96,10 +100,17 @@
                 </table>
 
                 {{-- BOUTON DE SAUVEGARDE --}}
-                <div class="p-6 bg-secondary/10 border-t flex justify-end">
+                {{-- <div class="p-6 bg-secondary/10 border-t flex justify-end">
                     <button type="submit"
                         class="bg-primary text-white px-8 py-4 rounded font-black  text-[12px] tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20">
-          Enregistrer tout le tableau
+                        Enregistrer tout le tableau
+                    </button>
+                </div> --}}
+                <div class="fixed bottom-8 left-[50%] z-10000 mt-8 flex justify-center">
+                    <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 bg-primary text-secondary    px-5 py-2.5 rounded-md text-xs font-semibold hover:opacity-90 transition">
+                        <x-lucide-save class="w-4 h-4" />
+                        <span>Enregistrer </span>
                     </button>
                 </div>
             </form>
