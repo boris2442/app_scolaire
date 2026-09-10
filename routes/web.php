@@ -318,6 +318,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
         Route::get('/settings/classes/{classe}/edit', [ClasseController::class, 'edit'])->name('edit');
         Route::put('/settings/classes/{classe}', [ClasseController::class, 'update'])->name('update');
+        
     });
 
 
