@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Etablissement;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 
 class PresenceAndServiceController extends Controller
 {
@@ -23,12 +22,10 @@ class PresenceAndServiceController extends Controller
         $pdf->setPaper('a4', 'portrait');
 
         // Télécharger automatiquement le fichier PDF
-        return $pdf->download('Presence_' . $user->name . '.pdf');
+        return $pdf->download('Presence_'.$user->name.'.pdf');
     }
 
-
-
-     /**
+    /**
      * Générer l'attestation de prise de service
      */
     public function generateAttestationPriseService($id)
@@ -56,19 +53,11 @@ class PresenceAndServiceController extends Controller
 
         // Télécharger le PDF
         return $pdf->download(
-            'Prise_Service_' . $user->name . '.pdf'
+            'Prise_Service_'.$user->name.'.pdf'
         );
     }
 
-
-
-
-
-
-
-
-
-     /**
+    /**
      * Attestation de reprise de service
      */
     public function generateAttestationRepriseService($id)
@@ -97,7 +86,7 @@ class PresenceAndServiceController extends Controller
 
         // Télécharger le document
         return $pdf->download(
-            'Reprise_Service_' . $user->name . '.pdf'
+            'Reprise_Service_'.$user->name.'.pdf'
         );
     }
 }

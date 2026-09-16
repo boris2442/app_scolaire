@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-         $table->enum('role', [
+            $table->enum('role', [
                 'admin',
                 'enseignant',
                 'secretaire',
@@ -27,17 +27,17 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-public function down(): void
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->enum('role', [
-            'admin',
-            'enseignant',
-            'secretaire',
-            'parent',
-            'eleve',
-            'surveillantGeneral',
-        ])->default('enseignant')->change();
-    });
-}
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role', [
+                'admin',
+                'enseignant',
+                'secretaire',
+                'parent',
+                'eleve',
+                'surveillantGeneral',
+            ])->default('enseignant')->change();
+        });
+    }
 };

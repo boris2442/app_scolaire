@@ -223,7 +223,7 @@
             // On extrait les variables pour que ton code en dessous ne change pas
             $inscription = $b['inscription'];
             $totalElevesClasse = $b['totalElevesClasse'];
-            $matieres = $b['matieres'];
+         $matieres = $b['matieres'];
             $notes = $b['notes'];
             $coefficients = $b['coefficients'];
             $bilan = $b['bilan'];

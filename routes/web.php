@@ -452,4 +452,9 @@ Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
 
 Route::post('/sequences/{sequence}/classes/{classe}/calculate', [SequenceController::class, 'calculateClassAverages'])
     ->name('admin.sequences.calculate');
+
+    Route::get(
+    '/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}/controle-notes',
+    [BulletinPrintController::class, 'imprimerEtatControleNotes']
+)->name('admin.bulletins.etat-controle-notes');
 require __DIR__ . '/auth.php';

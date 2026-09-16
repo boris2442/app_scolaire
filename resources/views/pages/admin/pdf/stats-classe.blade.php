@@ -255,7 +255,7 @@
     <table class="kpi-table" style="margin-top: 10px;">
         <thead>
             <tr>
-                <th>Élèves Admis (≥ 10/20)</th>
+                <th>Élèves Admis (>=10/20)</th>
                 <th>Élèves Refusés (< 10/20)</th>
             </tr>
         </thead>

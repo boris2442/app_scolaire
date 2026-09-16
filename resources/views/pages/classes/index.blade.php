@@ -10,9 +10,6 @@
     </div>
 
 
-
-
-
     <div class="lg:col-span-3 pb-4">
         <div class="bg-card rounded-xl border border-border overflow-hidden">
             <div class="bg-secondary/30 px-4 py-3 border-b border-border flex justify-between items-center">
