@@ -7,6 +7,7 @@ use App\Models\Trimestre;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BulletinPrintController extends Controller
 {
@@ -96,7 +97,7 @@ class BulletinPrintController extends Controller
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download("Bulletin_{$bulletin['inscription']->eleve_nom}.pdf");
+        return $pdf->download(str("Bulletin {$bulletin['inscription']->eleve_nom}")->slug('_').'.pdf');
     }
 
     // 4. Impression de TOUTE la classe d'un coup (Optimisée 100% SQL)
@@ -122,7 +123,7 @@ class BulletinPrintController extends Controller
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('Bulletins_Classe.pdf');
+        return $pdf->download(str('Bulletins_Classe')->slug('_').'.pdf');
     }
 
     /**
@@ -304,7 +305,7 @@ class BulletinPrintController extends Controller
         $pdf = Pdf::loadView('pages.admin.pdf.tableau-honneur', compact('classe', 'trimestre', 'etablissement', 'resultats', 'anneeActive'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->download("Tableau_Honneur_{$classe->nom}.pdf");
+        return $pdf->download(str("Tableau_Honneur_{$classe->nom}")->slug('_').'.pdf');
     }
 
     public function imprimerStatsClasse($classeId, $trimestreId)
@@ -358,7 +359,7 @@ class BulletinPrintController extends Controller
             $pdf = Pdf::loadView('pages.admin.pdf.stats-classe', compact('classe', 'trimestre', 'etablissement', 'statsGlobales'))
                 ->setPaper('a4', 'portrait');
 
-            return $pdf->download("Statistiques_{$classe->nom}.pdf");
+            return $pdf->download(str("Statistiques_{$classe->nom}")->slug('_').'.pdf');
         }
 
         // 2. Calcul groupé des moyennes trimestrielles de chaque élève via la table 'moyennes'
@@ -447,7 +448,7 @@ class BulletinPrintController extends Controller
         $pdf = Pdf::loadView('pages.admin.pdf.stats-classe', compact('classe', 'trimestre', 'etablissement', 'statsGlobales'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download("Statistiques_{$classe->nom}.pdf");
+        return $pdf->download(str("Statistiques_{$classe->nom}")->slug('_').'.pdf');
     }
 
     /**
@@ -643,9 +644,8 @@ class BulletinPrintController extends Controller
                 'notes'
             )
         )->setPaper('a3', 'landscape');
+        $fileName = Str::slug("EtatControleNotes {$classe->nom} {$trimestre->nom}").'.pdf';
 
-        return $pdf->download(
-            "Etat_Controle_Notes_{$classe->nom}_{$trimestre->nom}.pdf"
-        );
+        return $pdf->download($fileName);
     }
 }

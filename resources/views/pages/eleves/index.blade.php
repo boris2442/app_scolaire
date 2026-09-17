@@ -198,7 +198,7 @@
                     <!-- Aperçu visuel / Maquette du template Excel attendu -->
                     <div class="pt-4 border-t border-border">
                         <h4
-                            class="text-xs font-bold text-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            class="text-xs font-bold text-foreground  tracking-wider mb-2 flex items-center gap-1.5">
                             <x-lucide-file-text class="w-4 h-4 text-primary" />
                             Modèle de structure requis pour les colonnes de votre fichier Excel :
                         </h4>

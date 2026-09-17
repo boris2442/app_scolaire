@@ -307,6 +307,6 @@ class EvaluationController extends Controller
         $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download('Statistiques_' . $evaluation->matiere->nom . '.pdf');
+     return $pdf->download(str('Statistiques ' . $evaluation->matiere->nom)->slug('_') . '.pdf');
     }
 }

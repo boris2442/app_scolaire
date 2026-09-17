@@ -140,7 +140,7 @@ public function telechargerPdfClasse($classeId)
 
         // Télécharger ou afficher dans le navigateur
        
-        return $pdf->download("emploi-du-temps-{$classe->nom}.pdf");
+        return $pdf->download(str("emploi-du-temps-{$classe->nom}")->slug() . '.pdf');
     }
 
 
@@ -196,6 +196,6 @@ public function telechargerPdfClasse($classeId)
         $pdf = Pdf::loadView('pages.emplois.pdf.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'))
             ->setPaper('a4', 'landscape'); // Format paysage conseillé pour les emplois du temps
 
-        return $pdf->download('emploi-du-temps-' . Str::slug($enseignant->name) . '.pdf');
+        return $pdf->download(str('emploi-du-temps-' . $enseignant->name)->slug('_') . '.pdf');
     }
 }

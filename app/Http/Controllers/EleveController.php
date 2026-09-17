@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\EleveRequest;
 use App\Imports\StudentImport;
 use App\Models\AnneeScolaire;
@@ -14,16 +13,14 @@ use App\Models\Niveau;
 use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
 use Barryvdh\DomPDF\PDF;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EleveController extends Controller
 {
-
     protected $scolarite;
 
     // On injecte le service via le constructeur pour l'avoir partout
@@ -31,7 +28,6 @@ class EleveController extends Controller
     {
         $this->scolarite = $scolarite;
     }
-
 
     public function index(Request $request, StudentAnalyticsService $analytics)
     {
@@ -120,7 +116,6 @@ class EleveController extends Controller
         return view('pages.eleves.create', compact('anneeActive', 'classes', 'sexes'));
     }
 
-
     public function store(EleveRequest $request)
     {
         $data = $request->validated();
@@ -130,28 +125,22 @@ class EleveController extends Controller
         }
 
         // On récupère le résultat de la transaction (qui sera notre objet $eleve)
-      
-        
-
-
-
-
 
         $eleve = DB::transaction(function () use ($data, $request) {
 
             $nouveauEleve = Eleve::create([
-                'nom'              => strtoupper($data['nom']),
-                'prenom'           => $data['prenom'],
-                'date_naissance'   => $data['date_naissance'],
-                'sexe'             => $data['sexe'],
-                'lieu_naissance'   => $data['lieu_naissance'] ?? null,
+                'nom' => strtoupper($data['nom']),
+                'prenom' => $data['prenom'],
+                'date_naissance' => $data['date_naissance'],
+                'sexe' => $data['sexe'],
+                'lieu_naissance' => $data['lieu_naissance'] ?? null,
                 'telephone_parent' => $data['telephone_parent'] ?? null,
-                'adresse'          => $data['adresse'] ?? 'Non renseigné',
-                'photo'            => $data['photo'] ?? null,
-                'est_actif'        => true,
+                'adresse' => $data['adresse'] ?? 'Non renseigné',
+                'photo' => $data['photo'] ?? null,
+                'est_actif' => true,
                 // 'matricule'        => $data['matricule'] ?? null,
-                'name_father'      => $data['name_father'] ?? null,
-                'name_mother'      => $data['name_mother'] ?? null,
+                'name_father' => $data['name_father'] ?? null,
+                'name_mother' => $data['name_mother'] ?? null,
             ]);
 
             $anneeActive = $this->scolarite->getAnneeActive();
@@ -160,37 +149,29 @@ class EleveController extends Controller
             Eleve::genererEtAttribuerMatricule($nouveauEleve, $anneeActive->id);
 
             Inscription::create([
-                'eleve_id'          => $nouveauEleve->id,
-                'classe_id'         => $request->classe_id,
+                'eleve_id' => $nouveauEleve->id,
+                'classe_id' => $request->classe_id,
                 'annee_scolaire_id' => $anneeActive->id,
-                'date_inscription'  => now(),
-                'est_redoublant'    => $request->has('est_redoublant'),
+                'date_inscription' => now(),
+                'est_redoublant' => $request->has('est_redoublant'),
             ]);
 
             return $nouveauEleve;
         });
-
-
-
 
         // Maintenant, $eleve est parfaitement défini ici
         return redirect()->route('admin.students.index')
             ->with('success', "Inscription réussie ! Matricule : {$eleve->matricule}");
     }
 
-
-
-
-
     /**
      * Affiche le dossier complet d'un élève.
      */
     /**
      * Affiche le dossier complet d'un élève.
-     * @param  \App\Models\Eleve  $eleve
+     *
+     * @param  Eleve  $eleve
      */
-
-
     public function show($id)
     {
         // On charge les inscriptions, l'année scolaire et la classe (sans la relation 'niveau')
@@ -199,10 +180,6 @@ class EleveController extends Controller
 
         return view('pages.eleves.show', compact('eleve'));
     }
-
-
-
-
 
     public function edit($id)
     {
@@ -224,6 +201,7 @@ class EleveController extends Controller
             'inscriptionActuelle'
         ));
     }
+
     public function update(EleveRequest $request, $id)
     {
         $eleve = Eleve::findOrFail($id);
@@ -273,13 +251,6 @@ class EleveController extends Controller
         });
     }
 
-
-
-
-
-
-
-
     public function destroy($id)
     {
         $eleve = Eleve::findOrFail($id);
@@ -290,9 +261,6 @@ class EleveController extends Controller
         return redirect()->route('admin.students.index')
             ->with('success', "L'élève {$eleve->nom} a été déplacé dans la corbeille.");
     }
-
-
-
 
     // Afficher uniquement les élèves supprimés
     public function trashed()
@@ -324,24 +292,11 @@ class EleveController extends Controller
         return redirect()->back()->with('success', "L'élève a été définitivement supprimé.");
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function imprimer(Request $request)
     {
         // 1. Validation : on s'assure qu'une classe est bien fournie
         $request->validate([
-            'classe_id' => 'required|exists:classes,id'
+            'classe_id' => 'required|exists:classes,id',
         ]);
 
         $anneeActive = AnneeScolaire::where('est_active', true)->first();
@@ -366,17 +321,19 @@ class EleveController extends Controller
         $pdf = \PDF::loadView('pages.eleves.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
 
         // 4. Téléchargement ou affichage
-        return $pdf->download('liste_eleves_' . $classe->nom . '.pdf');
-    }
+        $fileName = Str::slug('liste eleves '.$classe->nom).'.pdf';
 
+        return $pdf->download($fileName);
+
+    }
 
     // Dans ton Contrôleur
     public function importer(Request $request)
     {
         $request->validate([
             'fichier_excel' => 'required|mimes:xlsx,xls,csv',
-            'classe_id'     => 'required|exists:classes,id',
-            'annee_id'      => 'required|exists:annee_scolaires,id', // Note bien le nom du champ du formulaire : 'annee_id'
+            'classe_id' => 'required|exists:classes,id',
+            'annee_id' => 'required|exists:annee_scolaires,id', // Note bien le nom du champ du formulaire : 'annee_id'
         ]);
 
         try {
@@ -388,7 +345,7 @@ class EleveController extends Controller
 
             return redirect()->back()->with('success', 'Importation réussie !');
         } catch (\Exception $e) {
-            dd("Erreur critique : " . $e->getMessage());
+            dd('Erreur critique : '.$e->getMessage());
         }
     }
 }
