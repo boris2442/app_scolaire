@@ -20,6 +20,7 @@ class UserController extends Controller
             return trim($value, "'");
         }, explode(',', $matches[1]));
     }
+
     public function index(Request $request)
     {
         $query = User::query();
@@ -50,12 +51,12 @@ class UserController extends Controller
         $rolesDisponibles = $this->getEnumRoles();
 
         $request->validate([
-            'role' => 'required|in:' . implode(',', $rolesDisponibles),
+            'role' => 'required|in:'.implode(',', $rolesDisponibles),
         ]);
 
         // Mise à jour de la base de données
         $user->update([
-            'role' => $request->role
+            'role' => $request->role,
         ]);
 
         return redirect()->back()->with('success', 'Rôle mis à jour avec succès.');
@@ -73,15 +74,12 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
     }
 
-
-
     /**
      * Réinitialise le mot de passe d'un enseignant par l'administrateur.
      */
     public function resetPassword(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
 
         $plainPassword = Str::random(8);
 

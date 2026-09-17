@@ -4,7 +4,6 @@ use App\Http\Controllers\AcademiqueController;
 use App\Http\Controllers\Admin\AuditSaisieController;
 use App\Http\Controllers\Admin\BulletinPrintController;
 use App\Http\Controllers\Admin\ResultatController;
-use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AfterLoginController;
@@ -24,6 +23,7 @@ use App\Http\Controllers\Exports\DepartmentExportController;
 use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\Exports\TeacherExportController;
+use App\Http\Controllers\GlobalStatController;
 use App\Http\Controllers\GroupeMatiereController;
 use App\Http\Controllers\LeconController;
 use App\Http\Controllers\MatiereController;
@@ -35,8 +35,6 @@ use App\Http\Controllers\SequenceController;
 use App\Http\Controllers\TeacherProfileController;
 use App\Http\Controllers\TrimestreController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\SGMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -47,8 +45,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
@@ -56,18 +52,7 @@ Route::middleware(['auth'])
         Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
     });
 
-
 // });
-
-
-
-
-
-
-
-
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -84,25 +69,18 @@ Route::middleware('auth')->group(function () {
     Route::get('presence/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
         ->name('teacher.attestation.take-service');
     // });
-    //attestation reprise de service
+    // attestation reprise de service
     Route::get('presence/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
         ->name('teacher.attestation.reprise-service');
 
-
-
-    //Rou globale configuration middleware admin
+    // Rou globale configuration middleware admin
     Route::middleware('admin')->group(function () {
-
 
         // Section Paramètres
         Route::get('/configuration-school', [EtablissementController::class, 'edit'])->name('settings.index');
         Route::put('/configuration-school', [EtablissementController::class, 'update'])->name('settings.update');
 
-
-        //Annees scolaires
-
-
-
+        // Annees scolaires
 
         // On regroupe tout sous le préfixe 'settings'
         Route::prefix('settings')->name('settings.')->group(function () {
@@ -110,22 +88,15 @@ Route::middleware('auth')->group(function () {
             // Cette ligne gère TOUT (Index, Store, Edit, Update, Destroy)
             // Elle crée automatiquement la route 'settings.annees.edit' et 'settings.annees.update'
             Route::resource('years', AnneeScolaireController::class)->parameters([
-                'years' => 'annee_scolaire' // Pour que Laravel injecte bien le modèle dans ton Controller
+                'years' => 'annee_scolaire', // Pour que Laravel injecte bien le modèle dans ton Controller
             ]);
 
             // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
             Route::patch('years/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('years.active');
         });
 
-
-
-
-
-
-
         Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('trimestres', TrimestreController::class);
-
 
             // Route::get('/results', [ResultatController::class, 'index'])->name('resultats.index');
             //  Route::post('/results/calculs', [ResultatController::class, 'calculer'])->name('resultats.calculer');
@@ -134,11 +105,6 @@ Route::middleware('auth')->group(function () {
             // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
         });
     });
-
-
-
-
-
 
     // Modeule Evaluations
 
@@ -151,19 +117,13 @@ Route::middleware('auth')->group(function () {
             ->name('evaluations.telecharger-stats');
     });
 
-
-
-
     Route::prefix('teatcher')->name('enseignant.')->group(function () {
         Route::get('/dashboard', [DashboardTeacherController::class, 'index'])->name('dashboard');
     });
 
-
-
-
     // Route pour afficher le formulaire de sélection
 
-    //Middleware sg
+    // Middleware sg
     Route::middleware('sg')->group(function () {
         Route::prefix('discipline')->name('discipline.')->group(function () {
             Route::get('/selection', [DisciplineController::class, 'index'])->name('index');
@@ -173,7 +133,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', [DisciplineController::class, 'store'])->name('store');
         });
     });
-
 
     Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
@@ -187,20 +146,15 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
-
-
 Route::middleware(['auth'])->group(function () {});
 
-//Route with censor and admin
+// Route with censor and admin
 
 Route::middleware(['auth', 'censeur'])->group(function () {
 
     // Routes de gestion du verrouillage des séquences
     Route::get('/sequences', [SequenceController::class, 'index'])->name('admin.sequences.index');
     Route::put('/sequences/{id}', [SequenceController::class, 'update'])->name('admin.sequences.update');
-
-
 
     Route::get('/admin/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
     // Page principale : La grille avec le choix du trimestre
@@ -209,14 +163,6 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
     Route::get('/admin/report/print/{inscription}/{trimestre}', [BulletinPrintController::class, 'imprimerTrimestriel'])
         ->name('admin.bulletins.imprimer');
-
-
-
-
-
-
-
-
 
     // // Page principale : La grille des 4 colonnes avec le choix du trimestre
 
@@ -232,41 +178,24 @@ Route::middleware(['auth', 'censeur'])->group(function () {
     Route::get('/admin/report/student/{inscriptionId}/print/{trimestreId}', [BulletinPrintController::class, 'imprimerEleve'])
         ->name('admin.bulletins.imprimer-eleve');
 
-
     Route::get('/admin/report/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
         ->name('admin.bulletins.download-stats');
 
     Route::get('/admin/reports/tableau-honneur/{classeId}/{trimestreId}', [BulletinPrintController::class, 'imprimerTableauHonneur'])
         ->name('admin.bulletins.tableau-honneur');
 
-
-
-
-
-    //users route
+    // users route
 
     Route::get('admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
     Route::delete('admin/users/{user}', [UserController::class, 'destroy'])
         ->name('admin.users.destroy');
 
-
-
     Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
-
-
-
-
-
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('/departments', DepartementController::class)->except(['show']);
     });
-
-
-
-
-
 
     Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
         ->names('admin.groupes')
@@ -274,27 +203,10 @@ Route::middleware(['auth', 'censeur'])->group(function () {
 
     Route::get('admin/student/print', [EleveController::class, 'imprimer'])->name('admin.eleves.imprimer');
 
-
-
-
-
-
-
-
-
     Route::get('admin/students/export/', [StudentControllerExport::class, 'export'])->name('admin.students.export');
 
     Route::get('admin/inscriptions/export/', [ExportInscriptionController::class, 'export'])->name('admin.inscriptions.export');
     Route::get('admin/teachers/export/', [TeacherExportController::class, 'export'])->name('admin.teachers.export');
-
-
-
-
-
-
-
-
-
 
     Route::prefix('settings/academic')->name('settings.academique.')->group(function () {
         Route::get('/', [AcademiqueController::class, 'index'])->name('index');
@@ -318,9 +230,8 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
         Route::get('/settings/classes/{classe}/edit', [ClasseController::class, 'edit'])->name('edit');
         Route::put('/settings/classes/{classe}', [ClasseController::class, 'update'])->name('update');
-        
-    });
 
+    });
 
     Route::prefix('settings/courses')->name('settings.matieres.')->group(function () {
         Route::get('/', [MatiereController::class, 'index'])->name('index');
@@ -333,8 +244,6 @@ Route::middleware(['auth', 'censeur'])->group(function () {
     Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'edit'])->name('settings.classes.matieres.edit');
     Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
 
-
-
     Route::prefix('admin/students')->name('admin.students.')->group(function () {
         Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
         Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
@@ -342,13 +251,10 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         Route::post('/importer', [EleveController::class, 'importer'])->name('importer');
     });
 
-
-
     Route::prefix('admin')->name('admin.')->group(function () {
 
         // --- GESTION DES ELEVES ---
         // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
-
 
         Route::resource('students', EleveController::class);
 
@@ -356,10 +262,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
         Route::get('search/students', [EleveController::class, 'search'])->name('eleves.search');
     });
 
-
     Route::prefix('admin')->name('admin.')->group(function () {
-
-
 
         // --- MODULE ENSEIGNANTS ---
         // Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
@@ -391,17 +294,7 @@ Route::middleware(['auth', 'censeur'])->group(function () {
             ->name('statistiques.classe.detail');
     });
 });
-//Audit saisie
-
-
-
-
-
-
-
-
-
-
+// Audit saisie
 
 Route::middleware(['auth', 'censeur'])
     ->prefix('admin')
@@ -421,8 +314,6 @@ Route::middleware(['auth', 'censeur'])
         Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
     });
 // });
-
-
 
 Route::middleware(['auth', 'teacher'])->group(function () {
     Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
@@ -446,6 +337,7 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::put('/enseignants/{id}/reset-password', [UserController::class, 'resetPassword'])->name('enseignants.reset-password');
 });
+
 Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
     ->middleware(['auth'])
     ->name('avancement.index');
@@ -453,8 +345,13 @@ Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
 Route::post('/sequences/{sequence}/classes/{classe}/calculate', [SequenceController::class, 'calculateClassAverages'])
     ->name('admin.sequences.calculate');
 
-    Route::get(
+Route::get(
     '/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}/controle-notes',
     [BulletinPrintController::class, 'imprimerEtatControleNotes']
 )->name('admin.bulletins.etat-controle-notes');
-require __DIR__ . '/auth.php';
+
+Route::get('/trimestres/{trimestreId}/statistiques-globales', [GlobalStatController::class, 'imprimerStatsGlobales'])
+    ->name('stats.globales.pdf')
+    ->middleware(['auth']);
+
+require __DIR__.'/auth.php';
