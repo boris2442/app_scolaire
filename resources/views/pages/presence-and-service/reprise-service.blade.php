@@ -31,7 +31,7 @@
 
         td {
             vertical-align: bottom;
-            padding-bottom: 1px;
+            padding-bottom: 5px;
             font-weight: bold;
             text-transform: uppercase;
         }

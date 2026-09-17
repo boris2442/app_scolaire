@@ -43,76 +43,75 @@
             </button>
         </form>
 
-       @if (!empty($auditData))
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        @foreach ($auditData as $data)
-            <div
-                class="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-4
+        @if (!empty($auditData))
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                @foreach ($auditData as $data)
+                    <div
+                        class="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-4
                        hover:shadow-md hover:border-primary/30 transition-all duration-200">
 
-                {{-- Matière + enseignant --}}
-                <div class="mb-4">
-                    <div class="font-bold text-foreground text-sm">
-                        {{ $data['matiere'] }}
-                    </div>
+                        {{-- Matière + enseignant --}}
+                        <div class="mb-4">
+                            <div class="font-bold text-foreground text-sm">
+                                {{ $data['matiere'] }}
+                            </div>
 
-                    <div class="text-xs text-muted-foreground italic mt-1">
-                        Par : Mr/ Mme {{ $data['enseignant'] }}
-                    </div>
+                            <div class="text-xs text-muted-foreground italic mt-1">
+                                Par : Mr/ Mme {{ $data['enseignant'] }}
+                            </div>
 
-                    <div class="text-xs text-muted-foreground italic mt-0.5">
-                        Téléphone : {{ $data['phone'] }}
-                    </div>
-                </div>
-
-                {{-- Progression --}}
-                <div class="mb-4">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-[10px] font-semibold  tracking-wider text-muted-foreground">
-                            Progression
-                        </span>
-
-                        <span class="text-[11px] font-mono font-bold text-foreground">
-                            {{ $data['pourcentage'] }}%
-                        </span>
-                    </div>
-
-                    <div class="w-full bg-secondary rounded-full h-2 overflow-hidden">
-                        <div
-                            class="h-2 rounded-full bg-primary transition-all duration-500"
-                            style="width: {{ $data['pourcentage'] }}%">
+                            <div class="text-xs text-muted-foreground italic mt-0.5">
+                                Téléphone : {{ $data['phone'] }}
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                {{-- Statut --}}
-                <div>
-                    @if ($data['pourcentage'] == 100)
-                        <span
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1
+                        {{-- Progression --}}
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-semibold  tracking-wider text-muted-foreground">
+                                    Progression
+                                </span>
+
+                                <span class="text-[11px] font-mono font-bold text-foreground">
+                                    {{ $data['pourcentage'] }}%
+                                </span>
+                            </div>
+
+                            <div class="w-full bg-secondary rounded-full h-2 overflow-hidden">
+                                <div class="h-2 rounded-full bg-primary transition-all duration-500"
+                                    style="width: {{ $data['pourcentage'] }}%">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Statut --}}
+                        <div>
+                            @if ($data['pourcentage'] == 100)
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1
                                    bg-success/10 text-success rounded-full
                                    text-[10px] font-bold border border-success/20">
 
-                            <x-lucide-check-circle class="w-3 h-3" />
+                                    <x-lucide-check-circle class="w-3 h-3" />
 
-                            Pret
-                        </span>
-                    @else
-                        <span
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1
+                                    Pret
+                                </span>
+                            @else
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1
                                    bg-warning/10 text-warning rounded-full
                                    text-[10px] font-bold border border-warning/20">
 
-                            <x-lucide-clock class="w-3 h-3" />
+                                    <x-lucide-clock class="w-3 h-3" />
 
-                            Incomplet
-                        </span>
-                    @endif
-                </div>
+                                    Incomplet
+                                </span>
+                            @endif
+                        </div>
 
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
-@endif
+        @endif
     </div>
 @endsection

@@ -30,7 +30,7 @@
 
         td {
             vertical-align: bottom;
-            padding-bottom: 1px;
+            padding-bottom: 8px;
             font-weight: bold;
             text-transform: uppercase;
         }
@@ -1094,7 +1094,7 @@
         AcademiaPro HIGH SCHOOL |
         Email: academiapro237@gmail.com |
         (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06 60 01
-        
+
 
         | Page 1/1
 

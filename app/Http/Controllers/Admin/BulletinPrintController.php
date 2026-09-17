@@ -450,209 +450,202 @@ class BulletinPrintController extends Controller
         return $pdf->download("Statistiques_{$classe->nom}.pdf");
     }
 
-
-
     /**
- * Impression de l'état de contrôle des notes d'une classe
- *
- * Objectif :
- * Permettre aux enseignants et à l'administration de vérifier
- * toutes les notes saisies avant l'impression des bulletins.
- */
-public function imprimerEtatControleNotes($classeId, $trimestreId)
-{
-    // ---------------------------------------------------------
-    // 1. Informations générales
-    // ---------------------------------------------------------
+     * Impression de l'état de contrôle des notes d'une classe
+     *
+     * Objectif :
+     * Permettre aux enseignants et à l'administration de vérifier
+     * toutes les notes saisies avant l'impression des bulletins.
+     */
+    public function imprimerEtatControleNotes($classeId, $trimestreId)
+    {
+        // ---------------------------------------------------------
+        // 1. Informations générales
+        // ---------------------------------------------------------
 
-    $etablissement = DB::table('etablissements')->first();
+        $etablissement = DB::table('etablissements')->first();
 
-    $trimestre = DB::table('trimestres')
-        ->where('id', $trimestreId)
-        ->first();
+        $trimestre = DB::table('trimestres')
+            ->where('id', $trimestreId)
+            ->first();
 
-    $classe = DB::table('classes')
-        ->where('id', $classeId)
-        ->first();
+        $classe = DB::table('classes')
+            ->where('id', $classeId)
+            ->first();
 
-    if (! $trimestre || ! $classe) {
-        abort(404, 'Classe ou trimestre introuvable.');
-    }
+        if (! $trimestre || ! $classe) {
+            abort(404, 'Classe ou trimestre introuvable.');
+        }
 
-    $anneeActive = DB::table('annee_scolaires')
-        ->where('est_active', 1)
-        ->first();
+        $anneeActive = DB::table('annee_scolaires')
+            ->where('est_active', 1)
+            ->first();
 
-    if (! $anneeActive) {
-        abort(500, 'Aucune année scolaire active configurée.');
-    }
+        if (! $anneeActive) {
+            abort(500, 'Aucune année scolaire active configurée.');
+        }
 
-    // ---------------------------------------------------------
-    // 2. Récupération des séquences du trimestre
-    // ---------------------------------------------------------
+        // ---------------------------------------------------------
+        // 2. Récupération des séquences du trimestre
+        // ---------------------------------------------------------
 
-    $sequences = DB::table('sequences')
-        ->where('trimestre_id', $trimestreId)
-        ->orderBy('id', 'asc')
-        ->get();
+        $sequences = DB::table('sequences')
+            ->where('trimestre_id', $trimestreId)
+            ->orderBy('id', 'asc')
+            ->get();
 
-    if ($sequences->isEmpty()) {
-        abort(404, 'Aucune séquence configurée pour ce trimestre.');
-    }
+        if ($sequences->isEmpty()) {
+            abort(404, 'Aucune séquence configurée pour ce trimestre.');
+        }
 
-    $sequenceIds = $sequences->pluck('id');
+        $sequenceIds = $sequences->pluck('id');
 
-    // ---------------------------------------------------------
-    // 3. Récupération des élèves de la classe
-    // ---------------------------------------------------------
+        // ---------------------------------------------------------
+        // 3. Récupération des élèves de la classe
+        // ---------------------------------------------------------
 
-    $eleves = DB::table('inscriptions')
-        ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-        ->where('inscriptions.classe_id', $classeId)
-        ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
-        ->select(
-            'inscriptions.id as inscription_id',
-            'eleves.nom',
-            'eleves.prenom',
-            'eleves.matricule',
-            'eleves.sexe'
-        )
-        ->orderBy('eleves.nom', 'asc')
-        ->orderBy('eleves.prenom', 'asc')
-        ->get();
-
-    // ---------------------------------------------------------
-    // 4. Matières de la classe + enseignants
-    // ---------------------------------------------------------
-
-    $matieres = DB::table('classe_matiere')
-        ->join(
-            'matieres',
-            'classe_matiere.matiere_id',
-            '=',
-            'matieres.id'
-        )
-        ->leftJoin(
-            'groupes_matieres',
-            'matieres.groupe_matiere_id',
-            '=',
-            'groupes_matieres.id'
-        )
-        ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
-            $join->on(
-                'affectations.matiere_id',
-                '=',
-                'classe_matiere.matiere_id'
+        $eleves = DB::table('inscriptions')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->where('inscriptions.classe_id', $classeId)
+            ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+            ->select(
+                'inscriptions.id as inscription_id',
+                'eleves.nom',
+                'eleves.prenom',
+                'eleves.matricule',
+                'eleves.sexe'
             )
-                ->where(
-                    'affectations.classe_id',
+            ->orderBy('eleves.nom', 'asc')
+            ->orderBy('eleves.prenom', 'asc')
+            ->get();
+
+        // ---------------------------------------------------------
+        // 4. Matières de la classe + enseignants
+        // ---------------------------------------------------------
+
+        $matieres = DB::table('classe_matiere')
+            ->join(
+                'matieres',
+                'classe_matiere.matiere_id',
+                '=',
+                'matieres.id'
+            )
+            ->leftJoin(
+                'groupes_matieres',
+                'matieres.groupe_matiere_id',
+                '=',
+                'groupes_matieres.id'
+            )
+            ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
+                $join->on(
+                    'affectations.matiere_id',
                     '=',
-                    $classeId
+                    'classe_matiere.matiere_id'
                 )
-                ->where(
-                    'affectations.annee_scolaire_id',
-                    '=',
-                    $anneeActive->id
-                );
-        })
-        ->leftJoin(
-            'enseignants',
-            'affectations.enseignant_id',
-            '=',
-            'enseignants.id'
-        )
-        ->leftJoin(
-            'users',
-            'enseignants.user_id',
-            '=',
-            'users.id'
-        )
-        ->where(
-            'classe_matiere.classe_id',
-            $classeId
-        )
-        ->select(
-            'matieres.id as matiere_id',
-            'matieres.nom as matiere_nom',
-            'classe_matiere.coefficient',
-            'groupes_matieres.id as groupe_id',
-            'groupes_matieres.nom as groupe_nom',
-            'groupes_matieres.ordre as groupe_ordre',
-            DB::raw(
-                "GROUP_CONCAT(
+                    ->where(
+                        'affectations.classe_id',
+                        '=',
+                        $classeId
+                    )
+                    ->where(
+                        'affectations.annee_scolaire_id',
+                        '=',
+                        $anneeActive->id
+                    );
+            })
+            ->leftJoin(
+                'enseignants',
+                'affectations.enseignant_id',
+                '=',
+                'enseignants.id'
+            )
+            ->leftJoin(
+                'users',
+                'enseignants.user_id',
+                '=',
+                'users.id'
+            )
+            ->where(
+                'classe_matiere.classe_id',
+                $classeId
+            )
+            ->select(
+                'matieres.id as matiere_id',
+                'matieres.nom as matiere_nom',
+                'classe_matiere.coefficient',
+                'groupes_matieres.id as groupe_id',
+                'groupes_matieres.nom as groupe_nom',
+                'groupes_matieres.ordre as groupe_ordre',
+                DB::raw(
+                    "GROUP_CONCAT(
                     DISTINCT users.name
                     SEPARATOR ' / '
                 ) as enseignant_nom"
+                )
             )
-        )
-        ->groupBy(
-            'matieres.id',
-            'matieres.nom',
-            'classe_matiere.coefficient',
-            'groupes_matieres.id',
-            'groupes_matieres.nom',
-            'groupes_matieres.ordre'
-        )
-        ->orderBy('groupes_matieres.ordre', 'asc')
-        ->orderBy('matieres.nom', 'asc')
-        ->get();
+            ->groupBy(
+                'matieres.id',
+                'matieres.nom',
+                'classe_matiere.coefficient',
+                'groupes_matieres.id',
+                'groupes_matieres.nom',
+                'groupes_matieres.ordre'
+            )
+            ->orderBy('groupes_matieres.ordre', 'asc')
+            ->orderBy('matieres.nom', 'asc')
+            ->get();
 
-    // ---------------------------------------------------------
-    // 5. Récupération de toutes les notes en une seule requête
-    // ---------------------------------------------------------
+        // ---------------------------------------------------------
+        // 5. Récupération de toutes les notes en une seule requête
+        // ---------------------------------------------------------
 
-    // $moyennes = DB::table('moyennes')
-    //     ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
-    //     ->whereIn('sequence_id', $sequenceIds)
-    //     ->get();
+        /*
+         * Structure finale :
+         *
+         * $notes[inscription_id][matiere_id][sequence_id] = valeur
+         */
+        $moyennes = DB::table('moyennes')
+            ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
+            ->whereIn('sequence_id', $sequenceIds)
+            ->select(
+                'inscription_id',
+                'matiere_id',
+                'sequence_id',
+                'valeur'
+            )
+            ->get();
+        $notes = [];
 
-    /*
-     * Structure finale :
-     *
-     * $notes[inscription_id][matiere_id][sequence_id] = valeur
-     */
-$moyennes = DB::table('moyennes')
-    ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
-    ->whereIn('sequence_id', $sequenceIds)
-    ->select(
-        'inscription_id',
-        'matiere_id',
-        'sequence_id',
-        'valeur'
-    )
-    ->get();
-    $notes = [];
+        foreach ($moyennes as $moyenne) {
+            $notes[
+                $moyenne->inscription_id
+            ][
+                $moyenne->matiere_id
+            ][
+                $moyenne->sequence_id
+            ] = $moyenne->valeur;
+        }
 
-    foreach ($moyennes as $moyenne) {
-        $notes[
-            $moyenne->inscription_id
-        ][
-            $moyenne->matiere_id
-        ][
-            $moyenne->sequence_id
-        ] = $moyenne->valeur;
+        // ---------------------------------------------------------
+        // 6. Génération du PDF
+        // ---------------------------------------------------------
+
+        $pdf = Pdf::loadView(
+            'pages.admin.pdf.etat-controle-notes',
+            compact(
+                'etablissement',
+                'anneeActive',
+                'classe',
+                'trimestre',
+                'sequences',
+                'eleves',
+                'matieres',
+                'notes'
+            )
+        )->setPaper('a3', 'landscape');
+
+        return $pdf->download(
+            "Etat_Controle_Notes_{$classe->nom}_{$trimestre->nom}.pdf"
+        );
     }
-
-    // ---------------------------------------------------------
-    // 6. Génération du PDF
-    // ---------------------------------------------------------
-
-    $pdf = Pdf::loadView(
-        'pages.admin.pdf.etat-controle-notes',
-        compact(
-            'etablissement',
-            'anneeActive',
-            'classe',
-            'trimestre',
-            'sequences',
-            'eleves',
-            'matieres',
-            'notes'
-        )
-    )->setPaper('a3', 'landscape');
-
-    return $pdf->download(
-        "Etat_Controle_Notes_{$classe->nom}_{$trimestre->nom}.pdf"
-    );
-}
 }

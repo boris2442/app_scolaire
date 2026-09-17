@@ -78,14 +78,14 @@ Route::middleware('auth')->group(function () {
         ->name('enseignant.profile.update');
 
     // Route pour télécharger l'attestation de présence effective
-    Route::get('presence/{id}/attestation-presence', [PresenceAndServiceController::class, 'generateAttestationPresence'])
+    Route::get('presence/attestation', [PresenceAndServiceController::class, 'generateAttestationPresence'])
         ->name('teacher.attestation.presence');
 
-    Route::get('presence/{id}/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
+    Route::get('presence/attestation-take-service', [PresenceAndServiceController::class, 'generateAttestationPriseService'])
         ->name('teacher.attestation.take-service');
     // });
     //attestation reprise de service
-    Route::get('presence/{id}/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
+    Route::get('presence/attestation-reprise-service', [PresenceAndServiceController::class, 'generateAttestationRepriseService'])
         ->name('teacher.attestation.reprise-service');
 
 

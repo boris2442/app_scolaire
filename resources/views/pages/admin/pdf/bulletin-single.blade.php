@@ -530,7 +530,7 @@
                     <td width="34%" class="text-center">
                         Le Chef d'Établissement<br><br><br>
                         <span style="font-weight: normal; font-size: 7.5px;">
-                            Fait à {{ $etablissement->adresse ?? 'Bafoussam' }}, le {{ date('d/m/Y') }}
+                            Fait à  ................................., le ..............
                         </span>
                     </td>
                 </tr>
