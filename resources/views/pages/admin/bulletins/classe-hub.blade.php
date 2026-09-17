@@ -82,7 +82,7 @@
                                 <td>
                                     <!-- Bouton Imprimer 1 à 1 -->
                                     <a href="{{ route('admin.bulletins.imprimer-eleve', ['inscriptionId' => $eleve->inscription_id, 'trimestreId' => $trimestreId]) }}"
-                                        class="btn btn-sm btn-outline-primary" target="_blank">
+                                        class="btn btn-sm btn-outline-primary bg-primary p-2 rounded text-white" target="_blank">
                                         <i class="fas fa-print"></i> Imprimer le bulletin
                                     </a>
                                 </td>
