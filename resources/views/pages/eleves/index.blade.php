@@ -112,32 +112,7 @@
                     </div>
                 </div>
 
-                {{-- <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
-                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Parité F/G</p>
-                    <div class="flex flex-col gap-2">
-                        <span class="text-lg font-semibold">{{ $stats['filles'] }}f · {{ $stats['garcons'] }}g</span>
-                        <div class="w-full h-1 bg-secondary rounded-full overflow-hidden flex">
-                            @php $p = $stats['total'] > 0 ? ($stats['filles'] / $stats['total']) * 100 : 0; @endphp
-                            <div class="h-full bg-primary transition-all duration-500" style="width: {{ $p }}%">
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
 
-
-
-                {{-- <div class="bg-card p-5 rounded-xl border border-border shadow-sm col-span-2 lg:col-span-1">
-                    <p class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Répartition
-                        cycles</p>
-                    <div class="flex flex-wrap gap-3">
-                        @foreach ($stats['cycles'] as $c)
-                            <div class="flex flex-col">
-                                <span class="text-[10px] text-muted-foreground font-bold">{{ $c['cycle'] }}</span>
-                                <span class="text-xs font-semibold">{{ $c['total'] }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div> --}}
 
             </div>
         </div>
@@ -298,19 +273,7 @@
                     </button>
                 </div>
 
-                {{-- <select name="classe_id" onchange="this.form.submit()"
-                    class="bg-secondary border-border rounded-xl px-4 py-3 text-xs font-black  outline-none cursor-pointer focus:ring-2 focus:ring-primary/20">
-                    <option value="">Toutes les classes</option>
-                    @foreach ($niveaux as $n)
-                        <optgroup label="{{ $n->nom }}" class="bg-card">
-                            @foreach ($n->classes as $c)
-                                <option value="{{ $c->id }}"
-                                    {{ request('classe_id') == $c->id ? 'selected' : '' }}>
-                                    {{ $n->nom }} {{ $c->nom }}</option>
-                            @endforeach
-                        </optgroup>
-                    @endforeach
-                </select> --}}
+
                 <select name="classe_id" onchange="this.form.submit()"
                     class="bg-secondary border-border rounded-xl px-4 py-3 text-xs font-black outline-none cursor-pointer focus:ring-2 focus:ring-primary/20">
                     <option value="">Toutes les classes</option>
@@ -349,54 +312,110 @@
         </form>
 
         <div class="bg-card border border-border rounded-3xl overflow-hidden shadow-xl">
-            <div class="overflow-x-auto">
+
+            <!-- VUE MOBILE (Cartes) -->
+            <div class="block md:hidden divide-y divide-border/50">
+                @forelse ($eleves as $index => $eleve)
+                    <div class="p-4 flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-6 w-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-bold border border-primary/20">
+                                    {{ $eleves->firstItem() + $index }}
+                                </div>
+                                <div>
+                                    <a href="{{ route('admin.students.show', $eleve) }}"
+                                        class="text-sm font-semibold uppercase text-foreground">
+                                        {{ $eleve->nom }} {{ $eleve->prenom }}
+                                    </a>
+                                    <p class="text-[10px] text-primary font-bold tracking-wider">{{ $eleve->matricule }}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 bg-secondary rounded text-[10px]">{{ $eleve->sexe }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[11px] pt-1">
+                            <div>
+                                @php $ins = $eleve->inscriptions->first(); @endphp
+                                @if ($ins && $ins->classe)
+                                    <span
+                                        class="bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-[9px] uppercase">
+                                        {{ $ins->classe->nom }}
+                                    </span>
+                                @else
+                                    <span class="text-danger/50 text-[9px] font-black uppercase italic">Dossier en
+                                        attente</span>
+                                @endif
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-3 text-foreground/50">
+                                <a href="{{ route('admin.students.show', $eleve) }}"
+                                    class="hover:text-primary"><x-lucide-eye class="w-4 h-4" /></a>
+                                @can('access-admin')
+                                    <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
+                                        onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700">
+                                            <x-lucide-trash-2 class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                @endcan
+                                <a href="{{ route('admin.students.edit', $eleve) }}"
+                                    class="hover:text-danger"><x-lucide-edit class="w-4 h-4" /></a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-10 text-center text-foreground/40 text-xs italic">
+                        Aucune donnée disponible
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- VUE DESKTOP (Tableau classique) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left">
                     <thead class="bg-secondary/50 border-b border-border">
                         <tr>
-                            <th class="px-6 py-4 text-[10px]  uppercase text-foreground/50 font-bold-200">Apprenant</th>
-                            <th class="px-6 py-4 text-[10px]  uppercase text-foreground/50 text-center">Genre
+                            <th class="px-6 py-4 text-[10px] uppercase text-foreground/50 font-bold-200">Apprenant</th>
+                            <th class="px-6 py-4 text-[10px] uppercase text-foreground/50 text-center">Genre</th>
+                            <th class="px-6 py-4 text-[10px] uppercase text-foreground/50 text-center">Position Académique
                             </th>
-                            <th class="px-6 py-4 text-[10px]  uppercase text-foreground/50 text-center">Position
-                                Académique</th>
-                            <th class="px-6 py-4 text-[10px]  uppercase text-foreground/50 text-right">Actions
-                            </th>
+                            <th class="px-6 py-4 text-[10px] uppercase text-foreground/50 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/50">
-                        {{-- @forelse($eleves as $eleve) --}}
                         @forelse ($eleves as $index => $eleve)
-                            {{--      @foreach ($eleves as $index => $eleve) --}}
                             <tr class="hover:bg-secondary/30 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
                                         <div
-                                            class="h-5 w-5 bg-primary/10 text-primary rounded-full flex items-center justify-center  text-sm border border-primary/20">
-                                            {{-- {{ strtoupper(substr($eleve->nom, 0, 1)) }}{{ strtoupper(substr($eleve->prenom, 0, 1)) }} --}}
-                                            {{-- {{ $index +1 }} --}}
+                                            class="h-6 w-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs border border-primary/20 shrink-0">
                                             {{ $eleves->firstItem() + $index }}
                                         </div>
                                         <div>
-                                            <p class="text-sm  uppercase">
+                                            <p class="text-sm uppercase font-medium">
                                                 <a href="{{ route('admin.students.show', $eleve) }}">
-                                                    {{ $eleve->nom }}
-                                                    {{ $eleve->prenom }}
+                                                    {{ $eleve->nom }} {{ $eleve->prenom }}
                                                 </a>
                                             </p>
                                             <p class="text-[10px] text-primary font-bold tracking-wider">
                                                 {{ $eleve->matricule }}</p>
-                                            <span class="text-[10px] text-primary font-bold tracking-wider">Inscrit le
+                                            <span class="text-[10px] text-primary/70 font-medium">Inscrit le
                                                 <i>{{ $eleve->created_at }}</i></span>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-2 text-center">
-                                    <span class="px-2 py-1 bg-secondary rounded text-[10px] ">{{ $eleve->sexe }}</span>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-2 py-1 bg-secondary rounded text-[10px]">{{ $eleve->sexe }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @php $ins = $eleve->inscriptions->first(); @endphp
                                     @if ($ins && $ins->classe)
                                         <span
-                                            class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-[9px]  uppercase">
+                                            class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-[9px] uppercase">
                                             {{ $ins->classe->nom }}
                                         </span>
                                     @else
@@ -404,25 +423,23 @@
                                             attente</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-2 text-right">
-                                    <div class="flex justify-center items-center gap-2 text-foreground/30">
-
-                                        <a href="{{ route('admin.students.show', $eleve) }}"
-                                            title="Voir les détails"class="p-2 hover:text-primary transition-colors"><x-lucide-eye
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end items-center gap-2 text-foreground/30">
+                                        <a href="{{ route('admin.students.show', $eleve) }}" title="Voir les détails"
+                                            class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>
                                         @can('access-admin')
                                             <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
                                                 onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                                <button type="submit" class="p-2 text-red-500 hover:text-red-700">
                                                     <x-lucide-trash-2 class="w-4 h-4" />
-                                                    {{-- Archiver --}}
                                                 </button>
                                             </form>
                                         @endcan
-                                        <a title="Modifier les informations de l'élève"
-                                            href="{{ route('admin.students.edit', $eleve) }}"class="p-2 hover:text-danger transition-colors"><x-lucide-edit
+                                        <a title="Modifier" href="{{ route('admin.students.edit', $eleve) }}"
+                                            class="p-2 hover:text-danger transition-colors"><x-lucide-edit
                                                 class="w-4 h-4" /></a>
                                     </div>
                                 </td>
@@ -431,7 +448,7 @@
                             <tr>
                                 <td colspan="4"
                                     class="py-20 text-center text-foreground/20 uppercase font-black text-xs italic">
-                                    Aucune donnée disponible dans cette section
+                                    Aucune donnée disponible
                                 </td>
                             </tr>
                         @endforelse
