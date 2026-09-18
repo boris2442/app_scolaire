@@ -74,7 +74,9 @@ class BulletinPrintController extends Controller
             ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
             ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom', 'eleves.matricule', 'eleves.sexe', 'eleves.date_naissance', 'eleves.lieu_naissance')
             ->orderBy('eleves.nom', 'asc')
-            ->get();
+            // ->get();
+            ->paginate(15)
+            ->withQueryString();
 
         return view('pages.admin.bulletins.classe-hub', compact('classe', 'eleves', 'trimestreId'));
     }

@@ -324,8 +324,8 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
                         @endif
                     </td>
                     <!-- Sexe -->
-                    <td style="width: 15%;">
-                        <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
+                    <td style="width: 15%; font-size:8px;">
+                        <strong>S  : </strong> {{ $inscription->sexe ?? 'N/A' }}
                     </td>
                 </tr>
             </table>
