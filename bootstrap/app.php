@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CenseurMiddleware;
+use App\Http\Middleware\EnsureScolariteCoherence;
 use App\Http\Middleware\SGMiddleware;
 use App\Http\Middleware\TeacherMiddleware;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'sg' => SGMiddleware::class,
             'censeur' => CenseurMiddleware::class,
             'teacher' => TeacherMiddleware::class,
+            'scolarite.coherence' => EnsureScolariteCoherence::class,
         ]);
     })
 

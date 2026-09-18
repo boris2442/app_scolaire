@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Trimestre;
+use App\Services\ScolariteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,13 +45,15 @@ class BulletinPrintController extends Controller
     }
 
     // 2. Affichage du Hub d'une classe (La liste des élèves)
-    public function classeHub($classeId, Request $request)
+    public function classeHub($classeId, Request $request, ScolariteService $scolariteService)
     {
         $trimestreId = $request->get('trimestre_id');
         $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
-
         // VÉRIFICATION DE LA CLÔTURE DES SÉQUENCES DU TRIMESTRE
         if ($trimestreId) {
+            $trimestre = Trimestre::findOrFail($trimestreId);
+            // 🔒 SÉCURITÉ : On vérifie que le trimestre appartient bien à l'année scolaire active
+            $scolariteService->validateTrimestre($trimestre);
             $sequencesNonCloses = DB::table('sequences')
                 ->where('trimestre_id', $trimestreId)
                 ->where('is_closed', 0)
@@ -128,144 +131,139 @@ class BulletinPrintController extends Controller
     //     return $pdf->download(str('Bulletins_Classe')->slug('_').'.pdf');
     // }
 
+    // 4. Impression de TOUTE la classe (Version ultra-rapide en ~5-7 requêtes SQL au total)
+    public function imprimerClasse($classeId, $trimestreId)
+    {
+        $etablissement = DB::table('etablissements')->first();
+        $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+        $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+        $sequenceIds = $sequences->pluck('id');
+        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-// 4. Impression de TOUTE la classe (Version ultra-rapide en ~5-7 requêtes SQL au total)
-public function imprimerClasse($classeId, $trimestreId)
-{
-    $etablissement = DB::table('etablissements')->first();
-    $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
-    $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
-    $sequenceIds = $sequences->pluck('id');
-    $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+        // 1. Charger tous les élèves de la classe en UNE SEULE requête
+        $inscriptions = DB::table('inscriptions')
+            ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+            ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+            ->join('annee_scolaires', 'inscriptions.annee_scolaire_id', '=', 'annee_scolaires.id')
+            ->where('inscriptions.classe_id', $classeId)
+            ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+            ->select(
+                'inscriptions.id as inscription_id',
+                'inscriptions.classe_id',
+                'inscriptions.est_redoublant',
+                'inscriptions.annee_scolaire_id',
+                'eleves.nom as eleve_nom',
+                'eleves.photo as student_picture',
+                'eleves.prenom as eleve_prenom',
+                'eleves.matricule',
+                'eleves.sexe',
+                'eleves.date_naissance',
+                'eleves.lieu_naissance',
+                'classes.nom as classe_nom',
+                'classes.section',
+                'annee_scolaires.libelle as annee_libelle'
+            )->get();
 
-    // 1. Charger tous les élèves de la classe en UNE SEULE requête
-    $inscriptions = DB::table('inscriptions')
-        ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
-        ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
-        ->join('annee_scolaires', 'inscriptions.annee_scolaire_id', '=', 'annee_scolaires.id')
-        ->where('inscriptions.classe_id', $classeId)
-        ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
-        ->select(
-            'inscriptions.id as inscription_id',
-            'inscriptions.classe_id',
-            'inscriptions.est_redoublant',
-            'inscriptions.annee_scolaire_id',
-            'eleves.nom as eleve_nom',
-            'eleves.photo as student_picture',
-            'eleves.prenom as eleve_prenom',
-            'eleves.matricule',
-            'eleves.sexe',
-            'eleves.date_naissance',
-            'eleves.lieu_naissance',
-            'classes.nom as classe_nom',
-            'classes.section',
-            'annee_scolaires.libelle as annee_libelle'
-        )->get();
+        $totalElevesClasse = $inscriptions->count();
+        $inscriptionIds = $inscriptions->pluck('inscription_id');
 
-    $totalElevesClasse = $inscriptions->count();
-    $inscriptionIds = $inscriptions->pluck('inscription_id');
+        // 2. Charger les matières de la classe UNE SEULE FOIS pour tout le monde
+        $matieres = DB::table('classe_matiere')
+            ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
+            ->leftJoin('groupes_matieres', 'matieres.groupe_matiere_id', '=', 'groupes_matieres.id')
+            ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
+                $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
+                    ->where('affectations.classe_id', '=', $classeId)
+                    ->where('affectations.annee_scolaire_id', '=', $anneeActive->id);
+            })
+            ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
+            ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
+            ->where('classe_matiere.classe_id', $classeId)
+            ->select(
+                'matieres.id as matiere_id',
+                'matieres.nom as matiere_nom',
+                'classe_matiere.coefficient',
+                'groupes_matieres.id as groupe_id',
+                'groupes_matieres.nom as groupe_nom',
+                'groupes_matieres.ordre as groupe_ordre',
+                DB::raw("GROUP_CONCAT(DISTINCT users.name SEPARATOR ' / ') as prof_nom")
+            )
+            ->groupBy(
+                'matieres.id', 'matieres.nom', 'classe_matiere.coefficient',
+                'groupes_matieres.id', 'groupes_matieres.nom', 'groupes_matieres.ordre'
+            )
+            ->orderBy('groupes_matieres.ordre', 'asc')
+            ->get()
+            ->groupBy('groupe_id');
 
-    // 2. Charger les matières de la classe UNE SEULE FOIS pour tout le monde
-    $matieres = DB::table('classe_matiere')
-        ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-        ->leftJoin('groupes_matieres', 'matieres.groupe_matiere_id', '=', 'groupes_matieres.id')
-        ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
-            $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
-                ->where('affectations.classe_id', '=', $classeId)
-                ->where('affectations.annee_scolaire_id', '=', $anneeActive->id);
-        })
-        ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
-        ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
-        ->where('classe_matiere.classe_id', $classeId)
-        ->select(
-            'matieres.id as matiere_id',
-            'matieres.nom as matiere_nom',
-            'classe_matiere.coefficient',
-            'groupes_matieres.id as groupe_id',
-            'groupes_matieres.nom as groupe_nom',
-            'groupes_matieres.ordre as groupe_ordre',
-            DB::raw("GROUP_CONCAT(DISTINCT users.name SEPARATOR ' / ') as prof_nom")
-        )
-        ->groupBy(
-            'matieres.id', 'matieres.nom', 'classe_matiere.coefficient',
-            'groupes_matieres.id', 'groupes_matieres.nom', 'groupes_matieres.ordre'
-        )
-        ->orderBy('groupes_matieres.ordre', 'asc')
-        ->get()
-        ->groupBy('groupe_id');
+        // 3. Charger TOUTES les moyennes de la classe d'un coup
+        $toutesLesMoyennes = DB::table('moyennes')
+            ->whereIn('inscription_id', $inscriptionIds)
+            ->whereIn('sequence_id', $sequenceIds)
+            ->get()
+            ->groupBy('inscription_id');
 
-    // 3. Charger TOUTES les moyennes de la classe d'un coup
-    $toutesLesMoyennes = DB::table('moyennes')
-        ->whereIn('inscription_id', $inscriptionIds)
-        ->whereIn('sequence_id', $sequenceIds)
-        ->get()
-        ->groupBy('inscription_id');
+        // 4. Charger TOUS les suivis disciplinaires d'un coup
+        $tousLesSuivis = DB::table('suivi_disciplinaires')
+            ->whereIn('inscription_id', $inscriptionIds)
+            ->where('trimestre_id', $trimestreId)
+            ->get()
+            ->keyBy('inscription_id');
 
-    // 4. Charger TOUS les suivis disciplinaires d'un coup
-    $tousLesSuivis = DB::table('suivi_disciplinaires')
-        ->whereIn('inscription_id', $inscriptionIds)
-        ->where('trimestre_id', $trimestreId)
-        ->get()
-        ->keyBy('inscription_id');
+        // 5. Calculer TOUTES les moyennes générales et rangs de la classe en 1 seule requête SQL
+        $bilanClasse = DB::table('moyennes')
+            ->whereIn('inscription_id', $inscriptionIds)
+            ->whereIn('sequence_id', $sequenceIds)
+            ->select(
+                'inscription_id',
+                DB::raw('ROUND(SUM(total_points) / SUM(coefficient), 2) as moyenne_trimestre')
+            )
+            ->groupBy('inscription_id')
+            ->orderByDesc('moyenne_trimestre')
+            ->get();
 
-    // 5. Calculer TOUTES les moyennes générales et rangs de la classe en 1 seule requête SQL
-    $bilanClasse = DB::table('moyennes')
-        ->whereIn('inscription_id', $inscriptionIds)
-        ->whereIn('sequence_id', $sequenceIds)
-        ->select(
-            'inscription_id',
-            DB::raw('ROUND(SUM(total_points) / SUM(coefficient), 2) as moyenne_trimestre')
-        )
-        ->groupBy('inscription_id')
-        ->orderByDesc('moyenne_trimestre')
-        ->get();
-
-    // Générer les rangs en mémoire PHP
-    $rangsEtMoyennes = [];
-    $rangActuel = 1;
-    foreach ($bilanClasse as $b) {
-        $rangsEtMoyennes[$b->inscription_id] = [
-            'moyenne' => $b->moyenne_trimestre,
-            'rang' => $rangActuel++
-        ];
-    }
-
-    // 6. Assemblage en mémoire
-    $bulletins = [];
-    foreach ($inscriptions as $ins) {
-        $id = $ins->inscription_id;
-        $moyennesEleve = $toutesLesMoyennes->get($id, collect());
-
-        $notes = [];
-        $coefficients = [];
-        foreach ($moyennesEleve as $m) {
-            $notes[$m->matiere_id][$m->sequence_id] = $m->valeur;
-            $coefficients[$m->matiere_id] = $m->coefficient;
+        // Générer les rangs en mémoire PHP
+        $rangsEtMoyennes = [];
+        $rangActuel = 1;
+        foreach ($bilanClasse as $b) {
+            $rangsEtMoyennes[$b->inscription_id] = [
+                'moyenne' => $b->moyenne_trimestre,
+                'rang' => $rangActuel++,
+            ];
         }
 
-        $bulletins[] = [
-            'inscription' => $ins,
-            'totalElevesClasse' => $totalElevesClasse,
-            'matieres' => $matieres,
-            'notes' => $notes,
-            'coefficients' => $coefficients,
-            'suivi' => $tousLesSuivis->get($id),
-            'moyenneEleve' => $rangsEtMoyennes[$id]['moyenne'] ?? 0,
-            'rang' => $rangsEtMoyennes[$id]['rang'] ?? 'N/A',
-        ];
+        // 6. Assemblage en mémoire
+        $bulletins = [];
+        foreach ($inscriptions as $ins) {
+            $id = $ins->inscription_id;
+            $moyennesEleve = $toutesLesMoyennes->get($id, collect());
+
+            $notes = [];
+            $coefficients = [];
+            foreach ($moyennesEleve as $m) {
+                $notes[$m->matiere_id][$m->sequence_id] = $m->valeur;
+                $coefficients[$m->matiere_id] = $m->coefficient;
+            }
+
+            $bulletins[] = [
+                'inscription' => $ins,
+                'totalElevesClasse' => $totalElevesClasse,
+                'matieres' => $matieres,
+                'notes' => $notes,
+                'coefficients' => $coefficients,
+                'suivi' => $tousLesSuivis->get($id),
+                'moyenneEleve' => $rangsEtMoyennes[$id]['moyenne'] ?? 0,
+                'rang' => $rangsEtMoyennes[$id]['rang'] ?? 'N/A',
+            ];
+        }
+
+        $stats = $this->obtenirStatistiquesClasse($classeId, $trimestreId);
+
+        $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download(str('Bulletins_Classe')->slug('_').'.pdf');
     }
-
-    $stats = $this->obtenirStatistiquesClasse($classeId, $trimestreId);
-
-    $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'etablissement', 'stats'))
-        ->setPaper('a4', 'portrait');
-
-    return $pdf->download(str('Bulletins_Classe')->slug('_').'.pdf');
-}
-
-
-
-
 
     /**
      * Reconstitution instantanée du bulletin depuis la table 'moyennes'
@@ -283,7 +281,7 @@ public function imprimerClasse($classeId, $trimestreId)
                 'inscriptions.est_redoublant',
                 'inscriptions.annee_scolaire_id',
                 'eleves.nom as eleve_nom',
-                //image de l'eleve
+                // image de l'eleve
                 'eleves.photo as student_picture',
                 'eleves.prenom as eleve_prenom',
                 'eleves.matricule',

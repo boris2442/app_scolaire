@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Affectation;
 use App\Models\Evaluation;
 use App\Models\Inscription;
@@ -12,11 +11,11 @@ use App\Models\Sequence;
 use App\Services\ScolariteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EvaluationController extends Controller
 {
     protected $scolarite;
+
     protected $anneeActive;
 
     public function __construct(ScolariteService $scolarite)
@@ -25,15 +24,12 @@ class EvaluationController extends Controller
         $this->anneeActive = $this->scolarite->getAnneeActive();
     }
 
-
-
-
     public function index()
     {
         $enseignant = auth()->user()->enseignant;
 
-        if (!$enseignant) {
-            return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+        if (! $enseignant) {
+            return back()->with('error', 'Action impossible : profil enseignant non trouvé.');
         }
 
         // 1. Récupérer les séquences de l'année active (utilise $this->anneeActive)
@@ -61,33 +57,28 @@ class EvaluationController extends Controller
             ->get();
 
         return view('pages.evaluations.index', [
-            'evaluations'  => $evaluations,
-            'sequences'    => $sequences,
-            'anneeActive'  => $this->anneeActive,
+            'evaluations' => $evaluations,
+            'sequences' => $sequences,
+            'anneeActive' => $this->anneeActive,
             'affectations' => $affectations,
         ]);
     }
 
-
-
-
-    public function saisie($id)
+    public function saisie($id, ScolariteService $scolariteService)
     {
         $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
 
-
         // --- VERIFICATION DE CLOTURE ---
         $sequence = $evaluation->sequence;
+
+        // 🔒 SECURITE : Vérifie que la séquence appartient à l'année active
+        $scolariteService->validateSequence($sequence);
 
         if ($sequence->is_closed || ($sequence->submission_deadline && now()->greaterThan($sequence->submission_deadline))) {
             return redirect()->route('admin.evaluations.index')
                 ->with('error', 'La saisie des notes pour cette évaluation est verrouillée (séquence clôturée ou date limite dépassée).');
         }
         //
-
-
-
-
 
         // Conservé : la table 'inscriptions' utilise bien annee_scolaire_id
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
@@ -102,7 +93,7 @@ class EvaluationController extends Controller
         $notesExistantes = Note::where('evaluation_id', $id)
             ->get()
             ->mapWithKeys(function ($item) {
-                return [(int)$item->inscription_id => $item];
+                return [(int) $item->inscription_id => $item];
             });
 
         // Retrait de 'annee_scolaire_id' qui n'existe pas dans la table 'lecons'
@@ -117,20 +108,19 @@ class EvaluationController extends Controller
         return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
 
-
-
-
-    public function store(Request $request)
+    public function store(Request $request, ScolariteService $scolariteService)
     {
 
         $enseignant = auth()->user()->enseignant;
 
-        if (!$enseignant) {
-            return back()->with('error', "Action impossible : profil enseignant non trouvé.");
+        if (! $enseignant) {
+            return back()->with('error', 'Action impossible : profil enseignant non trouvé.');
         }
 
         // --- VERIFICATION DE CLOTURE ---
         $sequence = Sequence::findOrFail($request->sequence_id);
+        // 🔒 SECURITE : Bloque si la séquence est hors de l'année scolaire active
+        $scolariteService->validateSequence($sequence);
 
         if ($sequence->is_closed) {
             return back()->with('error', "Impossible de créer une évaluation : la période pour la {$sequence->nom} est clôturée par l'administration.");
@@ -140,73 +130,64 @@ class EvaluationController extends Controller
             return back()->with('error', "Impossible de créer une évaluation : la date limite de saisie pour la {$sequence->nom} est dépassée.");
         }
 
-
-
-
-
         $affectation = Affectation::findOrFail($request->affectation_id);
 
         // ICI : On cherche si cette évaluation existe déjà pour ne pas perdre les notes
         $evaluation = Evaluation::firstOrCreate(
             [
-                'sequence_id'   => $request->sequence_id,
-                'classe_id'     => $affectation->classe_id,
-                'matiere_id'    => $affectation->matiere_id,
+                'sequence_id' => $request->sequence_id,
+                'classe_id' => $affectation->classe_id,
+                'matiere_id' => $affectation->matiere_id,
                 'enseignant_id' => $enseignant->id,
                 'annee_scolaire_id' => $this->anneeActive->id, // <--- AJOUTE ÇA ICI
                 // On ne met pas 'titre' ou 'date' ici car ils peuvent varier
             ],
             [
-                'titre'           => $request->titre,
+                'titre' => $request->titre,
                 'date_evaluation' => now(),
             ]
         );
 
         return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
             ->with('success', 'Session d\'évaluation prête !');
-        //on finit on reste sur la meme page pour le telechargement des stats
+        // on finit on reste sur la meme page pour le telechargement des stats
         //   return redirect()->back()->with('success', 'Session d\'évaluation prête ! Vous pouvez maintenant saisir les notes ou télécharger les statistiques.');
     }
 
-
-
-
-
-    public function bulkStoreNotes(Request $request, $id)
+    public function bulkStoreNotes(Request $request, $id, ScolariteService $scolariteService)
     {
         $evaluation = Evaluation::findOrFail($id);
 
-
         // --- VERIFICATION DE CLOTURE ---
         $sequence = $evaluation->sequence;
-
+        // 🔒 SECURITE : Contrôle de cohérence de l'année active
+        $scolariteService->validateSequence($sequence);
         if ($sequence->is_closed || ($sequence->submission_deadline && now()->greaterThan($sequence->submission_deadline))) {
             return redirect()->route('admin.evaluations.index')
                 ->with('error', 'Enregistrement refusé : la période de saisie pour cette séquence est fermée.');
         }
 
-
         // 1. Synchroniser les leçons cochées (même si aucune n'est cochée, ça nettoie)
         $evaluation->lecons()->sync($request->input('lesson_ids', []));
 
         // 2. On vérifie qu'on a bien reçu le tableau 'notes'
-        if (!$request->has('notes')) {
+        if (! $request->has('notes')) {
             return redirect()->back()->with('error', 'Aucune note n’a été envoyée, mais les leçons ont été mises à jour.');
         }
 
         foreach ($request->notes as $inscriptionId => $donnees) {
-            if (isset($donnees['valeur']) && $donnees['valeur'] !== "") {
+            if (isset($donnees['valeur']) && $donnees['valeur'] !== '') {
                 if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
                     return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
                 }
 
                 Note::updateOrCreate(
                     [
-                        'evaluation_id'  => $evaluation->id,
+                        'evaluation_id' => $evaluation->id,
                         'inscription_id' => $inscriptionId,
                     ],
                     [
-                        'valeur'      => $donnees['valeur'],
+                        'valeur' => $donnees['valeur'],
                         'observation' => $donnees['observation'] ?? null,
                     ]
                 );
@@ -218,29 +199,17 @@ class EvaluationController extends Controller
         return redirect()->back()->with('success', 'Félicitations ! Les notes et les leçons évaluées ont été enregistrées. Vous pouvez maintenant télécharger les statistiques de cette évaluation.');
     }
 
-
-
-
-
-
-
-
-
-
-    ///////////////// les diffferents statistiques a gerer pour les impressions
-
-
-
+    // /////////////// les diffferents statistiques a gerer pour les impressions
 
     private function calculerStats($evaluation)
     {
         $notes = $evaluation->notes()->with('inscription.eleve')->get();
 
         $total = $notes->count();
-        $reussites = $notes->filter(fn($n) => $n->valeur >= 10);
+        $reussites = $notes->filter(fn ($n) => $n->valeur >= 10);
 
-        $garcons = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'M');
-        $filles = $notes->filter(fn($n) => $n->inscription->eleve->sexe === 'F');
+        $garcons = $notes->filter(fn ($n) => $n->inscription->eleve->sexe === 'M');
+        $filles = $notes->filter(fn ($n) => $n->inscription->eleve->sexe === 'F');
 
         $garconsCount = $garcons->count();
         $garconsReussite = $garcons->where('valeur', '>=', 10)->count();
@@ -260,7 +229,7 @@ class EvaluationController extends Controller
             ->where('annee_scolaire_id', $evaluation->annee_scolaire_id)
             ->with('lecons')
             ->get()
-            ->flatMap(fn($eval) => $eval->lecons->pluck('id'))
+            ->flatMap(fn ($eval) => $eval->lecons->pluck('id'))
             ->unique()
             ->count();
 
@@ -288,9 +257,6 @@ class EvaluationController extends Controller
         ];
     }
 
-
-
-
     public function telechargerStats($id)
     {
         // On charge les relations nécessaires (plus de .niveau sur la classe)
@@ -301,12 +267,12 @@ class EvaluationController extends Controller
         $data = [
             'evaluation' => $evaluation,
             'stats' => $stats,
-            'date_impression' => now()->format('d/m/Y à H:i')
+            'date_impression' => now()->format('d/m/Y à H:i'),
         ];
 
         $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
             ->setPaper('a4', 'portrait');
 
-     return $pdf->download(str('Statistiques ' . $evaluation->matiere->nom)->slug('_') . '.pdf');
+        return $pdf->download(str('Statistiques '.$evaluation->matiere->nom)->slug('_').'.pdf');
     }
 }
