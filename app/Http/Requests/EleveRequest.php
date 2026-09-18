@@ -23,8 +23,8 @@ class EleveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom' => 'required|string|max:255',
-            'prenom' => 'nullable|string|max:255',
+            'nom' => 'required|string|max:60',
+            'prenom' => 'nullable|string|max:60',
             'date_naissance' => 'required|date',
             'sexe' => 'required|in:M,F',
             'classe_id' => 'required|exists:classes,id', // On cible la table 'classes'
@@ -32,7 +32,7 @@ class EleveRequest extends FormRequest
             'telephone_parent' => 'nullable|string',
             'adresse' => 'nullable|string',
             'est_redoublant' => 'nullable|boolean',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Limite de 2MB
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024', // Limite de 1MB
 
             'name_father' => 'nullable|string|max:255',
             'name_mother' => 'nullable|string|max:255',

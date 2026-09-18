@@ -19,9 +19,14 @@
             padding: 0;
         }
 
-        /* td {
-            padding: 6px 0 !important;
-        } */
+        .space-head {
+            padding: 2px 0px !important;
+        }
+
+        .devise-class {
+            font-family: 'Times New Roman';
+            font-style: italic;
+        }
 
         /* En-tête officiel MINESEC */
         .en-tete {
@@ -61,11 +66,9 @@
         .titre-bulletin {
             text-align: center;
             margin: 8px 0 10px 0;
-            /* au lieu de 4px 0 6px 0 */
             padding: 4px 0;
             border-top: 1.5px solid #000;
             border-bottom: 1.5px solid #000;
-
         }
 
         .titre-bulletin h2 {
@@ -86,7 +89,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
-            /* au lieu de 5px */
             page-break-inside: avoid;
         }
 
@@ -98,9 +100,34 @@
         }
 
         /* Infos élève */
+        .table-eleve {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
         .table-eleve td {
+            border: 1px solid #000000;
+            padding: 5px 6px;
             font-size: 9px;
-            padding: 2px 4px;
+            vertical-align: middle;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 55px;
+            border: 1px dashed #666;
+            line-height: 55px;
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+        }
+
+        .photo-eleve {
+            max-width: 60px;
+            max-height: 60px;
+            display: block;
+            margin: 0 auto;
         }
 
         /* Tableau des Notes */
@@ -150,7 +177,6 @@
         .table-signatures td {
             border: 1px solid #000;
             height: 90px;
-            /* Espace suffisant pour les cachets officiels */
             vertical-align: top;
             padding: 15px;
             font-size: 9px;
@@ -174,34 +200,41 @@
             $coefficients = $b['coefficients'];
             $suivi = $b['suivi'];
 
-            // Variables calculées dynamiquement
             $moyenneEleve = $b['moyenneEleve'] ?? 0;
             $rangEleve = $b['rang'] ?? 'N/A';
+
+            // Traitement de la photo d'identité
+$photoPath = 'storage/' . ($inscription->student_picture ?? '');
+$defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
+
+            if (!empty($inscription->student_picture) && file_exists(public_path($photoPath))) {
+                $imageSrc = public_path($photoPath);
+            } elseif (file_exists(public_path($defaultAvatar))) {
+                $imageSrc = public_path($defaultAvatar);
+            } else {
+                $imageSrc = null;
+            }
         @endphp
-
-
-
 
         <div class="page-bulletin">
 
             <!-- EN-TÊTE OFFICIEL -->
-            <!-- EN-TÊTE OFFICIEL -->
             <div class="en-tete" style="line-height: 1.45;">
                 <div class="bloc-gauche" style="line-height: 1.45;">
-                    <div>REPUBLIQUE DU CAMEROUN</div>
-                    <div>Paix-Travail-Patrie</div>
-                    <div>MINISTERE DES ENSEIGNEMENTS SECONDAIRES</div>
-                    <div>
+                    <div class="space-head">REPUBLIQUE DU CAMEROUN</div>
+                    <div class='devise-class space-head'>Paix-Travail-Patrie</div>
+                    <div class="space-head">MINISTERE DES ENSEIGNEMENTS SECONDAIRES</div>
+                    <div class="space-head">
                         <span
                             style="text-transform: uppercase; font-weight: bold;">{{ $etablissement->nom ?? 'Établissement Scolaire' }}</span>
                     </div>
                     @if (!empty($etablissement->slogan))
-                        <div>
+                        <div class="space-head">
                             <span
                                 style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->slogan }}"</span>
                         </div>
                     @endif
-                    <div>
+                    <div class="space-head">
                         <span style="font-weight: normal; font-size: 7.5px;">{{ $etablissement->adresse ?? '' }} —
                             {{ $etablissement->telephone ?? '' }}</span>
                     </div>
@@ -224,76 +257,75 @@
                 </div>
 
                 <div class="bloc-droite" style="line-height: 1.45;">
-                    <div>REPUBLIC OF CAMEROON</div>
-                    <div>Peace-Work-Fatherland</div>
-                    <div>MINISTRY OF SECONDARY EDUCATION</div>
-                    <div>
+                    <div class="space-head"> REPUBLIC OF CAMEROON</div>
+                    <div class='devise-class space-head'>Peace-Work-Fatherland</div>
+                    <div class="space-head">MINISTRY OF SECONDARY EDUCATION</div>
+                    <div class="space-head">
                         <span
                             style="text-transform: uppercase; font-weight: bold;">{{ $etablissement->english_name ?? 'School Complex' }}</span>
                     </div>
                     @if (!empty($etablissement->english_slogan))
-                        <div>
+                        <div class="space-head">
                             <span
                                 style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span>
                         </div>
                     @endif
-                    <div>
+                    <div class="space-head">
                         <span style="font-weight: normal; font-size: 7.5px;">{{ $etablissement->email ?? '' }}</span>
                     </div>
                 </div>
                 <div class="clear"></div>
             </div>
 
-
-
             <!-- TITRE DU BULLETIN -->
             <div class="titre-bulletin">
-                <h2>BULLETIN DE NOTES DU {{ $trimestre->nom }}</h2>
+                <h2>BULLETIN DE NOTES DU {{ $trimestre->nom ?? '' }}</h2>
                 <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
             </div>
 
-            <!-- INFOS ÉLÈVE -->
+            <!-- INFOS ÉLÈVE AVEC PHOTO -->
             <table class="table-eleve">
                 <tr>
-                    <td width="60%" style="text-transform:uppercase">
+                    <!-- Nom & Prénom -->
+                    <td colspan="2" style="text-transform: uppercase; width: 50%;">
                         <strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
                         {{ $inscription->eleve_prenom }}
                     </td>
-                    <td width="40%">
+                    <!-- Date & Lieu de Naissance -->
+                    <td colspan="2" style="width: 40%;">
                         <strong>NÉ(E) LE :</strong>
                         {{ $inscription->date_naissance ? date('d/m/Y', strtotime($inscription->date_naissance)) : 'N/A' }}
                         À {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
                     </td>
+                    <!-- Photo d'identité (prend toute la hauteur des 2 lignes) -->
+                    <td rowspan="2" style="width: 65px; text-align: center; vertical-align: middle; padding: 2px;">
+                        @if (!empty($imageSrc))
+                            <img src="{{ $imageSrc }}" class="photo-eleve" alt="Photo Élève">
+                        @else
+                            <div class="photo-placeholder">PHOTO</div>
+                        @endif
+                    </td>
                 </tr>
                 <tr>
-                    <td width="60%">
-                        <table style="width:100%; margin:0; border:none;">
-                            <tr style="border:none;">
-                                <td style="border:none; padding:0;" width="50%">
-                                    <strong>REDOUBLANT :</strong> {{ $inscription->est_redoublant ? 'Oui' : 'Non' }}
-                                </td>
-                                <td style="border:none; padding:0;" width="50%">
-                                    <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
-                                </td>
-                            </tr>
-                        </table>
+                    <!-- Redoublant -->
+                    <td style="width: 20%;">
+                        <strong>REDOUBLANT :</strong> {{ $inscription->est_redoublant ? 'Oui' : 'Non' }}
                     </td>
-                    <td width="40%">
-                        <table style="width:100%; margin:0; border:none;">
-                            <tr style="border:none;">
-                                <td style="border:none; padding:0;" width="60%">
-                                    <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
-                                    @if (!empty($inscription->section))
-                                        <em style="font-style: italic; font-size: 0.9em; opacity: 0.85;">
-                                            ({{ ucfirst($inscription->section) }})
-                                        </em>
-                                    @endif
-                                </td>
-                                <td style="border:none; padding:0;" width="40%">
-                                    <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
-                                </td>
-                            </tr>
-                        </table>
+                    <!-- Matricule -->
+                    <td style="width: 30%;">
+                        <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
+                    </td>
+                    <!-- Classe -->
+                    <td style="width: 25%;">
+                        <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
+                        @if (!empty($inscription->section))
+                            <em
+                                style="font-style: italic; font-size: 0.85em;">({{ ucfirst($inscription->section) }})</em>
+                        @endif
+                    </td>
+                    <!-- Sexe -->
+                    <td style="width: 15%;">
+                        <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
                     </td>
                 </tr>
             </table>
@@ -332,7 +364,7 @@
 
                         <tr style="background-color: #e5e7eb;">
                             <td colspan="8" style="font-weight: bold; font-size: 9px;">
-                                {{ $matieresDuGroupe->first()->groupe_nom ?? 'MATIÈRES DIVERSE' }}
+                                {{ $matieresDuGroupe->first()->groupe_nom ?? 'MATIÈRES DIVERSES' }}
                             </td>
                         </tr>
 
@@ -387,7 +419,7 @@
                         <!-- SOUS-TOTAL DU GROUPE -->
                         <tr style="background-color: #f9f9f9; font-weight: bold;">
                             <td colspan="4" class="text-right" style="font-size: 8.5px;">
-                                SOUS-TOTAL {{ strtoupper($matieresDuGroupe->first()->groupe_nom) }}
+                                SOUS-TOTAL {{ strtoupper($matieresDuGroupe->first()->groupe_nom ?? '') }}
                             </td>
                             <td class="text-center">{{ $sousTotalCoeffs }}</td>
                             <td class="text-center">{{ number_format($sousTotalPoints, 2) }}</td>
@@ -411,9 +443,7 @@
                 </tbody>
             </table>
 
-
             @php
-                // Calcul de secours si $bilan->moyenne n'est pas encore en BDD
                 if ($moyenneEleve === null || $moyenneEleve == 0) {
                     $moyenneEleve = $totalCoeffGlobal > 0 ? $totalPointsGlobal / $totalCoeffGlobal : 0;
                 }
@@ -434,23 +464,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        {{-- <td style="font-weight: bold; font-size: 11px; background-color: #f4f4f4;">
-                            {{ number_format($moyenneEleve, 2) }} / 20
-                        </td> --}}
-
                         <td style="font-weight: bold; font-size: 10px;">
                             {{ number_format($moyenneEleve, 2, ',', ' ') }} / 20
                         </td>
-
-
-                        {{-- <td style="font-weight: bold; font-size: 10px;">
-                            @if ($rangEleve !== 'N/A' && is_numeric($rangEleve))
-                                {{ $rangEleve }}{{ $rangEleve == 1 ? 'er' : 'ème' }} / {{ $totalElevesClasse }}
-                            @else
-                                N/A
-                            @endif
-                        </td> --}}
-
                         <td style="font-weight: bold; font-size: 10px;">
                             {{ $rangEleve }}{{ $rangEleve == 1 ? 'er' : 'ème' }} / {{ $totalElevesClasse }}
                         </td>
@@ -530,7 +546,7 @@
                     <td width="34%" class="text-center">
                         Le Chef d'Établissement<br><br><br>
                         <span style="font-weight: normal; font-size: 7.5px;">
-                            Fait à  ................................., le ..............
+                            Fait à ................................., le ..............
                         </span>
                     </td>
                 </tr>
