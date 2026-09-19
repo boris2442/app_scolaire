@@ -35,8 +35,8 @@
             <form action="{{ route('settings.years.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="text-xs font-medium">Libellé (ex: 2025-2026)</label>
-                    <input required type="text" name="libelle" value="{{ old('libelle') }}" 
+                    <label class="text-xs font-medium" for='libelle'>Libellé (ex: 2025-2026)</label>
+                    <input required type="text" name="libelle" value="{{ old('libelle') }}" id='libelle'
                         class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('libelle') border-danger @else border-border @enderror">
                     @error('libelle')
                         <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>
@@ -45,16 +45,16 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs font-medium">Début</label>
-                        <input required type="date" name="date_debut" value="{{ old('date_debut') }}"
+                        <label for='date_debut' class="text-xs font-medium">Début</label>
+                        <input id='date_debut' required type="date" name="date_debut" value="{{ old('date_debut') }}"
                             class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('date_debut') border-danger @else border-border @enderror">
                         @error('date_debut')
                             <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="text-xs font-medium">Fin</label>
-                        <input required type="date" name="date_fin" value="{{ old('date_fin') }}"
+                        <label for='date_fin' class="text-xs font-medium">Fin</label>
+                        <input id='date_fin' required type="date" name="date_fin" value="{{ old('date_fin') }}"
                             class="w-full bg-secondary rounded-lg text-sm px-3 py-2 border @error('date_fin') border-danger @else border-border @enderror">
                         @error('date_fin')
                             <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>
@@ -137,7 +137,8 @@
                                         @foreach ($trim->sequences as $seq)
                                             <p
                                                 class="text-[9px] text-foreground border-b border-border/50 last:border-0 py-1 italic">
-                                              <x-lucide-chevron-right class="w-3 h-3 mr-1 text-primary" />{{ $seq->nom }}
+                                                <x-lucide-chevron-right
+                                                    class="w-3 h-3 mr-1 text-primary" />{{ $seq->nom }}
                                             </p>
                                         @endforeach
                                     </div>

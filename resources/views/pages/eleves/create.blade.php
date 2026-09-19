@@ -33,16 +33,17 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de famille</label>
-                            <input type="text" name="nom" placeholder="ex: Hey"
+                            <label for='nom' class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de
+                                famille</label>
+                            <input id='nom' type="text" name="nom" placeholder="ex: Hey"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
 
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Prénoms</label>
-                            <input type="text" name="prenom" placeholder="ex: Hello Joe"
+                            <label for='prenom' class="text-[10px] font-bold  text-muted-foreground ml-1">Prénoms</label>
+                            <input id='prenom' type="text" name="prenom" placeholder="ex: Hello Joe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                             @error('prenom')
                                 <span class="text-xs text-danger mt-1">{{ $message }}</span>
@@ -50,9 +51,9 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Date de
+                            <label for='date_naissance' class="text-[10px] font-bold  text-muted-foreground ml-1">Date de
                                 naissance</label>
-                            <input type="date" name="date_naissance"
+                            <input id='date_naissance' type="date" name="date_naissance"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
                             @error('date_naissance')
@@ -61,8 +62,9 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Genre / Sexe</label>
-                            <select name="sexe"
+                            <label for='sexe' class="text-[10px] font-bold  text-muted-foreground ml-1">Genre /
+                                Sexe</label>
+                            <select id='sexe' name="sexe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
                                 <option value="" disabled selected>Choisir...</option>
@@ -81,11 +83,11 @@
 
                         <!-- Lieu de naissance -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for='lieu_naissance' class="block text-sm font-semibold text-gray-700 mb-2">
                                 Lieu de naissance
                             </label>
 
-                            <input type="text" name="lieu_naissance" placeholder="Ex : Bafoussam"
+                            <input id='lieu_naissance' type="text" name="lieu_naissance" placeholder="Ex : Bafoussam"
                                 class="w-full bg-secondary border border-gray-300 rounded-lg py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-primary/20">
 
                             @error('lieu_naissance')
@@ -95,7 +97,7 @@
 
                         <!-- Statut élève -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for='est_redoublant' class="block text-sm font-semibold text-gray-700 mb-2">
                                 Statut de l'élève (Redoublement)
                             </label>
 
@@ -134,18 +136,20 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Téléphone
+                            <label for='telephone_parent'
+                                class="text-[10px] font-bold  text-muted-foreground ml-1">Téléphone
                                 Parent</label>
-                            <input type="tel" name="telephone_parent" placeholder="ex: 6xx xx xx xx"
+                            <input id='telephone_parent' type="tel" name="telephone_parent"
+                                placeholder="ex: 6xx xx xx xx"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                         @error('telephone_parent')
                             <span class="text-xs text-danger mt-1">{{ $message }}</span>
                         @enderror
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Adresse /
+                            <label for='adresse' class="text-[10px] font-bold  text-muted-foreground ml-1">Adresse /
                                 Quartier</label>
-                            <input type="text" name="adresse" placeholder="ex: Djeleng V"
+                            <input id='adresse' type="text" name="adresse" placeholder="ex: Djeleng V"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                             @error('adresse')
                                 <span class="text-xs text-danger mt-1">{{ $message }}</span>
@@ -154,17 +158,19 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom du Père</label>
+                            <label for='name_father' class="text-[10px] font-bold  text-muted-foreground ml-1">Nom du
+                                Père</label>
 
-                            <input type="text" name="name_father" placeholder="ex: John Doe"
+                            <input id='name_father' type="text" name="name_father" placeholder="ex: John Doe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                         @error('name_father')
                             <span class="text-xs text-danger mt-1">{{ $message }}</span>
                         @enderror
                         <div>
-                            <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de la Mère</label>
-                            <input type="text" name="name_mother" placeholder="ex: Jane Doe"
+                            <label for='name_mother' class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de la
+                                Mère</label>
+                            <input id='name_mother' type="text" name="name_mother" placeholder="ex: Jane Doe"
                                 class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                             @error('name_mother')
                                 <span class="text-xs text-danger mt-1">{{ $message }}</span>
@@ -180,8 +186,9 @@
                         <x-lucide-school class="w-4 h-4" /> Affectation
                     </h2>
                     <div>
-                        <label class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de destination</label>
-                        <select name="classe_id"
+                        <label for='classe_id' class="text-[10px] font-bold  text-muted-foreground ml-1">Classe de
+                            destination</label>
+                        <select id='classe_id' name="classe_id"
                             class="w-full bg-secondary border-border rounded-xl py-3 px-4 mt-1 text-sm font-black  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                             required>
                             <option value="">-- Choisir une classe --</option>

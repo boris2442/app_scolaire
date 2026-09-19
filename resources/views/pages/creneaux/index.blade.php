@@ -46,33 +46,33 @@
 
                     <div class="mb-5">
 
-                        <label class="block text-sm font-medium text-foreground mb-2">
+                        <label class="block text-sm font-medium text-foreground mb-2" for='heure_debut'>
                             Heure de début
                         </label>
 
-                        <input type="time" name="heure_debut" required
+                        <input type="time" name="heure_debut" required id='heure_debut'
                             class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                     </div>
 
                     <div class="mb-5">
 
-                        <label class="block text-sm font-medium text-foreground mb-2">
+                        <label class="block text-sm font-medium text-foreground mb-2" for='heure_fin'>
                             Heure de fin
                         </label>
 
-                        <input type="time" name="heure_fin" required
+                        <input type="time" name="heure_fin" required id='heure_fin'
                             class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                     </div>
 
                     <div class="mb-6">
 
-                        <label class="block text-sm font-medium text-foreground mb-2">
+                        <label class="block text-sm font-medium text-foreground mb-2" for='libelle'>
                             Libellé
                         </label>
 
-                        <input type="text" name="libelle" placeholder="Ex : Pause, Cours..."
+                        <input id='libelle' type="text" name="libelle" placeholder="Ex : Pause, Cours..."
                             class="w-full rounded-lg border-border bg-background text-foreground placeholder:text-foreground/40 focus:border-primary focus:ring-primary">
 
                     </div>

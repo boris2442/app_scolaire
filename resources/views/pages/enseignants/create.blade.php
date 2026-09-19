@@ -17,20 +17,20 @@
                     <h3 class="text-[10px] font-black  text-primary border-b border-border pb-2">Compte Utilisateur
                     </h3>
                     <div>
-                        <label class="text-[10px] font-black  ml-1">Nom Complet</label>
-                        <input type="text" name="name" required
+                        <label for="name" class="text-[10px] font-black  ml-1">Nom Complet</label>
+                        <input type="text" id="name" name="name" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium uppercase focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="EX: Hello Dupont">
                     </div>
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
-                        <input type="email" name="email"
+                        <label for="email" class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
+                        <input type="email" id="email" name="email"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="enseignant@academiapro.com">
                     </div>
                     <div>
-                        <label class="text-[10px] font-black  ml-1">Contact</label>
-                        <input type="text" name="phone" required
+                        <label for="phone" class="text-[10px] font-black  ml-1">Contact</label>
+                        <input type="text" id="phone" name="phone" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all"
                             placeholder="EX: +237  6 77 88 99 00">
                     </div>
@@ -46,8 +46,8 @@
                             placeholder="ENS-2026-001">
                     </div> --}}
                     <div>
-                        <label class="text-[10px] font-black  ml-1 text-primary">Département d'attache</label>
-                        <select name="departement_id" required
+                        <label for="departement_id" class="text-[10px] font-black  ml-1 text-primary">Département d'attache</label>
+                        <select id="departement_id" name="departement_id" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium  focus:ring-2 focus:ring-primary/20 transition-all">
                             <option value="">-- Choisir un département --</option>
                             @foreach ($departements as $dept)

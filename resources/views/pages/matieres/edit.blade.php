@@ -9,20 +9,21 @@
                 @csrf @method('PUT')
 
                 <div>
-                    <label class="text-sm font-bold">Nom</label>
+                    <label for='nom' class="text-sm font-bold">Nom</label>
                     <input type="text" name="nom" value="{{ old('nom', $matiere->nom) }}"
-                        class="w-full bg-secondary border rounded p-2 mt-1">
+                        class="w-full bg-secondary border rounded p-2 mt-1" id='nom'>
                 </div>
 
                 <div>
-                    <label class="text-sm font-bold">Code</label>
-                    <input type="text" name="code" value="{{ old('code', $matiere->code) }}"
+                    <label for='code' class="text-sm font-bold">Code</label>
+                    <input id='code' type="text" name="code" value="{{ old('code', $matiere->code) }}"
                         class="w-full bg-secondary border rounded p-2 mt-1 uppercase">
                 </div>
 
                 <div>
-                    <label class="text-sm font-bold">Groupe</label>
-                    <select name="groupe_matiere_id" class="w-full bg-secondary border rounded p-2 mt-1">
+                    <label for='groupe_matiere_id' class="text-sm font-bold">Groupe</label>
+                    <select id='groupe_matiere_id' name="groupe_matiere_id"
+                        class="w-full bg-secondary border rounded p-2 mt-1">
                         @foreach ($groupes as $groupe)
                             <option value="{{ $groupe->id }}"
                                 {{ $matiere->groupe_matiere_id == $groupe->id ? 'selected' : '' }}>

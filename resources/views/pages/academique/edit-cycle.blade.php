@@ -15,8 +15,8 @@
         <form action="{{ route('settings.academique.cycles.update', $cycle) }}" method="POST" class="space-y-4">
             @csrf @method('PUT')
             <div>
-                <label class="text-xs font-medium uppercase text-muted-foreground">Nom du Cycle</label>
-                <input type="text" name="nom" value="{{ old('nom', $cycle->nom) }}" 
+                <label for='nom' class="text-xs font-medium uppercase text-muted-foreground">Nom du Cycle</label>
+                <input id='nom' type="text" name="nom" value="{{ old('nom', $cycle->nom) }}" 
                     class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1 @error('nom') border-danger @enderror">
                 @error('nom') <p class="text-[10px] text-danger mt-1">{{ $message }}</p> @enderror
             </div>

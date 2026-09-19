@@ -16,37 +16,39 @@
 
                     <!-- Informations Générales -->
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2">Nom officiel de l'établissement (FR)</label>
+                        <label for='nom' class="block text-sm font-medium mb-2">Nom officiel de l'établissement (FR)</label>
                         <input type="text" name="nom" value="{{ old('nom', $etablissement->nom) }}"
                             class="w-full bg-secondary border-border rounded-lg focus:ring-primary focus:border-primary px-4 py-2.5"
+                            id='nom'
                             placeholder="Ex: Lycée Classique de .....">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Nom officiel de l'établissement (EN)</label>
-                        <input type="text" name="english_name"
+                        <label for='english_name' class="block text-sm font-medium mb-2">Nom officiel de l'établissement (EN)</label>
+                        <input type="text" name="english_name" 
+id='english_name'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             placeholder="School Name in English"
                             value="{{ old('english_name', $etablissement->english_name) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Code École (Ministère)</label>
-                        <input type="text" name="code_ecole"
+                        <label for='code_ecole' class="block text-sm font-medium mb-2">Code École (Ministère)</label>
+                        <input type="text" name="code_ecole" id='code_ecole'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             value="{{ old('code_ecole', $etablissement->code_ecole) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Slogan / Devise (FR)</label>
-                        <input type="text" name="slogan"
+                        <label for='slogan' class="block text-sm font-medium mb-2">Slogan / Devise (FR)</label>
+                        <input type="text" name="slogan" id='slogan'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             placeholder="Travail - Paix - Patrie" value="{{ old('slogan', $etablissement->slogan) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Slogan / Devise (EN)</label>
-                        <input type="text" name="english_slogan"
+                        <label class="block text-sm font-medium mb-2"  for='english_slogan'>Slogan / Devise (EN)</label>
+                        <input type="text" name="english_slogan" id='english_slogan'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             placeholder="Work - Peace - Fatherland"
                             value="{{ old('english_slogan', $etablissement->english_slogan) }}">
@@ -54,64 +56,67 @@
 
                     <!-- Contacts & Adresse -->
                     <div>
-                        <label class="block text-sm font-medium mb-2">Téléphone</label>
-                        <input type="text" name="telephone"
+                        <label class="block text-sm font-medium mb-2"  for='telephone'>Téléphone</label>
+                        <input type="text" name="telephone" id='telephone'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             value="{{ old('telephone', $etablissement->telephone) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Email</label>
-                        <input type="email" name="email"
+                        <label class="block text-sm font-medium mb-2" for='email'>Email</label>
+                        <input type="email" name="email" id='email'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             value="{{ old('email', $etablissement->email) }}">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2">Adresse physique</label>
-                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 resize-none">{{ old('adresse', $etablissement->adresse) }}</textarea>
+                        <label class="block text-sm font-medium mb-2" for='adresse'>Adresse physique</label>
+                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 resize-none" id='adresse'>{{ old('adresse', $etablissement->adresse) }}</textarea>
                     </div>
 
                     <!-- Localisation Administrative (FR) -->
                     <div>
-                        <label class="block text-sm font-medium mb-2">Région (FR)</label>
-                        <input type="text" name="region"
+                        <label class="block text-sm font-medium mb-2" for='region'>Région (FR)</label>
+                        <input type="text" name="region" id='region'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Ouest"
                             value="{{ old('region', $etablissement->region) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Département (FR)</label>
+                        <label class="block text-sm font-medium mb-2" for='department'>Département (FR)</label>
                         <input type="text" name="department"
+                        id='department'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Mifi"
                             value="{{ old('department', $etablissement->department) }}">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2">Arrondissement / Sub-Division (FR)</label>
+                        <label class="block text-sm font-medium mb-2" for='sub_division'>Arrondissement / Sub-Division (FR)</label>
                         <input type="text" name="sub_division"
+                        id='sub_division'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Bafoussam 1er"
                             value="{{ old('sub_division', $etablissement->sub_division) }}">
                     </div>
 
                     <!-- Localisation Administrative (EN) -->
                     <div>
-                        <label class="block text-sm font-medium mb-2">Région (EN)</label>
-                        <input type="text" name="english_region"
+                        <label class="block text-sm font-medium mb-2" for='english_region'>Région (EN)</label>
+                        <input type="text" name="english_region" id='english_region'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: West"
                             value="{{ old('english_region', $etablissement->english_region) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2">Département (EN)</label>
-                        <input type="text" name="english_department"
+                        <label class="block text-sm font-medium mb-2" for='english_department'>Département (EN)</label>
+                        <input type="text" name="english_department" id='english_department'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Mifi"
                             value="{{ old('english_department', $etablissement->english_department) }}">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2">Arrondissement / Sub-Division (EN)</label>
+                        <label class="block text-sm font-medium mb-2" for='english_sub_division'>Arrondissement / Sub-Division (EN)</label>
                         <input type="text" name="english_sub_division"
+                        id='english_sub_division'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Bafoussam I"
                             value="{{ old('english_sub_division', $etablissement->english_sub_division) }}">
                     </div>

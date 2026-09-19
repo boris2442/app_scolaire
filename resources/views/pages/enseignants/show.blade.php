@@ -22,20 +22,20 @@
                     </h3>
 
                     <div>
-                        <label class="text-[10px] font-black ml-1">Nom Complet</label>
-                        <input type="text" name="name" required value="{{ old('name', $enseignant->user->name) }}"
+                        <label for="name" class="text-[10px] font-black ml-1">Nom Complet</label>
+                        <input type="text" id="name" name="name" required value="{{ old('name', $enseignant->user->name) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
-                        <input type="email" name="email" required value="{{ old('email', $enseignant->user->email) }}"
+                        <label for="email" class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
+                        <input type="email" id="email" name="email" required value="{{ old('email', $enseignant->user->email) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Contact</label>
-                        <input type="text" name="phone" required
+                        <label for="phone" class="text-[10px] font-black uppercase ml-1">Contact</label>
+                        <input type="text" id="phone" name="phone" required
                             value="{{ old('phone', $enseignant->user->phone ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
@@ -48,14 +48,14 @@
                     </h3>
 
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Matricule</label>
-                        <input type="text" name="matricule" required
+                        <label for="matricule" class="text-[10px] font-black uppercase ml-1">Matricule</label>
+                        <input type="text" id="matricule" name="matricule" required
                             value="{{ old('matricule', $enseignant->matricule) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                     <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Département d'attache</label>
-                        <input type="text" name="departement_id" required
+                        <label for="departement_id" class="text-[10px] font-black uppercase ml-1">Département d'attache</label>
+                        <input type="text" id="departement_id" name="departement_id" required
                             value="{{ old('departement_id', $enseignant->departement->nom ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>

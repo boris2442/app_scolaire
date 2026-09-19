@@ -49,7 +49,7 @@
                         <input type="hidden" name="classe_id" value="{{ $classe->id }}">
 
                         <div>
-                            <label class="block text-xs font-semibold mb-1 uppercase opacity-70">Période de calcul</label>
+                            <label  class="block text-xs font-semibold mb-1 uppercase opacity-70">Période de calcul</label>
                             <select name="type_periode" id="periode_select_{{ $classe->id }}"
                                 onchange="updateHiddenInputs(this, {{ $classe->id }})"
                                 class="w-full bg-background border border-input text-foreground rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-ring transition-all"

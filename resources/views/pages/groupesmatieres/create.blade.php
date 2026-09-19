@@ -9,17 +9,17 @@
             @csrf
             
             <div class="mb-5">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Nom du groupe</label>
-                <input type="text" name="nom" required 
+                <label for='nom' class="block text-sm font-bold text-gray-700 mb-2">Nom du groupe</label>
+                <input type="text" name="nom" required id='nom'
                     class="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     placeholder="Ex: Matières Littéraires">
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Ordre d'affichage</label>
+                <label for='ordre' class="block text-sm font-bold text-gray-700 mb-2">Ordre d'affichage</label>
                 <input type="number" name="ordre" required min="1" value="1"
                     class="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="Ex: 1">
+                    placeholder="Ex: 1" id='ordre'>
                 <p class="text-xs text-gray-400 mt-2">Plus le chiffre est petit, plus le groupe apparaîtra haut sur le bulletin.</p>
             </div>
 

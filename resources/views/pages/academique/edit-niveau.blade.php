@@ -44,9 +44,9 @@
 
                 {{-- Nom du Niveau --}}
                 <div>
-                    <label class="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Nom du Niveau (ex:
+                    <label for='nom' class="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Nom du Niveau (ex:
                         3ème)</label>
-                    <input type="text" name="nom" value="{{ old('nom', $niveau->nom) }}"
+                    <input id='nom' type="text" name="nom" value="{{ old('nom', $niveau->nom) }}"
                         class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2.5 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all @error('nom') border-danger @enderror">
                     @error('nom')
                         <p class="text-[10px] text-danger mt-1 font-medium">{{ $message }}</p>

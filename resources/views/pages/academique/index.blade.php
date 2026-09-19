@@ -8,7 +8,7 @@
                 <h2 class="text-xs  text-primary mb-4 tracking-widest">1. Ajouter un Cycle</h2>
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
-                    <input type="text" name="nom" placeholder="ex: Premier Cycle" required
+                    <input  type="text" name="nom" placeholder="ex: Premier Cycle" required
                         class="flex-1 bg-secondary border-border rounded text-sm px-3 py-2">
                     <button class="bg-primary text-white p-2 rounded hover:opacity-90">
                         <x-lucide-plus class="w-4 h-4" />
@@ -38,8 +38,8 @@
                     </div>
 
                     <div>
-                        <label class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
-                        <input type="text" name="nom" placeholder="Ex: 6ème A"
+                        <label for='nom' class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
+                        <input type="text" name="nom" id='nom' placeholder="Ex: 6ème A"
                             class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1" required>
                     </div>
                     <div class="space-y-2">

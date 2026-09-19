@@ -6,8 +6,8 @@
         <div class="grid grid-cols-2 gap-4">
             <!-- Classe et Matière (pré-filtrées) -->
             <div>
-                <label class="block text-sm font-medium text-foreground">Matière</label>
-                <select name="matiere_id" class="w-full mt-1 bg-background border-input rounded-lg">
+                <label for="matiere_id" class="block text-sm font-medium text-foreground">Matière</label>
+                <select id="matiere_id" name="matiere_id" class="w-full mt-1 bg-background border-input rounded-lg">
                     @foreach ($matieres as $m)
                         <option value="{{ $m->id }}">{{ $m->nom }}</option>
                     @endforeach
@@ -16,8 +16,8 @@
 
             <!-- Enseignant -->
             <div>
-                <label class="block text-sm font-medium text-foreground">Enseignant</label>
-                <select name="enseignant_id" class="w-full mt-1 bg-background border-input rounded-lg">
+                <label for="enseignant_id" class="block text-sm font-medium text-foreground">Enseignant</label>
+                <select id="enseignant_id" name="enseignant_id" class="w-full mt-1 bg-background border-input rounded-lg">
                     @foreach ($enseignants as $e)
                         <option value="{{ $e->id }}">{{ $e->user->name }}</option>
                     @endforeach
@@ -26,8 +26,8 @@
 
             <!-- Jour et Créneau -->
             <div>
-                <label class="block text-sm font-medium text-foreground">Jour</label>
-                <select name="jour_id" class="w-full mt-1 bg-background border-input rounded-lg">
+                <label for="jour_id" class="block text-sm font-medium text-foreground">Jour</label>
+                <select id="jour_id" name="jour_id" class="w-full mt-1 bg-background border-input rounded-lg">
                     @foreach ($jours as $j)
                         <option value="{{ $j->id }}">{{ $j->nom }}</option>
                     @endforeach
@@ -35,8 +35,8 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-foreground">Créneau</label>
-                <select name="creneau_id" class="w-full mt-1 bg-background border-input rounded-lg">
+                <label for="creneau_id" class="block text-sm font-medium text-foreground">Créneau</label>
+                <select id="creneau_id" name="creneau_id" class="w-full mt-1 bg-background border-input rounded-lg">
                     @foreach ($creneaux as $c)
                         <option value="{{ $c->id }}">{{ $c->heure_debut }} - {{ $c->heure_fin }}</option>
                     @endforeach

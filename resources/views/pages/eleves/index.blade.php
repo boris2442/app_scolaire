@@ -167,9 +167,9 @@
 
                         <!-- Choix de la classe -->
                         <div>
-                            <label class="block text-xs font-semibold text-foreground/70 mb-1">Classe de destination <span
+                            <label for='classe_id' class="block text-xs font-semibold text-foreground/70 mb-1">Classe de destination <span
                                     class="text-red-500">*</span></label>
-                            <select name="classe_id" required
+                            <select id='classe_id' name="classe_id" required
                                 class="w-full px-3 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg border border-border focus:ring-2 focus:ring-primary">
                                 <option value="">-- Choisir la classe --</option>
                                 @foreach ($classes as $classe)
@@ -180,9 +180,9 @@
 
                         <!-- Fichier Excel -->
                         <div>
-                            <label class="block text-xs font-semibold text-foreground/70 mb-1">Fichier Excel (.xlsx, .xls,
+                            <label for='fichier_excel' class="block text-xs font-semibold text-foreground/70 mb-1">Fichier Excel (.xlsx, .xls,
                                 .csv) <span class="text-red-500">*</span></label>
-                            <input type="file" name="fichier_excel" accept=".xlsx, .xls, .csv" required
+                            <input id='fichier_excel' type="file" name="fichier_excel" accept=".xlsx, .xls, .csv" required
                                 class="w-full text-xs text-foreground/70 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90">
                         </div>
 

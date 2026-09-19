@@ -64,11 +64,11 @@
 
                 <!-- Jour -->
                 <div>
-                    <label class="block text-sm font-medium text-foreground mb-2">
+                    <label for='jour_id' class="block text-sm font-medium text-foreground mb-2">
                         Jour
                     </label>
 
-                    <select name="jour_id" required
+                    <select name="jour_id" required id='jour_id'
                         class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                         @foreach ($jours as $jour)
@@ -83,11 +83,11 @@
                 <!-- Créneau -->
                 <div>
 
-                    <label class="block text-sm font-medium text-foreground mb-2">
+                    <label for='creneau_id' class="block text-sm font-medium text-foreground mb-2">
                         Créneau
                     </label>
 
-                    <select name="creneau_id" required
+                    <select name="creneau_id" required id='creneau_id'
                         class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                         @foreach ($creneaux as $creneau)
@@ -110,13 +110,13 @@
 
                 <div>
 
-                    <label class="block text-sm font-medium text-foreground mb-2">
+                    <label for='matiere_id' class="block text-sm font-medium text-foreground mb-2">
 
                         Matière
 
                     </label>
 
-                    <select name="matiere_id" required
+                    <select name="matiere_id" required id='matiere_id'
                         class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                         @foreach ($matieres as $matiere)
@@ -133,13 +133,13 @@
 
                 <div>
 
-                    <label class="block text-sm font-medium text-foreground mb-2">
+                    <label for='enseignant_id' class="block text-sm font-medium text-foreground mb-2">
 
                         Enseignant
 
                     </label>
 
-                    <select name="enseignant_id" required
+                    <select name="enseignant_id" required id='enseignant_id'
                         class="w-full rounded-lg border-border bg-background text-foreground focus:border-primary focus:ring-primary">
 
                         @foreach ($enseignants as $enseignant)

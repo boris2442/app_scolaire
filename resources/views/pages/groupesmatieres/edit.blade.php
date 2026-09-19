@@ -11,16 +11,18 @@
             @csrf
             @method('PUT')
 
-      <div class="mb-5">
-        <label class="block text-sm font-bold text-gray-700 mb-2">Nom du groupe</label>
-        <input type="text" name="nom" required value="{{ old('nom', $groupe->nom) }}"
-            class="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-            placeholder="Ex: Matières Littéraires">
-    </div>
+            <div class="mb-5">
+                <label class="block text-sm font-bold text-gray-700 mb-2" for='nom'
+>Nom du groupe</label>
+                <input id='nom' type="text" name="nom" required value="{{ old('nom', $groupe->nom) }}"
+                    class="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                    placeholder="Ex: Matières Littéraires">
+            </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Ordre d'affichage</label>
+                <label for="ordre" class="block text-sm font-bold text-gray-700 mb-2">Ordre d'affichage</label>
                 <input type="number" name="ordre" required min="1" value="{{ old('ordre', $groupe->ordre) }}"
+                    id='ordre'
                     class="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     placeholder="Ex: 1">
                 <p class="text-xs text-gray-400 mt-2">Plus le chiffre est petit, plus le groupe apparaîtra haut sur le

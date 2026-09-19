@@ -47,8 +47,8 @@
                 <form action="{{ route('settings.matieres.store') }}" method="POST" class="space-y-4">
                     @csrf
                     <div>
-                        <label class="text-[12px] font-bold  text-muted-foreground ml-1">Nom complet</label>
-                        <input type="text" name="nom" placeholder="ex: Mathématiques"
+                        <label for='nom' class="text-[12px] font-bold  text-muted-foreground ml-1">Nom complet</label>
+                        <input id='nom' type="text" name="nom" placeholder="ex: Mathématiques"
                             class="w-full bg-secondary border-border rounded text-sm px-4 py-2 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             required>
                         {{-- affichage des erreur --}}
@@ -58,8 +58,8 @@
                     </div>
 
                     <div>
-                        <label class="text-[12px] font-bold  text-muted-foreground ml-1">Code court (Trigramme)</label>
-                        <input type="text" name="code" placeholder="ex: MATH"
+                        <label for='code' class="text-[12px] font-bold  text-muted-foreground ml-1">Code court (Trigramme)</label>
+                        <input id='code' type="text" name="code" placeholder="ex: MATH"
                             class="w-full bg-secondary border-border rounded text-sm px-4 py-2 mt-1 focus:ring-2 focus:ring-primary/20 outline-none transition-all uppercase"
                             required>
                         @error('code')
@@ -67,8 +67,8 @@
                         @enderror
                     </div>
                     <div class="mb-5">
-                        <label class="block text-sm font-bold  mb-2">Groupe de matière</label>
-                        <select name="groupe_matiere_id" class="w-full px-4 py-2 rounded border border-border bg-secondary">
+                        <label for='groupe_matiere_id' class="block text-sm font-bold  mb-2">Groupe de matière</label>
+                        <select id='groupe_matiere_id' name="groupe_matiere_id" class="w-full px-4 py-2 rounded border border-border bg-secondary">
                             <option value="">Sélectionner un groupe...</option>
 
                             {{-- On boucle sur la liste des groupes --}}

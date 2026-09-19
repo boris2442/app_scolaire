@@ -18,8 +18,8 @@
                 @method('PUT')
 
                 <div>
-                    <label class="text-[10px] text-muted-foreground">Cycle concerné</label>
-                    <select name="cycle_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1"
+                    <label for='cycle_id' class="text-[10px] text-muted-foreground">Cycle concerné</label>
+                    <select id='cycle_id' name="cycle_id" class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1"
                         required>
                         <option value="">Sélectionner un cycle...</option>
                         @foreach ($cycles as $cycle)
@@ -32,8 +32,8 @@
                 </div>
 
                 <div>
-                    <label class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
-                    <input type="text" name="nom" value="{{ old('nom', $classe->nom) }}" placeholder="Ex: 6ème A"
+                    <label for='nom' class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
+                    <input type="text" id='nom' name="nom" value="{{ old('nom', $classe->nom) }}" placeholder="Ex: 6ème A"
                         class="w-full bg-secondary border-border rounded-lg text-sm px-3 py-2 mt-1" required>
                 </div>
                 <div>

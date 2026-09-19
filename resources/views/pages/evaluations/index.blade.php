@@ -27,11 +27,11 @@
 
                 {{-- Séquence --}}
                 <div>
-                    <label class="block text-sm font-semibold text-card-foreground mb-2">
+                    <label for='sequence_id' class="block text-sm font-semibold text-card-foreground mb-2">
                         Période d'évaluation
                     </label>
 
-                    <select name="sequence_id"
+                    <select id='sequence_id' name="sequence_id"
                         class="w-full bg-background border border-border rounded p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                         required>
 
@@ -60,11 +60,11 @@
                 {{-- Cours --}}
                 <div class="md:col-span-2">
 
-                    <label class="block text-sm font-semibold text-card-foreground mb-2">
+                    <label for='affectation_id' class="block text-sm font-semibold text-card-foreground mb-2">
                         Cours à évaluer
                     </label>
 
-                    <select name="affectation_id"
+                    <select id='affectation_id' name="affectation_id"
                         class="w-full bg-background border border-border rounded p-3 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                         required>
 
