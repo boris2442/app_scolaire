@@ -74,7 +74,7 @@
     <!-- Barre de recherche -->
     <form method="GET" action="{{ route('admin.users.index') }}" class="mb-6 flex gap-3 items-center">
         <div class="relative flex-1">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher..."
+            <input required type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher..."
                 class="w-full bg-card border border-border rounded-full text-sm pl-4 pr-10 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
 
             <!-- Bouton Croix (apparaît uniquement si une recherche est en cours) -->

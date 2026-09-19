@@ -196,20 +196,6 @@
             @endcanany
 
             @can('access-enseignant')
-                <li>
-                    <a href="{{ route('enseignant.dashboard') }}" title="Progression saisie"
-                        class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
-                        <x-lucide-line-chart class="w-4 h-4 flex-shrink-0" />
-                        <span class="sidebar-label ml-3 truncate">Progression saisie</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Mon Emploi du temps"
-                        class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('emplois.enseignant') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
-                        <x-lucide-calendar class="w-4 h-4 flex-shrink-0" />
-                        <span class="sidebar-label ml-3 truncate">Mon Emploi du temps</span>
-                    </a>
-                </li>
             @endcan
 
             @can('access-sg')
@@ -221,7 +207,20 @@
                     </a>
                 </li>
             @endcan
-
+            <li>
+                <a href="{{ route('enseignant.dashboard') }}" title="Progression saisie"
+                    class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('enseignant.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
+                    <x-lucide-line-chart class="w-4 h-4 flex-shrink-0" />
+                    <span class="sidebar-label ml-3 truncate">Progression saisie</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Mon Emploi du temps"
+                    class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('emplois.enseignant') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
+                    <x-lucide-calendar class="w-4 h-4 flex-shrink-0" />
+                    <span class="sidebar-label ml-3 truncate">Mon Emploi du temps</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ route('admin.evaluations.index') }}" title="Évaluations"
                     class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('admin.evaluations.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">

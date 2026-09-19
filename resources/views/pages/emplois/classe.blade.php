@@ -261,7 +261,7 @@
 
                                                 <div class="text-xs text-foreground/70 mt-1">
 
-                                               M/Mme     {{ $seance->enseignant->user->name ?? 'Enseignant' }}
+                                               M/Mme     {{ $seance->enseignant->name ?? 'Enseignant' }}
 
                                                     {{ $seance->enseignant->prenom ?? '' }}
 

@@ -133,21 +133,7 @@
 
                             });
                         </script>
-                        <div class="flex flex-row items-center justify-between w-full pt-1 text-xs gap-2">
-                            <label for="remember_me"
-                                class="inline-flex items-center cursor-pointer select-none text-gray-500 font-medium">
-                                <input id="remember_me" type="checkbox" name="remember"
-                                    class="rounded border-input bg-background text-primary shadow-sm focus:ring-primary/30 w-3.5 h-3.5 transition-colors">
-                                <span class="ms-2">Se souvenir de moi</span>
-                            </label>
-
-                            @if (Route::has('password.request'))
-                                <a class="text-danger hover:underline font-medium text-[11px]"
-                                    href="{{ route('password.request') }}">
-                                    Mot de passe oublié ?
-                                </a>
-                            @endif
-                        </div>
+                       
 
                         <div class="pt-2 w-full">
                             <button type="submit"

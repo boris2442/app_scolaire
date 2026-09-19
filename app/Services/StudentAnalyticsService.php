@@ -11,8 +11,8 @@ class StudentAnalyticsService
     // app/Services/StudentAnalyticsService.php
 
     public function getFullDashboardStats($anneeId)
-{
-    // return Cache::remember("student_stats_year_{$anneeId}", 1800, function () use ($anneeId) {
+    {
+        // return Cache::remember("student_stats_year_{$anneeId}", 1800, function () use ($anneeId) {
         // Optimisation : On ne fait qu'une seule lecture pour le global
         $global = Inscription::where('inscriptions.annee_scolaire_id', $anneeId)
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
@@ -39,14 +39,15 @@ class StudentAnalyticsService
         $taux = $total > 0 ? round((($total - $anciensCount) / $total) * 100) : 0;
 
         return [
-            'total'    => $total,
-            'garcons'  => (int) ($global->garcons ?? 0),
-            'filles'   => (int) ($global->filles ?? 0),
+            'total' => $total,
+            'garcons' => (int) ($global->garcons ?? 0),
+            'filles' => (int) ($global->filles ?? 0),
             'nouveaux' => $taux,
-            'cycles'   => $cycles
+            'cycles' => $cycles,
         ];
-    // });
-}
+        // });
+    }
+
     private function getGlobalStats($anneeId)
     {
         return Inscription::where('inscriptions.annee_scolaire_id', $anneeId) // Préfixe ajouté
@@ -83,7 +84,9 @@ class StudentAnalyticsService
     {
         $totalCetteAnnee = Inscription::where('annee_scolaire_id', $anneeId)->count();
 
-        if ($totalCetteAnnee == 0) return 0;
+        if ($totalCetteAnnee == 0) {
+            return 0;
+        }
 
         // On précise aussi ici pour éviter toute erreur future
         $anciensIds = Inscription::where('annee_scolaire_id', '<', $anneeId)

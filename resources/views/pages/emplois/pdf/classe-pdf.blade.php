@@ -204,7 +204,7 @@
                                     {{ $seance->matiere->nom ?? 'Matière' }}
                                 </div>
                                 <div class="enseignant">
-                               M / Mme     {{ $seance->enseignant->user->name ?? '' }}
+                               M / Mme    {{ $seance->enseignant?->name ?? 'Non assigné' }}
                                 </div>
                             @else
                                 <span class="libre">Libre</span>

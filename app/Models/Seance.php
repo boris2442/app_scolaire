@@ -8,6 +8,7 @@ use App\Models\Creneau;
 use App\Models\Enseignant;
 use App\Models\Jour;
 use App\Models\Matiere;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -32,10 +33,14 @@ class Seance extends Model
         return $this->belongsTo(Matiere::class);
     }
 
-    public function enseignant(): BelongsTo
-    {
-        return $this->belongsTo(Enseignant::class);
-    }
+    // public function enseignant(): BelongsTo
+    // {
+    //     return $this->belongsTo(Enseignant::class);
+    // }
+    public function enseignant()
+{
+    return $this->belongsTo(User::class, 'enseignant_id');
+}
 
     public function anneeScolaire(): BelongsTo
     {

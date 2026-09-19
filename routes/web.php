@@ -317,7 +317,7 @@ Route::middleware('scolarite.coherence')->group(function () {
         });
     // });
 
-    Route::middleware(['auth', 'teacher'])->group(function () {
+    Route::middleware('auth')->group(function () {
         Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
         // Emploi du temps de l'enseignant (Téléchargement PDF)
