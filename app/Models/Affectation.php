@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\AnneeScolaire;
+
 use App\Models\Classe;
-use App\Models\Enseignant;
+
 use App\Models\Matiere;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Teacher;
 
 class Affectation extends Model
 {
@@ -21,7 +22,7 @@ class Affectation extends Model
     ];
     public function enseignant()
     {
-        return $this->belongsTo(Enseignant::class);
+        return $this->belongsTo(Teacher::class);
     }
     public function matiere()
     {
@@ -33,7 +34,7 @@ class Affectation extends Model
     }
     public function anneeScolaire()
     {
-        return $this->belongsTo(AnneeScolaire::class);
+        return $this->belongsTo(Year::class, 'annee_scolaire_id');
     }
-  
+
 }

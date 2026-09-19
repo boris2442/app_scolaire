@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Affectation;
-use App\Models\Evaluation;
+use App\Models\Assessment;
+
 use App\Models\Sequence;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ public function index(Request $request, ScolariteService $scolarite)
         ->get();
 
     // 3. Charger UNIQUEMENT les évaluations créées par cet enseignant pour la séquence choisie
-    $evaluations = \App\Models\Evaluation::where('enseignant_id', $enseignant->id)
+    $evaluations = Assessment::where('enseignant_id', $enseignant->id)
         ->where('sequence_id', $sequenceId)
         ->withCount('notes')
         ->get()

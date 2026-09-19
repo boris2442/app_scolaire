@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\IncoherentScolariteException;
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 use App\Models\Inscription;
 use App\Models\Sequence;
 use App\Models\Trimestre;
@@ -16,7 +16,7 @@ class ScolariteService
      */
     public function getAnneeActive()
     {
-        return AnneeScolaire::where('est_active', true)->first()
+        return Year::where('est_active', true)->first()
             ?? abort(500, "Aucune année scolaire active n'est définie dans le système.");
     }
 

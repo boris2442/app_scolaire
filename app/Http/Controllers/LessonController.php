@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lecon;
+
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
@@ -12,7 +13,7 @@ class LessonController extends Controller
         $userId = auth()->id();
 
         // Récupérer les leçons existantes en utilisant directement $subjectId et $classRoomId
-        $lessons = Lecon::where('enseignant_id', $userId)
+        $lessons = Lesson::where('enseignant_id', $userId)
             ->where('matiere_id', $subjectId)
             ->where('classe_id', $classRoomId)
             ->orderBy('ordre')
@@ -30,7 +31,7 @@ class LessonController extends Controller
             'classe_id' => 'required',
         ]);
 
-        Lecon::create([
+        Lesson::create([
             'titre' => $request->titre,
             'description' => $request->description,
             'matiere_id' => $request->matiere_id,

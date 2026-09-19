@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EleveRequest;
+use App\Http\Requests\StudentRequest;
 use App\Imports\StudentImport;
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 use App\Models\Classe;
-use App\Models\Eleve;
-use App\Models\Etablissement;
+
+
 use App\Models\Inscription;
-use App\Models\Niveau;
+use App\Models\School;
+use App\Models\Student;
 use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
 use Barryvdh\DomPDF\PDF;
@@ -33,13 +34,13 @@ class StudentController extends Controller
     {
         $anneeId = $request->input('annee_id');
         $anneeActive = $anneeId
-            ? AnneeScolaire::findOrFail($anneeId)
-            : AnneeScolaire::where('est_active', true)->first();
+            ? Year::findOrFail($anneeId)
+            : Year::where('est_active', true)->first();
 
         $stats = $analytics->getFullDashboardStats($anneeActive->id);
 
         // MODIFICATION ICI : On charge directement la classe (plus de relation niveau)
-        $query = Eleve::whereHas('inscriptions', function ($q) use ($anneeActive) {
+        $query = Student::whereHas('inscriptions', function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id);
         })->with(['inscriptions' => function ($q) use ($anneeActive) {
             $q->where('annee_scolaire_id', $anneeActive->id)->with('classe');
@@ -95,28 +96,28 @@ class StudentController extends Controller
     // {
     //     //afficher le sexe
 
-    //     $anneeActive = AnneeScolaire::where('est_active', true)->first();
+    //     $anneeActive = Year::where('est_active', true)->first();
     //     $niveaux = Niveau::with('classes')->get();
     //     // On récupère les sexes depuis la structure de la BD
-    //     $sexes = Eleve::getSexeOptions();
+    //     $sexes = Student::getSexeOptions();
     //     return view('pages.eleves.create', compact('anneeActive', 'niveaux', 'sexes'));
     // }
 
     public function create()
     {
         // Récupérer l'année active
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         // On récupère directement la liste des classes (plus de niveaux)
         $classes = Classe::all();
 
         // On récupère les sexes depuis la structure de la BD
-        $sexes = Eleve::getSexeOptions();
+        $sexes = Student::getSexeOptions();
 
         return view('pages.eleves.create', compact('anneeActive', 'classes', 'sexes'));
     }
 
-    public function store(EleveRequest $request)
+    public function store(StudentRequest $request)
     {
         $data = $request->validated();
 
@@ -128,7 +129,7 @@ class StudentController extends Controller
 
         $eleve = DB::transaction(function () use ($data, $request) {
 
-            $nouveauEleve = Eleve::create([
+            $nouveauEleve = Student::create([
                 'nom' => strtoupper($data['nom']),
                 'prenom' => $data['prenom'],
                 'date_naissance' => $data['date_naissance'],
@@ -146,7 +147,7 @@ class StudentController extends Controller
             $anneeActive = $this->scolarite->getAnneeActive();
 
             // UTILISATION DE LA NOUVELLE FONCTION DE MATRICULE
-            Eleve::genererEtAttribuerMatricule($nouveauEleve, $anneeActive->id);
+            Student::genererEtAttribuerMatricule($nouveauEleve, $anneeActive->id);
 
             Inscription::create([
                 'eleve_id' => $nouveauEleve->id,
@@ -170,12 +171,12 @@ class StudentController extends Controller
     /**
      * Affiche le dossier complet d'un élève.
      *
-     * @param  Eleve  $eleve
+     * @param  Student  $eleve
      */
     public function show($id)
     {
         // On charge les inscriptions, l'année scolaire et la classe (sans la relation 'niveau')
-        $eleve = Eleve::with(['inscriptions.classe', 'inscriptions.annee_scolaire'])
+        $eleve = Student::with(['inscriptions.classe', 'inscriptions.annee_scolaire'])
             ->findOrFail($id);
 
         return view('pages.eleves.show', compact('eleve'));
@@ -183,7 +184,7 @@ class StudentController extends Controller
 
     public function edit($id)
     {
-        $eleve = Eleve::with('inscriptions')->findOrFail($id);
+        $eleve = Student::with('inscriptions')->findOrFail($id);
 
         // Utilisation du service
         $anneeActive = $this->scolarite->getAnneeActive();
@@ -191,7 +192,7 @@ class StudentController extends Controller
 
         // On récupère directement les classes (plus de niveaux)
         $classes = Classe::all();
-        $sexes = Eleve::getSexeOptions();
+        $sexes = Student::getSexeOptions();
 
         return view('pages.eleves.edit', compact(
             'eleve',
@@ -202,9 +203,9 @@ class StudentController extends Controller
         ));
     }
 
-    public function update(EleveRequest $request, $id)
+    public function update(StudentRequest $request, $id)
     {
-        $eleve = Eleve::findOrFail($id);
+        $eleve = Student::findOrFail($id);
         $data = $request->validated();
 
         return DB::transaction(function () use ($data, $request, $eleve) {
@@ -234,7 +235,7 @@ class StudentController extends Controller
 
             // 3. Mise à jour de la Classe (Inscription)
             // On cherche l'inscription de l'année active pour cet élève
-            $anneeActive = AnneeScolaire::where('est_active', true)->first();
+            $anneeActive = Year::where('est_active', true)->first();
 
             if ($anneeActive) {
                 $inscription = Inscription::where('eleve_id', $eleve->id)
@@ -253,7 +254,7 @@ class StudentController extends Controller
 
     public function destroy($id)
     {
-        $eleve = Eleve::findOrFail($id);
+        $eleve = Student::findOrFail($id);
 
         // On archive l'élève
         $eleve->delete();
@@ -265,7 +266,7 @@ class StudentController extends Controller
     // Afficher uniquement les élèves supprimés
     public function trashed()
     {
-        $elevesArchives = Eleve::onlyTrashed()
+        $elevesArchives = Student::onlyTrashed()
             ->orderByDesc('deleted_at')
             ->paginate(10);
 
@@ -276,7 +277,7 @@ class StudentController extends Controller
     public function restore($id)
     {
         // On utilise withTrashed() pour pouvoir trouver l'élève même s'il est "supprimé"
-        $eleve = Eleve::withTrashed()->findOrFail($id);
+        $eleve = Student::withTrashed()->findOrFail($id);
         $eleve->restore();
 
         return redirect()->route('admin.students.index')
@@ -286,7 +287,7 @@ class StudentController extends Controller
     // Suppression définitive (Optionnel)
     public function forceDelete($id)
     {
-        $eleve = Eleve::withTrashed()->findOrFail($id);
+        $eleve = Student::withTrashed()->findOrFail($id);
         $eleve->forceDelete(); // Ici, la ligne est réellement effacée de la BD
 
         return redirect()->back()->with('success', "L'élève a été définitivement supprimé.");
@@ -299,12 +300,12 @@ class StudentController extends Controller
             'classe_id' => 'required|exists:classes,id',
         ]);
 
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
         // Récupération des infos de l'école
-        $etablissement = Etablissement::first();
+        $etablissement = School::first();
 
         // 2. Récupération des données filtrées (plus de relation niveau)
-        $eleves = Eleve::whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
+        $eleves = Student::whereHas('inscriptions', function ($q) use ($request, $anneeActive) {
             $q->where('classe_id', $request->classe_id)
                 ->where('annee_scolaire_id', $anneeActive->id);
         })->with(['inscriptions' => function ($q) use ($anneeActive) {

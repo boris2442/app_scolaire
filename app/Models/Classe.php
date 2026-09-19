@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\AnneeScolaire;
+
 use App\Models\Inscription;
 use App\Models\Matiere;
 
@@ -31,7 +31,7 @@ class Classe extends Model
     }
     public function anneeScolaire()
     {
-        return $this->belongsTo(AnneeScolaire::class);
+        return $this->belongsTo(Year::class, 'annee_scolaire_id');
     }
 
 

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Assessment;
 use App\Models\Classe; // <-- On importe Classe au lieu de Niveau
-use App\Models\Evaluation;
+
 use App\Models\Inscription;
 use App\Models\Note;
 use App\Models\Sequence;
+use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Services\ScolariteService;
 
 class DataAuditController extends Controller
 {
@@ -60,7 +61,7 @@ class DataAuditController extends Controller
             $matiereIds = $matieres->pluck('id');
 
             // 3. Récupération des évaluations
-            $evaluations = Evaluation::where('classe_id', $classeId)
+            $evaluations = Assessment::where('classe_id', $classeId)
                 ->where('sequence_id', $sequenceId)
                 ->whereIn('matiere_id', $matiereIds)
                 ->get()

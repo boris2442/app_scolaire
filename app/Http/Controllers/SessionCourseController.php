@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 use App\Models\Classe;
 use App\Models\Creneau;
 use App\Models\Enseignant;
-use App\Models\Etablissement;
+
 use App\Models\Jour;
 use App\Models\Matiere;
+use App\Models\School;
 use App\Models\Seance;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -23,7 +24,7 @@ class SessionCourseController extends Controller
     {
         // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         // Récupérer toutes les séances de cette classe pour l'année en cours
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
@@ -76,7 +77,7 @@ class SessionCourseController extends Controller
             'creneau_id' => 'required|exists:creneaus,id',
         ]);
 
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         if (! $anneeActive) {
             return redirect()->back()->withErrors(['msg' => 'Aucune année scolaire active trouvée.']);
@@ -104,10 +105,10 @@ class SessionCourseController extends Controller
     {
         // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         // Récupération de l'établissement (prend le premier enregistrement de la table)
-        $etablissement = Etablissement::first();
+        $etablissement = School::first();
 
         // Même récupération des données
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
@@ -142,7 +143,7 @@ class SessionCourseController extends Controller
     {
         // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
         $enseignant = User::findOrFail($userId);
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])
@@ -161,7 +162,7 @@ class SessionCourseController extends Controller
     {
         // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
         $enseignant = User::findOrFail($userId);
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])

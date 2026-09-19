@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DepartementRequest;
-use App\Models\Departement;
+use App\Http\Requests\DepartmentRequest;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -68,7 +68,7 @@ class DepartmentController extends Controller
         return view('pages.departements.create');
     }
 
-    public function store(DepartementRequest $request)
+    public function store(DepartmentRequest $request)
     {
         $request->validated();
 
@@ -87,7 +87,7 @@ class DepartmentController extends Controller
     }
 
 
-    public function show(Departement $department)
+    public function show(Department $department)
 {
     return redirect()->route('admin.departments.index');
 }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassStoreRequest;
-use App\Models\AnneeScolaire;
+
 use App\Models\Classe;
 use App\Models\Cycle;
 use App\Models\Niveau;
+use App\Models\Year;
 use Illuminate\Http\Request;
 
 
@@ -17,7 +18,7 @@ class ClassController extends Controller
     public function index()
     {
         // On récupère l'année active (très important !)
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         if (!$anneeActive) {
             return redirect()->route('settings.years.index')

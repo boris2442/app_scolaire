@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Affectation;
-use App\Models\Evaluation;
+use App\Models\Assessment;
+
 use App\Models\Inscription;
-use App\Models\Lecon;
+use App\Models\Lesson;
 use App\Models\Note;
 use App\Models\Sequence;
 use App\Services\ScolariteService;
@@ -48,7 +49,7 @@ class AssessmentController extends Controller
             ->get();
 
         // 3. Évaluations filtrées STRICTEMENT sur l'année active
-        $evaluations = Evaluation::with(['classe', 'matiere', 'sequence'])
+        $evaluations = Assessment::with(['classe', 'matiere', 'sequence'])
             ->where('enseignant_id', $enseignant->id)
             ->whereHas('sequence.trimestre', function ($query) {
                 $query->where('annee_scolaire_id', $this->anneeActive->id);
@@ -66,7 +67,7 @@ class AssessmentController extends Controller
 
     public function saisie($id, ScolariteService $scolariteService)
     {
-        $evaluation = Evaluation::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
+        $evaluation = Assessment::with(['classe', 'matiere', 'sequence'])->findOrFail($id);
 
         // --- VERIFICATION DE CLOTURE ---
         $sequence = $evaluation->sequence;
@@ -97,7 +98,7 @@ class AssessmentController extends Controller
             });
 
         // Retrait de 'annee_scolaire_id' qui n'existe pas dans la table 'lecons'
-        $lecons = Lecon::where('enseignant_id', $evaluation->enseignant_id)
+        $lecons = Lesson::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->orderBy('ordre')
@@ -133,7 +134,7 @@ class AssessmentController extends Controller
         $affectation = Affectation::findOrFail($request->affectation_id);
 
         // ICI : On cherche si cette évaluation existe déjà pour ne pas perdre les notes
-        $evaluation = Evaluation::firstOrCreate(
+        $evaluation = Assessment::firstOrCreate(
             [
                 'sequence_id' => $request->sequence_id,
                 'classe_id' => $affectation->classe_id,
@@ -156,7 +157,7 @@ class AssessmentController extends Controller
 
     public function bulkStoreNotes(Request $request, $id, ScolariteService $scolariteService)
     {
-        $evaluation = Evaluation::findOrFail($id);
+        $evaluation = Assessment::findOrFail($id);
 
         // --- VERIFICATION DE CLOTURE ---
         $sequence = $evaluation->sequence;
@@ -218,12 +219,12 @@ class AssessmentController extends Controller
         $fillesReussite = $filles->where('valeur', '>=', 10)->count();
 
         // Progression des leçons
-        $totalLeconsPrevues = Lecon::where('enseignant_id', $evaluation->enseignant_id)
+        $totalLeconsPrevues = Lesson::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->count();
 
-        $leconsEvalueesIds = Evaluation::where('enseignant_id', $evaluation->enseignant_id)
+        $leconsEvalueesIds = Assessment::where('enseignant_id', $evaluation->enseignant_id)
             ->where('matiere_id', $evaluation->matiere_id)
             ->where('classe_id', $evaluation->classe_id)
             ->where('annee_scolaire_id', $evaluation->annee_scolaire_id)
@@ -260,7 +261,7 @@ class AssessmentController extends Controller
     public function telechargerStats($id)
     {
         // On charge les relations nécessaires (plus de .niveau sur la classe)
-        $evaluation = Evaluation::with(['classe', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
+        $evaluation = Assessment::with(['classe', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
 
         $stats = $this->calculerStats($evaluation);
 

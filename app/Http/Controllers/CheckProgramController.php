@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classe;
-use App\Models\Lecon;
+
+use App\Models\Lesson;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,7 @@ class CheckProgramController extends Controller
 
         if ($selectedClasseId) {
             // Filtrage des évaluations uniquement sur l'année scolaire active
-            $leconsGrouped = Lecon::where('classe_id', $selectedClasseId)
+            $leconsGrouped = Lesson::where('classe_id', $selectedClasseId)
                 ->with(['matiere', 'enseignant'])
                 ->withExists(['evaluations' => function ($query) use ($anneeActive) {
                     $query->whereHas('sequence.trimestre', function ($q) use ($anneeActive) {

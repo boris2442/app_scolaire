@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use App\Enums\UserRole;
-use App\Models\Etablissement;
+
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $ecole = Cache::rememberForever('ecole', function () {
-            return Etablissement::first() ?? new Etablissement();
+            return School::first() ?? new School();
         });
 
         View::share('ecole', $ecole);

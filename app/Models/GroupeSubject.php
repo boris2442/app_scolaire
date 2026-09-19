@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Matiere;
 use Illuminate\Database\Eloquent\Model;
 
-class GroupeMatiere extends Model
+class GroupeSubject extends Model
 {
 
     // Ajoute cette ligne pour forcer Laravel à utiliser le bon nom de table

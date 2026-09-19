@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
-use App\Models\GroupeMatiere;
+
+use App\Models\GroupeSubject;
 use App\Models\Matiere;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class SubjectController extends Controller
 {
     public function index(Request $request)
     {
-        $groupes = GroupeMatiere::all();
+        $groupes = GroupeSubject::all();
     
         $query = Matiere::with(['groupeMatiere']); // On récupère également le groupe de chaque matière 
 
@@ -45,7 +46,7 @@ class SubjectController extends Controller
 
     public function edit(Matiere $matiere)
     {
-        $groupes = GroupeMatiere::orderBy('ordre')->get();
+        $groupes = GroupeSubject::orderBy('ordre')->get();
         return view('pages.matieres.edit', compact('matiere', 'groupes'));
     }
 

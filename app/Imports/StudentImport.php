@@ -2,14 +2,15 @@
 
 namespace App\Imports;
 
-use App\Models\Eleve;
+
 use App\Models\Inscription;
+use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class StudentImport implements ToCollection, WithHeadingRow
 {
@@ -66,9 +67,9 @@ class StudentImport implements ToCollection, WithHeadingRow
                 // 1. Recherche de l'élève
                 $eleve = null;
                 if ($matricule) {
-                    $eleve = Eleve::where('matricule', $matricule)->first();
+                    $eleve = Student::where('matricule', $matricule)->first();
                 } else {
-                    $eleve = Eleve::where('nom', strtoupper($nom))
+                    $eleve = Student::where('nom', strtoupper($nom))
                         ->when($prenom, fn($q) => $q->where('prenom', $prenom))
                         ->when($dateNaissance, fn($q) => $q->where('date_naissance', $dateNaissance))
                         ->first();
@@ -92,11 +93,11 @@ class StudentImport implements ToCollection, WithHeadingRow
                         $eleveData['matricule'] = $matricule;
                     }
 
-                    $eleve = Eleve::create($eleveData);
+                    $eleve = Student::create($eleveData);
 
                     // 🔥 CORRECTION ICI : Utilisation de empty(trim(...)) pour forcer la génération si vide
-                    if (empty(trim($eleve->matricule)) && method_exists(Eleve::class, 'genererEtAttribuerMatricule')) {
-                        Eleve::genererEtAttribuerMatricule($eleve, $this->anneeScolaireId);
+                    if (empty(trim($eleve->matricule)) && method_exists(Student::class, 'genererEtAttribuerMatricule')) {
+                        Student::genererEtAttribuerMatricule($eleve, $this->anneeScolaireId);
                     }
                 } else {
                     // Mettre à jour les infos manquantes si besoin

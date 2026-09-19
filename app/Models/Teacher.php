@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Models\Affectation;
-use App\Models\Departement;
+
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Enseignant extends Model
+class Teacher extends Model
 {
+    protected $table='enseignants';
 
     // C'est ici que ça se passe !
     protected $fillable = [
@@ -76,7 +78,7 @@ class Enseignant extends Model
 
     public function departement()
     {
-        return $this->belongsTo(Departement::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function affectations(): HasMany

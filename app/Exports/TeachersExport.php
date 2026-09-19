@@ -2,7 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Enseignant;
+
+use App\Models\Teacher;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -14,16 +15,16 @@ class TeachersExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Enseignant::with(['user', 'departement'])
+        return Teacher::with(['user', 'departement'])
             ->get()
-            ->map(function ($enseignant) {
+            ->map(function ($Teacher) {
                 return [
-                    $enseignant->id,
-                    $enseignant->matricule,
-                    $enseignant->user->name,
-                    $enseignant->user->phone,
-                    $enseignant->user->email,
-                    $enseignant->departement ? $enseignant->departement->nom : '',
+                    $Teacher->id,
+                    $Teacher->matricule,
+                    $Teacher->user->name,
+                    $Teacher->user->phone,
+                    $Teacher->user->email,
+                    $Teacher->departement ? $Teacher->departement->nom : '',
                 ];
             });
     }

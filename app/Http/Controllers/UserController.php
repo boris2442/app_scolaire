@@ -62,18 +62,47 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Rôle mis à jour avec succès.');
     }
 
-    public function destroy(User $user)
-    {
-        // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même si besoin
-        if ($user->id === auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
-        }
+    // public function destroy(User $user)
+    // {
+    //     // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même si besoin
+    //     if ($user->id === auth()->id()) {
+    //         return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+    //     }
 
-        $user->delete();
+    //     $user->delete();
 
-        return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
+    //     return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
+    // }
+
+
+public function destroy(User $user)
+{
+    // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même
+    if ($user->id === auth()->id()) {
+        return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
     }
 
+    try {
+        DB::transaction(function () use ($user) {
+            // 1. Si l'utilisateur est lié à un enseignant
+            if ($user->enseignant) {
+                // Supprimer les affectations liées à cet enseignant
+                $user->enseignant->affectations()->delete();
+
+                // Supprimer le profil enseignant
+                $user->enseignant->delete();
+            }
+
+            // 2. Supprimer l'utilisateur
+            $user->delete();
+        });
+
+        return redirect()->back()->with('success', 'Utilisateur et données associées supprimés avec succès.');
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Impossible de supprimer cet utilisateur : ' . $e->getMessage());
+    }
+}
     /**
      * Réinitialise le mot de passe d'un enseignant par l'administrateur.
      */

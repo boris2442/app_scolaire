@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAnneeScolaireRequest;
-use App\Models\AnneeScolaire;
+use App\Http\Requests\StoreYearSchoolRequest;
+use App\Models\Year;
 use Illuminate\Support\Facades\DB;
 
 class YearController extends Controller
 {
     public function index()
     {
-        $annees = AnneeScolaire::with(['trimestres.sequences'])
+        $annees = Year::with(['trimestres.sequences'])
 
             ->orderBy('date_debut', 'desc')->get();
         $totalAnnees = $annees->count();
-        // $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        // $anneeActive = Year::where('est_active', true)->first();
         // On récupère l'année active (petit bonus : on peut la chercher dans la collection déjà chargée)
         $anneeActive = $annees->where('est_active', true)->first();
 
         return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
-    public function store(StoreAnneeScolaireRequest $request)
+    public function store(StoreYearSchoolRequest $request)
     {
         DB::transaction(function () use ($request) {
             // 1. Créer l'année
-            $annee = AnneeScolaire::create($request->validated());
+            $annee = Year::create($request->validated());
 
             // 2. Créer les 3 trimestres et leurs séquences
             for ($i = 1; $i <= 3; $i++) {
@@ -46,7 +46,7 @@ class YearController extends Controller
         return back()->with('success', 'Année scolaire et périodes pédagogiques générées avec succès !');
     }
 
-    public function set_active(AnneeScolaire $annee_scolaire)
+    public function set_active(Year $annee_scolaire)
     {
         $annee_scolaire->activer(); // Utilise la méthode du modèle
 
@@ -81,7 +81,7 @@ class YearController extends Controller
     //     return back()->with('success', 'Année et bilans associés supprimés avec succès.');
     // }
 
-    public function destroy(AnneeScolaire $annee_scolaire)
+    public function destroy(Year $annee_scolaire)
     {
         if ($annee_scolaire->est_active) {
             return back()->with('error', 'Impossible de supprimer une année active.');
@@ -107,13 +107,13 @@ class YearController extends Controller
         return back()->with('success', 'Année et toutes ses données associées supprimées avec succès.');
     }
 
-    public function edit(AnneeScolaire $annee_scolaire)
+    public function edit(Year $annee_scolaire)
     {
         // On envoie l'objet à la vue d'édition
         return view('pages.annees.edit', compact('annee_scolaire'));
     }
 
-    public function update(StoreAnneeScolaireRequest $request, AnneeScolaire $annee_scolaire)
+    public function update(StoreYearSchoolRequest $request, Year $annee_scolaire)
     {
         $annee_scolaire->update($request->validated());
 

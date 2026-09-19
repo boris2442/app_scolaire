@@ -155,14 +155,14 @@
                     <a href="{{ route('settings.classes.index') }}" title="Classes & Salles"
                         class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('settings.classes.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
                         <x-lucide-school class="w-4 h-4 flex-shrink-0" />
-                        <span class="sidebar-label ml-3 truncate">Classes & Salles</span>
+                        <span class="sidebar-label ml-3 truncate">Classes </span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('settings.matieres.index') }}" title="Matières & Coeffs"
                         class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('settings.matieres.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
                         <x-lucide-book class="w-4 h-4 flex-shrink-0" />
-                        <span class="sidebar-label ml-3 truncate">Matières & Coeffs</span>
+                        <span class="sidebar-label ml-3 truncate">Matières </span>
                     </a>
                 </li>
                 <li>

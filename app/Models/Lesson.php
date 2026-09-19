@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Assessment;
 use Illuminate\Database\Eloquent\Model;
 
-class Lecon extends Model
+class Lesson extends Model
 {
+    protected $table='lecons';
     protected $fillable = [
         'titre',
         'description',
@@ -18,7 +20,7 @@ class Lecon extends Model
 
     public function evaluations()
     {
-        return $this->belongsToMany(Evaluation::class, 'evaluation_lesson', 'lecon_id', 'evaluation_id');
+        return $this->belongsToMany(Assessment::class, 'evaluation_lesson', 'lecon_id', 'evaluation_id');
     }
 
 

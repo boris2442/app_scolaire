@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AnneeScolaire;
-use App\Models\Etablissement;
+use App\Models\Year;
+
+use App\Models\School;
 use Illuminate\Support\Facades\Auth;
 
 class AfterLoginController extends Controller
@@ -11,8 +12,8 @@ class AfterLoginController extends Controller
     public function index()
     {
         // Récupération sécurisée
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
-        $etablissement = Etablissement::first(); // Supposant qu'il n'y a qu'un seul paramétrage
+        $anneeActive = Year::where('est_active', true)->first();
+        $etablissement = School::first(); // Supposant qu'il n'y a qu'un seul paramétrage
 
         // $user=Auth::user()->name();
         // dd($user);

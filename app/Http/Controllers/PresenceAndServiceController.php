@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Etablissement;
+
+use App\Models\School;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,7 @@ class PresenceAndServiceController extends Controller
     {
         $user = Auth::user();
 
-        $etablissement = Etablissement::first();
+        $etablissement = School::first();
 
         $user->load('enseignant.matiere');
 

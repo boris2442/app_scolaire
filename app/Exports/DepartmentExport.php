@@ -2,7 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Departement;
+
+use App\Models\Department;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -13,16 +14,16 @@ class DepartmentExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        // return Departement::all();
-        return Departement::Select('id', 'nom', 'code', 'description')
+        // return Department::all();
+        return Department::Select('id', 'nom', 'code', 'description')
             ->get()
 
-            ->map(function ($departement) {
+            ->map(function ($Department) {
                 return [
-                    $departement->id,
-                    $departement->nom,
-                    $departement->code,
-                    $departement->description ?? '',
+                    $Department->id,
+                    $Department->nom,
+                    $Department->code,
+                    $Department->description ?? '',
                 ];
             });
     }

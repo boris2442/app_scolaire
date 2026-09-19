@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GroupeMatiere;
+use App\Models\GroupeSubject;
 use Illuminate\Http\Request;
 
 class SubjectGroupController extends Controller
@@ -11,7 +11,7 @@ class SubjectGroupController extends Controller
     {
         // On récupère les groupes triés par ordre d'affichage
         // et on compte le nombre de matières par groupe
-        $groupes = GroupeMatiere::withCount('matieres')
+        $groupes = GroupeSubject::withCount('matieres')
             ->orderBy('ordre', 'asc')
             ->get();
 
@@ -30,16 +30,16 @@ class SubjectGroupController extends Controller
             'ordre' => 'required|integer',
         ]);
 
-        GroupeMatiere::create($request->all());
+        GroupeSubject::create($request->all());
 
         return redirect()->route('admin.groupes.index')
             ->with('success', 'Groupe ajouté avec succès.');
     }
-    public function edit(GroupeMatiere $groupe)
+    public function edit(GroupeSubject $groupe)
     {
         return view('pages.groupesmatieres.edit', compact('groupe'));
     }
-    public function update(Request $request, GroupeMatiere $groupe)
+    public function update(Request $request, GroupeSubject $groupe)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
@@ -51,7 +51,7 @@ class SubjectGroupController extends Controller
         return redirect()->route('admin.groupes.index')
             ->with('success', 'Groupe mis à jour avec succès.');
     }
-    public function destroy(GroupeMatiere $groupe)
+    public function destroy(GroupeSubject $groupe)
     {
         $groupe->delete();
 

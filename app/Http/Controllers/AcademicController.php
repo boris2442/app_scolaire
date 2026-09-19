@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCycleRequest;
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 use App\Models\Cycle;
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ class AcademicController extends Controller
     public function index()
     {
         // On récupère l'année active (très important !)
-        $anneeActive = AnneeScolaire::where('est_active', true)->first();
+        $anneeActive = Year::where('est_active', true)->first();
 
         if (!$anneeActive) {
             return redirect()->route('settings.years.index')

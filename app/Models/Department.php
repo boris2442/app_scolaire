@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Model;
 
-class Departement extends Model
+class Department extends Model
 {
+    protected $table='departements';
 
 protected $fillable = ['nom'];
     public function enseignants() {
-    return $this->hasMany(Enseignant::class);
+    return $this->hasMany(Teacher::class);
 }
 }

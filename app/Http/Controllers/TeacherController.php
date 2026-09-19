@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
-use App\Models\Departement;
-use App\Models\Enseignant;
+use App\Models\Department;
+
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +22,8 @@ class TeacherController extends Controller
     {
 
         //afficher les enseignants avec pagination par ordre alphabetique
-        // $enseignants=Enseignant::with(['user', 'departement'])
-        $enseignants = Enseignant::select('enseignants.*')
+        // $enseignants=Teacher::with(['user', 'departement'])
+        $enseignants = Teacher::select('enseignants.*')
             ->join('users', 'users.id', '=', 'enseignants.user_id')
             ->with(['user', 'departement'])
             ->orderBy('users.name', 'asc') // Ordre alphabétique A -> Z
@@ -36,39 +37,10 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        $departements = Departement::orderBy('nom')->get();
+        $departements = Department::orderBy('nom')->get();
         return view('pages.enseignants.create', compact('departements'));
     }
-    // public function store(TeacherRequest $request)
-    // {
-    //     $request->validated();
-
-
-    //     DB::transaction(function () use ($request) {
-    //         $password = Str::password(12);
-    //         $user = User::create([
-    //             'name' => $request->name,
-    //             'email' => $request->email,
-    //             // 'password' => Hash::make('12345678'),
-    //             'password' => $password,
-    //             'role' => UserRole::ENSEIGNANT,
-    //             'phone' => $request->phone, // Nouveau !
-    //         ]);
-
-    //         Enseignant::create([
-    //             'user_id' => $user->id,
-    //             // 'matricule' => $request->matricule,
-    //             'matricule' => Enseignant::generateMatricule(), // Génère un matricule unique
-    //             'departement_id' => $request->departement_id, // On enregistre l'ID
-    //         ]);
-    //     });
-
-    //     return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant créé avec succès !');
-    // }
-
-
-
-
+    
 
     public function store(TeacherRequest $request)
     {
@@ -88,9 +60,9 @@ class TeacherController extends Controller
                 'must_change_password' => true,
             ]);
 
-            Enseignant::create([
+            Teacher::create([
                 'user_id' => $user->id,
-                'matricule' => Enseignant::generateMatricule(),
+                'matricule' => Teacher::generateMatricule(),
                 'departement_id' => $validated['departement_id'],
             ]);
         });
@@ -116,12 +88,12 @@ class TeacherController extends Controller
 
 
 
-    public function edit(Enseignant $enseignant)
+    public function edit(Teacher $enseignant)
     {
-        $departements = Departement::orderBy('nom')->get();
+        $departements = Department::orderBy('nom')->get();
         return view('pages.enseignants.edit', compact('enseignant', 'departements'));
     }
-    public function update(Request $request, Enseignant $enseignant)
+    public function update(Request $request, Teacher $enseignant)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -147,7 +119,7 @@ class TeacherController extends Controller
 
         return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant mis à jour avec succès !');
     }
-    public function destroy(Enseignant $enseignant)
+    public function destroy(Teacher $enseignant)
     {
         DB::transaction(function () use ($enseignant) {
             $enseignant->user->delete(); // Supprime l'utilisateur associé
@@ -157,7 +129,7 @@ class TeacherController extends Controller
         return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant supprimé avec succès !');
     }
 
-    public function show(Enseignant $enseignant)
+    public function show(Teacher $enseignant)
     {
         $enseignant->load('user', 'departement'); // Charge les relations nécessaires
         return view('pages.enseignants.show', compact('enseignant'));

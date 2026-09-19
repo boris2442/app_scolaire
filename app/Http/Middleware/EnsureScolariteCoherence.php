@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Middleware;
 
+use App\Models\Assessment;
+
+use App\Models\Sequence;
+use App\Models\Trimestre;
+use App\Services\ScolariteService;
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\Trimestre;
-use App\Models\Sequence;
-use App\Models\Evaluation;
-use App\Services\ScolariteService;
 
 class EnsureScolariteCoherence
 {
@@ -22,7 +23,7 @@ class EnsureScolariteCoherence
         if (!$sequenceId && !$trimestreId) {
             $evaluationId = $this->extractParam($request, ['evaluation', 'evaluation_id', 'id']);
             if ($evaluationId) {
-                $eval = $evaluationId instanceof Evaluation ? $evaluationId : Evaluation::find($evaluationId);
+                $eval = $evaluationId instanceof Assessment ? $evaluationId : Assessment::find($evaluationId);
                 $sequenceId = $eval?->sequence_id;
             }
         }

@@ -18,6 +18,6 @@ class Trimestre extends Model
 
     public function anneeScolaire(): BelongsTo
     {
-        return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
+        return $this->belongsTo(Year::class, 'annee_scolaire_id');
     }
 }

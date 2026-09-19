@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,7 +15,7 @@ class RepairAnneeActiveSeeder extends Seeder
    public function run(): void
     {
         // 1. Correction : doesntHave (avec 'nt') pour trouver celles qui sont vides
-        $anneesVides = AnneeScolaire::doesntHave('trimestres')->get();
+        $anneesVides = Year::doesntHave('trimestres')->get();
 
         if ($anneesVides->isEmpty()) {
             $this->command->info("Toutes tes années ont déjà une structure. Rien à réparer !");

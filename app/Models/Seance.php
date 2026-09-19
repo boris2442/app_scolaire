@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\AnneeScolaire;
+
 use App\Models\Classe;
 use App\Models\Creneau;
 use App\Models\Enseignant;
@@ -44,7 +44,7 @@ class Seance extends Model
 
     public function anneeScolaire(): BelongsTo
     {
-        return $this->belongsTo(AnneeScolaire::class);
+        return $this->belongsTo(Year::class);
     }
 
     public function jour(): BelongsTo

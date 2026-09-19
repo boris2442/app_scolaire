@@ -28,7 +28,7 @@
                             <a href="{{ route('admin.students.trashed') }}"
                                 class="flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-secondary transition-colors">
                                 <x-lucide-trash-2 class="w-4 h-4" /> Voir la corbeille
-                                ({{ \App\Models\Eleve::onlyTrashed()->count() }})
+                                ({{ \App\Models\Student::onlyTrashed()->count() }})
                             </a>
                         @endcan
 

@@ -12,7 +12,7 @@
             <x-lucide-plus class="w-4 h-4 mr-2" />
             Ajouter un Département
         </a>
-        <a href="{{ route('admin.departments.export') }}"
+        <a href="{{ route('admin.departments.export') }}" target="_blank"
             class="inline-flex items-center px-6 py-3 bg-primary text-white rounded font-bold text-sm tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all mb-6">
             <x-lucide-file-up class="w-4 h-4 mr-2" />
             Exporter en excel
@@ -39,7 +39,7 @@
                     <div class="relative inline-block text-left">
                         <button type="button" onclick="toggleMenu(this)"
                             class="menu-trigger p-2 rounded-full hover:bg-secondary text-gray-400 hover:text-foreground transition-colors">
-                          <x-lucide-more-vertical class="w-5 h-5" />
+                            <x-lucide-more-vertical class="w-5 h-5" />
                         </button>
 
                         <div

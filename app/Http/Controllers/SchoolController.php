@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateEtablissementRequest;
-use App\Models\Etablissement;
-use Illuminate\Http\Request;
+
+use App\Http\Requests\UpdateEtsRequest;
+use App\Models\School;
+
 use Illuminate\Support\Facades\Storage;
 
 class SchoolController extends Controller
 {
     public function edit()
     {
-        $etablissement = Etablissement::first() ?: new Etablissement();
+        $etablissement = School::first() ?: new School();
         return view('pages.etablissements.edit', compact('etablissement'));
     }
 
-    public function update(UpdateEtablissementRequest $request)
+    public function update(UpdateEtsRequest $request)
     {
         // Si on arrive ici, c'est que la validation a déjà réussi !
-        $etablissement = Etablissement::first() ?: new Etablissement();
+        $etablissement = School::first() ?: new School();
 
         $validatedData = $request->validated(); // On récupère uniquement les données validées
 

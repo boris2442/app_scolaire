@@ -10,7 +10,7 @@ class Inscription extends Model
     protected $fillable = ['eleve_id', 'classe_id', 'annee_scolaire_id', 'date_inscription', 'statut', 'est_redoublant'];
     public function eleve(): BelongsTo
     {
-        return $this->belongsTo(Eleve::class);
+     return $this->belongsTo(Student::class, 'eleve_id');
     }
 
     // app/Models/Inscription.php
@@ -20,7 +20,7 @@ class Inscription extends Model
     }
     public function annee_scolaire() // avec un underscore _
     {
-        return $this->belongsTo(AnneeScolaire::class, 'annee_scolaire_id');
+        return $this->belongsTo(Year::class, 'annee_scolaire_id');
     }
 
     public function suivi()

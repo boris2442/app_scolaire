@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkStoreRequest;
 use App\Models\Affectation;
-use App\Models\AnneeScolaire;
+
 use App\Models\Classe;
 use App\Models\Enseignant;
+use App\Models\Teacher;
+use App\Models\Year;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
@@ -28,7 +30,7 @@ class AssignmentController extends Controller
 
         if ($anneeId) {
             // Logique si l'année est transmise explicitement
-            $anneeActive = AnneeScolaire::findOrFail($anneeId);
+            $anneeActive = Year::findOrFail($anneeId);
         } else {
             $anneeActive = $this->scolarite->getAnneeActive();
         }
@@ -37,7 +39,7 @@ class AssignmentController extends Controller
         // $enseignants = Enseignant::with('user')
         //     ->orderBy('users.name')
         //     ->get();
-        $enseignants = Enseignant::query()
+        $enseignants = Teacher::query()
             ->join('users', 'enseignants.user_id', '=', 'users.id')
             ->orderBy('users.name', 'asc')
             ->select('enseignants.*') // Évite les conflits d'ID entre les deux tables

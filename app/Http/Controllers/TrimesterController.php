@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\AnneeScolaire;
+use App\Models\Year;
 use App\Models\Inscription;
 use App\Models\Sequence;
 use App\Models\Trimestre;
@@ -76,11 +76,11 @@ class TrimesterController extends Controller
     public function index()
     {
         // On ne propose que les années qui n'ont pas encore leurs 3 trimestres
-        $anneesSansTrimestres = AnneeScolaire::withCount('trimestres')
+        $anneesSansTrimestres = Year::withCount('trimestres')
             ->having('trimestres_count', '<', 3)
             ->get();
 
-        $anneeActive = AnneeScolaire::where('est_active', 1)
+        $anneeActive = Year::where('est_active', 1)
             ->with('trimestres.sequences')
             ->first();
 

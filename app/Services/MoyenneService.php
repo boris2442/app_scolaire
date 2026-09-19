@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Affectation;
+use App\Models\Assessment;
 use App\Models\Bilan;
-use App\Models\Evaluation;
+
 use App\Models\Inscription;
 use App\Models\Moyenne;
 use App\Models\Note;
@@ -213,7 +214,7 @@ class MoyenneService
 
     private function getEvaluationId($matiereStructure, $sequenceId)
     {
-        return Evaluation::where([
+        return Assessment::where([
             'classe_id'   => $matiereStructure->classe_id,
             'matiere_id'  => $matiereStructure->matiere_id,
             'sequence_id' => $sequenceId

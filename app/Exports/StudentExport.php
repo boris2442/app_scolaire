@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Eleve;
+use App\Models\Student;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class StudentExport implements FromCollection
@@ -12,6 +12,6 @@ class StudentExport implements FromCollection
      */
     public function collection()
     {
-        return Eleve::all();
+        return Student::all();
     }
 }

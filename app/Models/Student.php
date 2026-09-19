@@ -5,12 +5,16 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\SoftDeletes; // <--- DOIT ÊTRE LÀ
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB; // <--- DOIT ÊTRE LÀ
 
-class Eleve extends Model
+class Student extends Model
 {
+    protected $table = 'eleves';
+    // protected $columns='el'
+
     use SoftDeletes; // <--- DOIT ÊTRE LÀ
+
     protected $fillable = [
         'nom',
         'prenom',
@@ -25,15 +29,15 @@ class Eleve extends Model
         'name_mother',
     ];
 
-
     /**
      * Un élève peut avoir plusieurs inscriptions (historique scolaire)
      */
     // app/Models/Eleve.php
     public function inscriptions(): HasMany
     {
-        return $this->hasMany(Inscription::class);
+        return $this->hasMany(Inscription::class, 'eleve_id');
     }
+
     /**
      * Récupère les valeurs possibles de l'énumération 'sexe'
      */
@@ -64,17 +68,12 @@ class Eleve extends Model
 
     // Dans app/Models/Eleve.php
 
-
-
-
-
-
     // app/Models/Eleve.php
 
     // Calcul de l'âge : Année Actuelle - Date de Naissance
     public function getAgeAttribute()
     {
-        return \Carbon\Carbon::parse($this->date_naissance)->age;
+        return Carbon::parse($this->date_naissance)->age;
     }
 
     // Récupérer la dernière inscription (Niveau + Classe/Salle)
@@ -83,25 +82,22 @@ class Eleve extends Model
         return $this->inscriptions()->latest()->first();
     }
 
-
-
-
     public static function genererEtAttribuerMatricule(self $eleve, $anneeScolaireId)
     {
         // Si l'élève a déjà un matricule (fourni par Excel par exemple), on ne touche à rien
-        if (!empty($eleve->matricule)) {
+        if (! empty($eleve->matricule)) {
             return $eleve->matricule;
         }
 
         // Récupérer l'année scolaire concernée
-        $anneeScolaire = AnneeScolaire::find($anneeScolaireId);
+        $anneeScolaire = Year::find($anneeScolaireId);
 
         if ($anneeScolaire) {
             $debut = Carbon::parse($anneeScolaire->date_debut)->format('y');
             $fin = Carbon::parse($anneeScolaire->date_fin)->format('y');
 
             // Génération : 2 chiffres début + 2 chiffres fin + ID sur 5 chiffres (ex: 262600012)
-            $matricule = $debut . $fin . str_pad($eleve->id, 5, '0', STR_PAD_LEFT);
+            $matricule = $debut.$fin.str_pad($eleve->id, 5, '0', STR_PAD_LEFT);
 
             $eleve->update(['matricule' => $matricule]);
 
