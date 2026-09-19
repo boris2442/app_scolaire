@@ -11,7 +11,7 @@ use App\Models\Niveau;
 use Illuminate\Http\Request;
 
 
-class ClasseController extends Controller
+class ClassController extends Controller
 {
 
     public function index()

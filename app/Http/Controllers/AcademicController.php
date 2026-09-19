@@ -8,7 +8,7 @@ use App\Models\AnneeScolaire;
 use App\Models\Cycle;
 use Illuminate\Http\Request;
 
-class AcademiqueController extends Controller
+class AcademicController extends Controller
 {
     public function index()
     {

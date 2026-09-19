@@ -8,8 +8,8 @@ use App\Models\Niveau;
 use App\Models\SuiviDisciplinaire;
 use App\Models\Trimestre;
 use App\Services\ScolariteService;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DisciplineController extends Controller
 {

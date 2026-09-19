@@ -7,7 +7,7 @@ use App\Models\Etablissement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class EtablissementController extends Controller
+class SchoolController extends Controller
 {
     public function edit()
     {

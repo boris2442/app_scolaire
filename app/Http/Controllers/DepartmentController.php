@@ -7,12 +7,12 @@ use App\Models\Departement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DepartementController extends Controller
+class DepartmentController extends Controller
 {
     public function index()
     {
 
-        // Dans DepartementController.php à la ligne 12
+        // Dans DepartmentController.php à la ligne 12
         $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
         return view('pages.departements.index', compact('departements'));
     }

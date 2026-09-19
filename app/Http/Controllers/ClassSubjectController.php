@@ -7,7 +7,7 @@ use App\Models\Classe;
 use App\Models\Matiere;
 use Illuminate\Http\Request;
 
-class ClasseMatiereController extends Controller
+class ClassSubjectController extends Controller
 {
     // Afficher la page de config pour une classe spécifique
     public function edit(Classe $classe)

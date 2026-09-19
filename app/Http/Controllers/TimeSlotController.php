@@ -6,7 +6,7 @@ use App\Models\Classe;
 use App\Models\Creneau;
 use Illuminate\Http\Request;
 
-class CreneauController extends Controller
+class TimeSlotController extends Controller
 {
 
     // Afficher la liste des créneaux horaires de l'établissement

@@ -11,7 +11,7 @@ use App\Models\Enseignant;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
-class AffectationController extends Controller
+class AssignmentController extends Controller
 {
     protected $scolarite;
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class JourController extends Controller
+class DayController extends Controller
 {
     //
 }

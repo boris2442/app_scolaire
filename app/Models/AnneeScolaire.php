@@ -19,7 +19,6 @@ class AnneeScolaire extends Model
         return $this->hasMany(Trimestre::class);
     }
 
-
     // Méthode pour activer cette année et désactiver les autres
     public function activer()
     {

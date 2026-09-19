@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\ScolariteService;
 
-class AuditSaisieController extends Controller
+class DataAuditController extends Controller
 {
     protected $scolarite;
 

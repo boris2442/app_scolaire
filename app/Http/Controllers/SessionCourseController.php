@@ -15,7 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SeanceController extends Controller
+class SessionCourseController extends Controller
 {
     // Afficher l'emploi du temps d'une classe spécifique
 

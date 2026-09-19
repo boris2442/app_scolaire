@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
-class EnseignantController extends Controller
+class TeacherController extends Controller
 {
 
     public function index()

@@ -8,7 +8,7 @@ use App\Models\GroupeMatiere;
 use App\Models\Matiere;
 use Illuminate\Http\Request;
 
-class MatiereController extends Controller
+class SubjectController extends Controller
 {
     public function index(Request $request)
     {

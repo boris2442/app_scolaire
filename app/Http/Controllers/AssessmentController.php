@@ -12,7 +12,7 @@ use App\Services\ScolariteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
-class EvaluationController extends Controller
+class AssessmentController extends Controller
 {
     protected $scolarite;
 

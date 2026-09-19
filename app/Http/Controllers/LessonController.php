@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lecon;
 use Illuminate\Http\Request;
 
-class LeconController extends Controller
+class LessonController extends Controller
 {
     public function index($subjectId, $classRoomId)
     {

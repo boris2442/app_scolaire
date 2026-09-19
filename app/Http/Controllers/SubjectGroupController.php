@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GroupeMatiere;
 use Illuminate\Http\Request;
 
-class GroupeMatiereController extends Controller
+class SubjectGroupController extends Controller
 {
     public function index()
     {

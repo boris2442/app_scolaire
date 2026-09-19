@@ -12,7 +12,7 @@ use App\Services\MoyenneService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TrimestreController extends Controller
+class TrimesterController extends Controller
 {
 
     protected $statisticsService;

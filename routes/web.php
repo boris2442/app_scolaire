@@ -1,40 +1,40 @@
 <?php
 
-use App\Http\Controllers\AcademiqueController;
-use App\Http\Controllers\Admin\AuditSaisieController;
+use App\Http\Controllers\AcademicController;
+use App\Http\Controllers\Admin\DataAuditController;
 use App\Http\Controllers\Admin\BulletinPrintController;
-use App\Http\Controllers\Admin\ResultatController;
+use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\StatistiqueController;
-use App\Http\Controllers\AffectationController;
 use App\Http\Controllers\AfterLoginController;
-use App\Http\Controllers\AnneeScolaireController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CheckProgramController;
-use App\Http\Controllers\ClasseController;
-use App\Http\Controllers\ClasseMatiereController;
-use App\Http\Controllers\CreneauController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\ClassSubjectController;
+use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\DashboardTeacherController;
-use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DisciplineController;
-use App\Http\Controllers\EleveController;
-use App\Http\Controllers\EnseignantController;
-use App\Http\Controllers\EtablissementController;
-use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\Exports\DepartmentExportController;
 use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\Exports\TeacherExportController;
 use App\Http\Controllers\GlobalStatController;
-use App\Http\Controllers\GroupeMatiereController;
-use App\Http\Controllers\LeconController;
-use App\Http\Controllers\MatiereController;
-use App\Http\Controllers\ParametreAcademiqueController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\PresenceAndServiceController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SeanceController;
+use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\SessionCourseController;
 use App\Http\Controllers\SequenceController;
+use App\Http\Controllers\SettingAcademicController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectGroupController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherProfileController;
-use App\Http\Controllers\TrimestreController;
+use App\Http\Controllers\TrimesterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\YearController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -51,7 +51,7 @@ Route::middleware('scolarite.coherence')->group(function () {
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
-            Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
+            Route::get('teachers', [TeacherController::class, 'index'])->name('enseignants.index');
         });
 
     // });
@@ -79,8 +79,8 @@ Route::middleware('scolarite.coherence')->group(function () {
         Route::middleware('admin')->group(function () {
 
             // Section Paramètres
-            Route::get('/configuration-school', [EtablissementController::class, 'edit'])->name('settings.index');
-            Route::put('/configuration-school', [EtablissementController::class, 'update'])->name('settings.update');
+            Route::get('/configuration-school', [SchoolController::class, 'edit'])->name('settings.index');
+            Route::put('/configuration-school', [SchoolController::class, 'update'])->name('settings.update');
 
             // Annees scolaires
 
@@ -89,33 +89,33 @@ Route::middleware('scolarite.coherence')->group(function () {
 
                 // Cette ligne gère TOUT (Index, Store, Edit, Update, Destroy)
                 // Elle crée automatiquement la route 'settings.annees.edit' et 'settings.annees.update'
-                Route::resource('years', AnneeScolaireController::class)->parameters([
+                Route::resource('years', YearController::class)->parameters([
                     'years' => 'annee_scolaire', // Pour que Laravel injecte bien le modèle dans ton Controller
                 ]);
 
                 // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
-                Route::patch('years/{annee_scolaire}/activer', [AnneeScolaireController::class, 'set_active'])->name('years.active');
+                Route::patch('years/{annee_scolaire}/activer', [YearController::class, 'set_active'])->name('years.active');
             });
 
             Route::prefix('admin')->name('admin.')->group(function () {
-                Route::resource('trimestres', TrimestreController::class);
+                Route::resource('trimestres', TrimesterController::class);
 
-                // Route::get('/results', [ResultatController::class, 'index'])->name('resultats.index');
-                //  Route::post('/results/calculs', [ResultatController::class, 'calculer'])->name('resultats.calculer');
+                // Route::get('/results', [ResultController::class, 'index'])->name('resultats.index');
+                //  Route::post('/results/calculs', [ResultController::class, 'calculer'])->name('resultats.calculer');
 
                 // On pourra ajouter plus tard :
-                // Route::get('/resultats/classe/{id}', [ResultatController::class, 'show'])->name('resultats.show');
+                // Route::get('/resultats/classe/{id}', [ResultController::class, 'show'])->name('resultats.show');
             });
         });
 
         // Modeule Evaluations
 
         Route::prefix('admin')->name('admin.')->group(function () {
-            Route::get('/evaluations', [EvaluationController::class, 'index'])->name('evaluations.index');
-            Route::post('/evaluations', [EvaluationController::class, 'store'])->name('evaluations.store');
-            Route::get('/evaluations/{id}/saisie', [EvaluationController::class, 'saisie'])->name('evaluations.saisie');
-            Route::post('/evaluations/{id}/bulk-store', [EvaluationController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
-            Route::get('/evaluations/{id}/download-stats', [EvaluationController::class, 'telechargerStats'])
+            Route::get('/evaluations', [AssessmentController::class, 'index'])->name('evaluations.index');
+            Route::post('/evaluations', [AssessmentController::class, 'store'])->name('evaluations.store');
+            Route::get('/evaluations/{id}/saisie', [AssessmentController::class, 'saisie'])->name('evaluations.saisie');
+            Route::post('/evaluations/{id}/bulk-store', [AssessmentController::class, 'bulkStoreNotes'])->name('evaluations.bulk-store');
+            Route::get('/evaluations/{id}/download-stats', [AssessmentController::class, 'telechargerStats'])
                 ->name('evaluations.telecharger-stats');
         });
 
@@ -139,11 +139,11 @@ Route::middleware('scolarite.coherence')->group(function () {
         Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
             // Route pour afficher le formulaire de configuration
-            Route::get('/settings-classes', [ParametreAcademiqueController::class, 'index'])
+            Route::get('/settings-classes', [SettingAcademicController::class, 'index'])
                 ->name('admin.parametres-classes.index');
 
             // Route pour enregistrer les changements
-            Route::post('/settings-classes', [ParametreAcademiqueController::class, 'store'])
+            Route::post('/settings-classes', [SettingAcademicController::class, 'store'])
                 ->name('admin.parametres-classes.store');
         });
     });
@@ -158,7 +158,7 @@ Route::middleware('scolarite.coherence')->group(function () {
         Route::get('/sequences', [SequenceController::class, 'index'])->name('admin.sequences.index');
         Route::put('/sequences/{id}', [SequenceController::class, 'update'])->name('admin.sequences.update');
 
-        Route::get('/admin/audit-saisie', [AuditSaisieController::class, 'index'])->name('admin.audit.saisie');
+        Route::get('/admin/audit-saisie', [DataAuditController::class, 'index'])->name('admin.audit.saisie');
         // Page principale : La grille avec le choix du trimestre
         Route::get('/admin/report', [BulletinPrintController::class, 'index'])
             ->name('admin.bulletins.index');
@@ -196,14 +196,14 @@ Route::middleware('scolarite.coherence')->group(function () {
         Route::get('admin/departments/export/', [DepartmentExportController::class, 'export'])->name('admin.departments.export');
 
         Route::prefix('admin')->name('admin.')->group(function () {
-            Route::resource('/departments', DepartementController::class)->except(['show']);
+            Route::resource('/departments', DepartmentController::class)->except(['show']);
         });
 
-        Route::resource('admin/groupes-matieres', GroupeMatiereController::class)
+        Route::resource('admin/groupes-matieres', SubjectGroupController::class)
             ->names('admin.groupes')
-            ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', GroupeMatiereController::class)->names('admin.groupes');
+            ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', SubjectGroupController::class)->names('admin.groupes');
 
-        Route::get('admin/student/print', [EleveController::class, 'imprimer'])->name('admin.eleves.imprimer');
+        Route::get('admin/student/print', [StudentController::class, 'imprimer'])->name('admin.eleves.imprimer');
 
         Route::get('admin/students/export/', [StudentControllerExport::class, 'export'])->name('admin.students.export');
 
@@ -211,46 +211,46 @@ Route::middleware('scolarite.coherence')->group(function () {
         Route::get('admin/teachers/export/', [TeacherExportController::class, 'export'])->name('admin.teachers.export');
 
         Route::prefix('settings/academic')->name('settings.academique.')->group(function () {
-            Route::get('/', [AcademiqueController::class, 'index'])->name('index');
+            Route::get('/', [AcademicController::class, 'index'])->name('index');
 
             // CYCLES
-            Route::post('/cycles', [AcademiqueController::class, 'storeCycle'])->name('cycles.store');
-            Route::get('/cycles/{cycle}/edit', [AcademiqueController::class, 'editCycle'])->name('cycles.edit');
-            Route::put('/cycles/{cycle}', [AcademiqueController::class, 'updateCycle'])->name('cycles.update');
-            Route::delete('/cycles/{cycle}', [AcademiqueController::class, 'destroyCycle'])->name('cycles.destroy');
+            Route::post('/cycles', [AcademicController::class, 'storeCycle'])->name('cycles.store');
+            Route::get('/cycles/{cycle}/edit', [AcademicController::class, 'editCycle'])->name('cycles.edit');
+            Route::put('/cycles/{cycle}', [AcademicController::class, 'updateCycle'])->name('cycles.update');
+            Route::delete('/cycles/{cycle}', [AcademicController::class, 'destroyCycle'])->name('cycles.destroy');
 
             // NIVEAUX
-            Route::post('/level', [AcademiqueController::class, 'storeNiveau'])->name('niveaux.store');
-            Route::get('/level/{niveau}/edit', [AcademiqueController::class, 'editNiveau'])->name('niveaux.edit');
-            Route::put('/level/{niveau}', [AcademiqueController::class, 'updateNiveau'])->name('niveaux.update');
-            Route::delete('/level/{niveau}', [AcademiqueController::class, 'destroyNiveau'])->name('niveaux.destroy');
+            Route::post('/level', [AcademicController::class, 'storeNiveau'])->name('niveaux.store');
+            Route::get('/level/{niveau}/edit', [AcademicController::class, 'editNiveau'])->name('niveaux.edit');
+            Route::put('/level/{niveau}', [AcademicController::class, 'updateNiveau'])->name('niveaux.update');
+            Route::delete('/level/{niveau}', [AcademicController::class, 'destroyNiveau'])->name('niveaux.destroy');
         });
 
         Route::prefix('settings/classes')->name('settings.classes.')->group(function () {
-            Route::get('/', [ClasseController::class, 'index'])->name('index');
-            Route::post('/', [ClasseController::class, 'store'])->name('store');
-            Route::delete('/{classe}', [ClasseController::class, 'destroy'])->name('destroy');
-            Route::get('/settings/classes/{classe}/edit', [ClasseController::class, 'edit'])->name('edit');
-            Route::put('/settings/classes/{classe}', [ClasseController::class, 'update'])->name('update');
+            Route::get('/', [ClassController::class, 'index'])->name('index');
+            Route::post('/', [ClassController::class, 'store'])->name('store');
+            Route::delete('/{classe}', [ClassController::class, 'destroy'])->name('destroy');
+            Route::get('/settings/classes/{classe}/edit', [ClassController::class, 'edit'])->name('edit');
+            Route::put('/settings/classes/{classe}', [ClassController::class, 'update'])->name('update');
 
         });
 
         Route::prefix('settings/courses')->name('settings.matieres.')->group(function () {
-            Route::get('/', [MatiereController::class, 'index'])->name('index');
-            Route::post('/', [MatiereController::class, 'store'])->name('store');
-            Route::get('edit/{matiere}', [MatiereController::class, 'edit'])->name('edit');
-            Route::put('/{matiere}', [MatiereController::class, 'update'])->name('update');
-            Route::delete('/{matiere}', [MatiereController::class, 'destroy'])->name('destroy');
+            Route::get('/', [SubjectController::class, 'index'])->name('index');
+            Route::post('/', [SubjectController::class, 'store'])->name('store');
+            Route::get('edit/{matiere}', [SubjectController::class, 'edit'])->name('edit');
+            Route::put('/{matiere}', [SubjectController::class, 'update'])->name('update');
+            Route::delete('/{matiere}', [SubjectController::class, 'destroy'])->name('destroy');
         });
 
-        Route::get('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'edit'])->name('settings.classes.matieres.edit');
-        Route::post('settings/classes/{classe}/matieres', [ClasseMatiereController::class, 'update'])->name('settings.classes.matieres.update');
+        Route::get('settings/classes/{classe}/matieres', [ClassSubjectController::class, 'edit'])->name('settings.classes.matieres.edit');
+        Route::post('settings/classes/{classe}/matieres', [ClassSubjectController::class, 'update'])->name('settings.classes.matieres.update');
 
         Route::prefix('admin/students')->name('admin.students.')->group(function () {
-            Route::get('/corbeille', [EleveController::class, 'trashed'])->name('trashed');
-            Route::patch('/{id}/restore', [EleveController::class, 'restore'])->name('restore');
-            Route::delete('/{id}/force-delete', [EleveController::class, 'forceDelete'])->name('force-delete');
-            Route::post('/importer', [EleveController::class, 'importer'])->name('importer');
+            Route::get('/corbeille', [StudentController::class, 'trashed'])->name('trashed');
+            Route::patch('/{id}/restore', [StudentController::class, 'restore'])->name('restore');
+            Route::delete('/{id}/force-delete', [StudentController::class, 'forceDelete'])->name('force-delete');
+            Route::post('/importer', [StudentController::class, 'importer'])->name('importer');
         });
 
         Route::prefix('admin')->name('admin.')->group(function () {
@@ -258,35 +258,35 @@ Route::middleware('scolarite.coherence')->group(function () {
             // --- GESTION DES ELEVES ---
             // Cette ressource gère l'index, le create, le store, l'edit, le show, etc.
 
-            Route::resource('students', EleveController::class);
+            Route::resource('students', StudentController::class);
 
             // --- RECHERCHE RAPIDE (Optionnel pour plus tard) ---
-            Route::get('search/students', [EleveController::class, 'search'])->name('eleves.search');
+            Route::get('search/students', [StudentController::class, 'search'])->name('eleves.search');
         });
 
         Route::prefix('admin')->name('admin.')->group(function () {
 
             // --- MODULE ENSEIGNANTS ---
-            // Route::get('teachers', [EnseignantController::class, 'index'])->name('enseignants.index');
-            Route::get('teachers/create', [EnseignantController::class, 'create'])->name('enseignants.create');
-            Route::post('teachers', [EnseignantController::class, 'store'])->name('enseignants.store');
-            Route::get('teachers/{enseignant}/edit', [EnseignantController::class, 'edit'])->name('enseignants.edit');
-            Route::put('teachers/{enseignant}', [EnseignantController::class, 'update'])->name('enseignants.update');
-            Route::delete('teachers/{enseignant}', [EnseignantController::class, 'destroy'])->name('enseignants.destroy');
-            Route::get('teachers/{enseignant}', [EnseignantController::class, 'show'])->name('enseignants.show');
+            // Route::get('teachers', [TeacherController::class, 'index'])->name('enseignants.index');
+            Route::get('teachers/create', [TeacherController::class, 'create'])->name('enseignants.create');
+            Route::post('teachers', [TeacherController::class, 'store'])->name('enseignants.store');
+            Route::get('teachers/{enseignant}/edit', [TeacherController::class, 'edit'])->name('enseignants.edit');
+            Route::put('teachers/{enseignant}', [TeacherController::class, 'update'])->name('enseignants.update');
+            Route::delete('teachers/{enseignant}', [TeacherController::class, 'destroy'])->name('enseignants.destroy');
+            Route::get('teachers/{enseignant}', [TeacherController::class, 'show'])->name('enseignants.show');
 
             // --- MODULE PEDAGOGIQUE (AFFECTATIONS) ---
             // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
-            Route::get('affectations', [AffectationController::class, 'index'])->name('affectations.index');
-            Route::post('affectations', [AffectationController::class, 'store'])->name('affectations.store');
+            Route::get('affectations', [AssignmentController::class, 'index'])->name('affectations.index');
+            Route::post('affectations', [AssignmentController::class, 'store'])->name('affectations.store');
             // Dans routes/web.php, à l'intérieur de ton groupe 'admin'
-            Route::post('/affectations/store/bulk-store', [AffectationController::class, 'bulkStore'])->name('affectations.bulk-store');
+            Route::post('/affectations/store/bulk-store', [AssignmentController::class, 'bulkStore'])->name('affectations.bulk-store');
         });
 
         Route::prefix('admin')->name('admin.')->group(function () {
             // ... tes autres routes ...
 
-            //     Route::get('/audit-saisie', [AuditSaisieController::class, 'index'])->name('audit.saisie');
+            //     Route::get('/audit-saisie', [DataAuditController::class, 'index'])->name('audit.saisie');
 
             // On pourra ajouter plus tard :
 
@@ -304,37 +304,37 @@ Route::middleware('scolarite.coherence')->group(function () {
         ->group(function () {
 
             // Créneaux horaires
-            Route::get('/creneaux', [CreneauController::class, 'index'])->name('creneaux.index');
-            Route::post('/creneaux', [CreneauController::class, 'store'])->name('creneaux.store');
-            Route::delete('/creneaux/{creneau}', [CreneauController::class, 'destroy'])->name('creneaux.destroy');
+            Route::get('/creneaux', [TimeSlotController::class, 'index'])->name('creneaux.index');
+            Route::post('/creneaux', [TimeSlotController::class, 'store'])->name('creneaux.store');
+            Route::delete('/creneaux/{creneau}', [TimeSlotController::class, 'destroy'])->name('creneaux.destroy');
 
             // Emplois du temps
-            Route::get('/emplois/classes', [SeanceController::class, 'indexClasses'])->name('emplois.classes');
-            Route::get('/emplois/classe/{classeId}', [SeanceController::class, 'showByClasse'])->name('emplois.classe');
+            Route::get('/emplois/classes', [SessionCourseController::class, 'indexClasses'])->name('emplois.classes');
+            Route::get('/emplois/classe/{classeId}', [SessionCourseController::class, 'showByClasse'])->name('emplois.classe');
 
-            Route::get('/emplois/classe/{classeId}/pdf', [SeanceController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
-            Route::post('/emplois/seances', [SeanceController::class, 'store'])->name('seances.store');
+            Route::get('/emplois/classe/{classeId}/pdf', [SessionCourseController::class, 'telechargerPdfClasse'])->name('emplois.classe.pdf');
+            Route::post('/emplois/seances', [SessionCourseController::class, 'store'])->name('seances.store');
         });
     // });
 
     Route::middleware('auth')->group(function () {
-        Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
+        Route::get('/emplois/teacher/{userId}', [SessionCourseController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
         // Emploi du temps de l'enseignant (Téléchargement PDF)
-        Route::get('/emplois/teacher/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+        Route::get('/emplois/teacher/{userId}/pdf', [SessionCourseController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
         // Route::middleware(['auth', 'censeur'])->group(function () {
 
         // Afficher les leçons d'une matière pour une classe spécifique
-        Route::get('/lessons/{subjectId}/{classRoomId}', [LeconController::class, 'index'])->name('lessons.index');
+        Route::get('/lessons/{subjectId}/{classRoomId}', [LessonController::class, 'index'])->name('lessons.index');
 
         // Enregistrer une nouvelle leçon
-        Route::post('/lessons', [LeconController::class, 'store'])->name('lessons.store');
+        Route::post('/lessons', [LessonController::class, 'store'])->name('lessons.store');
     });
-    // Route::get('/emplois/teacher/{userId}', [SeanceController::class, 'showByEnseignant'])->name('emplois.enseignant');
+    // Route::get('/emplois/teacher/{userId}', [SessionCourseController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
     // // Emploi du temps de l'enseignant (Téléchargement PDF)
-    // Route::get('/emplois/teacher/{userId}/pdf', [SeanceController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+    // Route::get('/emplois/teacher/{userId}/pdf', [SessionCourseController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::put('/enseignants/{id}/reset-password', [UserController::class, 'resetPassword'])->name('enseignants.reset-password');

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
-class EleveController extends Controller
+class StudentController extends Controller
 {
     protected $scolarite;
 

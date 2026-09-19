@@ -8,7 +8,7 @@ use App\Models\ParametreAcademique;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
-class ParametreAcademiqueController extends Controller
+class SettingAcademicController extends Controller
 {
   // Fonction pour afficher la vue avec les classes
     public function index()

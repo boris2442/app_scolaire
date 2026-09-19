@@ -11,7 +11,7 @@ use App\Services\MoyenneService;
 use App\Services\ScolariteService;
 use Illuminate\Http\Request;
 
-class ResultatController extends Controller
+class ResultController extends Controller
 {
     protected $moyenneService;
     protected $scolarite;
