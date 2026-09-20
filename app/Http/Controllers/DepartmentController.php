@@ -14,7 +14,7 @@ class DepartmentController extends Controller
 
         // Dans DepartmentController.php à la ligne 12
         $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
-        return view('pages.departements.index', compact('departements'));
+        return view('pages.departments.index', compact('departements'));
     }
 
     public function edit($id)
@@ -25,7 +25,7 @@ class DepartmentController extends Controller
             return redirect()->back()->with('error', 'Département introuvable.');
         }
 
-        return view('pages.departements.edit', compact('departement'));
+        return view('pages.departments.edit', compact('departement'));
     }
 
     public function update(Request $request, $id)
@@ -65,7 +65,7 @@ class DepartmentController extends Controller
 
     public function create()
     {
-        return view('pages.departements.create');
+        return view('pages.departments.create');
     }
 
     public function store(DepartmentRequest $request)

@@ -20,7 +20,7 @@ class LessonController extends Controller
             ->get();
 
         // On passe les variables attendues par la vue
-        return view('pages.lecons.index', compact('lessons', 'subjectId', 'classRoomId'));
+        return view('pages.lessons.index', compact('lessons', 'subjectId', 'classRoomId'));
     }
     
     public function store(Request $request)

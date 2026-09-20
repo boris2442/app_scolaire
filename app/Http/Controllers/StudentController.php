@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
 use App\Imports\StudentImport;
-use App\Models\Year;
 use App\Models\Classe;
-
-
 use App\Models\Inscription;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Year;
 use App\Services\ScolariteService;
 use App\Services\StudentAnalyticsService;
 use Barryvdh\DomPDF\PDF;
@@ -67,7 +65,7 @@ class StudentController extends Controller
         // On récupère directement la liste des classes pour les filtres de la vue
         $classes = Classe::all();
 
-        return view('pages.eleves.index', compact('eleves', 'classes', 'anneeActive', 'stats'));
+        return view('pages.students.index', compact('eleves', 'classes', 'anneeActive', 'stats'));
     }
 
     private function getKpis($anneeActiveId)
@@ -100,7 +98,7 @@ class StudentController extends Controller
     //     $niveaux = Niveau::with('classes')->get();
     //     // On récupère les sexes depuis la structure de la BD
     //     $sexes = Student::getSexeOptions();
-    //     return view('pages.eleves.create', compact('anneeActive', 'niveaux', 'sexes'));
+    //     return view('pages.students.create', compact('anneeActive', 'niveaux', 'sexes'));
     // }
 
     public function create()
@@ -114,7 +112,7 @@ class StudentController extends Controller
         // On récupère les sexes depuis la structure de la BD
         $sexes = Student::getSexeOptions();
 
-        return view('pages.eleves.create', compact('anneeActive', 'classes', 'sexes'));
+        return view('pages.students.create', compact('anneeActive', 'classes', 'sexes'));
     }
 
     public function store(StudentRequest $request)
@@ -179,7 +177,7 @@ class StudentController extends Controller
         $eleve = Student::with(['inscriptions.classe', 'inscriptions.annee_scolaire'])
             ->findOrFail($id);
 
-        return view('pages.eleves.show', compact('eleve'));
+        return view('pages.students.show', compact('eleve'));
     }
 
     public function edit($id)
@@ -194,7 +192,7 @@ class StudentController extends Controller
         $classes = Classe::all();
         $sexes = Student::getSexeOptions();
 
-        return view('pages.eleves.edit', compact(
+        return view('pages.students.edit', compact(
             'eleve',
             'anneeActive',
             'classes',
@@ -270,7 +268,7 @@ class StudentController extends Controller
             ->orderByDesc('deleted_at')
             ->paginate(10);
 
-        return view('pages.eleves.trashed', compact('elevesArchives'));
+        return view('pages.students.trashed', compact('elevesArchives'));
     }
 
     // Restaurer un élève
@@ -319,7 +317,7 @@ class StudentController extends Controller
         $classe = Classe::findOrFail($request->classe_id);
 
         // 3. Génération du PDF
-        $pdf = \PDF::loadView('pages.eleves.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
+        $pdf = \PDF::loadView('pages.students.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
 
         // 4. Téléchargement ou affichage
         $fileName = Str::slug('liste eleves '.$classe->nom).'.pdf';

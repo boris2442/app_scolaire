@@ -13,7 +13,7 @@ class SchoolController extends Controller
     public function edit()
     {
         $etablissement = School::first() ?: new School();
-        return view('pages.etablissements.edit', compact('etablissement'));
+        return view('pages.schools.edit', compact('etablissement'));
     }
 
     public function update(UpdateEtsRequest $request)

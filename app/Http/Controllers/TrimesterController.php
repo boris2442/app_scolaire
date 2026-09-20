@@ -85,7 +85,7 @@ class TrimesterController extends Controller
             ->first();
 
 
-        return view('pages.trimestres.index', compact('anneesSansTrimestres', 'anneeActive'));
+        return view('pages.trimesters.index', compact('anneesSansTrimestres', 'anneeActive'));
     }
 
     public function store(Request $request)

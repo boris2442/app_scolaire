@@ -52,7 +52,7 @@ class ClassController extends Controller
         $classe = Classe::findOrFail($id);
         $cycles = Cycle::all(); // Pour alimenter le menu déroulant des cycles
 
-        return view('pages.academique.classes-edit', compact('classe', 'cycles'));
+        return view('pages.academics.classes-edit', compact('classe', 'cycles'));
     }
 
     public function update(Request $request, $id)

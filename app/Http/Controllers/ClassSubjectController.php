@@ -17,7 +17,7 @@ class ClassSubjectController extends Controller
         // On récupère les IDs des matières déjà attribuées pour cocher les cases
         $matieresAttribuees = $classe->matieres->pluck('id')->toArray();
 
-        return view('pages.classes.config-matieres', compact('classe', 'allMatieres', 'matieresAttribuees'));
+        return view('pages.classes.config-subjects', compact('classe', 'allMatieres', 'matieresAttribuees'));
     }
 
     // Sauvegarder les attributions

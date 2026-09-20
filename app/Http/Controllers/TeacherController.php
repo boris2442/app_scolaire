@@ -29,7 +29,7 @@ class TeacherController extends Controller
             ->orderBy('users.name', 'asc') // Ordre alphabétique A -> Z
             ->paginate(10); // Nombre d'éléments par page
 
-        return view('pages.enseignants.index', compact('enseignants'));
+        return view('pages.teachers.index', compact('enseignants'));
     }
 
     /**
@@ -38,7 +38,7 @@ class TeacherController extends Controller
     public function create()
     {
         $departements = Department::orderBy('nom')->get();
-        return view('pages.enseignants.create', compact('departements'));
+        return view('pages.teachers.create', compact('departements'));
     }
     
 
@@ -91,7 +91,7 @@ class TeacherController extends Controller
     public function edit(Teacher $enseignant)
     {
         $departements = Department::orderBy('nom')->get();
-        return view('pages.enseignants.edit', compact('enseignant', 'departements'));
+        return view('pages.teachers.edit', compact('enseignant', 'departements'));
     }
     public function update(Request $request, Teacher $enseignant)
     {
@@ -132,6 +132,6 @@ class TeacherController extends Controller
     public function show(Teacher $enseignant)
     {
         $enseignant->load('user', 'departement'); // Charge les relations nécessaires
-        return view('pages.enseignants.show', compact('enseignant'));
+        return view('pages.teachers.show', compact('enseignant'));
     }
 }

@@ -15,9 +15,6 @@ class DashboardTeacherController extends Controller
 {
 
 
-
-   
-
 public function index(Request $request, ScolariteService $scolarite)
 {
     $anneeActive = $scolarite->getAnneeActive();
@@ -72,7 +69,7 @@ public function index(Request $request, ScolariteService $scolarite)
         ];
     });
 
-    return view('pages.enseignants.dashboard', compact(
+    return view('pages.teachers.dashboard', compact(
         'statsSaisie',
         'sequences',
         'sequenceId',

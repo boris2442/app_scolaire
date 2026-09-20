@@ -61,7 +61,7 @@ class AssignmentController extends Controller
                 ->keyBy('matiere_id');
         }
 
-        return view('pages.affectations.index', compact(
+        return view('pages.assignments.index', compact(
             'classes',
             'enseignants',
             'anneeActive',

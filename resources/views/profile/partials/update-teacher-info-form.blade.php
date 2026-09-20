@@ -91,7 +91,11 @@
 
             <div class="flex justify-end mt-6">
                 <button type="button" onclick="goToStep(2)"
-                    class="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground border border-transparent rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-4 py-2   border border-transparent rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150  bg-gray-800 dark:bg-gray-200
+hover:bg-gray-700
+dark:hover:bg-white
+focus:bg-gray-700 dark:focus:bg-white text-white
+active:bg-gray-900 dark:active:bg-gray-300">
                     Suivant &rarr;
                 </button>
             </div>
@@ -170,11 +174,19 @@
 
             <div class="flex justify-between mt-6">
                 <button type="button" onclick="goToStep(1)"
-                    class="inline-flex items-center px-4 py-2 bg-secondary text-secondary-foreground border border-border rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-4 py-2   border border-border rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150  bg-gray-800 dark:bg-gray-200 text-white
+hover:bg-gray-700
+dark:hover:bg-white
+focus:bg-gray-700 dark:focus:bg-white
+active:bg-gray-900 dark:active:bg-gray-300">
                     &larr; Précédent
                 </button>
                 <button type="button" onclick="goToStep(3)"
-                    class="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground border border-transparent rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-4 py-2   border border-transparent rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150 bg-gray-800 dark:bg-gray-200 text-white
+hover:bg-gray-700
+dark:hover:bg-white
+focus:bg-gray-700 dark:focus:bg-white
+active:bg-gray-900 dark:active:bg-gray-300 text-white">
                     Suivant &rarr;
                 </button>
             </div>
@@ -222,11 +234,19 @@
 
             <div class="flex justify-between mt-6">
                 <button type="button" onclick="goToStep(2)"
-                    class="inline-flex items-center px-4 py-2 bg-secondary text-secondary-foreground border border-border rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-4 py-2   border border-border rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150  bg-gray-800 dark:bg-gray-200 text-white
+hover:bg-gray-700
+dark:hover:bg-white
+focus:bg-gray-700 dark:focus:bg-white
+active:bg-gray-900 dark:active:bg-gray-300">
                     &larr; Précédent
                 </button>
                 <button type="submit"
-                    class="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground border border-transparent rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-4 py-2   border border-border rounded font-semibold text-xs  tracking-widest hover:opacity-90 focus:outline-none transition ease-in-out duration-150  bg-gray-800 dark:bg-gray-200 text-white
+hover:bg-gray-700
+dark:hover:bg-white
+focus:bg-gray-700 dark:focus:bg-white
+active:bg-gray-900 dark:active:bg-gray-300">
                     {{ __('Enregistrer tout le profil') }}
                 </button>
             </div>

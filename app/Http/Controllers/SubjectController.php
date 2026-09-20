@@ -25,7 +25,7 @@ class SubjectController extends Controller
         }
 
         $matieres = $query->orderBy('nom')->paginate(10);
-        return view('pages.matieres.index', compact('matieres', 'groupes'));
+        return view('pages.subjects.index', compact('matieres', 'groupes'));
     }
 
     public function store(CourseRequest $request)
@@ -47,7 +47,7 @@ class SubjectController extends Controller
     public function edit(Matiere $matiere)
     {
         $groupes = GroupeSubject::orderBy('ordre')->get();
-        return view('pages.matieres.edit', compact('matiere', 'groupes'));
+        return view('pages.subjects.edit', compact('matiere', 'groupes'));
     }
 
 

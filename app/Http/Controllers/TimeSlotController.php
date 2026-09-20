@@ -13,7 +13,7 @@ class TimeSlotController extends Controller
     public function index()
     {
         $creneaux = Creneau::orderBy('heure_debut')->get();
-        return view('pages.creneaux.index', compact('creneaux'));
+        return view('pages.timeslots.index', compact('creneaux'));
     }
 
     // Enregistrer un nouveau créneau horaire

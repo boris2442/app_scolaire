@@ -18,7 +18,7 @@ class SettingAcademicController extends Controller
             $q->where('cle', 'moyenne_min');
         }])->get();
 
-        return view('pages.parametres-classes.index', compact('classes'));
+        return view('pages.settings-classes.index', compact('classes'));
     }
 
   

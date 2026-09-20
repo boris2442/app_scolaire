@@ -1,17 +1,19 @@
 <x-app-layout>
-    <x-slot name="header">
+    <x-slot name="header" class='relative'>
         <div class="flex items-center gap-3">
-            <!-- Bouton de retour -->
-            <a href="{{ route('after.login.page') }}"
-                class="p-1.5 rounded-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
-                title="Retour">
-                <x-lucide-arrow-left class="w-5 h-5" />
-            </a>
+            {{-- <div class="absolute top-0 left-0"> --}}
+                <!-- Bouton de retour -->
+                <a href="{{ route('after.login.page') }}"
+                    class="p-1.5 rounded-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                    title="Retour">
+                    <x-lucide-arrow-left class="w-5 h-5 text-bold" />
+                </a>
 
-            <!-- Titre -->
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Dashboard') }}
-            </h2>
+                <!-- Titre -->
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Dashboard') }}
+                </h2>
+            {{-- </div> --}}
         </div>
     </x-slot>
 

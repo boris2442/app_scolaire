@@ -57,7 +57,7 @@ class AssessmentController extends Controller
             ->latest()
             ->get();
 
-        return view('pages.evaluations.index', [
+        return view('pages.assessments.index', [
             'evaluations' => $evaluations,
             'sequences' => $sequences,
             'anneeActive' => $this->anneeActive,
@@ -106,7 +106,7 @@ class AssessmentController extends Controller
 
         $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
 
-        return view('pages.evaluations.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
+        return view('pages.assessments.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
 
     public function store(Request $request, ScolariteService $scolariteService)
@@ -271,7 +271,7 @@ class AssessmentController extends Controller
             'date_impression' => now()->format('d/m/Y à H:i'),
         ];
 
-        $pdf = Pdf::loadView('pages.evaluations.stats_evaluation', $data)
+        $pdf = Pdf::loadView('pages.assessments.stats_evaluation', $data)
             ->setPaper('a4', 'portrait');
 
         return $pdf->download(str('Statistiques '.$evaluation->matiere->nom)->slug('_').'.pdf');

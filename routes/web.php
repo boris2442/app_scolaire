@@ -119,7 +119,7 @@ Route::middleware('scolarite.coherence')->group(function () {
                 ->name('evaluations.telecharger-stats');
         });
 
-        Route::prefix('teatcher')->name('enseignant.')->group(function () {
+        Route::prefix('teacher')->name('enseignant.')->group(function () {
             Route::get('/dashboard', [DashboardTeacherController::class, 'index'])->name('dashboard');
         });
 

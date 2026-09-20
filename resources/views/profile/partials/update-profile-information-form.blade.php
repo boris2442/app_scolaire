@@ -1,4 +1,4 @@
-<section>
+<section >
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __(' Information sur le profil') }}
@@ -31,7 +31,7 @@
         <div>
             <x-input-label for="avatar" :value="__('Photo de profil')" />
             <input id="avatar" name="avatar" type="file"
-                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-gray-700 dark:file:text-gray-300"
+                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 hover:file:bg-indigo-100 dark:file:bg-gray-700 dark:file:text-gray-300"
                 accept="image/png, image/jpeg, image/jpg" />
             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
         </div>

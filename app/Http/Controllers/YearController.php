@@ -18,7 +18,7 @@ class YearController extends Controller
         // On récupère l'année active (petit bonus : on peut la chercher dans la collection déjà chargée)
         $anneeActive = $annees->where('est_active', true)->first();
 
-        return view('pages.annees.index', compact('annees', 'totalAnnees', 'anneeActive'));
+        return view('pages.years.index', compact('annees', 'totalAnnees', 'anneeActive'));
     }
 
     public function store(StoreYearSchoolRequest $request)
@@ -110,7 +110,7 @@ class YearController extends Controller
     public function edit(Year $annee_scolaire)
     {
         // On envoie l'objet à la vue d'édition
-        return view('pages.annees.edit', compact('annee_scolaire'));
+        return view('pages.years.edit', compact('annee_scolaire'));
     }
 
     public function update(StoreYearSchoolRequest $request, Year $annee_scolaire)

@@ -21,7 +21,7 @@ class AcademicController extends Controller
         }
         // On récupère uniquement les cycles (la relation 'niveaux' est supprimée)
         $cycles = Cycle::with('classes')->get(); // avec 'with' pour charger la relation
-        return view('pages.academique.index', compact('cycles', 'anneeActive'));
+        return view('pages.academics.index', compact('cycles', 'anneeActive'));
     }
 
     public function storeCycle(StoreCycleRequest $request)
@@ -34,7 +34,7 @@ class AcademicController extends Controller
     // Afficher le formulaire d'édition d'un Cycle
     public function editCycle(Cycle $cycle)
     {
-        return view('pages.academique.edit-cycle', compact('cycle'));
+        return view('pages.academics.edit-cycle', compact('cycle'));
     }
 
     // --- ACTIONS POUR LES CYCLES ---

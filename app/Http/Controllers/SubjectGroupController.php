@@ -15,12 +15,12 @@ class SubjectGroupController extends Controller
             ->orderBy('ordre', 'asc')
             ->get();
 
-        return view('pages.groupesmatieres.index', compact('groupes'));
+        return view('pages.subjectgroups.index', compact('groupes'));
     }
 
     public function create()
     {
-        return view('pages.groupesmatieres.create');
+        return view('pages.subjectgroups.create');
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class SubjectGroupController extends Controller
     }
     public function edit(GroupeSubject $groupe)
     {
-        return view('pages.groupesmatieres.edit', compact('groupe'));
+        return view('pages.subjectgroups.edit', compact('groupe'));
     }
     public function update(Request $request, GroupeSubject $groupe)
     {
