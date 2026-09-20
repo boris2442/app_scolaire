@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Statistiques Globales - {{ $trimestre->nom }}</title>
@@ -119,10 +120,23 @@
             background-color: #f8fafc;
         }
 
-        .text-left { text-align: left !important; }
-        .font-bold { font-weight: bold; }
-        .text-success { color: #16a34a; font-weight: bold; }
-        .text-danger { color: #dc2626; font-weight: bold; }
+        .text-left {
+            text-align: left !important;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .text-success {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .text-danger {
+            color: #dc2626;
+            font-weight: bold;
+        }
 
         /* FOOTER */
         .footer {
@@ -138,14 +152,15 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- EN-TÊTE -->
     <table class="header-table">
         <tr>
             <td class="school-info">
-                <div class="school-name">{{ $etablissement->nom ?? 'ÉTABLISSEMENT SCOLAIRE' }}</div>
-                <div>Année Scolaire : <b>{{ $anneeActive->libelle ?? 'N/A' }}</b></div>
+                <div class="school-name">{{ $school->nom ?? 'ÉTABLISSEMENT SCOLAIRE' }}</div>
+                <div>Année Scolaire : <b>{{ $actifYear->libelle ?? 'N/A' }}</b></div>
             </td>
             <td class="doc-title">
                 <h1>Statistiques Globales</h1>
@@ -155,46 +170,46 @@
     </table>
 
     <!-- PODIUM ÉTABLISSEMENT -->
-    @if(isset($stats['etablissement']))
-    @php $etab = $stats['etablissement']; @endphp
-    <table class="podium-container">
-        <tr>
-            <td width="20%">
-                <div class="podium-card">
-                    <div class="podium-value">{{ $etab['total_eleves'] }}</div>
-                    <div class="podium-label">Effectif Evalué</div>
-                </div>
-            </td>
-            <td width="20%">
-                <div class="podium-card">
-                    <div class="podium-value">{{ $etab['moyenne_generale'] }} / 20</div>
-                    <div class="podium-label">Moyenne Générale</div>
-                </div>
-            </td>
-            <td width="20%">
-                <div class="podium-card">
-                    <div class="podium-value text-success">{{ $etab['taux_reussite'] }} %</div>
-                    <div class="podium-label">Taux de Réussite</div>
-                </div>
-            </td>
-            <td width="20%">
-                <div class="podium-card">
-                    <div class="podium-value" style="font-size: 10px; color: #2563eb;">
-                        {{ $etab['major'] ? $etab['major']->nom . ' ' . $etab['major']->prenom : 'N/A' }}
+    @if (isset($stats['school']))
+        @php $etab = $stats['school']; @endphp
+        <table class="podium-container">
+            <tr>
+                <td width="20%">
+                    <div class="podium-card">
+                        <div class="podium-value">{{ $etab['total_eleves'] }}</div>
+                        <div class="podium-label">Effectif Evalué</div>
                     </div>
-                    <div class="podium-label">Major ({{ $etab['major']->moyenne_trimestre ?? 0 }}/20)</div>
-                </div>
-            </td>
-            <td width="20%">
-                <div class="podium-card">
-                    <div class="podium-value" style="font-size: 10px; color: #dc2626;">
-                        {{ $etab['dernier'] ? $etab['dernier']->nom . ' ' . $etab['dernier']->prenom : 'N/A' }}
+                </td>
+                <td width="20%">
+                    <div class="podium-card">
+                        <div class="podium-value">{{ $etab['moyenne_generale'] }} / 20</div>
+                        <div class="podium-label">Moyenne Générale</div>
                     </div>
-                    <div class="podium-label">Dernier ({{ $etab['dernier']->moyenne_trimestre ?? 0 }}/20)</div>
-                </div>
-            </td>
-        </tr>
-    </table>
+                </td>
+                <td width="20%">
+                    <div class="podium-card">
+                        <div class="podium-value text-success">{{ $etab['taux_reussite'] }} %</div>
+                        <div class="podium-label">Taux de Réussite</div>
+                    </div>
+                </td>
+                <td width="20%">
+                    <div class="podium-card">
+                        <div class="podium-value" style="font-size: 10px; color: #2563eb;">
+                            {{ $etab['major'] ? $etab['major']->nom . ' ' . $etab['major']->prenom : 'N/A' }}
+                        </div>
+                        <div class="podium-label">Major ({{ $etab['major']->moyenne_trimestre ?? 0 }}/20)</div>
+                    </div>
+                </td>
+                <td width="20%">
+                    <div class="podium-card">
+                        <div class="podium-value" style="font-size: 10px; color: #dc2626;">
+                            {{ $etab['dernier'] ? $etab['dernier']->nom . ' ' . $etab['dernier']->prenom : 'N/A' }}
+                        </div>
+                        <div class="podium-label">Dernier ({{ $etab['dernier']->moyenne_trimestre ?? 0 }}/20)</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     @endif
 
     <!-- STATISTIQUES PAR SECTION -->
@@ -222,14 +237,18 @@
                         {{ $sec['taux_reussite'] }} %
                     </td>
                     <td class="text-left">
-                        <b>{{ $sec['major']->nom ?? '' }}</b> ({{ $sec['major']->classe_nom ?? '' }}) - <span class="text-success">{{ $sec['major']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $sec['major']->nom ?? '' }}</b> ({{ $sec['major']->classe_nom ?? '' }}) - <span
+                            class="text-success">{{ $sec['major']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                     <td class="text-left">
-                        <b>{{ $sec['dernier']->nom ?? '' }}</b> ({{ $sec['dernier']->classe_nom ?? '' }}) - <span class="text-danger">{{ $sec['dernier']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $sec['dernier']->nom ?? '' }}</b> ({{ $sec['dernier']->classe_nom ?? '' }}) - <span
+                            class="text-danger">{{ $sec['dernier']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7">Aucune donnée disponible</td></tr>
+                <tr>
+                    <td colspan="7">Aucune donnée disponible</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
@@ -259,14 +278,18 @@
                         {{ $cyc['taux_reussite'] }} %
                     </td>
                     <td class="text-left">
-                        <b>{{ $cyc['major']->nom ?? '' }}</b> ({{ $cyc['major']->classe_nom ?? '' }}) - <span class="text-success">{{ $cyc['major']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $cyc['major']->nom ?? '' }}</b> ({{ $cyc['major']->classe_nom ?? '' }}) - <span
+                            class="text-success">{{ $cyc['major']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                     <td class="text-left">
-                        <b>{{ $cyc['dernier']->nom ?? '' }}</b> ({{ $cyc['dernier']->classe_nom ?? '' }}) - <span class="text-danger">{{ $cyc['dernier']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $cyc['dernier']->nom ?? '' }}</b> ({{ $cyc['dernier']->classe_nom ?? '' }}) - <span
+                            class="text-danger">{{ $cyc['dernier']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7">Aucune donnée disponible</td></tr>
+                <tr>
+                    <td colspan="7">Aucune donnée disponible</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
@@ -296,14 +319,18 @@
                         {{ $niv['taux_reussite'] }} %
                     </td>
                     <td class="text-left">
-                        <b>{{ $niv['major']->nom ?? '' }}</b> ({{ $niv['major']->classe_nom ?? '' }}) - <span class="text-success">{{ $niv['major']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $niv['major']->nom ?? '' }}</b> ({{ $niv['major']->classe_nom ?? '' }}) - <span
+                            class="text-success">{{ $niv['major']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                     <td class="text-left">
-                        <b>{{ $niv['dernier']->nom ?? '' }}</b> ({{ $niv['dernier']->classe_nom ?? '' }}) - <span class="text-danger">{{ $niv['dernier']->moyenne_trimestre ?? 0 }}</span>
+                        <b>{{ $niv['dernier']->nom ?? '' }}</b> ({{ $niv['dernier']->classe_nom ?? '' }}) - <span
+                            class="text-danger">{{ $niv['dernier']->moyenne_trimestre ?? 0 }}</span>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7">Aucune donnée disponible</td></tr>
+                <tr>
+                    <td colspan="7">Aucune donnée disponible</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
@@ -314,4 +341,5 @@
     </div>
 
 </body>
+
 </html>

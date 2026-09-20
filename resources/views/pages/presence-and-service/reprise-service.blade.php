@@ -195,11 +195,11 @@
 
                 *******<br>
 
-                RÉGION DE {{ $etablissement->region }}<br>
+                RÉGION DE {{ $school->region }}<br>
 
                 *******<br>
 
-                DÉPARTEMENT DE LA {{ $etablissement->department }}<br>
+                DÉPARTEMENT DE LA {{ $school->department }}<br>
 
                 *******<br>
 
@@ -209,19 +209,19 @@
                 *******<br>
 
                 ARRONDISSEMENT DE
-                {{ $etablissement->sub_division }}<br>
+                {{ $school->sub_division }}<br>
 
                 *******<br>
 
                 <strong>
-                    {{ $etablissement->nom }}
+                    {{ $school->nom }}
                 </strong><br>
 
                 BP : - - TEL :
-                {{ $etablissement->telephone }}<br>
+                {{ $school->telephone }}<br>
 
                 Immatriculation :
-                {{ $etablissement->code_ecole }}
+                {{ $school->code_ecole }}
 
             </td>
 
@@ -258,11 +258,11 @@
 
                 *******<br>
 
-                {{ $etablissement->english_region }} REGION<br>
+                {{ $school->english_region }} REGION<br>
 
                 *******<br>
 
-                {{ $etablissement->english_department }} DIVISION<br>
+                {{ $school->english_department }} DIVISION<br>
 
                 *******<br>
 
@@ -271,20 +271,20 @@
 
                 *******<br>
 
-                {{ $etablissement->english_sub_division }}
+                {{ $school->english_sub_division }}
                 SUB DIVISION<br>
 
                 *******<br>
 
                 <strong>
-                    {{ $etablissement->english_name }}
+                    {{ $school->english_name }}
                 </strong><br>
 
                 PO-BOX : - - PHONE :
-                {{ $etablissement->telephone }}<br>
+                {{ $school->telephone }}<br>
 
                 Immatriculation :
-                {{ $etablissement->code_ecole }}
+                {{ $school->code_ecole }}
 
             </td>
 
@@ -352,14 +352,14 @@
         <tr>
             <td style="width: 25%; font-weight: bold;" class="label-fr">PROVISEUR / PRINCIPAL</td>
             <td style="width: 5%; font-size: 8.5px;">du</td>
-            <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $etablissement->nom }}
+            <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $school->nom }}
             </td>
         </tr>
         <tr>
             <td style="width: 25%;" class="label-en">PRINCIPAL</td>
             <td style="width: 5%; font-size: 8.5px;" class="label-en">of</td>
             <td style="width: 70%; text-align: center;" class="label-en">
-                {{ $etablissement->english_name ?? $etablissement->nom }}</td>
+                {{ $school->english_name ?? $school->nom }}</td>
         </tr>
     </table>
 
@@ -1081,7 +1081,7 @@
                         "
                             class="line-underline val-text">
 
-                            {{ $etablissement->adresse }}
+                            {{ $school->adresse }}
 
                         </td>
 

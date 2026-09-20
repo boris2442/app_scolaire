@@ -165,9 +165,9 @@
             <tr>
                 <td style="width: 50%;">
                     <div class="school-info">
-                        <strong>{{ $etablissement->nom ?? 'Établissement Scolaire' }}</strong><br>
-                        {{ $etablissement->bp ?? '' }} - Tél: {{ $etablissement->telephone ?? '' }}<br>
-                        Année Scolaire : {{ $etablissement->annee_courante ?? '2025/2026' }}
+                        <strong>{{ $school->nom ?? 'Établissement Scolaire' }}</strong><br>
+                        {{ $school->email ?? '' }} - Tél: {{ $school->telephone ?? '' }}<br>
+                        Année Scolaire : {{ $actifYear->libelle ?? '2025/2026' }}
                     </div>
                 </td>
                 <td style="width: 50%;" class="doc-title">

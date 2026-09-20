@@ -90,11 +90,11 @@ Route::middleware('scolarite.coherence')->group(function () {
                 // Cette ligne gère TOUT (Index, Store, Edit, Update, Destroy)
                 // Elle crée automatiquement la route 'settings.annees.edit' et 'settings.annees.update'
                 Route::resource('years', YearController::class)->parameters([
-                    'years' => 'annee_scolaire', // Pour que Laravel injecte bien le modèle dans ton Controller
+                    'years' => 'year', // Pour que Laravel injecte bien le modèle dans ton Controller
                 ]);
 
                 // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
-                Route::patch('years/{annee_scolaire}/activer', [YearController::class, 'set_active'])->name('years.active');
+                Route::patch('years/{year}/activer', [YearController::class, 'set_active'])->name('years.active');
             });
 
             Route::prefix('admin')->name('admin.')->group(function () {

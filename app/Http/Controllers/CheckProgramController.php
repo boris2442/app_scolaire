@@ -18,7 +18,7 @@ class CheckProgramController extends Controller
     }
     public function index(Request $request)
     {
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
         $classes = Classe::orderBy('nom')->get();
         $selectedClasseId = $request->input('classe_id');
 
@@ -28,9 +28,9 @@ class CheckProgramController extends Controller
             // Filtrage des évaluations uniquement sur l'année scolaire active
             $leconsGrouped = Lesson::where('classe_id', $selectedClasseId)
                 ->with(['matiere', 'enseignant'])
-                ->withExists(['evaluations' => function ($query) use ($anneeActive) {
-                    $query->whereHas('sequence.trimestre', function ($q) use ($anneeActive) {
-                        $q->where('annee_scolaire_id', $anneeActive->id);
+                ->withExists(['evaluations' => function ($query) use ($actifYear) {
+                    $query->whereHas('sequence.trimestre', function ($q) use ($actifYear) {
+                        $q->where('annee_scolaire_id', $actifYear->id);
                     });
                 }])
                 ->orderBy('ordre')

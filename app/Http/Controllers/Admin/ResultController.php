@@ -27,14 +27,14 @@ public function index()
     {
         // On récupère directement toutes les classes (plus de relation 'niveau')
         $classes = Classe::all(); 
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
-        $sequences = Sequence::whereHas('trimestre', function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id);
+        $sequences = Sequence::whereHas('trimestre', function ($q) use ($actifYear) {
+            $q->where('annee_scolaire_id', $actifYear->id);
         })->get();
 
         // On récupère aussi les trimestres pour l'affichage
-        $trimestres = Trimestre::where('annee_scolaire_id', $anneeActive->id)->get();
+        $trimestres = Trimestre::where('annee_scolaire_id', $actifYear->id)->get();
 
         return view('pages.results.index', compact('classes', 'sequences', 'trimestres'));
     }
@@ -50,13 +50,13 @@ public function index()
         // Validation souple : soit sequence_id, soit trimestre_id
         $request->validated();
 
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
         try {
             // CAS 1 : On a choisi une Séquence
             if ($request->filled('sequence_id')) {
                 $this->moyenneService->calculerMoyennesSequentielles($request->classe_id, $request->sequence_id);
-                $this->moyenneService->genererBilansSequentiels($request->classe_id, $request->sequence_id, $anneeActive->id);
+                $this->moyenneService->genererBilansSequentiels($request->classe_id, $request->sequence_id, $actifYear->id);
                 $message = 'Calculs de la séquence terminés !';
             }
             // CAS 2 : On a choisi un Trimestre

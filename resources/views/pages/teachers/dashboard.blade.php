@@ -5,42 +5,43 @@
 
         <!-- En-tête -->
         <!-- En-tête -->
- <div class='sticky top-[10%]'>
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-5 rounded-2xl border border-border shadow-md">
-            <div>
-                <h1 class="text-xl tracking-tight font-bold">Tableau de bord ; <a href='{{ route('profile.edit') }}' class='text-primary'>{{auth()->user()->name ?? ''}}</a> </h1>
-                <p class="text-xs text-foreground/60 tracking-wider font-medium mt-0.5">
-                    Session Active : {{ \Carbon\Carbon::parse($anneeActive->date_debut)->format('d/m/Y') }} -
-                    {{ \Carbon\Carbon::parse($anneeActive->date_fin)->format('d/m/Y') }}
-                </p>
-            </div>
-
-            <!-- Sélecteur de Séquence bien visible -->
-            <form action="{{ route('enseignant.dashboard') }}" method="GET"
-                class="flex items-center gap-3 bg-primary/10 border-2 border-primary/30 px-4 py-2.5 rounded-2xl shadow-sm hover:border-primary/50 transition">
-                <div class="flex items-center gap-2">
-                    <!-- Petite icône calendrier/filtre pour accentuer la visibilité -->
-                    <x-lucide-filter class="w-4 h-4 text-primary" />
-                    <label for="sequence_id"
-                        class="text-xs uppercase font-extrabold text-primary tracking-wide cursor-pointer">
-                        Evaluation :
-                    </label>
+        <div class='sticky top-[10%]'>
+            <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-5 rounded-2xl border border-border shadow-md">
+                <div>
+                    <h1 class="text-xl tracking-tight font-bold">Tableau de bord ; <a href='{{ route('profile.edit') }}'
+                            class='text-primary'>{{ auth()->user()->name ?? '' }}</a> </h1>
+                    <p class="text-xs text-foreground/60 tracking-wider font-medium mt-0.5">
+                        Session Active : {{ \Carbon\Carbon::parse($actifYear->date_debut)->format('d/m/Y') }} -
+                        {{ \Carbon\Carbon::parse($actifYear->date_fin)->format('d/m/Y') }}
+                    </p>
                 </div>
 
-                <select name="sequence_id" id="sequence_id" onchange="this.form.submit()"
-                    class="bg-background border border-border rounded px-3 py-1.5 text-xs font-bold text-foreground focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer shadow-inner transition">
-                    <option>
-                        Selectionner</option>
-                    @foreach ($sequences as $seq)
-                        <option value="{{ $seq->id }}" {{ $sequenceId == $seq->id ? 'selected' : '' }}>
-                            {{ $seq->nom }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
+                <!-- Sélecteur de Séquence bien visible -->
+                <form action="{{ route('enseignant.dashboard') }}" method="GET"
+                    class="flex items-center gap-3 bg-primary/10 border-2 border-primary/30 px-4 py-2.5 rounded-2xl shadow-sm hover:border-primary/50 transition">
+                    <div class="flex items-center gap-2">
+                        <!-- Petite icône calendrier/filtre pour accentuer la visibilité -->
+                        <x-lucide-filter class="w-4 h-4 text-primary" />
+                        <label for="sequence_id"
+                            class="text-xs uppercase font-extrabold text-primary tracking-wide cursor-pointer">
+                            Evaluation :
+                        </label>
+                    </div>
+
+                    <select name="sequence_id" id="sequence_id" onchange="this.form.submit()"
+                        class="bg-background border border-border rounded px-3 py-1.5 text-xs font-bold text-foreground focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer shadow-inner transition">
+                        <option>
+                            Selectionner</option>
+                        @foreach ($sequences as $seq)
+                            <option value="{{ $seq->id }}" {{ $sequenceId == $seq->id ? 'selected' : '' }}>
+                                {{ $seq->nom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
         </div>
-</div>
         <!-- Statistiques -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div class="bg-card border border-border p-3 rounded-2xl">

@@ -24,7 +24,7 @@
 
                 <form action="{{ route('settings.classes.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
+                    <input type="hidden" name="annee_scolaire_id" value="{{ $year->id }}">
 
                     <div>
                         <label class="text-[10px] text-muted-foreground">Cycle concerné</label>

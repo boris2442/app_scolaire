@@ -4,7 +4,7 @@
     <div class="mb-8">
         <h1 class="text-xl font-black  text-foreground tracking-tight">Affectations Pédagogiques</h1>
         <p class="text-xs text-primary font-bold  tracking-widest">
-            Année Scolaire : {{ $anneeActive->libelle }}
+            Année Scolaire : {{ $actifYear->libelle }}
         </p>
     </div>
 
@@ -13,7 +13,7 @@
     <div class="bg-card p-6 rounded-2xl border border-border shadow-sm mb-8">
         <form action="{{ route('admin.affectations.index') }}" method="GET" class="flex items-end gap-4">
             {{-- Conserver l'année active dans le filtre --}}
-            <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
+            <input type="hidden" name="annee_scolaire_id" value="{{ $actifYear->id }}">
             <div class="flex-1">
                 <label class="text-[10px] font-black text-muted-foreground ml-1">Sélectionner une salle / classe</label>
                 <select name="classe_id" onchange="this.form.submit()"
@@ -42,7 +42,7 @@
             <form action="{{ route('admin.affectations.bulk-store') }}" method="POST">
                 @csrf
                 {{-- Sécurité : passer l'ID de l'année à la soumission --}}
-                <input type="hidden" name="annee_scolaire_id" value="{{ $anneeActive->id }}">
+                <input type="hidden" name="annee_scolaire_id" value="{{ $actifYear->id }}">
                 <input type="hidden" name="classe_id" value="{{ $classeId }}">
 
                 <table class="w-full text-left border-collapse">

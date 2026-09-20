@@ -13,13 +13,13 @@ class PresenceAndServiceController extends Controller
     {
         $user = Auth::user();
 
-        $etablissement = School::first();
+        $school = School::first();
 
         $user->load('enseignant.matiere');
 
         $enseignant = $user->enseignant;
 
-        return compact('enseignant', 'user', 'etablissement');
+        return compact('enseignant', 'user', 'school');
 
     }
 

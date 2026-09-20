@@ -12,11 +12,11 @@ class AfterLoginController extends Controller
     public function index()
     {
         // Récupération sécurisée
-        $anneeActive = Year::where('est_active', true)->first();
-        $etablissement = School::first(); // Supposant qu'il n'y a qu'un seul paramétrage
+        $year = Year::where('est_active', true)->first();
+        $school = School::first(); // Supposant qu'il n'y a qu'un seul paramétrage
 
         // $user=Auth::user()->name();
         // dd($user);
-        return view('pages.after-login', compact('anneeActive', 'etablissement'));
+        return view('pages.after-login', compact('year', 'school'));
     }
 }

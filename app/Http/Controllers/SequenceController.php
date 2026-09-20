@@ -24,13 +24,13 @@ class SequenceController extends Controller
 
     public function index()
     {
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
-        $sequences = Sequence::whereHas('trimestre', function ($query) use ($anneeActive) {
-            $query->where('annee_scolaire_id', $anneeActive->id);
+        $sequences = Sequence::whereHas('trimestre', function ($query) use ($actifYear) {
+            $query->where('annee_scolaire_id', $actifYear->id);
         })->with('trimestre')->get();
 
-        return view('pages.admin.sequences.index', compact('sequences', 'anneeActive'));
+        return view('pages.admin.sequences.index', compact('sequences', 'actifYear'));
     }
 
     public function update(Request $request, $id)

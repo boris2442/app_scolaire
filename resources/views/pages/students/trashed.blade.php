@@ -34,31 +34,31 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-border">
-                @forelse($elevesArchives as $eleve)
+                @forelse($archiveStudents as $student)
                     <tr class="hover:bg-secondary/20 transition-colors">
                         <td class="p-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-border flex items-center justify-center overflow-hidden">
-                                    @if ($eleve->photo)
-                                        <img src="{{ asset('storage/' . $eleve->photo) }}"
+                                    @if ($student->photo)
+                                        <img src="{{ asset('storage/' . $student->photo) }}"
                                             class="w-full h-full object-cover grayscale">
                                     @else
                                         <x-lucide-user class="w-4 h-4 text-muted-foreground/50" />
                                     @endif
                                 </div>
                                 <div>
-                                    <p class="text-sm font-black uppercase">{{ $eleve->nom }} {{ $eleve->prenom }}</p>
-                                    <p class="text-[10px] text-muted-foreground font-bold uppercase">{{ $eleve->sexe }}</p>
+                                    <p class="text-sm font-black uppercase">{{ $student->nom }} {{ $student->prenom }}</p>
+                                    <p class="text-[10px] text-muted-foreground font-bold uppercase">{{ $student->sexe }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="p-4 text-xs font-bold font-mono text-primary">{{ $eleve->matricule }}</td>
+                        <td class="p-4 text-xs font-bold font-mono text-primary">{{ $student->matricule }}</td>
                         <td class="p-4 text-center text-[10px] font-bold text-muted-foreground uppercase">
-                            {{ $eleve->deleted_at->format('d/m/Y à H:i') }}
+                            {{ $student->deleted_at->format('d/m/Y à H:i') }}
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex justify-end gap-2">
-                                <form action="{{ route('admin.students.restore', $eleve->id) }}" method="POST">
+                                <form action="{{ route('admin.students.restore', $student->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" title="Restaurer"
@@ -67,7 +67,7 @@
                                     </button>
                                 </form>
 
-                                <form action="{{ route('admin.students.force-delete', $eleve->id) }}" method="POST"
+                                <form action="{{ route('admin.students.force-delete', $student->id) }}" method="POST"
                                     onsubmit="return confirm('ATTENTION : Cette action est irréversible. Supprimer définitivement ?')">
                                     @csrf
                                     @method('DELETE')
@@ -94,6 +94,6 @@
     </div>
 
     <div class="mt-6">
-        {{ $elevesArchives->links() }}
+        {{ $archiveStudents->links() }}
     </div>
 @endsection

@@ -11,19 +11,19 @@
 
     <div class="mb-8 flex justify-between items-center">
         <div>
-            <h1 class="text-xl font-black  text-foreground tracking-tight">Modifier le Dossier : {{ $eleve->nom }}
+            <h1 class="text-xl font-black  text-foreground tracking-tight">Modifier le Dossier : {{ $student->nom }}
             </h1>
             <p class="text-xs text-muted-foreground font-bold  tracking-tighter text-primary">
-                Matricule : {{ $eleve->matricule }}
+                Matricule : {{ $student->matricule }}
             </p>
         </div>
-        <a href="{{ route('admin.students.show', $eleve->id) }}"
-            class="text-[10px] font-black  bg-secondary px-4 py-2 rounded-lg hover:bg-border transition-all">
+        <a href="{{ route('admin.students.show', $student->id) }}"
+            class="text-[10px] font-black  bg-secondary px-4 py-2 rounded-full hover:bg-border transition-all">
             <x-lucide-arrow-left class="w-4 h-4 mr-2" /> Retour
         </a>
     </div>
 
-    <form action="{{ route('admin.students.update', $eleve->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -38,14 +38,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de famille</label>
-                            <input type="text" name="nom" value="{{ old('nom', $eleve->nom) }}"
+                            <input type="text" name="nom" value="{{ old('nom', $student->nom) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm font-bold  outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
                         </div>
 
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Prénoms</label>
-                            <input type="text" name="prenom" value="{{ old('prenom', $eleve->prenom) }}"
+                            <input type="text" name="prenom" value="{{ old('prenom', $student->prenom) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
 
@@ -53,7 +53,7 @@
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Date de
                                 naissance</label>
                             <input type="date" name="date_naissance"
-                                value="{{ old('date_naissance', $eleve->date_naissance) }}"
+                                value="{{ old('date_naissance', $student->date_naissance) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 required>
                         </div>
@@ -65,7 +65,7 @@
                                 required>
                                 @foreach ($sexes as $sexe)
                                     <option value="{{ $sexe }}"
-                                        {{ old('sexe', $eleve->sexe) == $sexe ? 'selected' : '' }}>
+                                        {{ old('sexe', $student->sexe) == $sexe ? 'selected' : '' }}>
                                         {{ $sexe == 'M' ? 'Masculin' : ($sexe == 'F' ? 'Féminin' : $sexe) }}
                                         ({{ $sexe }})
                                     </option>
@@ -77,7 +77,7 @@
                     <div class="mt-6">
                         <label class="text-[10px] font-bold  text-muted-foreground ml-1">Lieu de naissance</label>
                         <input type="text" name="lieu_naissance"
-                            value="{{ old('lieu_naissance', $eleve->lieu_naissance) }}"
+                            value="{{ old('lieu_naissance', $student->lieu_naissance) }}"
                             class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                 </div>
@@ -91,25 +91,27 @@
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Téléphone
                                 Parent</label>
                             <input type="tel" name="telephone_parent"
-                                value="{{ old('telephone_parent', $eleve->telephone_parent) }}"
+                                value="{{ old('telephone_parent', $student->telephone_parent) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Adresse /
                                 Quartier</label>
-                            <input type="text" name="adresse" value="{{ old('adresse', $eleve->adresse) }}"
+                            <input type="text" name="adresse" value="{{ old('adresse', $student->adresse) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom du Père</label>
-                            <input type="text" name="name_father" value="{{ old('name_father', $eleve->name_father) }}"
+                            <input type="text" name="name_father"
+                                value="{{ old('name_father', $student->name_father) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold  text-muted-foreground ml-1">Nom de la Mère</label>
-                            <input type="text" name="name_mother" value="{{ old('name_mother', $eleve->name_mother) }}"
+                            <input type="text" name="name_mother"
+                                value="{{ old('name_mother', $student->name_mother) }}"
                                 class="w-full bg-secondary border-border rounded py-3 px-4 mt-1 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all">
                         </div>
                     </div>
@@ -124,7 +126,7 @@
 
                     @php
                         // On récupère la classe actuelle pour l'année scolaire active
-$currentClasseId = $eleve->inscriptions->where('annee_scolaire_id', $anneeActive->id)->first()
+$currentClasseId = $student->inscriptions->where('annee_scolaire_id', $actifYear->id)->first()
                             ?->classe_id;
                     @endphp
 
@@ -159,8 +161,8 @@ $currentClasseId = $eleve->inscriptions->where('annee_scolaire_id', $anneeActive
                     <div class="relative group w-32 h-32 mx-auto mb-4">
                         <div
                             class="w-32 h-32 bg-secondary rounded-2xl border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
-                            @if ($eleve->photo)
-                                <img id="preview" src="{{ asset('storage/' . $eleve->photo) }}"
+                            @if ($student->photo)
+                                <img id="preview" src="{{ asset('storage/' . $student->photo) }}"
                                     class="w-full h-full object-cover">
                             @else
                                 <i id="icon-cam" class="fas fa-camera text-2xl text-muted-foreground/30"></i>

@@ -11,9 +11,9 @@ class GlobalStatService
      */
     public function obtenirStatsGlobales(int $trimestreId): array
     {
-        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+        $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        if (! $anneeActive) {
+        if (! $actifYear) {
             return [];
         }
 
@@ -31,7 +31,7 @@ class GlobalStatService
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
             ->leftJoin('cycles', 'classes.cycle_id', '=', 'cycles.id')
-            ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+            ->where('inscriptions.annee_scolaire_id', $actifYear->id)
             ->whereIn('moyennes.sequence_id', $sequences)
             ->select(
                 'inscriptions.id as inscription_id',

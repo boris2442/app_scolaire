@@ -23,13 +23,15 @@
 
                     <div>
                         <label for="name" class="text-[10px] font-black ml-1">Nom Complet</label>
-                        <input type="text" id="name" name="name" required value="{{ old('name', $enseignant->user->name) }}"
+                        <input type="text" id="name" name="name" required
+                            value="{{ old('name', $enseignant->user->name) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
                         <label for="email" class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
-                        <input type="email" id="email" name="email" required value="{{ old('email', $enseignant->user->email) }}"
+                        <input type="email" id="email" name="email" required
+                            value="{{ old('email', $enseignant->user->email) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
@@ -64,7 +66,7 @@
 
                             <option value="">-- Choisir un département --</option>
 
-                            @foreach ($departements as $dept)
+                            @foreach ($departments as $dept)
                                 <option value="{{ $dept->id }}"
                                     {{ old('departement_id', $enseignant->departement_id) == $dept->id ? 'selected' : '' }}>
                                     {{ $dept->nom }} ({{ $dept->code }})

@@ -59,9 +59,9 @@
 
         <div class="bg-card text-card-foreground rounded-xl border border-border shadow-sm overflow-hidden">
             <div class="p-4 bg-secondary/20 border-b border-border">
-                <h2 class="font-semibold text-foreground">Affichage de {{ $eleves->firstItem() }} à
-                    {{ $eleves->lastItem() }} sur
-                    <span class="font-bold text-foreground">{{ $eleves->total() }}</span> élèves au total
+                <h2 class="font-semibold text-foreground">Affichage de {{ $students->firstItem() }} à
+                    {{ $students->lastItem() }} sur
+                    <span class="font-bold text-foreground">{{ $students->total() }}</span> élèves au total
                 </h2>
             </div>
 
@@ -76,20 +76,20 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border">
-                            @forelse ($eleves as $index => $eleve)
+                            @forelse ($students as $index => $student)
                                 <tr class="hover:bg-secondary/10 transition">
                                     <td class="p-2 sm:p-4 font-mono text-xs text-foreground/70 whitespace-nowrap">
-                                        <span class="font-bold sm:font-normal">#{{ $eleves->firstItem() + $index }}</span>
-                                        <span class="hidden sm:inline"> / {{ $eleve->matricule ?? 'N/A' }}</span>
+                                        <span class="font-bold sm:font-normal">#{{ $students->firstItem() + $index }}</span>
+                                        <span class="hidden sm:inline"> / {{ $student->matricule ?? 'N/A' }}</span>
                                     </td>
                                     <td class="p-2 sm:p-4 text-xs sm:text-sm font-medium text-foreground">
-                                        <div>{{ $eleve->nom }} {{ $eleve->prenom }}</div>
+                                        <div>{{ $student->nom }} {{ $student->prenom }}</div>
                                         <div class="sm:hidden font-mono text-[10px] text-muted-foreground">
-                                            {{ $eleve->matricule ?? 'N/A' }}
+                                            {{ $student->matricule ?? 'N/A' }}
                                         </div>
                                     </td>
                                     <td class="p-2 sm:p-4 text-right whitespace-nowrap">
-                                        <a href="{{ route('admin.bulletins.imprimer-eleve', ['inscriptionId' => $eleve->inscription_id, 'trimestreId' => $trimestreId]) }}"
+                                        <a href="{{ route('admin.bulletins.imprimer-eleve', ['inscriptionId' => $student->inscription_id, 'trimestreId' => $trimestreId]) }}"
                                             class="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white text-xs font-medium p-2 sm:px-3 sm:py-1.5 rounded transition shadow-sm"
                                             target="_blank">
                                             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor"
@@ -114,7 +114,7 @@
 
                 {{-- Liens de pagination placés EN DEHORS du <table> --}}
                 <div class="p-2">
-                    {{ $eleves->links() }}
+                    {{ $students->links() }}
                 </div>
             </div>
         </div>

@@ -25,11 +25,11 @@ class GlobalStatController extends Controller
         }
 
         // 2. Chargement des données de base
-        $etablissement = DB::table('etablissements')->first();
+        $school = DB::table('etablissements')->first();
         $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
-        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+        $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        if (! $trimestre || ! $anneeActive) {
+        if (! $trimestre || ! $actifYear) {
             abort(404, 'Trimestre ou Année scolaire active introuvable.');
         }
 
@@ -42,9 +42,9 @@ class GlobalStatController extends Controller
 
         // 4. Génération du PDF au format A4 Landscape (Paysage)
         $pdf = Pdf::loadView('pages.admin.pdf.stats-globales', compact(
-            'etablissement',
+            'school',
             'trimestre',
-            'anneeActive',
+            'actifYear',
             'stats'
         ))->setPaper('a4', 'landscape');
 

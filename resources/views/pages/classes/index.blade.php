@@ -5,7 +5,7 @@
         <div>
             <h1 class="text-xl font-black  text-foreground">Gestion des Classes</h1>
             <p class="text-xs text-muted-foreground   tracking-tighter">Année en cours :
-                {{ $anneeActive->libelle }}</p>
+                {{ $actifYear->libelle }}</p>
         </div>
     </div>
 

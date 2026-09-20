@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Year;
 use App\Models\Classe;
 use App\Models\Creneau;
 use App\Models\Enseignant;
-
 use App\Models\Jour;
 use App\Models\Matiere;
 use App\Models\School;
 use App\Models\Seance;
 use App\Models\User;
+use App\Models\Year;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +23,12 @@ class SessionCourseController extends Controller
     {
         // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
         // Récupérer toutes les séances de cette classe pour l'année en cours
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
             ->where('classe_id', $classeId)
-            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->where('annee_scolaire_id', $actifYear?->id)
             ->get();
 
         $jours = Jour::orderBy('ordre')->get();
@@ -48,20 +47,19 @@ class SessionCourseController extends Controller
         // 2. Récupérer uniquement les enseignants affectés à cette classe (via la table affectations)
         // $enseignantsIds = DB::table('affectations')
         //     ->where('classe_id', $classeId)
-        //     ->when($anneeActive, function ($q) use ($anneeActive) {
-        //         return $q->where('annee_scolaire_id', $anneeActive->id);
+        //     ->when($actifYear, function ($q) use ($actifYear) {
+        //         return $q->where('annee_scolaire_id', $actifYear->id);
         //     })
         //     ->pluck('enseignant_id');
 
-    
         // $enseignants = User::whereIn('id', $enseignantsIds)
         //     ->select('id', 'name')
         //     ->orderBy('name')
         //     ->get();
         // 2. Récupérer absolument TOUS les utilisateurs (sans passer par la table affectations)
-    $enseignants = User::select('id', 'name')
-        ->orderBy('name')
-        ->get();
+        $enseignants = User::select('id', 'name')
+            ->orderBy('name')
+            ->get();
 
         return view('pages.emplois.classe', compact('classe', 'seances', 'jours', 'creneaux', 'matieres', 'enseignants'));
     }
@@ -72,21 +70,21 @@ class SessionCourseController extends Controller
         $validated = $request->validate([
             'classe_id' => 'required|exists:classes,id',
             'matiere_id' => 'required|exists:matieres,id',
- 'enseignant_id' => 'required|exists:users,id',
+            'enseignant_id' => 'required|exists:users,id',
             'jour_id' => 'required|exists:jours,id',
             'creneau_id' => 'required|exists:creneaus,id',
         ]);
 
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
-        if (! $anneeActive) {
+        if (! $actifYear) {
             return redirect()->back()->withErrors(['msg' => 'Aucune année scolaire active trouvée.']);
         }
 
-        $validated['annee_scolaire_id'] = $anneeActive->id;
+        $validated['annee_scolaire_id'] = $actifYear->id;
 
         // Optionnel : Vérifier si l'enseignant est déjà occupé sur ce créneau ce jour-là
-        $conflitEnseignant = Seance::where('annee_scolaire_id', $anneeActive->id)
+        $conflitEnseignant = Seance::where('annee_scolaire_id', $actifYear->id)
             ->where('enseignant_id', $validated['enseignant_id'])
             ->where('jour_id', $validated['jour_id'])
             ->where('creneau_id', $validated['creneau_id'])
@@ -105,22 +103,22 @@ class SessionCourseController extends Controller
     {
         // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
         // Récupération de l'établissement (prend le premier enregistrement de la table)
-        $etablissement = School::first();
+        $school = School::first();
 
         // Même récupération des données
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
             ->where('classe_id', $classeId)
-            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->where('annee_scolaire_id', $actifYear?->id)
             ->get();
 
         $jours = Jour::orderBy('ordre')->get();
         $creneaux = Creneau::orderBy('heure_debut')->get();
 
         // Charger la vue PDF dédiée
-        $pdf = Pdf::loadView('pages.emplois.pdf.classe-pdf', compact('classe', 'seances', 'jours', 'creneaux', 'anneeActive', 'etablissement'));
+        $pdf = Pdf::loadView('pages.emplois.pdf.classe-pdf', compact('classe', 'seances', 'jours', 'creneaux', 'actifYear', 'school'));
 
         // Optionnel : format Paysage (Landscape) car un emploi du temps est souvent large
         $pdf->setPaper('A4', 'landscape');
@@ -143,12 +141,12 @@ class SessionCourseController extends Controller
     {
         // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
         $enseignant = User::findOrFail($userId);
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
         // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])
             ->where('enseignant_id', $userId)
-            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->where('annee_scolaire_id', $actifYear?->id)
             ->get();
 
         $jours = Jour::orderBy('ordre')->get();
@@ -162,12 +160,12 @@ class SessionCourseController extends Controller
     {
         // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
         $enseignant = User::findOrFail($userId);
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
         // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])
             ->where('enseignant_id', $userId)
-            ->where('annee_scolaire_id', $anneeActive?->id)
+            ->where('annee_scolaire_id', $actifYear?->id)
             ->get();
 
         $jours = Jour::orderBy('ordre')->get();

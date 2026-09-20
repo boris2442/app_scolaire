@@ -2,37 +2,36 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\UpdateEtsRequest;
 use App\Models\School;
-
 use Illuminate\Support\Facades\Storage;
 
 class SchoolController extends Controller
 {
     public function edit()
     {
-        $etablissement = School::first() ?: new School();
-        return view('pages.schools.edit', compact('etablissement'));
+        $school = School::first() ?: new School;
+
+        return view('pages.schools.edit', compact('school'));
     }
 
     public function update(UpdateEtsRequest $request)
     {
         // Si on arrive ici, c'est que la validation a déjà réussi !
-        $etablissement = School::first() ?: new School();
+        $school = School::first() ?: new School;
 
         $validatedData = $request->validated(); // On récupère uniquement les données validées
 
         if ($request->hasFile('logo')) {
-            if ($etablissement->logo) {
-                Storage::disk('public')->delete($etablissement->logo);
+            if ($school->logo) {
+                Storage::disk('public')->delete($school->logo);
             }
             $validatedData['logo'] = $request->file('logo')->store('uploads/ecole', 'public');
         }
 
-        $etablissement->fill($validatedData);
+        $school->fill($validatedData);
         // dd($validatedData);
-        $etablissement->save();
+        $school->save();
 
         return redirect()->route('settings.index')->with('success', 'Configuration enregistrée avec succès.');
     }

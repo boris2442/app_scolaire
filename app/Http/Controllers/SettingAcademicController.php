@@ -25,7 +25,7 @@ class SettingAcademicController extends Controller
 
    public function store(Request $request)
     {
-        $annee = (new ScolariteService())->getAnneeActive();
+        $annee = (new ScolariteService())->getactifYear();
         
         foreach ($request->moyennes as $classeId => $valeur) {
             ParametreAcademique::updateOrCreate(

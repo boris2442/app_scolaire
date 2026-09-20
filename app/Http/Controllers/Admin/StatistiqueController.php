@@ -20,7 +20,7 @@ class StatistiqueController extends Controller
 
     public function index(Request $request)
     {
-        $anneeId = $this->scolarite->getAnneeActive()->id;
+        $anneeId = $this->scolarite->getactifYear()->id;
         $sequenceId = $request->get('sequence_id');
 
         $stats = [
@@ -42,7 +42,7 @@ class StatistiqueController extends Controller
 
     private function getStatsGlobales($sequenceId)
     {
-        $anneeId = $this->scolarite->getAnneeActive()->id;
+        $anneeId = $this->scolarite->getactifYear()->id;
 
         // 1. Effectif fixe des inscrits (La référence)
         $effectifRef = DB::table('inscriptions')
@@ -119,7 +119,7 @@ class StatistiqueController extends Controller
 
     public function detailClasse($classe_id, $sequence_id)
     {
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
         $classeInfo = DB::table('classes')
             ->where('classes.id', $classe_id)
@@ -128,7 +128,7 @@ class StatistiqueController extends Controller
 
         $totalInscrits = DB::table('inscriptions')
             ->where('classe_id', $classe_id)
-            ->where('annee_scolaire_id', $anneeActive->id)
+            ->where('annee_scolaire_id', $actifYear->id)
             ->count();
 
         // Récupération des moyennes générales de la classe depuis la table 'bilans'
@@ -136,7 +136,7 @@ class StatistiqueController extends Controller
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classe_id)
-            ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+            ->where('inscriptions.annee_scolaire_id', $actifYear->id)
             ->where('bilans.sequence_id', $sequence_id)
             ->where('bilans.moyenne', '>', 0)
             ->select(
@@ -168,7 +168,7 @@ class StatistiqueController extends Controller
     {
         $classeId = $request->get('classe_id');
         $trimestreId = $request->get('trimestre_id');
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
         // 1. Récupérer les classes et trimestres pour les filtres (Sans table niveaux)
         $classes = DB::table('classes')
@@ -176,7 +176,7 @@ class StatistiqueController extends Controller
             ->get();
             
         $trimestres = DB::table('trimestres')
-            ->where('annee_scolaire_id', $anneeActive->id)
+            ->where('annee_scolaire_id', $actifYear->id)
             ->get();
 
         $registre = null;
@@ -202,17 +202,17 @@ class StatistiqueController extends Controller
                 ->get();
 
             // 4. Récupérer les élèves de la classe
-            $eleves = DB::table('inscriptions')
+            $students = DB::table('inscriptions')
                 ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
                 ->where('inscriptions.classe_id', $classeId)
-                ->where('inscriptions.annee_scolaire_id', $anneeActive->id)
+                ->where('inscriptions.annee_scolaire_id', $actifYear->id)
                 ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom')
                 ->orderBy('eleves.nom', 'asc')
                 ->get();
 
             // 5. REQUÊTE OPTIMISÉE : Prendre toutes les notes des séquences de ce trimestre
             $notesBrutes = DB::table('moyennes')
-                ->whereIn('inscription_id', $eleves->pluck('inscription_id'))
+                ->whereIn('inscription_id', $students->pluck('inscription_id'))
                 ->whereIn('sequence_id', $sequences->pluck('id'))
                 ->get();
 
@@ -227,7 +227,7 @@ class StatistiqueController extends Controller
             $registre = [
                 'sequences' => $sequences,
                 'matieres' => $matieres,
-                'eleves' => $eleves,
+                'eleves' => $students,
                 'grille' => $grilleNotes,
                 'coefficients' => $coefficientsMatieres
             ];

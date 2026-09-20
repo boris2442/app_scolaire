@@ -148,17 +148,17 @@
                     Paix-Travail-Patrie
                 </i><br>
                 *******<br>
-                RÉGION DE {{ $etablissement->region }}<br>
+                RÉGION DE {{ $school->region }}<br>
                 *******<br>
-                DÉPARTEMENT DE LA {{ $etablissement->department }}<br>
+                DÉPARTEMENT DE LA {{ $school->department }}<br>
                 *******<br>
                 DÉLÉGATION DÉPARTEMENTALE DES ENSEIGNEMENTS SECONDAIRES<br>
                 *******<br>
-                ARRONDISSEMENT DE {{ $etablissement->sub_division }}<br>
+                ARRONDISSEMENT DE {{ $school->sub_division }}<br>
                 *******<br>
-                <strong>{{ $etablissement->nom }}</strong><br>
-                BP : - - TEL : {{ $etablissement->telephone }}<br>
-                Immatriculation : {{ $etablissement->code_ecole }}
+                <strong>{{ $school->nom }}</strong><br>
+                BP : - - TEL : {{ $school->telephone }}<br>
+                Immatriculation : {{ $school->code_ecole }}
             </td>
             <td style="width: 18%; text-align: center; vertical-align: middle; font-weight:bold;">
                 @if (file_exists(public_path('images/logo.png')))
@@ -170,17 +170,17 @@
 
                     Peace-Work-Fatherland </i><br>
                 *******<br>
-                {{ $etablissement->english_region }} REGION<br>
+                {{ $school->english_region }} REGION<br>
                 *******<br>
-                {{ $etablissement->english_department }} DIVISION<br>
+                {{ $school->english_department }} DIVISION<br>
                 *******<br>
                 DIVISIONAL DELEGATION FOR SECONDARY EDUCATION<br>
                 *******<br>
-                {{ $etablissement->english_sub_division }} SUB DIVISION<br>
+                {{ $school->english_sub_division }} SUB DIVISION<br>
                 *******<br>
-                <strong>{{ $etablissement->english_name }}</strong><br>
-                PO-BOX : - - PHONE : {{ $etablissement->telephone }}<br>
-                Immatriculation : {{ $etablissement->code_ecole }}
+                <strong>{{ $school->english_name }}</strong><br>
+                PO-BOX : - - PHONE : {{ $school->telephone }}<br>
+                Immatriculation : {{ $school->code_ecole }}
             </td>
         </tr>
     </table>
@@ -224,14 +224,14 @@
         <tr>
             <td style="width: 25%; font-weight: bold;" class="label-fr">LE PROVISEUR / LE PRINCIPAL</td>
             <td style="width: 5%; font-size: 8.5px;">du</td>
-            <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $etablissement->nom }}
+            <td style="width: 70%; text-align: center; font-weight: bold;" class="label-fr">{{ $school->nom }}
             </td>
         </tr>
         <tr>
             <td style="width: 25%;" class="label-en">THE PRINCIPAL</td>
             <td style="width: 5%; font-size: 8.5px;" class="label-en">of</td>
             <td style="width: 70%; text-align: center;" class="label-en">
-                {{ $etablissement->english_name ?? $etablissement->nom }}</td>
+                {{ $school->english_name ?? $school->nom }}</td>
         </tr>
     </table>
 
@@ -491,7 +491,7 @@
                     <tr>
                         <td style="width: 20%; text-align: right;" class="label-fr">Fait à</td>
                         <td style="width: 35%; text-align: center;" class="line-underline val-text">
-                            {{ $etablissement->adresse }}</td>
+                            {{ $school->adresse }}</td>
                         <td style="width: 10%; text-align: center;" class="label-fr">Le</td>
                         <td style="width: 35%;" class="line-underline">&nbsp;</td>
                     </tr>

@@ -18,9 +18,9 @@ class ClassController extends Controller
     public function index()
     {
         // On récupère l'année active (très important !)
-        $anneeActive = Year::where('est_active', true)->first();
+        $actifYear = Year::where('est_active', true)->first();
 
-        if (!$anneeActive) {
+        if (!$actifYear) {
             return redirect()->route('settings.years.index')
                 ->with('error', 'Veuillez activer une année scolaire d\'abord.');
         }
@@ -30,7 +30,7 @@ class ClassController extends Controller
         $classes = Classe::with(['matieres', 'cycle'])->get();
 
 
-        return view('pages.classes.index', compact('classes', 'anneeActive'));
+        return view('pages.classes.index', compact('classes', 'actifYear'));
     }
     public function store(ClassStoreRequest $request)
     {

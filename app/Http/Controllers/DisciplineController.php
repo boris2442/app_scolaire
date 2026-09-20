@@ -23,7 +23,7 @@ class DisciplineController extends Controller
  
     public function index()
     {
-        $annee = $this->scolarite->getAnneeActive();
+        $annee = $this->scolarite->getactifYear();
         
         // On récupère directement toutes les classes (ou filtrées selon ton besoin)
         $classes = Classe::all(); 
@@ -49,7 +49,7 @@ class DisciplineController extends Controller
 
         // 2. Récupération des inscriptions triées par nom et prénom
         $inscriptions = Inscription::where('classe_id', $request->classe_id)
-            ->where('annee_scolaire_id', $this->scolarite->getAnneeActive()->id)
+            ->where('annee_scolaire_id', $this->scolarite->getactifYear()->id)
             ->with(['eleve', 'suivi' => function ($query) use ($request) {
                 $query->where('trimestre_id', $request->trimestre_id);
             }])

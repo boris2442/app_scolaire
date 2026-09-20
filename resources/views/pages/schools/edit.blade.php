@@ -16,62 +16,62 @@
 
                     <!-- Informations Générales -->
                     <div class="md:col-span-2">
-                        <label for='nom' class="block text-sm font-medium mb-2">Nom officiel de l'établissement (FR)</label>
-                        <input type="text" name="nom" value="{{ old('nom', $etablissement->nom) }}"
+                        <label for='nom' class="block text-sm font-medium mb-2">Nom officiel de l'établissement
+                            (FR)</label>
+                        <input type="text" name="nom" value="{{ old('nom', $school->nom) }}"
                             class="w-full bg-secondary border-border rounded-lg focus:ring-primary focus:border-primary px-4 py-2.5"
-                            id='nom'
-                            placeholder="Ex: Lycée Classique de .....">
+                            id='nom' placeholder="Ex: Lycée Classique de .....">
                     </div>
 
                     <div>
-                        <label for='english_name' class="block text-sm font-medium mb-2">Nom officiel de l'établissement (EN)</label>
-                        <input type="text" name="english_name" 
-id='english_name'
+                        <label for='english_name' class="block text-sm font-medium mb-2">Nom officiel de l'établissement
+                            (EN)</label>
+                        <input type="text" name="english_name" id='english_name'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
-                            placeholder="School Name in English"
-                            value="{{ old('english_name', $etablissement->english_name) }}">
+                            placeholder="School Name in English" value="{{ old('english_name', $school->english_name) }}">
                     </div>
 
                     <div>
                         <label for='code_ecole' class="block text-sm font-medium mb-2">Code École (Ministère)</label>
                         <input type="text" name="code_ecole" id='code_ecole'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
-                            value="{{ old('code_ecole', $etablissement->code_ecole) }}">
+                            value="{{ old('code_ecole', $school->code_ecole) }}">
                     </div>
 
                     <div>
                         <label for='slogan' class="block text-sm font-medium mb-2">Slogan / Devise (FR)</label>
                         <input type="text" name="slogan" id='slogan'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
-                            placeholder="Travail - Paix - Patrie" value="{{ old('slogan', $etablissement->slogan) }}">
+                            placeholder="Travail - Paix - Patrie" value="{{ old('slogan', $school->slogan) }}">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium mb-2"  for='english_slogan'>Slogan / Devise (EN)</label>
+                        <label class="block text-sm font-medium mb-2" for='english_slogan'>Slogan / Devise (EN)</label>
                         <input type="text" name="english_slogan" id='english_slogan'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
                             placeholder="Work - Peace - Fatherland"
-                            value="{{ old('english_slogan', $etablissement->english_slogan) }}">
+                            value="{{ old('english_slogan', $school->english_slogan) }}">
                     </div>
 
                     <!-- Contacts & Adresse -->
                     <div>
-                        <label class="block text-sm font-medium mb-2"  for='telephone'>Téléphone</label>
+                        <label class="block text-sm font-medium mb-2" for='telephone'>Téléphone</label>
                         <input type="text" name="telephone" id='telephone'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
-                            value="{{ old('telephone', $etablissement->telephone) }}">
+                            value="{{ old('telephone', $school->telephone) }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-2" for='email'>Email</label>
                         <input type="email" name="email" id='email'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5"
-                            value="{{ old('email', $etablissement->email) }}">
+                            value="{{ old('email', $school->email) }}">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium mb-2" for='adresse'>Adresse physique</label>
-                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 resize-none" id='adresse'>{{ old('adresse', $etablissement->adresse) }}</textarea>
+                        <textarea name="adresse" rows="2" class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 resize-none"
+                            id='adresse'>{{ old('adresse', $school->adresse) }}</textarea>
                     </div>
 
                     <!-- Localisation Administrative (FR) -->
@@ -79,23 +79,22 @@ id='english_name'
                         <label class="block text-sm font-medium mb-2" for='region'>Région (FR)</label>
                         <input type="text" name="region" id='region'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Ouest"
-                            value="{{ old('region', $etablissement->region) }}">
+                            value="{{ old('region', $school->region) }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-2" for='department'>Département (FR)</label>
-                        <input type="text" name="department"
-                        id='department'
+                        <input type="text" name="department" id='department'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Mifi"
-                            value="{{ old('department', $etablissement->department) }}">
+                            value="{{ old('department', $school->department) }}">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2" for='sub_division'>Arrondissement / Sub-Division (FR)</label>
-                        <input type="text" name="sub_division"
-                        id='sub_division'
+                        <label class="block text-sm font-medium mb-2" for='sub_division'>Arrondissement / Sub-Division
+                            (FR)</label>
+                        <input type="text" name="sub_division" id='sub_division'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Bafoussam 1er"
-                            value="{{ old('sub_division', $etablissement->sub_division) }}">
+                            value="{{ old('sub_division', $school->sub_division) }}">
                     </div>
 
                     <!-- Localisation Administrative (EN) -->
@@ -103,30 +102,30 @@ id='english_name'
                         <label class="block text-sm font-medium mb-2" for='english_region'>Région (EN)</label>
                         <input type="text" name="english_region" id='english_region'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: West"
-                            value="{{ old('english_region', $etablissement->english_region) }}">
+                            value="{{ old('english_region', $school->english_region) }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-2" for='english_department'>Département (EN)</label>
                         <input type="text" name="english_department" id='english_department'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Mifi"
-                            value="{{ old('english_department', $etablissement->english_department) }}">
+                            value="{{ old('english_department', $school->english_department) }}">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-2" for='english_sub_division'>Arrondissement / Sub-Division (EN)</label>
-                        <input type="text" name="english_sub_division"
-                        id='english_sub_division'
+                        <label class="block text-sm font-medium mb-2" for='english_sub_division'>Arrondissement /
+                            Sub-Division (EN)</label>
+                        <input type="text" name="english_sub_division" id='english_sub_division'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Bafoussam I"
-                            value="{{ old('english_sub_division', $etablissement->english_sub_division) }}">
+                            value="{{ old('english_sub_division', $school->english_sub_division) }}">
                     </div>
 
                     <!-- Logo -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium">Logo actuel</label>
                         <div class="mt-2 mb-4">
-                            @if ($etablissement->logo)
-                                <img src="{{ asset('storage/' . $etablissement->logo) }}" alt="Logo"
+                            @if ($school->logo)
+                                <img src="{{ asset('storage/' . $school->logo) }}" alt="Logo"
                                     class="h-20 w-20 object-contain border rounded-lg p-1 bg-white">
                             @else
                                 <span class="text-gray-400 text-xs italic">Aucun logo configuré</span>

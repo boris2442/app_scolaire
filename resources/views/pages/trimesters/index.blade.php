@@ -50,11 +50,11 @@
 
             {{-- RÉCAPITULATIF ANNÉE ACTIVE --}}
             <div class="bg-secondary/10 border border-white/5 p-6 rounded-2xl">
-                <h2 class="text-lg text-white mb-6">Structure : {{ $anneeActive->nom ?? 'Aucune année active' }}</h2>
+                <h2 class="text-lg text-white mb-6">Structure : {{ $actifYear->nom ?? 'Aucune année active' }}</h2>
 
-                @if ($anneeActive && $anneeActive->trimestres->count() > 0)
+                @if ($actifYear && $actifYear->trimestres->count() > 0)
                     <div class="space-y-4">
-                        @foreach ($anneeActive->trimestres as $trimestre)
+                        @foreach ($actifYear->trimestres as $trimestre)
                             <div class="bg-white/5 rounded-xl p-4 border-l-4 border-primary">
                                 <h3 class="font-bold text-white">{{ $trimestre->nom }}</h3>
                                 <div class="flex gap-2 mt-2">

@@ -422,23 +422,23 @@
 
 <body>
 
-    @foreach ($resultats as $eleve)
+    @foreach ($resultats as $student)
         @php
-            $nomEleve = is_array($eleve) ? $eleve['nom'] ?? '' : $eleve->nom ?? '';
-            $prenomEleve = is_array($eleve) ? $eleve['prenom'] ?? '' : $eleve->prenom ?? '';
-            $moyenneEleve = is_array($eleve) ? $eleve['moyenne'] ?? 0 : $eleve->moyenne ?? ($moyenne ?? 0);
-            $positionEleve = is_array($eleve)
-                ? $eleve['position'] ?? ($eleve['rang'] ?? null)
-                : $eleve->position ?? ($eleve->rang ?? null);
-            $nombreEleves = is_array($eleve)
-                ? $eleve['total_eleves'] ?? ($eleve['effectif'] ?? null)
-                : $eleve->total_eleves ?? ($eleve->effectif ?? null);
+            $nomEleve = is_array($student) ? $student['nom'] ?? '' : $student->nom ?? '';
+            $prenomEleve = is_array($student) ? $student['prenom'] ?? '' : $student->prenom ?? '';
+            $moyenneEleve = is_array($student) ? $student['moyenne'] ?? 0 : $student->moyenne ?? ($moyenne ?? 0);
+            $positionEleve = is_array($student)
+                ? $student['position'] ?? ($student['rang'] ?? null)
+                : $student->position ?? ($student->rang ?? null);
+            $nombreEleves = is_array($student)
+                ? $student['total_eleves'] ?? ($student['effectif'] ?? null)
+                : $student->total_eleves ?? ($student->effectif ?? null);
 
             $nomTrimestre = isset($trimestre) ? optional($trimestre)->nom ?? 'Deuxième' : 'Deuxième';
-            $anneeScolaire = optional($anneeActive)->libelle ?? '2023-2024';
+            $anneeScolaire = optional($actifYear)->libelle ?? '2023-2024';
 
-            $logoPath = !empty($etablissement->logo)
-                ? public_path('storage/' . $etablissement->logo)
+            $logoPath = !empty($school->logo)
+                ? public_path('storage/' . $school->logo)
                 : public_path('images/logoeducation.jpeg');
         @endphp
 
@@ -460,12 +460,12 @@
                             <p class="txt-country">RÉPUBLIQUE DU CAMEROUN</p>
                             <p class="txt-motto">Paix - Travail - Patrie</p>
                             <div class="stars-line">**********************</div>
-                            <p class="txt-admin">RÉGION DE {{ strtoupper($etablissement->region ?? 'L’OUEST') }}</p>
+                            <p class="txt-admin">RÉGION DE {{ strtoupper($school->region ?? 'L’OUEST') }}</p>
                             <p class="txt-admin">DÉLÉGATION RÉGIONALE DES ENSEIGNEMENTS SECONDAIRES</p>
                             <div class="stars-line">**********************</div>
                             <p class="txt-admin">DÉLÉGATION DÉPARTEMENTALE DES
-                                {{ strtoupper($etablissement->department ?? 'HAUTS PLATEAUX') }}</p>
-                            <p class="txt-school">{{ strtoupper($etablissement->nom ?? 'LYCÉE BILINGUE DE BANGOU') }}
+                                {{ strtoupper($school->department ?? 'HAUTS PLATEAUX') }}</p>
+                            <p class="txt-school">{{ strtoupper($school->nom ?? 'LYCÉE BILINGUE DE BANGOU') }}
                             </p>
                             <div class="stars-line">**********************</div>
                         </td>
@@ -480,13 +480,13 @@
                             <p class="txt-country">REPUBLIC OF CAMEROON</p>
                             <p class="txt-motto">Peace - Work - Fatherland</p>
                             <div class="stars-line">**********************</div>
-                            <p class="txt-admin">{{ $etablissement->english_region }} REGION</p>
+                            <p class="txt-admin">{{ $school->english_region }} REGION</p>
                             <p class="txt-admin">REGIONAL DELEGATION OF SECONDARY EDUCATION</p>
                             <div class="stars-line">**********************</div>
                             <p class="txt-admin">DIVISIONAL DELEGATION OF
-                                {{ strtoupper($etablissement->english_department ?? 'UPPER PLATEAUX') }}</p>
+                                {{ strtoupper($school->english_department ?? 'UPPER PLATEAUX') }}</p>
                             <p class="txt-school">
-                                {{ strtoupper($etablissement->english_name ?? 'GOVERNMENT BILINGUAL HIGH SCHOOL BANGOU') }}
+                                {{ strtoupper($school->english_name ?? 'GOVERNMENT BILINGUAL HIGH SCHOOL BANGOU') }}
                             </p>
                             <div class="stars-line">**********************</div>
                         </td>
@@ -571,7 +571,8 @@
                             </td>
                             <td style="width: 45%;">
                                 <span class="rank-text">{{ $positionEleve ? $positionEleve . 'e/' : '---/' }}</span>
-                                <span class="students-text">{{ $nombreEleves ?? '------------------------   ' }} Élèves</span>
+                                <span class="students-text">{{ $nombreEleves ?? '------------------------   ' }}
+                                    Élèves</span>
                                 <br>
                                 <span class="label-italic" style="margin-left: 8mm;">on
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -612,7 +613,7 @@
                                 <span class="label-italic">On the</span>
                             </td>
                             <td class="sig-col">
-                                <div class="sig-head">POUR LE CHEF D'ETABLISSEMENT</div>
+                                <div class="sig-head">POUR LE CHEF D'school</div>
                                 <div class="sig-sub">President du Conseil de Classe</div>
                                 <div class="sig-sub" style="margin-top: 1mm;">The Principal, President of the Class
                                     Council</div>

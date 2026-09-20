@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCycleRequest;
-use App\Models\Year;
 use App\Models\Cycle;
+use App\Models\Year;
 use Illuminate\Http\Request;
 
 class AcademicController extends Controller
@@ -13,21 +12,23 @@ class AcademicController extends Controller
     public function index()
     {
         // On récupère l'année active (très important !)
-        $anneeActive = Year::where('est_active', true)->first();
+        $year = Year::where('est_active', true)->first();
 
-        if (!$anneeActive) {
+        if (! $year) {
             return redirect()->route('settings.years.index')
                 ->with('error', 'Veuillez activer une année scolaire d\'abord.');
         }
         // On récupère uniquement les cycles (la relation 'niveaux' est supprimée)
         $cycles = Cycle::with('classes')->get(); // avec 'with' pour charger la relation
-        return view('pages.academics.index', compact('cycles', 'anneeActive'));
+
+        return view('pages.academics.index', compact('cycles', 'year'));
     }
 
     public function storeCycle(StoreCycleRequest $request)
     {
         $request->validated();
         Cycle::create($request->all());
+
         return back()->with('success', 'Cycle ajouté !');
     }
 
@@ -40,14 +41,16 @@ class AcademicController extends Controller
     // --- ACTIONS POUR LES CYCLES ---
     public function updateCycle(Request $request, Cycle $cycle)
     {
-        $request->validate(['nom' => 'required|unique:cycles,nom,' . $cycle->id]);
+        $request->validate(['nom' => 'required|unique:cycles,nom,'.$cycle->id]);
         $cycle->update($request->all());
+
         return back()->with('success', 'Cycle mis à jour !');
     }
 
     public function destroyCycle(Cycle $cycle)
     {
         $cycle->delete();
+
         return back()->with('success', 'Cycle supprimé.');
     }
 }

@@ -16,7 +16,7 @@ class AcademicRulesService
     public function getMoyenneMin($classeId)
     {
         // On utilise ton service pour être certain d'avoir la bonne année
-        $annee = $this->scolariteService->getAnneeActive();
+        $annee = $this->scolariteService->getactifYear();
 
         $regle = ParametreAcademique::where('classe_id', $classeId)
             ->where('annee_scolaire_id', $annee->id) // Verrouillage par année active

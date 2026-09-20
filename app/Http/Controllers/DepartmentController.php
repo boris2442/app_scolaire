@@ -13,27 +13,28 @@ class DepartmentController extends Controller
     {
 
         // Dans DepartmentController.php à la ligne 12
-        $departements = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
-        return view('pages.departments.index', compact('departements'));
+        $departments = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
+
+        return view('pages.departments.index', compact('departments'));
     }
 
     public function edit($id)
     {
-        $departement = DB::table('departements')->where('id', $id)->first();
+        $department = DB::table('departements')->where('id', $id)->first();
 
-        if (!$departement) {
+        if (! $department) {
             return redirect()->back()->with('error', 'Département introuvable.');
         }
 
-        return view('pages.departments.edit', compact('departement'));
+        return view('pages.departments.edit', compact('department'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nom' => 'required|string|max:255',
-            'code' => 'required|string|max:10|unique:departements,code,' . $id,
-            'description' => 'nullable|string'
+            'code' => 'required|string|max:10|unique:departements,code,'.$id,
+            'description' => 'nullable|string',
         ]);
 
         DB::table('departements')->where('id', $id)->update([
@@ -47,11 +48,11 @@ class DepartmentController extends Controller
             ->with('success', 'Département mis à jour avec succès !');
     }
 
-
     public function destroy($id)
     {
         try {
             DB::table('departements')->where('id', $id)->delete();
+
             return redirect()->route('admin.departments.index')
                 ->with('success', 'Département supprimé.');
         } catch (\Exception $e) {
@@ -59,9 +60,6 @@ class DepartmentController extends Controller
             return redirect()->back()->with('error', 'Impossible de supprimer : ce département est lié à d\'autres données.');
         }
     }
-
-
-
 
     public function create()
     {
@@ -79,16 +77,15 @@ class DepartmentController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
             // Si tu as une colonne pour l'auteur, décommente la ligne suivante :
-            // 'createur_id' => auth()->id(), 
+            // 'createur_id' => auth()->id(),
         ]);
 
         return redirect()->route('admin.departments.index')
             ->with('success', 'Nouveau département créé avec succès !');
     }
 
-
     public function show(Department $department)
-{
-    return redirect()->route('admin.departments.index');
-}
+    {
+        return redirect()->route('admin.departments.index');
+    }
 }

@@ -6,16 +6,16 @@
         <a href="{{ route('settings.years.index') }}" class="p-2 bg-secondary rounded-lg hover:text-primary">
         <x-lucide-arrow-left class="w-4 h-4" />
         </a>
-        <h1 class="text-xl font-bold">Modifier l'année : {{ $annee_scolaire->libelle }}</h1>
+        <h1 class="text-xl font-bold">Modifier l'année : {{ $year->libelle }}</h1>
     </div>
 
     <div class="bg-card p-8 rounded-xl border border-border shadow-sm">
-        <form action="{{ route('settings.years.update', $annee_scolaire) }}" method="POST" class="space-y-6">
+        <form action="{{ route('settings.years.update', $year) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT') <div>
                 <label class="block text-sm font-medium mb-2" for='libelle'>Libellé de l'année</label>
                 <input type="text" name="libelle" required id='libelle'
-                       value="{{ old('libelle', $annee_scolaire->libelle) }}" 
+                       value="{{ old('libelle', $year->libelle) }}" 
                        class="w-full bg-secondary border-border rounded-lg px-4 py-2.5 focus:ring-primary">
             </div>
 
@@ -23,13 +23,13 @@
                 <div>
                     <label class="block text-sm font-medium mb-2" for='date_debut'>Date de début</label>
                     <input type="date" name="date_debut"  required id='date_debut'
-                           value="{{ old('date_debut', $annee_scolaire->date_debut->format('Y-m-d')) }}" 
+                           value="{{ old('date_debut', $year->date_debut->format('Y-m-d')) }}" 
                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2" for='date_fin'>Date de fin</label>
                     <input type="date" name="date_fin"  required id='date_fin'
-                           value="{{ old('date_fin', $annee_scolaire->date_fin->format('Y-m-d')) }}" 
+                           value="{{ old('date_fin', $year->date_fin->format('Y-m-d')) }}" 
                            class="w-full bg-secondary border-border rounded-lg px-4 py-2.5">
                 </div>
             </div>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assessment;
-use App\Models\Classe; // <-- On importe Classe au lieu de Niveau
+use App\Models\Classe; 
 
 use App\Models\Inscription;
 use App\Models\Note;
@@ -24,12 +24,12 @@ class DataAuditController extends Controller
 
     public function index(Request $request)
     {
-        $anneeActive = $this->scolarite->getAnneeActive();
+        $actifYear = $this->scolarite->getactifYear();
 
         // Classes et Séquences filtrées
         $classes = Classe::all();
-        $sequences = Sequence::whereHas('trimestre', function ($q) use ($anneeActive) {
-            $q->where('annee_scolaire_id', $anneeActive->id);
+        $sequences = Sequence::whereHas('trimestre', function ($q) use ($actifYear) {
+            $q->where('annee_scolaire_id', $actifYear->id);
         })->get();
 
         $classeId = $request->get('classe_id');
@@ -39,17 +39,17 @@ class DataAuditController extends Controller
         if ($classeId && $sequenceId) {
             // 1. CORRECTION EFFECTIF : Filtrer uniquement sur l'année en cours
             $effectif = Inscription::where('classe_id', $classeId)
-                ->where('annee_scolaire_id', $anneeActive->id)
+                ->where('annee_scolaire_id', $actifYear->id)
                 ->count();
 
             // 2. CORRECTION AFFECTATION : Filtrer les professeurs affectés à cette année
             // 2. Récupération des matières + l'enseignant affecté (Correction de la jointure)
             $matieres = DB::table('classe_matiere')
                 ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-                ->leftJoin('affectations', function ($join) use ($classeId, $anneeActive) {
+                ->leftJoin('affectations', function ($join) use ($classeId, $actifYear) {
                     $join->on('matieres.id', '=', 'affectations.matiere_id')
                         ->where('affectations.classe_id', '=', $classeId)
-                        ->where('affectations.annee_scolaire_id', '=', $anneeActive->id);
+                        ->where('affectations.annee_scolaire_id', '=', $actifYear->id);
                 })
                 // Jointure sur la table enseignants puis sur users
                 ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')

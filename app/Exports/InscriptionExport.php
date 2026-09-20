@@ -24,7 +24,7 @@ class InscriptionExport implements FromCollection, WithHeadings
     public function collection()
     {
         // On récupère l'année active via ton service
-        $annee = $this->scolariteService->getAnneeActive();
+        $annee = $this->scolariteService->getactifYear();
 
         return Inscription::with(['eleve', 'classe', 'classe.cycle'])
             ->where('inscriptions.annee_scolaire_id', $annee->id)

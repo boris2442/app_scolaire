@@ -47,10 +47,6 @@
             </div>
 
             @if ($registre)
-              
-
-
-
                 <div class="bg-card text-card-foreground rounded-lg shadow-sm border border-border overflow-x-auto">
                     <table class="w-full border-collapse text-left text-sm">
                         <thead>
@@ -74,11 +70,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border">
-                            @foreach ($registre['eleves'] as $eleve)
+                            @foreach ($registre['eleves'] as $student)
                                 <tr class="hover:bg-secondary/20 transition">
                                     <td
                                         class="p-4 font-medium sticky left-0 bg-card shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                                        {{ $eleve->nom }} {{ $eleve->prenom }}
+                                        {{ $student->nom }} {{ $student->prenom }}
                                     </td>
 
                                     @foreach ($registre['matieres'] as $matiere)
@@ -87,7 +83,7 @@
                                                 @foreach ($registre['sequences'] as $index => $seq)
                                                     @php
                                                         $note =
-                                                            $registre['grille'][$eleve->inscription_id][$matiere->id][
+                                                            $registre['grille'][$student->inscription_id][$matiere->id][
                                                                 $seq->id
                                                             ] ?? null;
                                                         $numSeq = $index + 1; // Permet d'afficher S1, S2 dynamiquement

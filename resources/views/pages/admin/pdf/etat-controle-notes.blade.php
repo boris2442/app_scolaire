@@ -263,12 +263,12 @@
         <div class="separator"></div>
 
         <div class="etablissement">
-            {{ $etablissement->nom ?? 'NOM DE L’ÉTABLISSEMENT' }}
+            {{ $school->nom ?? 'NOM DE L’ÉTABLISSEMENT' }}
         </div>
 
-        @if (isset($etablissement->adresse) && $etablissement->adresse)
+        @if (isset($school->adresse) && $school->adresse)
             <div class="adresse">
-                {{ $etablissement->adresse }}
+                {{ $school->adresse }}
             </div>
         @endif
 
@@ -295,7 +295,7 @@
             </td>
 
             <td class="value">
-                {{ $anneeActive->libelle }}
+                {{ $actifYear->libelle }}
             </td>
 
             <td class="label">
@@ -321,7 +321,7 @@
             </td>
 
             <td class="value">
-                {{ $eleves->count() }}
+                {{ $students->count() }}
             </td>
 
             <td class="label">
@@ -439,7 +439,7 @@
 
         <tbody>
 
-            @forelse($eleves as $index => $eleve)
+            @forelse($students as $index => $student)
 
                 <tr>
 
@@ -454,9 +454,9 @@
 
                     <td class="eleve-name">
 
-                        {{ strtoupper($eleve->nom) }}
+                        {{ strtoupper($student->nom) }}
 
-                        {{ $eleve->prenom }}
+                        {{ $student->prenom }}
 
                     </td>
 
@@ -468,7 +468,8 @@
                             @foreach ($sequences as $sequence)
                                 @php
 
-                                    $note = $notes[$eleve->inscription_id][$matiere->matiere_id][$sequence->id] ?? null;
+                                    $note =
+                                        $notes[$student->inscription_id][$matiere->matiere_id][$sequence->id] ?? null;
 
                                 @endphp
 

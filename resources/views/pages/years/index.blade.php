@@ -9,7 +9,7 @@
             </div>
             <div>
                 <p class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Total Années</p>
-                <h3 class="text-xl font-black text-foreground">{{ $totalAnnees }}</h3>
+                <h3 class="text-xl font-black text-foreground">{{ $totalYears }}</h3>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
             <div>
                 <p class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Année en cours</p>
                 <h3 class="text-sm font-bold text-foreground">
-                    {{ $anneeActive ? $anneeActive->libelle : 'Aucune' }}
+                    {{ $actifYear ? $actifYear->libelle : 'Aucune' }}
                 </h3>
             </div>
         </div>
@@ -72,28 +72,28 @@
 
         {{-- Liste des années à droite --}}
         <div class="lg:col-span-2 space-y-3">
-            @foreach ($annees as $annee)
+            @foreach ($years as $year)
                 <div
-                    class="bg-card p-4 rounded-xl border {{ $annee->est_active ? 'border-primary' : 'border-border' }} shadow-sm">
+                    class="bg-card p-4 rounded-xl border {{ $year->est_active ? 'border-primary' : 'border-border' }} shadow-sm">
                     {{-- Ligne principale --}}
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-4">
                             <div
-                                class="w-10 h-10 rounded-full {{ $annee->est_active ? 'bg-primary text-white' : 'bg-secondary text-gray-400' }} flex items-center justify-center">
+                                class="w-10 h-10 rounded-full {{ $year->est_active ? 'bg-primary text-white' : 'bg-secondary text-gray-400' }} flex items-center justify-center">
                                 <x-lucide-calendar class="w-4 h-4" />
                             </div>
                             <div>
-                                <h3 class="font-bold text-foreground">{{ $annee->libelle }}</h3>
+                                <h3 class="font-bold text-foreground">{{ $year->libelle }}</h3>
                                 <p class="text-[10px] text-muted-foreground uppercase">
-                                    Du {{ $annee->date_debut->format('d/m/Y') }} au
-                                    {{ $annee->date_fin->format('d/m/Y') }}
+                                    Du {{ $year->date_debut->format('d/m/Y') }} au
+                                    {{ $year->date_fin->format('d/m/Y') }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            @if (!$annee->est_active)
-                                <form action="{{ route('settings.years.active', $annee) }}" method="POST">
+                            @if (!$year->est_active)
+                                <form action="{{ route('settings.years.active', $year) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <button
                                         class="text-[10px] font-bold uppercase px-3 py-1.5 rounded bg-success/10 text-success border border-success/20 hover:bg-success hover:text-white transition-all">
@@ -105,13 +105,13 @@
                                     class="text-[10px] font-bold uppercase px-3 py-1.5 rounded bg-primary text-white">Actuelle</span>
                             @endif
 
-                            <a href="{{ route('settings.years.edit', $annee) }}"
+                            <a href="{{ route('settings.years.edit', $year) }}"
                                 class="p-2 text-gray-400 hover:text-primary transition-colors">
                                 <x-lucide-edit class="w-4 h-4" />
                             </a>
 
-                            @if (!$annee->est_active)
-                                <form action="{{ route('settings.years.destroy', $annee) }}" method="POST"
+                            @if (!$year->est_active)
+                                <form action="{{ route('settings.years.destroy', $year) }}" method="POST"
                                     onsubmit="return confirm('Supprimer ?')">
                                     @csrf @method('DELETE')
                                     <button class="text-gray-400 hover:text-danger p-2"><x-lucide-trash
@@ -125,7 +125,7 @@
                     <div class="pt-3 border-t border-border/50">
                         <p class="text-[9px] font-bold uppercase text-muted-foreground mb-2 tracking-tight">Périodes :</p>
                         <div class="flex flex-wrap gap-2">
-                            @foreach ($annee->trimestres as $trim)
+                            @foreach ($year->trimestres as $trim)
                                 <div class="group relative">
                                     <span
                                         class="px-2 py-0.5 bg-secondary text-primary rounded text-[9px] font-bold border border-border cursor-help">

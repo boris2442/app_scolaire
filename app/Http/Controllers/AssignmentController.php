@@ -30,9 +30,9 @@ class AssignmentController extends Controller
 
         if ($anneeId) {
             // Logique si l'année est transmise explicitement
-            $anneeActive = Year::findOrFail($anneeId);
+            $actifYear = Year::findOrFail($anneeId);
         } else {
-            $anneeActive = $this->scolarite->getAnneeActive();
+            $actifYear = $this->scolarite->getactifYear();
         }
 
         $classes = Classe::orderBy('nom')->get();
@@ -56,7 +56,7 @@ class AssignmentController extends Controller
 
             // Filtrage précis par classe ET année active
             $affectationsExistantes = Affectation::where('classe_id', $classeId)
-                ->where('annee_scolaire_id', $anneeActive->id)
+                ->where('annee_scolaire_id', $actifYear->id)
                 ->get()
                 ->keyBy('matiere_id');
         }
@@ -64,7 +64,7 @@ class AssignmentController extends Controller
         return view('pages.assignments.index', compact(
             'classes',
             'enseignants',
-            'anneeActive',
+            'actifYear',
             'classeId',
             'matieresDuNiveau',
             'affectationsExistantes'
@@ -80,7 +80,7 @@ class AssignmentController extends Controller
     //     // 1. Validation (Évite les crashs si les données sont corrompues)
     //     $request->validated();
 
-    //     $anneeActive = $this->scolarite->getAnneeActive();
+    //     $actifYear = $this->scolarite->getactifYear();
     //     $classeId = $request->classe_id;
     //     $donnees = $request->affectations ?? [];
 
@@ -91,7 +91,7 @@ class AssignmentController extends Controller
     //                 [
     //                     'classe_id' => $classeId,
     //                     'matiere_id' => $matiereId,
-    //                     'annee_scolaire_id' => $anneeActive->id,
+    //                     'annee_scolaire_id' => $actifYear->id,
     //                 ],
     //                 ['enseignant_id' => $enseignantId]
     //             );
@@ -100,7 +100,7 @@ class AssignmentController extends Controller
     //             Affectation::where([
     //                 'classe_id' => $classeId,
     //                 'matiere_id' => $matiereId,
-    //                 'annee_scolaire_id' => $anneeActive->id,
+    //                 'annee_scolaire_id' => $actifYear->id,
     //             ])->delete();
     //         }
     //     }
@@ -114,7 +114,7 @@ class AssignmentController extends Controller
         $request->validated();
 
         // Utiliser l'année soumise dans le formulaire prioritairement
-        $anneeId = $request->input('annee_scolaire_id', $this->scolarite->getAnneeActive()->id);
+        $anneeId = $request->input('annee_scolaire_id', $this->scolarite->getactifYear()->id);
         $classeId = $request->classe_id;
         $donnees = $request->affectations ?? [];
 

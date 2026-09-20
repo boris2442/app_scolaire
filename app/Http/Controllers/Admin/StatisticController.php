@@ -29,21 +29,21 @@ class StatisticController extends Controller
         $anneeScolaireId = 1; 
 
         // 1. Récupérer tous les élèves inscrits dans cette classe spécifique
-        $elevesInscrits = DB::table('inscriptions')
+        $studentsInscrits = DB::table('inscriptions')
             ->where('classe_id', $classeId)
             ->get();
 
-        if ($elevesInscrits->isEmpty()) {
+        if ($studentsInscrits->isEmpty()) {
             return redirect()->back()->with('error', 'Aucun élève trouvé dans cette classe.');
         }
 
         // 2. Lancer la boucle de calcul pour chaque élève
-        foreach ($elevesInscrits as $eleve) {
+        foreach ($studentsInscrits as $student) {
             // Étape A : Calcule les moyennes de chaque matière pour cet élève
-            $this->statsService->calculerMoyennesMatieresPourSequence($sequenceId, $eleve->id);
+            $this->statsService->calculerMoyennesMatieresPourSequence($sequenceId, $student->id);
 
             // Étape B : Combine ces matières pour générer son bilan général
-            $this->statsService->calculerBilanGeneralSequence($sequenceId, $eleve->id, $anneeScolaireId);
+            $this->statsService->calculerBilanGeneralSequence($sequenceId, $student->id, $anneeScolaireId);
         }
 
         // Étape C : Une fois que tout le monde est évalué, on calcule les rangs globaux de la classe

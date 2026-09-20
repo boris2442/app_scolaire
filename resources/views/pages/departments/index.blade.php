@@ -19,7 +19,7 @@
         </a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ($departements as $dept)
+        @foreach ($departments as $dept)
             <div
                 class="bg-card rounded-2xl border border-border p-5 hover:shadow-lg hover:border-primary/30 transition-all duration-300 group relative">
 

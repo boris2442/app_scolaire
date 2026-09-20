@@ -125,39 +125,39 @@
                     <strong>RÉPUBLIQUE DU CAMEROUN</strong><br>
                     Paix - Travail - Patrie<br>
                     -------------------<br>
-                    <strong>{{ $etablissement?->nom ?? 'Nom de l\'établissement' }}</strong><br>
-                    @if ($etablissement?->adresse)
-                        Adresse : {{ $etablissement->adresse }}<br>
+                    <strong>{{ $school?->nom ?? 'Nom de l\'établissement' }}</strong><br>
+                    @if ($school?->adresse)
+                        Adresse : {{ $school->adresse }}<br>
                     @endif
-                    @if ($etablissement?->telephone)
-                        Tél : {{ $etablissement->telephone }}
+                    @if ($school?->telephone)
+                        Tél : {{ $school->telephone }}
                     @endif
                 </td>
 
                 <td class="center-header" style="width: 30%;">
                     <!-- Logo stocké (si tu stockes l'image dans public/storage/ ou public/images/) -->
-                    @if ($etablissement?->logo)
-                        <!-- Ajuste le chemin selon ta façon de stocker les images (ex: public_path('storage/' . $etablissement->logo)) -->
-                        <img src="{{ public_path('storage/' . $etablissement->logo) }}" class="logo" alt="Logo">
+                    @if ($school?->logo)
+                        <!-- Ajuste le chemin selon ta façon de stocker les images (ex: public_path('storage/' . $school->logo)) -->
+                        <img src="{{ public_path('storage/' . $school->logo) }}" class="logo" alt="Logo">
                     @else
                         <h3 style="margin:0; font-size: 16px;">EMPLOI DU TEMPS</h3>
                     @endif
 
-                    @if ($etablissement?->slogan)
+                    @if ($school?->slogan)
                         <div style="font-size: 10px; font-style: italic; margin-top: 5px; color: #555;">
-                            "{{ $etablissement->slogan }}"
+                            "{{ $school->slogan }}"
                         </div>
                     @endif
                 </td>
 
                 <td class="right-header" style="width: 35%;">
-                    @if ($etablissement?->code_ecole)
-                        Code École : <strong>{{ $etablissement->code_ecole }}</strong><br>
+                    @if ($school?->code_ecole)
+                        Code École : <strong>{{ $school->code_ecole }}</strong><br>
                     @endif
-                    @if ($etablissement?->email)
-                        Email : {{ $etablissement->email }}<br>
+                    @if ($school?->email)
+                        Email : {{ $school->email }}<br>
                     @endif
-                    Année Scolaire : <strong>{{ $anneeActive?->libelle ?? '2025/2026' }}</strong><br>
+                    Année Scolaire : <strong>{{ $actifYear?->libelle ?? '2025/2026' }}</strong><br>
                     Date d'édition : {{ date('d/m/Y') }}
                 </td>
             </tr>

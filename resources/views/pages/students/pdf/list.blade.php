@@ -54,28 +54,28 @@
             <td class="header-col">
                 <strong>République du Cameroun</strong><br>Paix - Travail - Patrie<br>
                 <strong>Ministère des Enseignements Secondaires</strong><br>
-                {{ $etablissement->nom }}<br><em>"{{ $etablissement->slogan }}"</em>
+                {{ $school->nom }}<br><em>"{{ $school->slogan }}"</em>
             </td>
             <td class="header-col">
                 @php
-                    $vraiCheminDansPublic = 'storage/' . $etablissement->logo;
+                    $vraiCheminDansPublic = 'storage/' . $school->logo;
                 @endphp
-                @if ($etablissement->logo && file_exists(public_path($vraiCheminDansPublic)))
+                @if ($school->logo && file_exists(public_path($vraiCheminDansPublic)))
                     <img src="{{ public_path($vraiCheminDansPublic) }}" width="60">
                 @endif
             </td>
             <td class="header-col">
                 <strong>Republic of Cameroon</strong><br>Peace - Work - Fatherland<br>
                 <strong>Ministry of Secondary Education</strong><br>
-                {{ $etablissement->english_name }}<br><em>"{{ $etablissement->english_slogan }}"</em>
+                {{ $school->english_name }}<br><em>"{{ $school->english_slogan }}"</em>
             </td>
         </tr>
     </table>
 
-  <div class="title-box">
-    <h2>LISTE DES ÉLÈVES : {{ strtoupper($classe->nom) }}</h2>
-    <p>Année Scolaire : {{ $anneeActive->libelle }}</p>
-</div>
+    <div class="title-box">
+        <h2>LISTE DES ÉLÈVES : {{ strtoupper($classe->nom) }}</h2>
+        <p>Année Scolaire : {{ $actifYear->libelle }}</p>
+    </div>
     <table>
         <thead>
             <tr>
@@ -88,14 +88,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($eleves as $index => $eleve)
+            @foreach ($students as $index => $student)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $eleve->matricule }}</td>
-                    <td style="text-align: left;">{{ strtoupper($eleve->nom) }} {{ $eleve->prenom }}</td>
-                    <td>{{ $eleve->date_naissance }}</td>
-                    <td>{{ $eleve->lieu_naissance }}</td>
-                    <td>{{ $eleve->sexe }}</td>
+                    <td>{{ $student->matricule }}</td>
+                    <td style="text-align: left;">{{ strtoupper($student->nom) }} {{ $student->prenom }}</td>
+                    <td>{{ $student->date_naissance }}</td>
+                    <td>{{ $student->lieu_naissance }}</td>
+                    <td>{{ $student->sexe }}</td>
                 </tr>
             @endforeach
         </tbody>

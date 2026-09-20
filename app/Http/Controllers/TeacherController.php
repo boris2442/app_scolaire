@@ -37,7 +37,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        $departements = Department::orderBy('nom')->get();
+        $departments = Department::orderBy('nom')->get();
         return view('pages.teachers.create', compact('departements'));
     }
     
@@ -90,7 +90,7 @@ class TeacherController extends Controller
 
     public function edit(Teacher $enseignant)
     {
-        $departements = Department::orderBy('nom')->get();
+        $departments = Department::orderBy('nom')->get();
         return view('pages.teachers.edit', compact('enseignant', 'departements'));
     }
     public function update(Request $request, Teacher $enseignant)

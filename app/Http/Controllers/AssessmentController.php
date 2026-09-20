@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Affectation;
 use App\Models\Assessment;
-
 use App\Models\Inscription;
 use App\Models\Lesson;
 use App\Models\Note;
@@ -17,12 +16,12 @@ class AssessmentController extends Controller
 {
     protected $scolarite;
 
-    protected $anneeActive;
+    protected $actifYear;
 
     public function __construct(ScolariteService $scolarite)
     {
         $this->scolarite = $scolarite;
-        $this->anneeActive = $this->scolarite->getAnneeActive();
+        $this->actifYear = $this->scolarite->getactifYear();
     }
 
     public function index()
@@ -33,15 +32,15 @@ class AssessmentController extends Controller
             return back()->with('error', 'Action impossible : profil enseignant non trouvé.');
         }
 
-        // 1. Récupérer les séquences de l'année active (utilise $this->anneeActive)
+        // 1. Récupérer les séquences de l'année active (utilise $this->actifYear)
         $sequences = Sequence::whereHas('trimestre', function ($query) {
-            $query->where('annee_scolaire_id', $this->anneeActive->id);
+            $query->where('annee_scolaire_id', $this->actifYear->id);
         })->get();
 
         // 2. Affectations de l'enseignant
         // FILTRE AJOUTÉ ICI : annee_scolaire_id sur les affectations
         $affectations = $enseignant->affectations()
-            ->where('annee_scolaire_id', $this->anneeActive->id)
+            ->where('annee_scolaire_id', $this->actifYear->id)
             ->with(['matiere', 'classe'])
             ->whereHas('classe.matieres', function ($query) {
                 $query->whereColumn('matieres.id', 'affectations.matiere_id');
@@ -52,7 +51,7 @@ class AssessmentController extends Controller
         $evaluations = Assessment::with(['classe', 'matiere', 'sequence'])
             ->where('enseignant_id', $enseignant->id)
             ->whereHas('sequence.trimestre', function ($query) {
-                $query->where('annee_scolaire_id', $this->anneeActive->id);
+                $query->where('annee_scolaire_id', $this->actifYear->id);
             })
             ->latest()
             ->get();
@@ -60,7 +59,7 @@ class AssessmentController extends Controller
         return view('pages.assessments.index', [
             'evaluations' => $evaluations,
             'sequences' => $sequences,
-            'anneeActive' => $this->anneeActive,
+            'actifYear' => $this->actifYear,
             'affectations' => $affectations,
         ]);
     }
@@ -83,7 +82,7 @@ class AssessmentController extends Controller
 
         // Conservé : la table 'inscriptions' utilise bien annee_scolaire_id
         $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
-            ->where('annee_scolaire_id', $this->anneeActive->id)
+            ->where('annee_scolaire_id', $this->actifYear->id)
             ->with('eleve')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->orderBy('eleves.nom', 'asc')
@@ -140,7 +139,7 @@ class AssessmentController extends Controller
                 'classe_id' => $affectation->classe_id,
                 'matiere_id' => $affectation->matiere_id,
                 'enseignant_id' => $enseignant->id,
-                'annee_scolaire_id' => $this->anneeActive->id, // <--- AJOUTE ÇA ICI
+                'annee_scolaire_id' => $this->actifYear->id, // <--- AJOUTE ÇA ICI
                 // On ne met pas 'titre' ou 'date' ici car ils peuvent varier
             ],
             [

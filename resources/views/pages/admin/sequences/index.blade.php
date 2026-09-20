@@ -17,7 +17,7 @@
                 <span
                     class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]">
                     Année Active : <strong
-                        class="ml-1 text-[var(--primary)]">{{ $anneeActive->libelle ?? 'Non définie' }}</strong>
+                        class="ml-1 text-[var(--primary)]">{{ $actifYear->libelle ?? 'Non définie' }}</strong>
                 </span>
             </div>
         </div>

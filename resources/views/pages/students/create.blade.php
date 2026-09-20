@@ -12,7 +12,7 @@
     <div class="mb-8">
         <h1 class="text-xl   text-foreground tracking-tight">Inscription d'un Nouvel Élève</h1>
         <p class="text-xs text-muted-foreground   tracking-tighter text-primary">Année Scolaire :
-            {{ $anneeActive->libelle }}</p>
+            {{ $actifYear->libelle }}</p>
         <div class="">
             <a href="{{ route('admin.students.index') }}"
                 class="inline-flex items-center gap-2 bg-secondary/50 text-secondary-foreground px-4 py-2 rounded-xl font-bold text-[10px]  hover:bg-secondary/70 transition-all">

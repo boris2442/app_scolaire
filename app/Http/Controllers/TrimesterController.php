@@ -32,13 +32,13 @@ class TrimesterController extends Controller
     public function genererBilanTrimestre(Request $request, $trimestreId, $classeId)
     {
         // 1. Récupération dynamique de l'année scolaire active (Fini le "1" en dur !)
-        $anneeActive = DB::table('annee_scolaires')->where('est_active', 1)->first();
+        $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
-        if (!$anneeActive) {
+        if (!$actifYear) {
             return redirect()->back()->with('error', "Aucune année scolaire active configurée.");
         }
 
-        $anneeScolaireId = $anneeActive->id;
+        $anneeScolaireId = $actifYear->id;
 
         // 2. PREMIÈRE ÉTAPE CRUCIALE : Calculer les moyennes et rangs par MATIÈRE
         // C'est cette ligne qui va enfin remplir ta table 'moyennes' avec le trimestre_id !
@@ -80,12 +80,12 @@ class TrimesterController extends Controller
             ->having('trimestres_count', '<', 3)
             ->get();
 
-        $anneeActive = Year::where('est_active', 1)
+        $actifYear = Year::where('est_active', 1)
             ->with('trimestres.sequences')
             ->first();
 
 
-        return view('pages.trimesters.index', compact('anneesSansTrimestres', 'anneeActive'));
+        return view('pages.trimesters.index', compact('anneesSansTrimestres', 'actifYear'));
     }
 
     public function store(Request $request)

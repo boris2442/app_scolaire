@@ -46,11 +46,12 @@
                             placeholder="ENS-2026-001">
                     </div> --}}
                     <div>
-                        <label for="departement_id" class="text-[10px] font-black  ml-1 text-primary">Département d'attache</label>
+                        <label for="departement_id" class="text-[10px] font-black  ml-1 text-primary">Département
+                            d'attache</label>
                         <select id="departement_id" name="departement_id" required
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-medium  focus:ring-2 focus:ring-primary/20 transition-all">
                             <option value="">-- Choisir un département --</option>
-                            @foreach ($departements as $dept)
+                            @foreach ($departments as $dept)
                                 <option value="{{ $dept->id }}">{{ $dept->nom }} ({{ $dept->code }})</option>
                             @endforeach
                         </select>

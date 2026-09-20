@@ -82,11 +82,11 @@ class Student extends Model
         return $this->inscriptions()->latest()->first();
     }
 
-    public static function genererEtAttribuerMatricule(self $eleve, $anneeScolaireId)
+    public static function genererEtAttribuerMatricule(self $student, $anneeScolaireId)
     {
         // Si l'élève a déjà un matricule (fourni par Excel par exemple), on ne touche à rien
-        if (! empty($eleve->matricule)) {
-            return $eleve->matricule;
+        if (! empty($student->matricule)) {
+            return $student->matricule;
         }
 
         // Récupérer l'année scolaire concernée
@@ -97,9 +97,9 @@ class Student extends Model
             $fin = Carbon::parse($anneeScolaire->date_fin)->format('y');
 
             // Génération : 2 chiffres début + 2 chiffres fin + ID sur 5 chiffres (ex: 262600012)
-            $matricule = $debut.$fin.str_pad($eleve->id, 5, '0', STR_PAD_LEFT);
+            $matricule = $debut.$fin.str_pad($student->id, 5, '0', STR_PAD_LEFT);
 
-            $eleve->update(['matricule' => $matricule]);
+            $student->update(['matricule' => $matricule]);
 
             return $matricule;
         }

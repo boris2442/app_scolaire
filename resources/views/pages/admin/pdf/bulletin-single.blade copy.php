@@ -242,25 +242,25 @@
                     Paix-Travail-Patrie<br>
                     MINISTERE DES ENSEIGNEMENTS SECONDAIRES<br>
                     <span
-                        style="text-transform: uppercase;">{{ $etablissement->nom ?? 'Établissement Scolaire' }}</span><br>
+                        style="text-transform: uppercase;">{{ $school->nom ?? 'Établissement Scolaire' }}</span><br>
                     <span
-                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->slogan }}"</span><br>
-                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->adresse }} —
-                        {{ $etablissement->telephone }}</span>
+                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $school->slogan }}"</span><br>
+                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $school->adresse }} —
+                        {{ $school->telephone }}</span>
                 </div>
 
                 <div class="bloc-centre">
                     @php
-                        $vraiCheminDansPublic = 'storage/' . $etablissement->logo;
+                        $vraiCheminDansPublic = 'storage/' . $school->logo;
                     @endphp
 
-                    @if ($etablissement->logo && file_exists(public_path($vraiCheminDansPublic)))
+                    @if ($school->logo && file_exists(public_path($vraiCheminDansPublic)))
                         <img src="{{ public_path($vraiCheminDansPublic) }}"
                             style="max-height: 45px; max-width: 65px; object-fit: contain;">
                     @else
                         <div
                             style="border: 1px solid #000; width: 50px; height: 35px; margin: 0 auto; line-height: 35px; font-size: 7px; font-weight: bold;">
-                            {{ $etablissement->code_ecole ?? 'LOGO' }}
+                            {{ $school->code_ecole ?? 'LOGO' }}
                         </div>
                     @endif
                 </div>
@@ -270,10 +270,10 @@
                     Peace-Work-Fatherland<br>
                     MINISTRY OF SECONDARY EDUCATION<br>
                     <span
-                        style="text-transform: uppercase;">{{ $etablissement->english_name ?? 'School Complex' }}</span><br>
+                        style="text-transform: uppercase;">{{ $school->english_name ?? 'School Complex' }}</span><br>
                     <span
-                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $etablissement->english_slogan }}"</span><br>
-                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $etablissement->email }}</span>
+                        style="font-style: italic; font-weight: normal; font-size: 7.5px;">"{{ $school->english_slogan }}"</span><br>
+                    <span style="font-weight: normal; font-size: 7.5px;"> {{ $school->email }}</span>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -613,7 +613,7 @@
                     <td width="34%" class="text-center">
                         Nom et visa du Principal<br><br><br><br>
                         <span style="font-weight: normal; font-size: 8px;">Fait à
-                            {{ $etablissement->addresse ?? 'Bafoussam' }},
+                            {{ $school->addresse ?? 'Bafoussam' }},
                             le {{ date('d/m/Y') }}</span>
                     </td>
                 </tr>

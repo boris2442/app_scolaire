@@ -14,7 +14,7 @@ class ScolariteService
     /**
    
      */
-    public function getAnneeActive()
+    public function getactifYear()
     {
         return Year::where('est_active', true)->first()
             ?? abort(500, "Aucune année scolaire active n'est définie dans le système.");
@@ -23,11 +23,11 @@ class ScolariteService
     /**
      * Récupère la classe actuelle d'un élève pour l'année active.
      */
-    public function getClasseActuelle($eleveId)
+    public function getClasseActuelle($studentId)
     {
-        $annee = $this->getAnneeActive();
+        $annee = $this->getactifYear();
 
-        return Inscription::where('eleve_id', $eleveId)
+        return Inscription::where('eleve_id', $studentId)
             ->where('annee_scolaire_id', $annee->id)
             ->first();
     }
@@ -38,11 +38,11 @@ class ScolariteService
     /**
      * Vérifie qu'un trimestre appartient bien à l'année scolaire active (ou spécifiée)
      */
-    public function validateTrimestre(Trimestre $trimestre, ?AnneeScolaire $anneeActive = null): void
+    public function validateTrimestre(Trimestre $trimestre, ?AnneeScolaire $actifYear = null): void
     {
-        $anneeActive = $anneeActive ?? $this->getAnneeActive();
+        $actifYear = $actifYear ?? $this->getactifYear();
 
-        if ((int) $trimestre->annee_scolaire_id !== (int) $anneeActive->id) {
+        if ((int) $trimestre->annee_scolaire_id !== (int) $actifYear->id) {
             throw new IncoherentScolariteException("Le trimestre '{$trimestre->nom}' n'appartient pas à l'année scolaire en cours.");
         }
     }

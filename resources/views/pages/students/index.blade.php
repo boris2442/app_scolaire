@@ -8,7 +8,7 @@
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">Registre des élèves</h1>
-                <p class="text-sm text-muted-foreground">{{ $eleves->total() }} apprenants enregistrés cette année</p>
+                <p class="text-sm text-muted-foreground">{{ $students->total() }} apprenants enregistrés cette année</p>
             </div>
 
 
@@ -107,7 +107,7 @@
                 <div class="bg-card p-5 rounded-xl border border-border shadow-sm">
                     <p class="text-[11px] font-medium text-muted-foreground  tracking-wider mb-1">Apprenants</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-bold">{{ $eleves->total() }}</span>
+                        <span class="text-2xl font-bold">{{ $students->total() }}</span>
                         <span class="text-[10px] text-primary font-medium">Inscrits</span>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                 <div class="flex items-center gap-2 mt-1">
                     <span class="h-1 w-12 bg-primary rounded-full"></span>
                     <p class="text-[10px] font-bold  text-primary tracking-widest">
-                        {{ $eleves->total() }} Apprenants enregistrés
+                        {{ $students->total() }} Apprenants enregistrés
                     </p>
                 </div>
             </div>
@@ -163,12 +163,12 @@
                     <form action="{{ route('admin.students.importer') }}" method="POST" enctype="multipart/form-data"
                         class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         @csrf
-                        <input type="hidden" name="annee_id" value="{{ $anneeActive->id }}">
+                        <input type="hidden" name="annee_id" value="{{ $actifYear->id }}">
 
                         <!-- Choix de la classe -->
                         <div>
-                            <label for='classe_id' class="block text-xs font-semibold text-foreground/70 mb-1">Classe de destination <span
-                                    class="text-red-500">*</span></label>
+                            <label for='classe_id' class="block text-xs font-semibold text-foreground/70 mb-1">Classe de
+                                destination <span class="text-red-500">*</span></label>
                             <select id='classe_id' name="classe_id" required
                                 class="w-full px-3 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg border border-border focus:ring-2 focus:ring-primary">
                                 <option value="">-- Choisir la classe --</option>
@@ -180,9 +180,11 @@
 
                         <!-- Fichier Excel -->
                         <div>
-                            <label for='fichier_excel' class="block text-xs font-semibold text-foreground/70 mb-1">Fichier Excel (.xlsx, .xls,
+                            <label for='fichier_excel' class="block text-xs font-semibold text-foreground/70 mb-1">Fichier
+                                Excel (.xlsx, .xls,
                                 .csv) <span class="text-red-500">*</span></label>
-                            <input id='fichier_excel' type="file" name="fichier_excel" accept=".xlsx, .xls, .csv" required
+                            <input id='fichier_excel' type="file" name="fichier_excel" accept=".xlsx, .xls, .csv"
+                                required
                                 class="w-full text-xs text-foreground/70 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90">
                         </div>
 
@@ -197,8 +199,7 @@
 
                     <!-- Aperçu visuel / Maquette du template Excel attendu -->
                     <div class="pt-4 border-t border-border">
-                        <h4
-                            class="text-xs font-bold text-foreground  tracking-wider mb-2 flex items-center gap-1.5">
+                        <h4 class="text-xs font-bold text-foreground  tracking-wider mb-2 flex items-center gap-1.5">
                             <x-lucide-file-text class="w-4 h-4 text-primary" />
                             Modèle de structure requis pour les colonnes de votre fichier Excel :
                         </h4>
@@ -315,29 +316,29 @@
 
             <!-- VUE MOBILE (Cartes) -->
             <div class="block md:hidden divide-y divide-border/50">
-                @forelse ($eleves as $index => $eleve)
+                @forelse ($students as $index => $student)
                     <div class="p-4 flex flex-col gap-3">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div
                                     class="h-6 w-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-bold border border-primary/20">
-                                    {{ $eleves->firstItem() + $index }}
+                                    {{ $students->firstItem() + $index }}
                                 </div>
                                 <div>
-                                    <a href="{{ route('admin.students.show', $eleve) }}"
+                                    <a href="{{ route('admin.students.show', $student) }}"
                                         class="text-sm font-semibold uppercase text-foreground">
-                                        {{ $eleve->nom }} {{ $eleve->prenom }}
+                                        {{ $student->nom }} {{ $student->prenom }}
                                     </a>
-                                    <p class="text-[10px] text-primary font-bold tracking-wider">{{ $eleve->matricule }}
+                                    <p class="text-[10px] text-primary font-bold tracking-wider">{{ $student->matricule }}
                                     </p>
                                 </div>
                             </div>
-                            <span class="px-2 py-0.5 bg-secondary rounded text-[10px]">{{ $eleve->sexe }}</span>
+                            <span class="px-2 py-0.5 bg-secondary rounded text-[10px]">{{ $student->sexe }}</span>
                         </div>
 
                         <div class="flex items-center justify-between text-[11px] pt-1">
                             <div>
-                                @php $ins = $eleve->inscriptions->first(); @endphp
+                                @php $ins = $student->inscriptions->first(); @endphp
                                 @if ($ins && $ins->classe)
                                     <span
                                         class="bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-[9px] uppercase">
@@ -351,10 +352,10 @@
 
                             <!-- Actions -->
                             <div class="flex items-center gap-3 text-foreground/50">
-                                <a href="{{ route('admin.students.show', $eleve) }}"
+                                <a href="{{ route('admin.students.show', $student) }}"
                                     class="hover:text-primary"><x-lucide-eye class="w-4 h-4" /></a>
                                 @can('access-admin')
-                                    <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
+                                    <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST"
                                         onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:text-red-700">
@@ -362,7 +363,7 @@
                                         </button>
                                     </form>
                                 @endcan
-                                <a href="{{ route('admin.students.edit', $eleve) }}"
+                                <a href="{{ route('admin.students.edit', $student) }}"
                                     class="hover:text-danger"><x-lucide-edit class="w-4 h-4" /></a>
                             </div>
                         </div>
@@ -387,32 +388,32 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-border/50">
-                        @forelse ($eleves as $index => $eleve)
+                        @forelse ($students as $index => $student)
                             <tr class="hover:bg-secondary/30 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="h-6 w-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs border border-primary/20 shrink-0">
-                                            {{ $eleves->firstItem() + $index }}
+                                            {{ $students->firstItem() + $index }}
                                         </div>
                                         <div>
                                             <p class="text-sm uppercase font-medium">
-                                                <a href="{{ route('admin.students.show', $eleve) }}">
-                                                    {{ $eleve->nom }} {{ $eleve->prenom }}
+                                                <a href="{{ route('admin.students.show', $student) }}">
+                                                    {{ $student->nom }} {{ $student->prenom }}
                                                 </a>
                                             </p>
                                             <p class="text-[10px] text-primary font-bold tracking-wider">
-                                                {{ $eleve->matricule }}</p>
+                                                {{ $student->matricule }}</p>
                                             <span class="text-[10px] text-primary/70 font-medium">Inscrit le
-                                                <i>{{ $eleve->created_at }}</i></span>
+                                                <i>{{ $student->created_at }}</i></span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="px-2 py-1 bg-secondary rounded text-[10px]">{{ $eleve->sexe }}</span>
+                                    <span class="px-2 py-1 bg-secondary rounded text-[10px]">{{ $student->sexe }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    @php $ins = $eleve->inscriptions->first(); @endphp
+                                    @php $ins = $student->inscriptions->first(); @endphp
                                     @if ($ins && $ins->classe)
                                         <span
                                             class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-[9px] uppercase">
@@ -425,11 +426,11 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end items-center gap-2 text-foreground/30">
-                                        <a href="{{ route('admin.students.show', $eleve) }}" title="Voir les détails"
+                                        <a href="{{ route('admin.students.show', $student) }}" title="Voir les détails"
                                             class="p-2 hover:text-primary transition-colors"><x-lucide-eye
                                                 class="w-4 h-4" /></a>
                                         @can('access-admin')
-                                            <form action="{{ route('admin.students.destroy', $eleve->id) }}" method="POST"
+                                            <form action="{{ route('admin.students.destroy', $student->id) }}" method="POST"
                                                 onsubmit="return confirm('Voulez-vous vraiment archiver cet élève ?')">
                                                 @csrf
                                                 @method('DELETE')
@@ -438,7 +439,7 @@
                                                 </button>
                                             </form>
                                         @endcan
-                                        <a title="Modifier" href="{{ route('admin.students.edit', $eleve) }}"
+                                        <a title="Modifier" href="{{ route('admin.students.edit', $student) }}"
                                             class="p-2 hover:text-danger transition-colors"><x-lucide-edit
                                                 class="w-4 h-4" /></a>
                                     </div>
@@ -458,7 +459,7 @@
         </div>
 
         <div class="mt-6">
-            {{ $eleves->links() }}
+            {{ $students->links() }}
         </div>
     </div>
 @endsection

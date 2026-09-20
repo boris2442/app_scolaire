@@ -15,7 +15,7 @@
         </div>
 
         <div class="max-w-3xl mx-auto">
-            <form action="{{ route('admin.departments.update', $departement->id) }}" method="POST"
+            <form action="{{ route('admin.departments.update', $department->id) }}" method="POST"
                 class="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
                 @csrf
                 @method('PUT')
@@ -26,7 +26,7 @@
                             <label for="nom" class="text-sm font-bold text-foreground ml-1">Nom du Département</label>
                             <div class="relative">
                                 <input type="text" name="nom" id="nom"
-                                    value="{{ old('nom', $departement->nom) }}" required
+                                    value="{{ old('nom', $department->nom) }}" required
                                     class="w-full px-4 py-3 bg-secondary/50 border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
                                     placeholder="Ex: Sciences et Technologies">
                             </div>
@@ -38,7 +38,7 @@
                         <div class="space-y-2">
                             <label for="code" class="text-sm font-bold text-foreground ml-1">Code / Abréviation</label>
                             <input type="text" name="code" id="code"
-                                value="{{ old('code', $departement->code) }}" required
+                                value="{{ old('code', $department->code) }}" required
                                 class="w-full px-4 py-3 bg-secondary/50 border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm uppercase"
                                 placeholder="Ex: ST">
                             @error('code')
@@ -52,7 +52,7 @@
                             (Optionnel)</label>
                         <textarea name="description" id="description" rows="4"
                             class="w-full px-4 py-3  border border-border rounded focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm resize-none"
-                            placeholder="Décrivez brièvement le rôle de ce département...">{{ old('description', $departement->description) }}</textarea>
+                            placeholder="Décrivez brièvement le rôle de ce département...">{{ old('description', $department->description) }}</textarea>
                     </div>
 
                     <div class="p-4 bg-primary/5 border border-primary/10 rounded-xl flex items-start space-x-3">

@@ -3,7 +3,7 @@
 @section('content')
     {{-- 3. Affichage du Niveau et de la Salle --}}
     @php
-        $derniereInsc = $eleve->inscriptions->last();
+        $lastInsc = $student->inscriptions->last();
     @endphp
 
 
@@ -19,7 +19,7 @@
                 </a>
                 <div>
                     <h1 class="text-xl font-bold tracking-tight">Dossier de l'élève</h1>
-                    <p class="text-xs text-muted-foreground font-mono">Matricule : {{ $eleve->matricule }}</p>
+                    <p class="text-xs text-muted-foreground font-mono">Matricule : {{ $student->matricule }}</p>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                     Imprimer
                 </button> --}}
 
-                <a href="{{ route('admin.students.edit', $eleve->id) }}"
+                <a href="{{ route('admin.students.edit', $student->id) }}"
                     class="flex-1 sm:flex-none px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm">
                     <x-lucide-pencil class="w-4 h-4" />
                     Modifier
@@ -47,15 +47,15 @@
                 <div class="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mb-4 overflow-hidden border border-border flex items-center justify-center shadow-inner">
-                        @if ($eleve->photo)
-                            <img src="{{ asset('storage/' . $eleve->photo) }}" alt="{{ $eleve->nom }}"
+                        @if ($student->photo)
+                            <img src="{{ asset('storage/' . $student->photo) }}" alt="{{ $student->nom }}"
                                 class="w-full h-full object-cover">
                         @else
                             <x-lucide-user class="w-12 h-12 text-muted-foreground/40" />
                         @endif
                     </div>
 
-                    <h2 class="text-lg font-bold text-card-foreground leading-snug">{{ $eleve->nom }} {{ $eleve->prenom }}
+                    <h2 class="text-lg font-bold text-card-foreground leading-snug">{{ $student->nom }} {{ $student->prenom }}
                     </h2>
                     <p class="text-xs text-muted-foreground mt-0.5">Élève régulier</p>
 
@@ -72,13 +72,13 @@
                         (2025-2026)</p>
 
                     @php
-                        $derniereInsc = $eleve->inscriptions->last();
+                        $lastInsc = $student->inscriptions->last();
                     @endphp
 
                     <div class="flex items-center gap-2">
-                        @if ($derniereInsc && $derniereInsc->classe)
+                        @if ($lastInsc && $lastInsc->classe)
                             <span class="text-2xl font-bold text-primary">
-                                {{ $derniereInsc->classe->nom }}
+                                {{ $lastInsc->classe->nom }}
                             </span>
                         @else
                             <span class="text-sm font-semibold text-destructive ">Non Inscrit</span>
@@ -101,37 +101,37 @@
                         <div>
                             <span class="text-xs text-muted-foreground block mb-1">Date de naissance</span>
                             <p class="text-sm font-medium text-foreground">
-                                {{ \Carbon\Carbon::parse($eleve->date_naissance)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($student->date_naissance)->translatedFormat('d F Y') }}
                             </p>
                         </div>
 
                         <div>
                             <span class="text-xs text-muted-foreground block mb-1">Lieu de naissance</span>
-                            <p class="text-sm font-medium text-foreground">{{ $eleve->lieu_naissance ?? 'Non renseigné' }}
+                            <p class="text-sm font-medium text-foreground">{{ $student->lieu_naissance ?? 'Non renseigné' }}
                             </p>
                         </div>
 
                         <div>
                             <span class="text-xs text-muted-foreground block mb-1">Sexe</span>
                             <p class="text-sm font-medium text-foreground">
-                                {{ $eleve->sexe == 'M' ? 'Masculin' : 'Féminin' }}</p>
+                                {{ $student->sexe == 'M' ? 'Masculin' : 'Féminin' }}</p>
                         </div>
 
                         <div>
                             <span class="text-xs text-muted-foreground block mb-1">Statut académique</span>
                             <span
-                                class="inline-flex items-center text-xs font-semibold {{ $eleve->statut ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400' }}">
-                                {{ $eleve->statut ? 'Redoublant' : 'Nouveau / Passant' }}
+                                class="inline-flex items-center text-xs font-semibold {{ $student->statut ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                                {{ $student->statut ? 'Redoublant' : 'Nouveau / Passant' }}
                             </span>
                         </div>
 
                         <div class="sm:col-span-2 pt-4 border-t border-border/60">
                             <span class="text-xs text-muted-foreground block mb-1">Âge actuel</span>
                             <div class="flex items-center gap-2">
-                                <span class="text-base font-bold text-foreground">{{ $eleve->age }} ans</span>
+                                <span class="text-base font-bold text-foreground">{{ $student->age }} ans</span>
                                 <span
                                     class="text-[10px] px-2 py-0.5 bg-secondary text-secondary-foreground rounded font-semibold ">
-                                    {{ $eleve->age >= 18 ? 'Majeur' : 'Mineur' }}
+                                    {{ $student->age >= 18 ? 'Majeur' : 'Mineur' }}
                                 </span>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                             <div class="min-w-0">
                                 <p class="text-xs text-muted-foreground">Téléphone Parent</p>
                                 <p class="text-sm font-semibold text-foreground truncate">
-                                    {{ $eleve->telephone_parent ?? 'Non renseigné' }}
+                                    {{ $student->telephone_parent ?? 'Non renseigné' }}
                                 </p>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
                             <div class="min-w-0">
                                 <p class="text-xs text-muted-foreground">Adresse / Quartier</p>
                                 <p class="text-sm font-semibold text-foreground truncate">
-                                    {{ $eleve->adresse ?? 'Non spécifiée' }}
+                                    {{ $student->adresse ?? 'Non spécifiée' }}
                                 </p>
                             </div>
                         </div>
@@ -178,7 +178,7 @@
                             <div class="min-w-0">
                                 <p class="text-xs text-muted-foreground">Nom du Père</p>
                                 <p class="text-sm font-semibold text-foreground truncate">
-                                    {{ $eleve->name_father ?? 'Non renseigné' }}
+                                    {{ $student->name_father ?? 'Non renseigné' }}
                                 </p>
                             </div>
                         </div>
@@ -190,7 +190,7 @@
                             <div class="min-w-0">
                                 <p class="text-xs text-muted-foreground">Nom de la Mère</p>
                                 <p class="text-sm font-semibold text-foreground truncate">
-                                    {{ $eleve->name_mother ?? 'Non renseigné' }}
+                                    {{ $student->name_mother ?? 'Non renseigné' }}
                                 </p>
                             </div>
                         </div>

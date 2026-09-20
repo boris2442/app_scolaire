@@ -150,7 +150,7 @@ public function index()
 
     $sequences = Sequence::whereHas('trimestre', function ($q) {
 
-        $q->where('annee_scolaire_id', $this->scolarite->getAnneeActive()->id);
+        $q->where('annee_scolaire_id', $this->scolarite->getactifYear()->id);
 
     })->get();
 

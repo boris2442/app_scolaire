@@ -114,7 +114,7 @@
 
 
 
-            <input type="hidden" name="titre" value="Évaluation - {{ $anneeActive->libelle }}">
+            <input type="hidden" name="titre" value="Évaluation - {{ $actifYear->libelle }}">
 
 
         </form>
