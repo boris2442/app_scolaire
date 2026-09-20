@@ -311,7 +311,7 @@
             </td>
 
             <td class="value">
-                {{ $trimestre->nom }}
+                {{ $trimester->nom }}
             </td>
         </tr>
 

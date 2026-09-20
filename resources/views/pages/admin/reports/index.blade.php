@@ -14,8 +14,8 @@
                 <label class="block text-xs font-medium text-foreground/60 uppercase mb-1">Période d'impression</label>
                 <select name="trimestre_id" onchange="this.form.submit()"
                     class="w-full rounded-lg border border-border bg-card p-2.5 text-sm text-foreground focus:ring-2 focus:ring-primary focus:outline-none">
-                    @foreach ($trimestres as $t)
-                        <option value="{{ $t->id }}" {{ $trimestreId == $t->id ? 'selected' : '' }}>
+                    @foreach ($trimesters as $t)
+                        <option value="{{ $t->id }}" {{ $trimesterId == $t->id ? 'selected' : '' }}>
                             {{ $t->nom }}
                         </option>
                     @endforeach
@@ -26,7 +26,7 @@
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 w-full md:w-auto">
                 <!-- NOUVEAU : Bouton Stats Globales de l'Établissement -->
-                <a href="{{ route('stats.globales.pdf', ['trimestreId' => $trimestreId]) }}" target="_blank" data-turbo="false"
+                <a href="{{ route('stats.globales.pdf', ['trimestreId' => $trimesterId]) }}" target="_blank" data-turbo="false"
                     class="inline-flex items-center justify-center px-4 py-2.5 bg-card  text-sm font-semibold rounded-lg transition shadow-sm gap-2">
                     <x-lucide-file-text class="w-4 h-4" />
                     <span>Stats Globales (PDF)</span>
@@ -37,8 +37,8 @@
                     <label class="block text-xs font-medium text-foreground/60 uppercase mb-1">Période d'impression</label>
                     <select name="trimestre_id" onchange="this.form.submit()"
                         class="w-full rounded-lg border border-border bg-card p-2.5 text-sm text-foreground focus:ring-2 focus:ring-primary focus:outline-none">
-                        @foreach ($trimestres as $t)
-                            <option value="{{ $t->id }}" {{ $trimestreId == $t->id ? 'selected' : '' }}>
+                        @foreach ($trimesters as $t)
+                            <option value="{{ $t->id }}" {{ $trimesterId == $t->id ? 'selected' : '' }}>
                                 {{ $t->nom }}
                             </option>
                         @endforeach
@@ -73,7 +73,7 @@
                         </h3>
                     </div>
 
-                    <a href="{{ route('admin.bulletins.classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimestreId]) }}"
+                    <a href="{{ route('admin.bulletins.classe', ['classe_id' => $classe->id, 'trimestre_id' => $trimesterId]) }}"
                         class="w-full text-center inline-flex items-center justify-center px-4 py-2.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 text-sm font-medium rounded-lg transition">
                         <span>Ouvrir </span>
                         <x-lucide-chevron-right class="w-4 h-4 ml-1.5" />

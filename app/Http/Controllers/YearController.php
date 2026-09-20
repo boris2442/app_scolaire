@@ -28,14 +28,14 @@ class YearController extends Controller
 
             // 2. Créer les 3 trimestres et leurs séquences
             for ($i = 1; $i <= 3; $i++) {
-                $trimestre = $year->trimestres()->create([
+                $trimester = $year->trimestres()->create([
                     'nom' => "Trimestre $i",
                 ]);
 
                 // Pour chaque trimestre, on crée 2 séquences (1&2, 3&4, 5&6)
                 for ($j = 1; $j <= 2; $j++) {
                     $numSeq = ($i - 1) * 2 + $j;
-                    $trimestre->sequences()->create([
+                    $trimester->sequences()->create([
                         'nom' => "Eval $numSeq",
                     ]);
                 }
@@ -60,13 +60,13 @@ class YearController extends Controller
 
         DB::transaction(function () use ($year) {
             // 1. Récupérer les IDs des trimestres de CETTE année uniquement
-            $trimestreIds = $year->trimestres()->pluck('id');
+            $trimesterIds = $year->trimestres()->pluck('id');
 
             // 2. Supprimer les bilans liés à ces trimestres (pour éviter l'erreur 1451)
-            DB::table('bilans')->whereIn('trimestre_id', $trimestreIds)->delete();
+            DB::table('bilans')->whereIn('trimestre_id', $trimesterIds)->delete();
 
             // 3. Supprimer les séquences liées uniquement à ces trimestres
-            DB::table('sequences')->whereIn('trimestre_id', $trimestreIds)->delete();
+            DB::table('sequences')->whereIn('trimestre_id', $trimesterIds)->delete();
 
             // 4. Supprimer les trimestres de cette année
             $year->trimestres()->delete();

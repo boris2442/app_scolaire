@@ -12,14 +12,14 @@
                 </p>
             </div>
             <div class="bg-primary/10 text-primary px-4 py-2 rounded-full border border-primary/20 text-sm font-medium">
-                Année  : 2025-2026
+                Année : 2025-2026
             </div>
         </div>
 
         @if (session('success'))
             <div
                 class="bg-success/10 border border-success/20 text-success px-4 py-3 rounded-lg mb-6 flex items-center gap-3">
-            
+
                 <x-lucide-check-circle class='w-4 h-4' />
                 {{ session('success') }}
             </div>
@@ -42,14 +42,14 @@
                         </div>
                     </div>
 
-            
+
 
                     <form action="{{ route('admin.resultats.calculer') }}" method="POST" class="space-y-4">
                         @csrf
                         <input type="hidden" name="classe_id" value="{{ $classe->id }}">
 
                         <div>
-                            <label  class="block text-xs font-semibold mb-1 uppercase opacity-70">Période de calcul</label>
+                            <label class="block text-xs font-semibold mb-1 uppercase opacity-70">Période de calcul</label>
                             <select name="type_periode" id="periode_select_{{ $classe->id }}"
                                 onchange="updateHiddenInputs(this, {{ $classe->id }})"
                                 class="w-full bg-background border border-input text-foreground rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-ring transition-all"
@@ -63,8 +63,8 @@
                                 </optgroup>
 
                                 <optgroup label="Trimestres (Bilans globaux)">
-                                    @foreach ($trimestres as $trimestre)
-                                        <option value="trim_{{ $trimestre->id }}">Calculer {{ $trimestre->nom }}</option>
+                                    @foreach ($trimesters as $trimester)
+                                        <option value="trim_{{ $trimester->id }}">Calculer {{ $trimester->nom }}</option>
                                     @endforeach
                                 </optgroup>
                             </select>

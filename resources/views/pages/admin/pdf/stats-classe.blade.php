@@ -183,7 +183,7 @@
         <table>
             <tr>
                 <td><strong>Classe :</strong> {{ $classe->nom }}</td>
-                <td><strong>Période :</strong> {{ $trimestre->nom ?? 'Trimestre' }}</td>
+                <td><strong>Période :</strong> {{ $trimester->nom ?? 'Trimestre' }}</td>
                 <td class="text-right"><strong>Effectif Total :</strong> {{ $statsGlobales['total_eleves'] }} Élèves</td>
             </tr>
         </table>

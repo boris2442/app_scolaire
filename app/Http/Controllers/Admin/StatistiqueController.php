@@ -167,7 +167,7 @@ class StatistiqueController extends Controller
     public function registreTrimestriel(Request $request)
     {
         $classeId = $request->get('classe_id');
-        $trimestreId = $request->get('trimestre_id');
+        $trimesterId = $request->get('trimestre_id');
         $actifYear = $this->scolarite->getactifYear();
 
         // 1. Récupérer les classes et trimestres pour les filtres (Sans table niveaux)
@@ -175,16 +175,16 @@ class StatistiqueController extends Controller
             ->select('classes.id', 'classes.nom as nom')
             ->get();
             
-        $trimestres = DB::table('trimestres')
+        $trimesters = DB::table('trimestres')
             ->where('annee_scolaire_id', $actifYear->id)
             ->get();
 
         $registre = null;
 
-        if ($classeId && $trimestreId) {
+        if ($classeId && $trimesterId) {
             // 2. Trouver les séquences liées à ce trimestre
             $sequences = DB::table('sequences')
-                ->where('trimestre_id', $trimestreId)
+                ->where('trimestre_id', $trimesterId)
                 ->orderBy('id', 'asc')
                 ->get();
 
@@ -233,6 +233,6 @@ class StatistiqueController extends Controller
             ];
         }
 
-        return view('pages.admin.statistics.registre-trimestriel', compact('classes', 'trimestres', 'registre', 'classeId', 'trimestreId'));
+        return view('pages.admin.statistics.registre-trimestriel', compact('classes', 'trimesters', 'registre', 'classeId', 'trimestreId'));
     }
 }

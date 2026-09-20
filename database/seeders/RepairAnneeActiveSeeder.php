@@ -26,14 +26,14 @@ class RepairactifYearSeeder extends Seeder
             foreach ($anneesVides as $annee) {
                 // Pour chaque année vide, on applique ton automatisation
                 for ($i = 1; $i <= 3; $i++) {
-                    $trimestre = $annee->trimestres()->create([
+                    $trimester = $annee->trimestres()->create([
                         'nom' => "Trimestre $i"
                     ]);
 
                     // Création des 2 séquences par trimestre
                     for ($j = 1; $j <= 2; $j++) {
                         $numSeq = ($i - 1) * 2 + $j;
-                        $trimestre->sequences()->create([
+                        $trimester->sequences()->create([
                             'nom' => "Séquence $numSeq"
                         ]);
                     }

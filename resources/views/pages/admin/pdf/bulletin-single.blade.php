@@ -279,7 +279,7 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
 
             <!-- TITRE DU BULLETIN -->
             <div class="titre-bulletin">
-                <h2>BULLETIN DE NOTES DU {{ $trimestre->nom ?? '' }}</h2>
+                <h2>BULLETIN DE NOTES DU {{ $trimester->nom ?? '' }}</h2>
                 <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
             </div>
 
@@ -325,7 +325,7 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
                     </td>
                     <!-- Sexe -->
                     <td style="width: 15%; font-size:8px;">
-                        <strong>S  : </strong> {{ $inscription->sexe ?? 'N/A' }}
+                        <strong>S : </strong> {{ $inscription->sexe ?? 'N/A' }}
                     </td>
                 </tr>
             </table>

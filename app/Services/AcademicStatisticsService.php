@@ -141,10 +141,10 @@ class AcademicStatisticsService
 
 
 
-    public function calculerBilanGeneralTrimestre($trimestreId, $inscriptionId, $anneeScolaireId)
+    public function calculerBilanGeneralTrimestre($trimesterId, $inscriptionId, $anneeScolaireId)
     {
         // 1. Le code cherche quelles séquences appartiennent à ce trimestre (ex: Séquence 1 et Séquence 2)
-        $sequenceIds = DB::table('sequences')->where('trimestre_id', $trimestreId)->pluck('id');
+        $sequenceIds = DB::table('sequences')->where('trimestre_id', $trimesterId)->pluck('id');
 
         // 2. Il va dans la table 'bilans' et additionne les points et les coefficients de ces deux séquences pour cet élève
         $donneesTrimestre = DB::table('bilans')
@@ -166,7 +166,7 @@ class AcademicStatisticsService
  DB::table('bilans')->updateOrInsert(
     [
         'inscription_id' => $inscriptionId,
-        'trimestre_id'   => $trimestreId,
+        'trimestre_id'   => $trimesterId,
         'sequence_id'    => null,
         'annee_scolaire_id' => $anneeScolaireId,  // ⬅️ AJOUTE CETTE LIGNE ICI
     ],
@@ -185,12 +185,12 @@ class AcademicStatisticsService
 
 
 
-    public function attribuerRangsClasseForTrimestre($trimestreId, $classeId)
+    public function attribuerRangsClasseForTrimestre($trimesterId, $classeId)
     {
         $bilans = DB::table('bilans')
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->where('inscriptions.classe_id', $classeId)
-            ->where('bilans.trimestre_id', $trimestreId)
+            ->where('bilans.trimestre_id', $trimesterId)
             ->whereNull('bilans.sequence_id')
             // MODIFICATION ICI : On force l'ID du bilan sous le nom 'bilan_id'
             ->select('bilans.id', 'bilans.moyenne')
@@ -199,7 +199,7 @@ class AcademicStatisticsService
 
         // 🔍 DEBUG : Affiche les bilans trouvés
         Log::info('DEBUG attribuerRangsClasseForTrimestre', [
-            'trimestre_id' => $trimestreId,
+            'trimestre_id' => $trimesterId,
             'classe_id' => $classeId,
             'bilans_count' => $bilans->count(),
             'bilans_data' => $bilans->toArray(),

@@ -242,10 +242,10 @@ class MoyenneService
 
 
 
-    public function calculerMoyennesTrimestrielles($classeId, $trimestreId)
+    public function calculerMoyennesTrimestrielles($classeId, $trimesterId)
     {
         // 1. Trouver les IDs des deux séquences liées à ce trimestre
-        $sequences = Sequence::where('trimestre_id', $trimestreId)->pluck('id');
+        $sequences = Sequence::where('trimestre_id', $trimesterId)->pluck('id');
 
         if ($sequences->count() < 2) {
             // Optionnel : Gérer le cas où une seule séquence est faite
@@ -273,7 +273,7 @@ class MoyenneService
                     [
                         'inscription_id' => $inscription->id,
                         'matiere_id'     => $matiere->matiere_id,
-                        'trimestre_id'   => $trimestreId, // Différent de la séquence
+                        'trimestre_id'   => $trimesterId, // Différent de la séquence
                     ],
                     [
                         'valeur'       => $valeurTrim,
@@ -289,7 +289,7 @@ class MoyenneService
             }
 
             // Calcul des stats de classe pour le trimestre (Min, Max, Rang)
-            $this->remplirStatsTrimestreMatiere($classeId, $matiere->matiere_id, $trimestreId, $notesTrimestre);
+            $this->remplirStatsTrimestreMatiere($classeId, $matiere->matiere_id, $trimesterId, $notesTrimestre);
         }
 
         return true;
@@ -303,7 +303,7 @@ class MoyenneService
 
 
 
-    private function remplirStatsTrimestreMatiere($classeId, $matiereId, $trimestreId, $notes)
+    private function remplirStatsTrimestreMatiere($classeId, $matiereId, $trimesterId, $notes)
     {
         if (empty($notes)) return;
 
@@ -325,7 +325,7 @@ class MoyenneService
             Moyenne::where([
                 'inscription_id' => $inscriptionId,
                 'matiere_id'     => $matiereId,
-                'trimestre_id'   => $trimestreId,
+                'trimestre_id'   => $trimesterId,
             ])->update([
                 'rang'           => $rang,
                 'moyenne_classe' => $avg,

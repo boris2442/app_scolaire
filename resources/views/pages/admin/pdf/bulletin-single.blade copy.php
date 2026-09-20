@@ -279,7 +279,7 @@
             </div>
 
             <div class="titre-bulletin">
-                <h2>BULLETIN DE NOTES DU {{ $trimestre->nom }}</h2>
+                <h2>BULLETIN DE NOTES DU {{ $trimester->nom }}</h2>
                 <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
             </div>
 

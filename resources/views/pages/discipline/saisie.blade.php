@@ -6,12 +6,13 @@
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-foreground">
                 <a href="{{ route('discipline.index') }}" title="Retour à la liste des classes"
-                    aria-label="Retour à la liste des classes" class="text-primary hover:underline"><x-lucide-arrow-left class="inline-block w-5 h-5 mr-2" /></a>
+                    aria-label="Retour à la liste des classes" class="text-primary hover:underline"><x-lucide-arrow-left
+                        class="inline-block w-5 h-5 mr-2" /></a>
                 Saisie Disciplinaire
             </h2>
             <p class="text-sm text-muted-foreground mt-1">
                 Classe : <span class="font-semibold text-primary">{{ $classe->nom }}</span> |
-                Trimestre : <span class="font-semibold text-primary">{{ $trimestre->nom }}</span>
+                Trimestre : <span class="font-semibold text-primary">{{ $trimester->nom }}</span>
             </p>
         </div>
         @if ($errors->any())
@@ -25,7 +26,7 @@
         @endif
         <form action="{{ route('discipline.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="trimestre_id" value="{{ $trimestre->id }}">
+            <input type="hidden" name="trimestre_id" value="{{ $trimester->id }}">
             <input type="hidden" name="classe_id" value="{{ $classe->id }}">
 
             <!-- Card Container -->

@@ -21,11 +21,11 @@ class BulletinPrintController extends Controller
             abort(500, 'Aucune année scolaire active configurée.');
         }
 
-        $trimestres = DB::table('trimestres')
+        $trimesters = DB::table('trimestres')
             ->where('annee_scolaire_id', $actifYear->id)
             ->get();
 
-        $trimestreId = $request->get('trimestre_id') ?? ($trimestres->first()->id ?? null);
+        $trimesterId = $request->get('trimestre_id') ?? ($trimesters->first()->id ?? null);
 
         $classes = DB::table('classes')
             ->leftJoin('inscriptions', function ($join) use ($actifYear) {
@@ -47,19 +47,19 @@ class BulletinPrintController extends Controller
     // 2. Affichage du Hub d'une classe (La liste des élèves)
     public function classeHub($classeId, Request $request, ScolariteService $scolariteService)
     {
-        $trimestreId = $request->get('trimestre_id');
+        $trimesterId = $request->get('trimestre_id');
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
         // VÉRIFICATION DE LA CLÔTURE DES SÉQUENCES DU TRIMESTRE
-        if ($trimestreId) {
-            $trimestre = Trimestre::findOrFail($trimestreId);
+        if ($trimesterId) {
+            $trimester = Trimestre::findOrFail($trimesterId);
             // 🔒 SÉCURITÉ : On vérifie que le trimestre appartient bien à l'année scolaire active
-            $scolariteService->validateTrimestre($trimestre);
-            $sequencesNonCloses = DB::table('sequences')
-                ->where('trimestre_id', $trimestreId)
+            $scolariteService->validateTrimestre($trimester);
+            $unClosedSequences = DB::table('sequences')
+                ->where('trimestre_id', $trimesterId)
                 ->where('is_closed', 0)
                 ->exists();
 
-            if ($sequencesNonCloses) {
+            if ($unClosedSequences) {
                 return redirect()
                     ->back()
                     ->with('error', 'Les évaluations doivent être closes pour accéder à cette page et imprimer ');
@@ -81,21 +81,21 @@ class BulletinPrintController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('pages.admin.reports.classe-hub', compact('classe', 'eleves', 'trimestreId'));
+        return view('pages.admin.reports.classe-hub', compact('classe', 'students', 'trimestreId'));
     }
 
     // 3. Impression d'un SEUL élève (Lecture directe depuis `moyennes`)
-    public function imprimerEleve($inscriptionId, $trimestreId)
+    public function imprimerEleve($inscriptionId, $trimesterId)
     {
         $school = DB::table('etablissements')->first();
-        $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
-        $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+        $trimester = DB::table('trimestres')->where('id', $trimesterId)->first();
+        $sequences = DB::table('sequences')->where('trimestre_id', $trimesterId)->orderBy('id', 'asc')->take(2)->get();
 
         // Charger les données de l'élève
-        $bulletin = $this->chargerDonneesBulletinDepuisMoyennes($inscriptionId, $trimestreId, $sequences);
+        $bulletin = $this->chargerDonneesBulletinDepuisMoyennes($inscriptionId, $trimesterId, $sequences);
 
         // Récupération des statistiques globales pré-calculées de la classe pour ce trimestre
-        $stats = $this->obtenirStatistiquesClasse($bulletin['inscription']->classe_id, $trimestreId);
+        $stats = $this->obtenirStatistiquesClasse($bulletin['inscription']->classe_id, $trimesterId);
 
         $bulletins = [$bulletin];
 
@@ -108,11 +108,11 @@ class BulletinPrintController extends Controller
     // 4. Impression de TOUTE la classe d'un coup (Optimisée 100% SQL)
 
     // 4. Impression de TOUTE la classe (Version ultra-rapide en ~5-7 requêtes SQL au total)
-    public function imprimerClasse($classeId, $trimestreId)
+    public function imprimerClasse($classeId, $trimesterId)
     {
         $school = DB::table('etablissements')->first();
-        $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
-        $sequences = DB::table('sequences')->where('trimestre_id', $trimestreId)->orderBy('id', 'asc')->take(2)->get();
+        $trimester = DB::table('trimestres')->where('id', $trimesterId)->first();
+        $sequences = DB::table('sequences')->where('trimestre_id', $trimesterId)->orderBy('id', 'asc')->take(2)->get();
         $sequenceIds = $sequences->pluck('id');
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
@@ -182,7 +182,7 @@ class BulletinPrintController extends Controller
         // 4. Charger TOUS les suivis disciplinaires d'un coup
         $tousLesSuivis = DB::table('suivi_disciplinaires')
             ->whereIn('inscription_id', $inscriptionIds)
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->get()
             ->keyBy('inscription_id');
 
@@ -233,7 +233,7 @@ class BulletinPrintController extends Controller
             ];
         }
 
-        $stats = $this->obtenirStatistiquesClasse($classeId, $trimestreId);
+        $stats = $this->obtenirStatistiquesClasse($classeId, $trimesterId);
 
         $pdf = Pdf::loadView('pages.admin.pdf.bulletin-single', compact('bulletins', 'trimestre', 'sequences', 'school', 'stats'))
             ->setPaper('a4', 'portrait');
@@ -244,7 +244,7 @@ class BulletinPrintController extends Controller
     /**
      * Reconstitution instantanée du bulletin depuis la table 'moyennes'
      */
-    private function chargerDonneesBulletinDepuisMoyennes($inscriptionId, $trimestreId, $sequences)
+    private function chargerDonneesBulletinDepuisMoyennes($inscriptionId, $trimesterId, $sequences)
     {
         $inscription = DB::table('inscriptions')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
@@ -276,7 +276,7 @@ class BulletinPrintController extends Controller
 
         $suiviDisciplinaire = DB::table('suivi_disciplinaires')
             ->where('inscription_id', $inscriptionId)
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->first();
 
         // Récupération directe des moyennes pré-calculées pour les séquences du trimestre
@@ -365,10 +365,10 @@ class BulletinPrintController extends Controller
     /**
      * Calcul léger des statistiques globales de la classe
      */
-    private function obtenirStatistiquesClasse($classeId, $trimestreId)
+    private function obtenirStatistiquesClasse($classeId, $trimesterId)
     {
         $sequenceIds = DB::table('sequences')
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->pluck('id');
 
         if ($sequenceIds->isEmpty()) {
@@ -399,10 +399,10 @@ class BulletinPrintController extends Controller
         ];
     }
 
-    public function imprimerTableauHonneur($classeId, $trimestreId)
+    public function imprimerTableauHonneur($classeId, $trimesterId)
     {
         $school = DB::table('etablissements')->first();
-        $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+        $trimester = DB::table('trimestres')->where('id', $trimesterId)->first();
         $classe = DB::table('classes')->where('id', $classeId)->first();
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
@@ -412,7 +412,7 @@ class BulletinPrintController extends Controller
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classeId)
             ->where('inscriptions.annee_scolaire_id', $actifYear->id)
-            ->where('bilans.trimestre_id', $trimestreId)
+            ->where('bilans.trimestre_id', $trimesterId)
             ->whereNull('bilans.sequence_id')
             ->where('bilans.moyenne', '>=', 12)
             ->select('eleves.nom', 'eleves.prenom', 'eleves.sexe', 'bilans.moyenne')
@@ -425,15 +425,15 @@ class BulletinPrintController extends Controller
         return $pdf->download(str("Tableau_Honneur_{$classe->nom}")->slug('_').'.pdf');
     }
 
-    public function imprimerStatsClasse($classeId, $trimestreId)
+    public function imprimerStatsClasse($classeId, $trimesterId)
     {
         $school = DB::table('etablissements')->first();
-        $trimestre = DB::table('trimestres')->where('id', $trimestreId)->first();
+        $trimester = DB::table('trimestres')->where('id', $trimesterId)->first();
         $classe = DB::table('classes')->where('id', $classeId)->first();
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
         $sequences = DB::table('sequences')
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->orderBy('id', 'asc')
             ->pluck('id');
 
@@ -575,7 +575,7 @@ class BulletinPrintController extends Controller
      * Permettre aux enseignants et à l'administration de vérifier
      * toutes les notes saisies avant l'impression des bulletins.
      */
-    public function imprimerEtatControleNotes($classeId, $trimestreId)
+    public function imprimerEtatControleNotes($classeId, $trimesterId)
     {
         // ---------------------------------------------------------
         // 1. Informations générales
@@ -583,15 +583,15 @@ class BulletinPrintController extends Controller
 
         $school = DB::table('etablissements')->first();
 
-        $trimestre = DB::table('trimestres')
-            ->where('id', $trimestreId)
+        $trimester = DB::table('trimestres')
+            ->where('id', $trimesterId)
             ->first();
 
         $classe = DB::table('classes')
             ->where('id', $classeId)
             ->first();
 
-        if (! $trimestre || ! $classe) {
+        if (! $trimester || ! $classe) {
             abort(404, 'Classe ou trimestre introuvable.');
         }
 
@@ -608,7 +608,7 @@ class BulletinPrintController extends Controller
         // ---------------------------------------------------------
 
         $sequences = DB::table('sequences')
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->orderBy('id', 'asc')
             ->get();
 
@@ -761,7 +761,7 @@ class BulletinPrintController extends Controller
                 'notes'
             )
         )->setPaper('a3', 'landscape');
-        $fileName = Str::slug("EtatControleNotes {$classe->nom} {$trimestre->nom}").'.pdf';
+        $fileName = Str::slug("EtatControleNotes {$classe->nom} {$trimester->nom}").'.pdf';
 
         return $pdf->download($fileName);
     }

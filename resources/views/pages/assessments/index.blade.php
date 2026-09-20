@@ -39,7 +39,7 @@
                             -- Choisir une Evaluation --
                         </option>
 
-                        @foreach ($sequences->groupBy('trimestre_id') as $trimestreId => $group)
+                        @foreach ($sequences->groupBy('trimestre_id') as $trimesterId => $group)
                             <optgroup label="Trimestre {{ $loop->iteration }}">
 
                                 @foreach ($group as $seq)

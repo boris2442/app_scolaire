@@ -38,12 +38,12 @@ class ScolariteService
     /**
      * Vérifie qu'un trimestre appartient bien à l'année scolaire active (ou spécifiée)
      */
-    public function validateTrimestre(Trimestre $trimestre, ?AnneeScolaire $actifYear = null): void
+    public function validateTrimestre(Trimestre $trimester, ?AnneeScolaire $actifYear = null): void
     {
         $actifYear = $actifYear ?? $this->getactifYear();
 
-        if ((int) $trimestre->annee_scolaire_id !== (int) $actifYear->id) {
-            throw new IncoherentScolariteException("Le trimestre '{$trimestre->nom}' n'appartient pas à l'année scolaire en cours.");
+        if ((int) $trimester->annee_scolaire_id !== (int) $actifYear->id) {
+            throw new IncoherentScolariteException("Le trimestre '{$trimester->nom}' n'appartient pas à l'année scolaire en cours.");
         }
     }
 
@@ -53,21 +53,21 @@ class ScolariteService
   /**
  * Vérifie qu'une séquence appartient au trimestre spécifié (ou à son trimestre parent)
  */
-public function validateSequence(Sequence $sequence, ?Trimestre $trimestre = null): void
+public function validateSequence(Sequence $sequence, ?Trimestre $trimester = null): void
 {
     // Si aucun trimestre n'est fourni, on prend le trimestre associé à la séquence
-    $trimestre = $trimestre ?? $sequence->trimestre;
+    $trimester = $trimester ?? $sequence->trimestre;
 
-    if (!$trimestre) {
+    if (!$trimester) {
         throw new IncoherentScolariteException("Aucun trimestre valide n'est associé à cette séquence.");
     }
 
     // 1. Valider le trimestre par rapport à l'année active
-    $this->validateTrimestre($trimestre);
+    $this->validateTrimestre($trimester);
 
     // 2. Valider l'appartenance de la séquence au trimestre
-    if ((int) $sequence->trimestre_id !== (int) $trimestre->id) {
-        throw new IncoherentScolariteException("La séquence '{$sequence->nom}' n'appartient pas au trimestre '{$trimestre->nom}'.");
+    if ((int) $sequence->trimestre_id !== (int) $trimester->id) {
+        throw new IncoherentScolariteException("La séquence '{$sequence->nom}' n'appartient pas au trimestre '{$trimester->nom}'.");
     }
 }
 }

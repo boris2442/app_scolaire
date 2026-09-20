@@ -18,8 +18,8 @@
                         <select name="trimestre_id" required
                             class="w-full rounded-md border-border bg-background text-foreground focus:border-primary focus:ring-primary">
                             <option value="">-- Sélectionner --</option>
-                            @foreach ($trimestres as $t)
-                                <option value="{{ $t->id }}" {{ $trimestreId == $t->id ? 'selected' : '' }}>
+                            @foreach ($trimesters as $t)
+                                <option value="{{ $t->id }}" {{ $trimesterId == $t->id ? 'selected' : '' }}>
                                     {{ $t->nom }}</option>
                             @endforeach
                         </select>
@@ -70,7 +70,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border">
-                            @foreach ($registre['eleves'] as $student)
+                            @foreach ($registre['students'] as $student)
                                 <tr class="hover:bg-secondary/20 transition">
                                     <td
                                         class="p-4 font-medium sticky left-0 bg-card shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
@@ -114,7 +114,7 @@
                         </tbody>
                     </table>
                 </div>
-            @elseif($classeId && $trimestreId)
+            @elseif($classeId && $trimesterId)
                 <div class="text-center p-8 bg-card text-foreground/60 border border-border rounded-lg">
                     Aucune donnée disponible pour cette sélection.
                 </div>

@@ -29,7 +29,7 @@ class TrimesterController extends Controller
 
 
     // La fonction qui se déclenche quand tu cliques sur "Calculer le trimestre"
-    public function genererBilanTrimestre(Request $request, $trimestreId, $classeId)
+    public function genererBilanTrimestre(Request $request, $trimesterId, $classeId)
     {
         // 1. Récupération dynamique de l'année scolaire active (Fini le "1" en dur !)
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
@@ -42,7 +42,7 @@ class TrimesterController extends Controller
 
         // 2. PREMIÈRE ÉTAPE CRUCIALE : Calculer les moyennes et rangs par MATIÈRE
         // C'est cette ligne qui va enfin remplir ta table 'moyennes' avec le trimestre_id !
-        $this->moyenneService->calculerMoyennesTrimestrielles($classeId, $trimestreId);
+        $this->moyenneService->calculerMoyennesTrimestrielles($classeId, $trimesterId);
 
         // 3. Récupérer tous les élèves inscrits dans cette classe
         $inscriptions = Inscription::where('classe_id', $classeId)->get();
@@ -50,11 +50,11 @@ class TrimesterController extends Controller
         // 4. DEUXIÈME ÉTAPE : Pour chaque élève, on calcule sa moyenne générale trimestrielle
         // (Cette méthode va lire les données qu'on vient de générer ou les bilans séquentiels)
         foreach ($inscriptions as $inscription) {
-            $this->statisticsService->calculerBilanGeneralTrimestre($trimestreId, $inscription->id, $anneeScolaireId);
+            $this->statisticsService->calculerBilanGeneralTrimestre($trimesterId, $inscription->id, $anneeScolaireId);
         }
 
         // 5. TROISIÈME ÉTAPE : Une fois que tout le monde a sa moyenne générale, on distribue les rangs globaux !
-        $this->statisticsService->attribuerRangsClasseForTrimestre($trimestreId, $classeId);
+        $this->statisticsService->attribuerRangsClasseForTrimestre($trimesterId, $classeId);
 
         return redirect()->back()->with('success', 'Les bilans, moyennes par matière et rangs du trimestre ont été calculés avec succès !');
     }
@@ -96,7 +96,7 @@ class TrimesterController extends Controller
         ]);
 
         // 1. Créer le trimestre
-        $trimestre = Trimestre::create($request->all());
+        $trimester = Trimestre::create($request->all());
 
         // 2. Logique automatique pour les séquences (Le secret de Boris Tech)
         $sequencesMap = [
@@ -109,11 +109,11 @@ class TrimesterController extends Controller
             foreach ($sequencesMap[$request->nom] as $nomSeq) {
                 Sequence::create([
                     'nom' => $nomSeq,
-                    'trimestre_id' => $trimestre->id
+                    'trimestre_id' => $trimester->id
                 ]);
             }
         }
 
-        return redirect()->back()->with('success', "Le {$trimestre->nom} et ses séquences ont été initialisés.");
+        return redirect()->back()->with('success', "Le {$trimester->nom} et ses séquences ont été initialisés.");
     }
 }

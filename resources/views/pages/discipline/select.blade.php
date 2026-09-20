@@ -56,30 +56,31 @@
                                 @endforeach
                             </select>
                         </div> --}}
-<div>
-        <label class="block text-xs font-semibold text-foreground mb-2">
-            Classe
-        </label>
+                        <div>
+                            <label class="block text-xs font-semibold text-foreground mb-2">
+                                Classe
+                            </label>
 
-        <select name="classe_id"
-            class="w-full rounded-xl border border-input bg-background
+                            <select name="classe_id"
+                                class="w-full rounded-xl border border-input bg-background
                    px-4 py-3 text-foreground
                    focus:outline-none focus:ring-2
                    focus:ring-primary transition duration-200"
-            required>
+                                required>
 
-            <option value="">
-                -- Choisir une classe --
-            </option>
+                                <option value="">
+                                    -- Choisir une classe --
+                                </option>
 
-            {{-- On boucle directement sur les classes (en supposant que $classes est passé depuis le contrôleur) --}}
-            @foreach ($classes as $classe)
-                <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
-                    {{ $classe->nom }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                                {{-- On boucle directement sur les classes (en supposant que $classes est passé depuis le contrôleur) --}}
+                                @foreach ($classes as $classe)
+                                    <option value="{{ $classe->id }}"
+                                        {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
+                                        {{ $classe->nom }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <!-- Trimestre -->
                         <div>
                             <label class="block text-xs font-semibold text-foreground mb-2">
@@ -97,9 +98,9 @@
                                     -- Choisir un trimestre --
                                 </option>
 
-                                @foreach ($trimestres as $trimestre)
-                                    <option value="{{ $trimestre->id }}">
-                                        {{ $trimestre->nom }}
+                                @foreach ($trimesters as $trimester)
+                                    <option value="{{ $trimester->id }}">
+                                        {{ $trimester->nom }}
                                     </option>
                                 @endforeach
                             </select>
@@ -118,7 +119,7 @@
                                        active:scale-95
                                        transition-all duration-200">
 
-                              <x-lucide-clipboard class="w-5 h-5" />
+                                <x-lucide-clipboard class="w-5 h-5" />
 
                                 Accéder à la grille de saisie
                             </button>

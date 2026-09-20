@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use App\Models\Assessment;
-
 use App\Models\Sequence;
 use App\Models\Trimestre;
 use App\Services\ScolariteService;
@@ -16,11 +16,11 @@ class EnsureScolariteCoherence
     public function handle(Request $request, Closure $next)
     {
         // 1. Extraction unifiée via helper
-        $trimestreId = $this->extractParam($request, ['trimestre', 'trimestre_id']);
-        $sequenceId  = $this->extractParam($request, ['sequence', 'sequence_id']);
+        $trimesterId = $this->extractParam($request, ['trimestre', 'trimestre_id']);
+        $sequenceId = $this->extractParam($request, ['sequence', 'sequence_id']);
 
         // 2. Fallback via Évaluation si aucun paramètre direct
-        if (!$sequenceId && !$trimestreId) {
+        if (! $sequenceId && ! $trimesterId) {
             $evaluationId = $this->extractParam($request, ['evaluation', 'evaluation_id', 'id']);
             if ($evaluationId) {
                 $eval = $evaluationId instanceof Assessment ? $evaluationId : Assessment::find($evaluationId);
@@ -32,15 +32,15 @@ class EnsureScolariteCoherence
         if ($sequenceId) {
             $sequence = $sequenceId instanceof Sequence ? $sequenceId : Sequence::find($sequenceId);
             if ($sequence) {
-                $trimestre = $trimestreId 
-                    ? ($trimestreId instanceof Trimestre ? $trimestreId : Trimestre::find($trimestreId))
+                $trimester = $trimesterId
+                    ? ($trimesterId instanceof Trimestre ? $trimesterId : Trimestre::find($trimesterId))
                     : null;
-                $this->scolariteService->validateSequence($sequence, $trimestre);
+                $this->scolariteService->validateSequence($sequence, $trimester);
             }
-        } elseif ($trimestreId) {
-            $trimestre = $trimestreId instanceof Trimestre ? $trimestreId : Trimestre::find($trimestreId);
-            if ($trimestre) {
-                $this->scolariteService->validateTrimestre($trimestre);
+        } elseif ($trimesterId) {
+            $trimester = $trimesterId instanceof Trimestre ? $trimesterId : Trimestre::find($trimesterId);
+            if ($trimester) {
+                $this->scolariteService->validateTrimestre($trimester);
             }
         }
 
@@ -57,6 +57,7 @@ class EnsureScolariteCoherence
                 return $value;
             }
         }
+
         return null;
     }
 }

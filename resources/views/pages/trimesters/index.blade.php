@@ -8,7 +8,7 @@
             {{-- FORMULAIRE DE CRÉATION --}}
             <div class="bg-secondary/10 border border-white/5 p-6 rounded-2xl backdrop-blur-sm">
                 <h2 class="text-lg text-primary mb-6 flex items-center gap-2">
-                    <x-lucide-plus-circle class='w-4 h-4'/>
+                    <x-lucide-plus-circle class='w-4 h-4' />
                     Nouveau Trimestre
                 </h2>
 
@@ -54,11 +54,11 @@
 
                 @if ($actifYear && $actifYear->trimestres->count() > 0)
                     <div class="space-y-4">
-                        @foreach ($actifYear->trimestres as $trimestre)
+                        @foreach ($actifYear->trimestres as $trimester)
                             <div class="bg-white/5 rounded-xl p-4 border-l-4 border-primary">
-                                <h3 class="font-bold text-white">{{ $trimestre->nom }}</h3>
+                                <h3 class="font-bold text-white">{{ $trimester->nom }}</h3>
                                 <div class="flex gap-2 mt-2">
-                                    @forelse($trimestre->sequences as $seq)
+                                    @forelse($trimester->sequences as $seq)
                                         <span
                                             class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-md border border-primary/20">
                                             {{ $seq->nom }}

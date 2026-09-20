@@ -9,7 +9,7 @@ class GlobalStatService
     /**
      * Calcule les statistiques globales pour un trimestre donné de manière ultra-fluide.
      */
-    public function obtenirStatsGlobales(int $trimestreId): array
+    public function obtenirStatsGlobales(int $trimesterId): array
     {
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
@@ -18,7 +18,7 @@ class GlobalStatService
         }
 
         $sequences = DB::table('sequences')
-            ->where('trimestre_id', $trimestreId)
+            ->where('trimestre_id', $trimesterId)
             ->pluck('id');
 
         if ($sequences->isEmpty()) {

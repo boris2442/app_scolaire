@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Statistiques Globales - {{ $trimestre->nom }}</title>
+    <title>Statistiques Globales - {{ $trimester->nom }}</title>
     <style>
         @page {
             margin: 15mm 10mm 15mm 10mm;
@@ -164,7 +164,7 @@
             </td>
             <td class="doc-title">
                 <h1>Statistiques Globales</h1>
-                <div style="font-size: 10px; font-weight: bold; color: #475569;">{{ $trimestre->nom }}</div>
+                <div style="font-size: 10px; font-weight: bold; color: #475569;">{{ $trimester->nom }}</div>
             </td>
         </tr>
     </table>

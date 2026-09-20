@@ -16,7 +16,7 @@ class SequenceCalculationService
         DB::transaction(function () use ($sequenceId, $classeId) {
 
             // 0. Récupérer le trimestre_id associé à la séquence
-            $trimestreId = DB::table('sequences')
+            $trimesterId = DB::table('sequences')
                 ->where('id', $sequenceId)
                 ->value('trimestre_id');
 
@@ -86,7 +86,7 @@ class SequenceCalculationService
                         'inscription_id' => $studentId,
                         'matiere_id'     => $matiereId,
                         'sequence_id'    => $sequenceId,
-                        'trimestre_id'   => $trimestreId,
+                        'trimestre_id'   => $trimesterId,
                         'valeur'         => $moyenne,
                         'coefficient'    => $coeff,
                         'total_points'   => $totalPoints,

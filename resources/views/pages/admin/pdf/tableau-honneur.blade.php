@@ -434,7 +434,7 @@
                 ? $student['total_eleves'] ?? ($student['effectif'] ?? null)
                 : $student->total_eleves ?? ($student->effectif ?? null);
 
-            $nomTrimestre = isset($trimestre) ? optional($trimestre)->nom ?? 'Deuxième' : 'Deuxième';
+            $nomTrimestre = isset($trimester) ? optional($trimester)->nom ?? 'Deuxième' : 'Deuxième';
             $anneeScolaire = optional($actifYear)->libelle ?? '2023-2024';
 
             $logoPath = !empty($school->logo)

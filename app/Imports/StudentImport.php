@@ -61,19 +61,19 @@ class StudentImport implements ToCollection, WithHeadingRow
                 $matricule = ! empty(trim($rawMatricule)) ? trim($rawMatricule) : null;
 
                 // 1. Recherche de l'élève
-                $eleve = null;
+                $student = null;
                 if ($matricule) {
-                    $eleve = Student::where('matricule', $matricule)->first();
+                    $student = Student::where('matricule', $matricule)->first();
                 } else {
-                    $eleve = Student::where('nom', strtoupper($nom))
+                    $student = Student::where('nom', strtoupper($nom))
                         ->when($prenom, fn ($q) => $q->where('prenom', $prenom))
                         ->when($dateNaissance, fn ($q) => $q->where('date_naissance', $dateNaissance))
                         ->first();
                 }
 
                 // 2. Création ou mise à jour de la fiche élève
-                if (! $eleve) {
-                    $eleveData = [
+                if (! $student) {
+                    $studentData = [
                         'nom' => strtoupper($nom),
                         'prenom' => $prenom,
                         'sexe' => $row['sexe'] ?? 'M',
@@ -86,26 +86,26 @@ class StudentImport implements ToCollection, WithHeadingRow
 
                     // Si un matricule est présent dans Excel, on l'ajoute
                     if ($matricule) {
-                        $eleveData['matricule'] = $matricule;
+                        $studentData['matricule'] = $matricule;
                     }
 
-                    $eleve = Student::create($eleveData);
+                    $student = Student::create($studentData);
 
                     // 🔥 CORRECTION ICI : Utilisation de empty(trim(...)) pour forcer la génération si vide
-                    if (empty(trim($eleve->matricule)) && method_exists(Student::class, 'genererEtAttribuerMatricule')) {
-                        Student::genererEtAttribuerMatricule($eleve, $this->anneeScolaireId);
+                    if (empty(trim($student->matricule)) && method_exists(Student::class, 'genererEtAttribuerMatricule')) {
+                        Student::genererEtAttribuerMatricule($student, $this->anneeScolaireId);
                     }
                 } else {
                     // Mettre à jour les infos manquantes si besoin
-                    $eleve->update([
-                        'telephone_parent' => $row['telephone_parent'] ?? $eleve->telephone_parent,
+                    $student->update([
+                        'telephone_parent' => $row['telephone_parent'] ?? $student->telephone_parent,
                     ]);
                 }
 
                 // 3. Gestion de l'inscription
                 Inscription::updateOrCreate(
                     [
-                        'eleve_id' => $eleve->id,
+                        'eleve_id' => $student->id,
                         'annee_scolaire_id' => $this->anneeScolaireId,
                     ],
                     [

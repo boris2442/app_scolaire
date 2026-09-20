@@ -34,9 +34,9 @@ public function index()
         })->get();
 
         // On récupère aussi les trimestres pour l'affichage
-        $trimestres = Trimestre::where('annee_scolaire_id', $actifYear->id)->get();
+        $trimesters = Trimestre::where('annee_scolaire_id', $actifYear->id)->get();
 
-        return view('pages.results.index', compact('classes', 'sequences', 'trimestres'));
+        return view('pages.results.index', compact('classes', 'sequences', 'trimesters'));
     }
 
 
