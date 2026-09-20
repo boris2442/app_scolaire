@@ -135,7 +135,7 @@ class SessionCourseController extends Controller
         // On récupère directement les classes triées par nom (plus de with('niveau'))
         $classes = Classe::orderBy('nom')->get();
 
-        return view('pages.emplois.choix-classe', compact('classes'));
+        return view('pages.emplois.choice-class', compact('classes'));
     }
 
     // Afficher l'emploi du temps d'un enseignant spécifique

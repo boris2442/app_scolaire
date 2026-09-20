@@ -41,7 +41,7 @@ class BulletinPrintController extends Controller
             ->orderBy('classes.nom', 'asc')
             ->get();
 
-        return view('pages.admin.bulletins.index', compact('classes', 'trimestres', 'trimestreId'));
+        return view('pages.admin.reports.index', compact('classes', 'trimestres', 'trimestreId'));
     }
 
     // 2. Affichage du Hub d'une classe (La liste des élèves)
@@ -81,7 +81,7 @@ class BulletinPrintController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('pages.admin.bulletins.classe-hub', compact('classe', 'eleves', 'trimestreId'));
+        return view('pages.admin.reports.classe-hub', compact('classe', 'eleves', 'trimestreId'));
     }
 
     // 3. Impression d'un SEUL élève (Lecture directe depuis `moyennes`)

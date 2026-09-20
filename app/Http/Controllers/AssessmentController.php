@@ -271,7 +271,7 @@ class AssessmentController extends Controller
             'date_impression' => now()->format('d/m/Y à H:i'),
         ];
 
-        $pdf = Pdf::loadView('pages.assessments.stats_evaluation', $data)
+        $pdf = Pdf::loadView('pages.assessments.stats_assessment', $data)
             ->setPaper('a4', 'portrait');
 
         return $pdf->download(str('Statistiques '.$evaluation->matiere->nom)->slug('_').'.pdf');

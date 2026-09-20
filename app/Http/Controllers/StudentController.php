@@ -317,7 +317,7 @@ class StudentController extends Controller
         $classe = Classe::findOrFail($request->classe_id);
 
         // 3. Génération du PDF
-        $pdf = \PDF::loadView('pages.students.pdf.liste', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
+        $pdf = \PDF::loadView('pages.students.pdf.list', compact('eleves', 'classe', 'anneeActive', 'etablissement'));
 
         // 4. Téléchargement ou affichage
         $fileName = Str::slug('liste eleves '.$classe->nom).'.pdf';

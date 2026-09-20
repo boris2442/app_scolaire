@@ -55,6 +55,6 @@ class CheckProgramController extends Controller
             }
         }
 
-        return view('pages.avancement-program.index', compact('classes', 'selectedClasseId', 'progressionData'));
+        return view('pages.program-progress.index', compact('classes', 'selectedClasseId', 'progressionData'));
     }
 }

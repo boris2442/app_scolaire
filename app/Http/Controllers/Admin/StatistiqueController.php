@@ -233,6 +233,6 @@ class StatistiqueController extends Controller
             ];
         }
 
-        return view('pages.admin.statistiques.registre-trimestriel', compact('classes', 'trimestres', 'registre', 'classeId', 'trimestreId'));
+        return view('pages.admin.statistics.registre-trimestriel', compact('classes', 'trimestres', 'registre', 'classeId', 'trimestreId'));
     }
 }
