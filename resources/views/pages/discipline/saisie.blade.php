@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-end mt-6">
+            <div class="sticky bottom-[10px] r-0 mt-6">
                 <button type="submit"
                     class="bg-primary text-primary-foreground px-6 py-2 rounded-md hover:opacity-90 transition-opacity font-semibold shadow-md">
                     Enregistrer les données disciplinaires
