@@ -34,21 +34,21 @@ class InscriptionExport implements FromCollection, WithHeadings
             ->orderBy('eleves.prenom', 'asc')
             ->select('inscriptions.*') // Évite les conflits d'IDs lors des requêtes
             ->cursor()
-            ->map(function ($inscription) {
+            ->map(function ($enrollment) {
                 return [
-                    $inscription->eleve?->matricule ?? 'N/A',
-                    trim(($inscription->eleve?->nom ?? '').' '.($inscription->eleve?->prenom ?? '')),
-                    $inscription->eleve?->sexe ?? 'N/A',
-                    $inscription->eleve?->date_naissance ?? 'N/A',
-                    $inscription->eleve?->lieu_naissance ?? 'N/A',
-                    $inscription->eleve?->name_father ?? 'N/A',
-                    $inscription->eleve?->name_mother ?? 'N/A',
-                    $inscription->eleve?->telephone_parent ?? 'N/A',
+                    $enrollment->eleve?->matricule ?? 'N/A',
+                    trim(($enrollment->eleve?->nom ?? '').' '.($enrollment->eleve?->prenom ?? '')),
+                    $enrollment->eleve?->sexe ?? 'N/A',
+                    $enrollment->eleve?->date_naissance ?? 'N/A',
+                    $enrollment->eleve?->lieu_naissance ?? 'N/A',
+                    $enrollment->eleve?->name_father ?? 'N/A',
+                    $enrollment->eleve?->name_mother ?? 'N/A',
+                    $enrollment->eleve?->telephone_parent ?? 'N/A',
 
                     // Utilisation du Nullsafe operator pour éviter le crash sur classe
-                    $inscription->classe?->nom ?? 'Classe non assignée',
-                    $inscription->date_inscription,
-                    $inscription->statut,
+                    $enrollment->classe?->nom ?? 'Classe non assignée',
+                    $enrollment->date_inscription,
+                    $enrollment->statut,
                     ];
                   
             });

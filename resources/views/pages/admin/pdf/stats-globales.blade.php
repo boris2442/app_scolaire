@@ -169,48 +169,78 @@
         </tr>
     </table>
 
-    <!-- PODIUM ÉTABLISSEMENT -->
-    @if (isset($stats['school']))
-        @php $etab = $stats['school']; @endphp
-        <table class="podium-container">
-            <tr>
-                <td width="20%">
-                    <div class="podium-card">
-                        <div class="podium-value">{{ $etab['total_eleves'] }}</div>
-                        <div class="podium-label">Effectif Evalué</div>
+ <!-- PODIUM ÉTABLISSEMENT -->
+
+@if (isset($stats['etablissement']))
+    @php $etab = $stats['etablissement']; @endphp
+
+    <table class="podium-container">
+        <tr>
+            <td width="20%">
+                <div class="podium-card">
+                    <div class="podium-value">
+                        {{ $etab['total_eleves'] }}
                     </div>
-                </td>
-                <td width="20%">
-                    <div class="podium-card">
-                        <div class="podium-value">{{ $etab['moyenne_generale'] }} / 20</div>
-                        <div class="podium-label">Moyenne Générale</div>
+                    <div class="podium-label">
+                        Effectif Évalué
                     </div>
-                </td>
-                <td width="20%">
-                    <div class="podium-card">
-                        <div class="podium-value text-success">{{ $etab['taux_reussite'] }} %</div>
-                        <div class="podium-label">Taux de Réussite</div>
+                </div>
+            </td>
+
+            <td width="20%">
+                <div class="podium-card">
+                    <div class="podium-value">
+                        {{ $etab['moyenne_generale'] }} / 20
                     </div>
-                </td>
-                <td width="20%">
-                    <div class="podium-card">
-                        <div class="podium-value" style="font-size: 10px; color: #2563eb;">
-                            {{ $etab['major'] ? $etab['major']->nom . ' ' . $etab['major']->prenom : 'N/A' }}
-                        </div>
-                        <div class="podium-label">Major ({{ $etab['major']->moyenne_trimestre ?? 0 }}/20)</div>
+                    <div class="podium-label">
+                        Moyenne Générale
                     </div>
-                </td>
-                <td width="20%">
-                    <div class="podium-card">
-                        <div class="podium-value" style="font-size: 10px; color: #dc2626;">
-                            {{ $etab['dernier'] ? $etab['dernier']->nom . ' ' . $etab['dernier']->prenom : 'N/A' }}
-                        </div>
-                        <div class="podium-label">Dernier ({{ $etab['dernier']->moyenne_trimestre ?? 0 }}/20)</div>
+                </div>
+            </td>
+
+            <td width="20%">
+                <div class="podium-card">
+                    <div class="podium-value text-success">
+                        {{ $etab['taux_reussite'] }} %
                     </div>
-                </td>
-            </tr>
-        </table>
-    @endif
+                    <div class="podium-label">
+                        Taux de Réussite
+                    </div>
+                </div>
+            </td>
+
+            <td width="20%">
+                <div class="podium-card">
+                    <div class="podium-value" style="font-size: 10px; color: #2563eb;">
+                        {{ $etab['major']
+                            ? $etab['major']->nom . ' ' . $etab['major']->prenom
+                            : 'N/A'
+                        }}
+                    </div>
+
+                    <div class="podium-label">
+                        Major ({{ $etab['major']->moyenne_trimestre ?? 0 }}/20)
+                    </div>
+                </div>
+            </td>
+
+            <td width="20%">
+                <div class="podium-card">
+                    <div class="podium-value" style="font-size: 10px; color: #dc2626;">
+                        {{ $etab['dernier']
+                            ? $etab['dernier']->nom . ' ' . $etab['dernier']->prenom
+                            : 'N/A'
+                        }}
+                    </div>
+
+                    <div class="podium-label">
+                        Dernier ({{ $etab['dernier']->moyenne_trimestre ?? 0 }}/20)
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+@endif
 
     <!-- STATISTIQUES PAR SECTION -->
     <div class="section-title">1. Statistiques par Section</div>

@@ -30,7 +30,7 @@
                         <select name="annee_scolaire_id"
                             class="w-full bg-secondary/20 border border-white/10 rounded-xl p-3  outline-none focus:border-primary transition-all"
                             required>
-                            @forelse($anneesSansTrimestres as $annee)
+                            @forelse($yearsWithoutTrimestres as $annee)
                                 {{-- On utilise 'libelle' au lieu de 'nom' ici --}}
                                 <option value="{{ $annee->id }}" {{ $annee->est_active ? 'selected' : '' }}>
                                     {{ $annee->libelle }}

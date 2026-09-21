@@ -46,19 +46,19 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border">
-                            @foreach ($inscriptions as $inscription)
+                            @foreach ($enrollments as $enrollment)
                                 <tr class="hover:bg-secondary/50 transition-colors">
                                     <td class="px-4 py-3 text-center text-muted-foreground font-mono">
                                         {{ $loop->iteration }}
                                     </td>
 
-                                    <td class="px-6 py-3 font-medium">{{ $inscription->eleve->nom }}
-                                        {{ $inscription->eleve->prenom }}</td>
+                                    <td class="px-6 py-3 font-medium">{{ $enrollment->eleve->nom }}
+                                        {{ $enrollment->eleve->prenom }}</td>
 
                                     @foreach (['retards', 'absences', 'suspensions', 'avertissements', 'blames', 'exclusions'] as $field)
                                         <td class="px-2 py-2 bg-secondary/20">
-                                            <input type="number" name="data[{{ $inscription->id }}][{{ $field }}]"
-                                                value="{{ $inscription->suivi->$field ?? 0 }}"
+                                            <input type="number" name="data[{{ $enrollment->id }}][{{ $field }}]"
+                                                value="{{ $enrollment->suivi->$field ?? 0 }}"
                                                 class="w-full bg-secondary border  border-primary/50 border-white/10 rounded px-2 py-2 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all"
                                                 min="0">
                                         </td>

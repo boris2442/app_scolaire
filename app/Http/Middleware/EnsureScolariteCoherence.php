@@ -15,32 +15,66 @@ class EnsureScolariteCoherence
 
     public function handle(Request $request, Closure $next)
     {
-        // 1. Extraction unifiée via helper
-        $trimesterId = $this->extractParam($request, ['trimestre', 'trimestre_id']);
-        $sequenceId = $this->extractParam($request, ['sequence', 'sequence_id']);
 
-        // 2. Fallback via Évaluation si aucun paramètre direct
+        // 1. Extraction unifiée
+        $trimesterId = $this->extractParam(
+            $request,
+            ['trimestre', 'trimestre_id']
+        );
+
+        $sequenceId = $this->extractParam(
+            $request,
+            ['sequence', 'sequence_id']
+        );
+
+        // 2. Fallback uniquement pour une évaluation explicitement identifiée
         if (! $sequenceId && ! $trimesterId) {
-            $evaluationId = $this->extractParam($request, ['evaluation', 'evaluation_id', 'id']);
+
+            $evaluationId = $this->extractParam(
+                $request,
+                ['evaluation', 'evaluation_id']
+            );
+
             if ($evaluationId) {
-                $eval = $evaluationId instanceof Assessment ? $evaluationId : Assessment::find($evaluationId);
+                $eval = $evaluationId instanceof Assessment
+                    ? $evaluationId
+                    : Assessment::find($evaluationId);
+
                 $sequenceId = $eval?->sequence_id;
             }
         }
 
-        // 3. Validation par le Service Métier
+        // 3. Validation de la séquence
         if ($sequenceId) {
-            $sequence = $sequenceId instanceof Sequence ? $sequenceId : Sequence::find($sequenceId);
+
+            $sequence = $sequenceId instanceof Sequence
+                ? $sequenceId
+                : Sequence::find($sequenceId);
+
             if ($sequence) {
+
                 $trimester = $trimesterId
-                    ? ($trimesterId instanceof Trimestre ? $trimesterId : Trimestre::find($trimesterId))
+                    ? (
+                        $trimesterId instanceof Trimestre
+                            ? $trimesterId
+                            : Trimestre::find($trimesterId)
+                    )
                     : null;
-                $this->scolariteService->validateSequence($sequence, $trimester);
+
+                $this->scolariteService->validateSequence(
+                    $sequence,
+                    $trimester
+                );
             }
+
         } elseif ($trimesterId) {
-            $trimester = $trimesterId instanceof Trimestre ? $trimesterId : Trimestre::find($trimesterId);
+
+            $trimester = $trimesterId instanceof Trimestre
+                ? $trimesterId
+                : Trimestre::find($trimesterId);
+
             if ($trimester) {
-                $this->scolariteService->validateTrimestre($trimester);
+                $this->scolariteService->validateTrimester($trimester);
             }
         }
 

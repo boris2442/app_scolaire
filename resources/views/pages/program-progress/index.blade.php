@@ -11,7 +11,7 @@
         </div>
 
         <form method="GET" action="{{ route('avancement.index') }}" class="flex items-center gap-3">
-            <select name="classe_id" onchange="this.form.submit()" class="rounded-xl border border-border bg-background px-4 py-2 text-sm focus:ring-2 focus:ring-primary">
+            <select name="classe_id" onchange="this.form.submit()" class="rounded border border-border bg-background px-4 py-2 text-sm focus:ring-2 focus:ring-primary">
                 <option value="">-- Sélectionner une classe --</option>
                 @foreach ($classes as $classe)
                     <option value="{{ $classe->id }}" {{ $selectedClasseId == $classe->id ? 'selected' : '' }}>

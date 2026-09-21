@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bulletin - {{ $bulletins[0]['inscription']->eleve_nom ?? 'Classe' }}</title>
+    <title>Bulletin - {{ $reportCards[0]['inscription']->eleve_nom ?? 'Classe' }}</title>
     <style>
         /* Configuration de la page A4 et marges minimales pour forcer la page unique */
         @page {
@@ -217,12 +217,12 @@
 
 <body>
 
-    @foreach ($bulletins as $b)
+    @foreach ($reportCards as $b)
         @php
 
             // On extrait les variables pour que ton code en dessous ne change pas
-            $inscription = $b['inscription'];
-            $totalElevesClasse = $b['totalElevesClasse'];
+            $enrollment = $b['inscription'];
+            $totalStudentsInClass = $b['totalStudentsInClass'];
          $matieres = $b['matieres'];
             $notes = $b['notes'];
             $coefficients = $b['coefficients'];
@@ -280,20 +280,20 @@
 
             <div class="titre-bulletin">
                 <h2>BULLETIN DE NOTES DU {{ $trimester->nom }}</h2>
-                <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
+                <p>ANNÉE SCOLAIRE : {{ $enrollment->annee_libelle }}</p>
             </div>
 
             <table class="table-eleve">
                 <tr>
                     <td width="60%">
-                        <strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
-                        {{ $inscription->eleve_prenom }}
+                        <strong>NOM ET PRENOM :</strong> {{ $enrollment->eleve_nom }}
+                        {{ $enrollment->eleve_prenom }}
                     </td>
                     <td width="40%">
                         <strong>NÉ(E) LE :</strong>
-                        {{ $inscription->date_naissance ? date('d/m/Y', strtotime($inscription->date_naissance)) : 'N/A' }}
+                        {{ $enrollment->date_naissance ? date('d/m/Y', strtotime($enrollment->date_naissance)) : 'N/A' }}
                         À
-                        {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
+                        {{ strtoupper($enrollment->lieu_naissance ?? 'N/A') }}
                     </td>
                 </tr>
                 <tr>
@@ -301,10 +301,10 @@
                         <table style="width:100%; margin:0; border:none;">
                             <tr style="border:none;">
                                 <td style="border:none; padding:0;" width="50%">
-                                    <strong>REDOUBLANT :</strong> {{ $inscription->est_redoublant ? 'Oui' : 'Non' }}
+                                    <strong>REDOUBLANT :</strong> {{ $enrollment->est_redoublant ? 'Oui' : 'Non' }}
                                 </td>
                                 <td style="border:none; padding:0;" width="50%">
-                                    <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
+                                    <strong>MATRICULE :</strong> {{ $enrollment->matricule ?? 'N/A' }}
                                 </td>
                             </tr>
                         </table>
@@ -313,15 +313,15 @@
                         <table style="width:100%; margin:0; border:none;">
                             <tr style="border:none;">
                                 <td style="border:none; padding:0;" width="60%">
-                                    <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
-                                    @if (!empty($inscription->section))
+                                    <strong>CLASSE :</strong> {{ $enrollment->classe_nom }}
+                                    @if (!empty($enrollment->section))
                                         <em style="font-style: italic; font-size: 0.9em; opacity: 0.85;">
-                                            ({{ ucfirst($inscription->section) }})
+                                            ({{ ucfirst($enrollment->section) }})
                                         </em>
                                     @endif
                                 </td>
                                 <td style="border:none; padding:0;" width="40%">
-                                    <strong>SEXE :</strong> {{ $inscription->sexe ?? 'N/A' }}
+                                    <strong>SEXE :</strong> {{ $enrollment->sexe ?? 'N/A' }}
                                 </td>
                             </tr>
                         </table>
@@ -505,7 +505,7 @@
                         <td style="font-weight: bold; background-color: #f9f9f9;">
                             {{ number_format($b['moyenne_calculee'], 2) }}
                         </td>
-                        <td>{{ $b['rang'] }} / {{ $b['totalElevesClasse'] }}</td>
+                        <td>{{ $b['rang'] }} / {{ $b['totalStudentsInClass'] }}</td>
                         <td>
                             @php $moy = $b['moyenne_calculee']; @endphp
                             @if ($moy < 10)
@@ -598,7 +598,7 @@
                             T2: <strong>{{ number_format($b['moyenne_t2'], 2) }}</strong> |
                             T3: <strong>{{ number_format($b['moyenne_t3'], 2) }}</strong> |
                             ANNUELLE : <strong>{{ number_format($b['moyenne_annuelle'], 2) }}/20</strong><br>
-                            Rang Annuel : <strong>{{ $b['rang_annuel'] }} / {{ count($bulletins) }}</strong>
+                            Rang Annuel : <strong>{{ $b['rang_annuel'] }} / {{ count($reportCards) }}</strong>
                         </td>
                     </tr>
                 </table>

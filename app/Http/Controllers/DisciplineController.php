@@ -44,7 +44,7 @@ class DisciplineController extends Controller
         $trimester = Trimestre::findOrFail($request->trimestre_id);
 
         // 2. Récupération des inscriptions triées par nom et prénom
-        $inscriptions = Inscription::where('classe_id', $request->classe_id)
+        $enrollments = Inscription::where('classe_id', $request->classe_id)
             ->where('annee_scolaire_id', $this->scolarite->getactifYear()->id)
             ->with(['eleve', 'suivi' => function ($query) use ($request) {
                 $query->where('trimestre_id', $request->trimestre_id);
@@ -60,7 +60,7 @@ class DisciplineController extends Controller
             ->get();
 
         // 3. Passage des variables à la vue
-        return view('pages.discipline.saisie', compact('inscriptions', 'classe', 'trimester'));
+        return view('pages.discipline.saisie', compact('enrollments', 'classe', 'trimester'));
     }
 
     // 3. Enregistrement en masse (Le cœur du système)
@@ -76,7 +76,7 @@ class DisciplineController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                foreach ($request->data as $inscriptionId => $values) {
+                foreach ($request->data as $enrollmentId => $values) {
 
                     // Vérifier si au moins une valeur est différente de 0 ou null
                     // Si tout est à zéro, on peut choisir de supprimer l'enregistrement existant
@@ -86,7 +86,7 @@ class DisciplineController extends Controller
                     if ($hasData) {
                         SuiviDisciplinaire::updateOrCreate(
                             [
-                                'inscription_id' => $inscriptionId,
+                                'inscription_id' => $enrollmentId,
                                 'trimestre_id' => $request->trimestre_id,
                             ],
                             [
@@ -100,7 +100,7 @@ class DisciplineController extends Controller
                         );
                     } else {
                         // Optionnel : Si l'utilisateur efface tout, on supprime l'entrée
-                        SuiviDisciplinaire::where('inscription_id', $inscriptionId)
+                        SuiviDisciplinaire::where('inscription_id', $enrollmentId)
                             ->where('trimestre_id', $request->trimestre_id)
                             ->delete();
                     }

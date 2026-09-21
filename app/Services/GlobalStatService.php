@@ -60,7 +60,7 @@ class GlobalStatService
 
         // 3. Extraction groupée via SQL direct
         return [
-            'etablissement' => $this->genererAgregatSQL($baseQuery),
+            'etablissement' => $this->getAgregatSQL($baseQuery),
             'sections' => $this->genererAgregatsParColonne($baseQuery, 'section'),
             'cycles' => $this->genererAgregatsParColonne($baseQuery, 'cycle_nom'),
             'niveaux' => $this->genererAgregatsParColonne($baseQuery, 'niveau'),
@@ -73,7 +73,7 @@ class GlobalStatService
     /**
      * Génère les totaux, admis, taux et moyennes en 1 seule requête SQL.
      */
-    private function genererAgregatSQL($query): array
+    private function getAgregatSQL($query): array
     {
         $stats = (clone $query)
             ->select(
@@ -122,7 +122,7 @@ class GlobalStatService
         foreach ($groupes as $groupe) {
             if ($groupe) {
                 $queryGroupe = (clone $query)->where($colonne, $groupe);
-                $resultats[$groupe] = $this->genererAgregatSQL($queryGroupe);
+                $resultats[$groupe] = $this->getAgregatSQL($queryGroupe);
             }
         }
 

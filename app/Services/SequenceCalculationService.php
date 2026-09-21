@@ -13,6 +13,7 @@ class SequenceCalculationService
      */
     public function processSequenceAverages(int $sequenceId, int $classeId): void
     {
+       
         DB::transaction(function () use ($sequenceId, $classeId) {
 
             // 0. Récupérer le trimestre_id associé à la séquence
@@ -59,7 +60,7 @@ class SequenceCalculationService
                 ->groupBy('notes.inscription_id', 'evaluations.matiere_id')
                 ->get()
                 ->keyBy(function ($item) {
-                    return $item->inscription_id . '_' . $item->matiere_id;
+                    return $item->inscription_id.'_'.$item->matiere_id;
                 });
 
             // 5. Générer les enregistrements pour CHAQUE élève et CHAQUE matière (avec 0 si absence)
@@ -75,7 +76,7 @@ class SequenceCalculationService
                         continue;
                     }
 
-                    $key = $studentId . '_' . $matiereId;
+                    $key = $studentId.'_'.$matiereId;
                     $sumObtenue = isset($sumNotes[$key]) ? (float) $sumNotes[$key]->total_notes_obtenues : 0.0;
 
                     // Calcul de la moyenne : somme des notes divisée par le nombre d'évaluations (les manquantes comptent pour 0)
@@ -84,14 +85,14 @@ class SequenceCalculationService
 
                     $records[] = [
                         'inscription_id' => $studentId,
-                        'matiere_id'     => $matiereId,
-                        'sequence_id'    => $sequenceId,
-                        'trimestre_id'   => $trimesterId,
-                        'valeur'         => $moyenne,
-                        'coefficient'    => $coeff,
-                        'total_points'   => $totalPoints,
-                        'created_at'     => $now,
-                        'updated_at'     => $now,
+                        'matiere_id' => $matiereId,
+                        'sequence_id' => $sequenceId,
+                        'trimestre_id' => $trimesterId,
+                        'valeur' => $moyenne,
+                        'coefficient' => $coeff,
+                        'total_points' => $totalPoints,
+                        'created_at' => $now,
+                        'updated_at' => $now,
                     ];
                 }
             }
@@ -129,11 +130,11 @@ class SequenceCalculationService
             ->get();
 
         $cases = [
-            'rang'           => [],
-            'min_classe'     => [],
-            'max_classe'     => [],
+            'rang' => [],
+            'min_classe' => [],
+            'max_classe' => [],
             'moyenne_classe' => [],
-            'appreciation'   => [],
+            'appreciation' => [],
         ];
 
         $ids = [];
@@ -143,11 +144,11 @@ class SequenceCalculationService
             $ids[] = $id;
             $valeur = (float) $row->valeur;
 
-            $cases['rang'][]           = "WHEN {$id} THEN {$row->calculated_rank}";
-            $cases['min_classe'][]     = "WHEN {$id} THEN {$row->calculated_min}";
-            $cases['max_classe'][]     = "WHEN {$id} THEN {$row->calculated_max}";
+            $cases['rang'][] = "WHEN {$id} THEN {$row->calculated_rank}";
+            $cases['min_classe'][] = "WHEN {$id} THEN {$row->calculated_min}";
+            $cases['max_classe'][] = "WHEN {$id} THEN {$row->calculated_max}";
             $cases['moyenne_classe'][] = "WHEN {$id} THEN {$row->calculated_avg}";
-            $cases['appreciation'][]   = "WHEN {$id} THEN " . DB::getPdo()->quote($this->resolveAppreciation($valeur));
+            $cases['appreciation'][] = "WHEN {$id} THEN ".DB::getPdo()->quote($this->resolveAppreciation($valeur));
         }
 
         if (empty($ids)) {
@@ -156,14 +157,14 @@ class SequenceCalculationService
 
         $idList = implode(',', $ids);
 
-        DB::statement("
+        DB::statement('
             UPDATE moyennes 
             SET 
-                rang = CASE id " . implode(' ', $cases['rang']) . " END,
-                min_classe = CASE id " . implode(' ', $cases['min_classe']) . " END,
-                max_classe = CASE id " . implode(' ', $cases['max_classe']) . " END,
-                moyenne_classe = CASE id " . implode(' ', $cases['moyenne_classe']) . " END,
-                appreciation = CASE id " . implode(' ', $cases['appreciation']) . " END
+                rang = CASE id '.implode(' ', $cases['rang']).' END,
+                min_classe = CASE id '.implode(' ', $cases['min_classe']).' END,
+                max_classe = CASE id '.implode(' ', $cases['max_classe']).' END,
+                moyenne_classe = CASE id '.implode(' ', $cases['moyenne_classe']).' END,
+                appreciation = CASE id '.implode(' ', $cases['appreciation'])." END
             WHERE id IN ({$idList})
         ");
     }
@@ -178,8 +179,8 @@ class SequenceCalculationService
             $note >= 14 => 'Bien',
             $note >= 12 => 'Assez Bien',
             $note >= 10 => 'Passable',
-            $note >= 8  => 'Insuffisant',
-            default     => 'Médiocre',
+            $note >= 8 => 'Insuffisant',
+            default => 'Médiocre',
         };
     }
 }

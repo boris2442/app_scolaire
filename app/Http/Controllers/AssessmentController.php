@@ -81,7 +81,7 @@ class AssessmentController extends Controller
         //
 
         // Conservé : la table 'inscriptions' utilise bien annee_scolaire_id
-        $inscriptions = Inscription::where('classe_id', $evaluation->classe_id)
+        $enrollments = Inscription::where('classe_id', $evaluation->classe_id)
             ->where('annee_scolaire_id', $this->actifYear->id)
             ->with('eleve')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
@@ -105,7 +105,7 @@ class AssessmentController extends Controller
 
         $leconsEvalueesIds = $evaluation->lecons()->pluck('lecons.id')->toArray();
 
-        return view('pages.assessments.saisie', compact('evaluation', 'inscriptions', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
+        return view('pages.assessments.saisie', compact('evaluation', 'enrollments', 'notesExistantes', 'lecons', 'leconsEvalueesIds'));
     }
 
     public function store(Request $request, ScolariteService $scolariteService)
@@ -175,7 +175,7 @@ class AssessmentController extends Controller
             return redirect()->back()->with('error', 'Aucune note n’a été envoyée, mais les leçons ont été mises à jour.');
         }
 
-        foreach ($request->notes as $inscriptionId => $donnees) {
+        foreach ($request->notes as $enrollmentId => $donnees) {
             if (isset($donnees['valeur']) && $donnees['valeur'] !== '') {
                 if ($donnees['valeur'] > 20 || $donnees['valeur'] < 0) {
                     return back()->with('error', 'Attention : Une note doit être comprise entre 0 et 20.');
@@ -184,7 +184,7 @@ class AssessmentController extends Controller
                 Note::updateOrCreate(
                     [
                         'evaluation_id' => $evaluation->id,
-                        'inscription_id' => $inscriptionId,
+                        'inscription_id' => $enrollmentId,
                     ],
                     [
                         'valeur' => $donnees['valeur'],
@@ -201,7 +201,7 @@ class AssessmentController extends Controller
 
     // /////////////// les diffferents statistiques a gerer pour les impressions
 
-    private function calculerStats($evaluation)
+    private function calculateStats($evaluation)
     {
         $notes = $evaluation->notes()->with('inscription.eleve')->get();
 
@@ -262,7 +262,7 @@ class AssessmentController extends Controller
         // On charge les relations nécessaires (plus de .niveau sur la classe)
         $evaluation = Assessment::with(['classe', 'matiere', 'enseignant.user', 'anneeScolaire'])->findOrFail($id);
 
-        $stats = $this->calculerStats($evaluation);
+        $stats = $this->calculateStats($evaluation);
 
         $data = [
             'evaluation' => $evaluation,

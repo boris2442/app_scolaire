@@ -9,7 +9,7 @@
             </p>
         </div>
 
-        <form action="{{ route('admin.enseignants.update', $enseignant->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.enseignants.update', $teacher->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -24,21 +24,21 @@
                     <div>
                         <label for="name" class="text-[10px] font-black ml-1">Nom Complet</label>
                         <input type="text" id="name" name="name" required
-                            value="{{ old('name', $enseignant->user->name) }}"
+                            value="{{ old('name', $teacher->user->name) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
                         <label for="email" class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
                         <input type="email" id="email" name="email" required
-                            value="{{ old('email', $enseignant->user->email) }}"
+                            value="{{ old('email', $teacher->user->email) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
                         <label for="phone" class="text-[10px] font-black uppercase ml-1">Contact</label>
                         <input type="text" id="phone" name="contact" required
-                            value="{{ old('contact', $enseignant->user->phone ?? '') }}"
+                            value="{{ old('contact', $teacher->user->phone ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                 </div>
@@ -49,12 +49,7 @@
                         Profil Enseignant
                     </h3>
 
-                    {{-- <div>
-                        <label class="text-[10px] font-black uppercase ml-1">Matricule</label>
-                        <input type="text" name="matricule" required
-                            value="{{ old('matricule', $enseignant->matricule) }}"
-                            class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
-                    </div> --}}
+                  
 
                     <div>
                         <label for="departement_id" class="text-[10px] font-black uppercase ml-1 text-primary">
@@ -68,7 +63,7 @@
 
                             @foreach ($departments as $dept)
                                 <option value="{{ $dept->id }}"
-                                    {{ old('departement_id', $enseignant->departement_id) == $dept->id ? 'selected' : '' }}>
+                                    {{ old('departement_id', $teacher->departement_id) == $dept->id ? 'selected' : '' }}>
                                     {{ $dept->nom }} ({{ $dept->code }})
                                 </option>
                             @endforeach

@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Classe;
+use App\Http\Requests\TimeSlotRequest;
 use App\Models\Creneau;
-use Illuminate\Http\Request;
 
 class TimeSlotController extends Controller
 {
-
     // Afficher la liste des créneaux horaires de l'établissement
     public function index()
     {
         $creneaux = Creneau::orderBy('heure_debut')->get();
+
         return view('pages.timeslots.index', compact('creneaux'));
     }
 
     // Enregistrer un nouveau créneau horaire
-    public function store(Request $request)
+    public function store(TimeSlotRequest $request)
     {
-        $validated = $request->validate([
-            'heure_debut' => 'required|date_format:H:i',
-            'heure_fin' => 'required|date_format:H:i|after:heure_debut',
-            'libelle' => 'nullable|string|max:255',
-        ]);
-
-        Creneau::create($validated);
+        Creneau::create($request->validated());
+        // Creneau::create($validated);
 
         return redirect()->back()->with('success', 'Créneau horaire ajouté avec succès.');
     }
+
     // Supprimer un créneau
     public function destroy($id)
     {

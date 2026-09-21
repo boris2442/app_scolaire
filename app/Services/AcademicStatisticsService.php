@@ -11,12 +11,12 @@ class AcademicStatisticsService
      * Étape 1 : Calcule les moyennes par matière à partir des notes brutes
      * Remplis la table 'moyennes' (Capture 1)
      */
-    public function calculerMoyennesMatieresPourSequence($sequenceId, $inscriptionId)
+    public function calculerMoyennesMatieresPourSequence($sequenceId, $enrollmentId)
     {
         // Récupérer les notes brutes de la table 'notes' (Capture 3)
         $notesParMatiere = DB::table('notes')
             ->join('evaluations', 'notes.evaluation_id', '=', 'evaluations.id')
-            ->where('notes.inscription_id', $inscriptionId)
+            ->where('notes.inscription_id', $enrollmentId)
             ->where('evaluations.sequence_id', $sequenceId)
             ->select(
                 'evaluations.matiere_id',
@@ -33,7 +33,7 @@ class AcademicStatisticsService
             // Mise à jour ou insertion dans la table 'moyennes'
             DB::table('moyennes')->updateOrInsert(
                 [
-                    'inscription_id' => $inscriptionId,
+                    'inscription_id' => $enrollmentId,
                     'matiere_id'     => $item->matiere_id,
                     'sequence_id'    => $sequenceId,
                 ],
@@ -53,11 +53,11 @@ class AcademicStatisticsService
      * Étape 2 : Calcule la moyenne générale de l'élève sur la séquence
      * Remplis la table 'bilans' (Capture 2)
      */
-    public function calculerBilanGeneralSequence($sequenceId, $inscriptionId, $anneeScolaireId)
+    public function calculerBilanGeneralSequence($sequenceId, $enrollmentId, $anneeScolaireId)
     {
         // Récupérer la somme des points depuis la table 'moyennes'
         $donneesGlobales = DB::table('moyennes')
-            ->where('inscription_id', $inscriptionId)
+            ->where('inscription_id', $enrollmentId)
             ->where('sequence_id', $sequenceId)
             ->select(
                 DB::raw('SUM(total_points) as total_points_general'),
@@ -75,7 +75,7 @@ class AcademicStatisticsService
         // Mise à jour ou insertion dans la table 'bilans'
         DB::table('bilans')->updateOrInsert(
             [
-                'inscription_id' => $inscriptionId,
+                'inscription_id' => $enrollmentId,
                 'sequence_id'    => $sequenceId,
             ],
             [
@@ -141,14 +141,14 @@ class AcademicStatisticsService
 
 
 
-    public function calculerBilanGeneralTrimestre($trimesterId, $inscriptionId, $anneeScolaireId)
+    public function calculerBilanGeneralTrimestre($trimesterId, $enrollmentId, $anneeScolaireId)
     {
         // 1. Le code cherche quelles séquences appartiennent à ce trimestre (ex: Séquence 1 et Séquence 2)
         $sequenceIds = DB::table('sequences')->where('trimestre_id', $trimesterId)->pluck('id');
 
         // 2. Il va dans la table 'bilans' et additionne les points et les coefficients de ces deux séquences pour cet élève
         $donneesTrimestre = DB::table('bilans')
-            ->where('inscription_id', $inscriptionId)
+            ->where('inscription_id', $enrollmentId)
             ->whereIn('sequence_id', $sequenceIds)
             ->select(
                 DB::raw('AVG(moyenne) as moyenne_trimestrielle'),
@@ -165,7 +165,7 @@ class AcademicStatisticsService
         // Donc 'sequence_id' reste VIDE (null) et 'trimestre_id' est REMPLI.
  DB::table('bilans')->updateOrInsert(
     [
-        'inscription_id' => $inscriptionId,
+        'inscription_id' => $enrollmentId,
         'trimestre_id'   => $trimesterId,
         'sequence_id'    => null,
         'annee_scolaire_id' => $anneeScolaireId,  // ⬅️ AJOUTE CETTE LIGNE ICI

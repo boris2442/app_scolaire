@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Affectation;
-
-use App\Models\Department;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Teacher extends Model
 {
-    protected $table='enseignants';
+    protected $table = 'enseignants';
 
     // C'est ici que ça se passe !
     protected $fillable = [
@@ -43,34 +39,38 @@ class Teacher extends Model
         'number_of_children', // <--- IL DOIT ÊTRE ICI
     ];
 
-
-
-
-
     public static function generateMatricule(): string
     {
+        $year = now()->format('y');
         $prefix = 'ENS';
-        $year = date('Y');
 
-        // Compte le nombre d'enseignants créés l'année en cours
-        $count = self::whereYear('created_at', $year)->count() + 1;
+        $lastTeacher = self::where('matricule', 'like', "{$year}{$prefix}%")
+            ->orderByDesc('matricule')
+            ->first();
 
-        // Formate le numéro séquentiel sur 4 chiffres (ex: 1 -> 0001)
-        $sequence = str_pad($count, 4, '0', STR_PAD_LEFT);
+        $lastSequence = $lastTeacher
+            ? (int) substr($lastTeacher->matricule, -4)
+            : 0;
 
-        return "{$prefix}-{$year}-{$sequence}";
+        do {
+            $lastSequence++;
+
+            $matricule = sprintf(
+                '%s%s%04d',
+                $year,
+                $prefix,
+                $lastSequence
+            );
+        } while (self::where('matricule', $matricule)->exists());
+
+        return $matricule;
     }
-
-
-
-
-
-
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function getFullNameAttribute()
     {
         return $this->user->name; // Ou nom + prenom selon tes colonnes users
@@ -86,7 +86,6 @@ class Teacher extends Model
         // Assure-toi que la clé étrangère dans la table affectations est bien 'enseignant_id'
         return $this->hasMany(Affectation::class, 'enseignant_id');
     }
-
 
     public function matiere()
     {

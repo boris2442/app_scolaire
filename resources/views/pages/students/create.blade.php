@@ -210,13 +210,14 @@
                 </div>
 
                 <div class="bg-card p-8 rounded-2xl border border-border shadow-sm text-center">
-                    <h2 class="text-[10px] font-black  text-muted-foreground mb-4  text-left">Photo
-                        d'identité</h2>
+                    <h2 class="text-[10px] font-black  text-muted-foreground mb-4  text-left">
+                   <label for='photo'>     Photo
+                        d'identité</label></h2>
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mx-auto mb-4 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
                         <x-lucide-camera class="w-8 h-8 text-muted-foreground/30" />
                     </div>
-                    <input type="file" name="photo" class="text-[10px] text-muted-foreground">
+                    <input id='photo' type="file" name="photo" class="text-[10px] text-muted-foreground">
                 </div>
             </div>
         </div>

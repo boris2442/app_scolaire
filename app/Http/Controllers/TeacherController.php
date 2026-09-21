@@ -3,33 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Models\Department;
-
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
 
 class TeacherController extends Controller
 {
-
     public function index()
     {
 
-        //afficher les enseignants avec pagination par ordre alphabetique
+        // afficher les enseignants avec pagination par ordre alphabetique
         // $enseignants=Teacher::with(['user', 'departement'])
-        $enseignants = Teacher::select('enseignants.*')
+        $teachers = Teacher::select('enseignants.*')
             ->join('users', 'users.id', '=', 'enseignants.user_id')
             ->with(['user', 'departement'])
             ->orderBy('users.name', 'asc') // Ordre alphabétique A -> Z
-            ->paginate(10); // Nombre d'éléments par page
+            ->paginate(15); // Nombre d'éléments par page
 
-        return view('pages.teachers.index', compact('enseignants'));
+        return view('pages.teachers.index', compact('teachers'));
     }
 
     /**
@@ -38,9 +33,9 @@ class TeacherController extends Controller
     public function create()
     {
         $departments = Department::orderBy('nom')->get();
-        return view('pages.teachers.create', compact('departements'));
+
+        return view('pages.teachers.create', compact('departments'));
     }
-    
 
     public function store(TeacherRequest $request)
     {
@@ -67,8 +62,6 @@ class TeacherController extends Controller
             ]);
         });
 
-
-
         return redirect()
             ->route('admin.enseignants.index')
             ->with('success', 'Enseignant créé avec succès !')
@@ -79,39 +72,33 @@ class TeacherController extends Controller
             ]);
     }
 
-
-
-
-
-
-
-
-
-
-    public function edit(Teacher $enseignant)
+    public function edit(Teacher $teacher)
     {
+        $teacher=Teacher::findOrFail($teacher);
         $departments = Department::orderBy('nom')->get();
-        return view('pages.teachers.edit', compact('enseignant', 'departements'));
+
+        return view('pages.teachers.edit', compact('teacher', 'departments'));
     }
-    public function update(Request $request, Teacher $enseignant)
+
+    public function update(Request $request, Teacher $teacher)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $enseignant->user_id,
+            'email' => 'required|email|unique:users,email,'.$teacher->user_id,
             // 'matricule' => 'unique:enseignants,matricule,' . $enseignant->id,
             'departement_id' => 'required|exists:departements,id',
         ]);
 
-        DB::transaction(function () use ($request, $enseignant) {
+        DB::transaction(function () use ($request, $teacher) {
             // Mise à jour de l'utilisateur
-            $enseignant->user->update([
+            $teacher->user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone, // Nouveau !
             ]);
 
             // Mise à jour de l'enseignant
-            $enseignant->update([
+            $teacher->update([
                 // 'matricule' => $request->matricule,
                 'departement_id' => $request->departement_id,
             ]);
@@ -119,19 +106,23 @@ class TeacherController extends Controller
 
         return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant mis à jour avec succès !');
     }
-    public function destroy(Teacher $enseignant)
-    {
-        DB::transaction(function () use ($enseignant) {
-            $enseignant->user->delete(); // Supprime l'utilisateur associé
-            $enseignant->delete(); // Supprime l'enseignant
-        });
 
-        return redirect()->route('admin.enseignants.index')->with('success', 'Enseignant supprimé avec succès !');
-    }
+   public function destroy(Teacher $teacher)
+{
+    DB::transaction(function () use ($teacher) {
+        $teacher->user->delete(); // Supprime l'utilisateur associé
+        $teacher->delete();       // Supprime l'enseignant
+    });
 
-    public function show(Teacher $enseignant)
+    return redirect()
+        ->route('admin.enseignants.index')
+        ->with('success', 'Enseignant supprimé avec succès !');
+}
+
+    public function show(Teacher $teacher)
     {
-        $enseignant->load('user', 'departement'); // Charge les relations nécessaires
-        return view('pages.teachers.show', compact('enseignant'));
+        $teacher->load('user', 'departement'); // Charge les relations nécessaires
+
+        return view('pages.teachers.show', compact('teacher'));
     }
 }

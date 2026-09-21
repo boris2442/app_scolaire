@@ -9,7 +9,7 @@
             </p>
         </div>
 
-        <form action="{{ route('admin.enseignants.update', $enseignant->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.enseignants.update', $teacher->id) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -23,25 +23,25 @@
 
                     <div>
                         <label for="name" class="text-[10px] font-black ml-1">Nom Complet</label>
-                        <input type="text" id="name" name="name" required value="{{ old('name', $enseignant->user->name) }}"
+                        <input type="text" id="name" name="name" required value="{{ old('name', $teacher->user->name) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
                         <label for="email" class="text-[10px] font-black uppercase ml-1">Adresse Email</label>
-                        <input type="email" id="email" name="email" required value="{{ old('email', $enseignant->user->email) }}"
+                        <input type="email" id="email" name="email" required value="{{ old('email', $teacher->user->email) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 
                     <div>
                         <label for="phone" class="text-[10px] font-black uppercase ml-1">Contact</label>
                         <input type="text" id="phone" name="phone" required
-                            value="{{ old('phone', $enseignant->user->phone ?? '') }}"
+                            value="{{ old('phone', $teacher->user->phone ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                 </div>
 
-                <!-- PROFIL ENSEIGNANT -->
+                <!-- PROFIL teacher -->
                 <div class="space-y-4">
                     <h3 class="text-[10px] font-black uppercase text-primary border-b border-border pb-2">
                         Profil Enseignant
@@ -50,13 +50,13 @@
                     <div>
                         <label for="matricule" class="text-[10px] font-black uppercase ml-1">Matricule</label>
                         <input type="text" id="matricule" name="matricule" required
-                            value="{{ old('matricule', $enseignant->matricule) }}"
+                            value="{{ old('matricule', $teacher->matricule) }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
                     <div>
                         <label for="departement_id" class="text-[10px] font-black uppercase ml-1">Département d'attache</label>
                         <input type="text" id="departement_id" name="departement_id" required
-                            value="{{ old('departement_id', $enseignant->departement->nom ?? '') }}"
+                            value="{{ old('departement_id', $teacher->departement->nom ?? '') }}"
                             class="w-full bg-secondary border-transparent rounded-xl py-3 px-4 mt-1 text-sm font-bold uppercase focus:ring-2 focus:ring-primary/20 transition-all">
                     </div>
 

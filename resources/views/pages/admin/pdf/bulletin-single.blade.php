@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bulletin - {{ $bulletins[0]['inscription']->eleve_nom ?? 'Classe' }}</title>
+    <title>Bulletin - {{ $reportCards[0]['inscription']->eleve_nom ?? 'Classe' }}</title>
     <style>
         /* Configuration de la page A4 et marges minimales */
         @page {
@@ -191,23 +191,23 @@
 
 <body>
 
-    @foreach ($bulletins as $b)
+    @foreach ($reportCards as $b)
         @php
-            $inscription = $b['inscription'];
-            $totalElevesClasse = $b['totalElevesClasse'];
+            $enrollment = $b['inscription'];
+            $totalStudentsInClass = $b['totalStudentsInClass'];
             $matieres = $b['matieres'];
             $notes = $b['notes'];
             $coefficients = $b['coefficients'];
             $suivi = $b['suivi'];
 
             $moyenneEleve = $b['moyenneEleve'] ?? 0;
-            $rangEleve = $b['rang'] ?? 'N/A';
+            $studentRank = $b['rang'] ?? 'N/A';
 
             // Traitement de la photo d'identité
-$photoPath = 'storage/' . ($inscription->student_picture ?? '');
-$defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
+$photoPath = 'storage/' . ($enrollment->student_picture ?? '');
+$defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
 
-            if (!empty($inscription->student_picture) && file_exists(public_path($photoPath))) {
+            if (!empty($enrollment->student_picture) && file_exists(public_path($photoPath))) {
                 $imageSrc = public_path($photoPath);
             } elseif (file_exists(public_path($defaultAvatar))) {
                 $imageSrc = public_path($defaultAvatar);
@@ -280,7 +280,7 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
             <!-- TITRE DU BULLETIN -->
             <div class="titre-bulletin">
                 <h2>BULLETIN DE NOTES DU {{ $trimester->nom ?? '' }}</h2>
-                <p>ANNÉE SCOLAIRE : {{ $inscription->annee_libelle }}</p>
+                <p>ANNÉE SCOLAIRE : {{ $enrollment->annee_libelle }}</p>
             </div>
 
             <!-- INFOS ÉLÈVE AVEC PHOTO -->
@@ -288,14 +288,14 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
                 <tr>
                     <!-- Nom & Prénom -->
                     <td colspan="2" style="text-transform: uppercase; width: 50%;">
-                        <strong>NOM ET PRENOM :</strong> {{ $inscription->eleve_nom }}
-                        {{ $inscription->eleve_prenom }}
+                        <strong>NOM ET PRENOM :</strong> {{ $enrollment->eleve_nom }}
+                        {{ $enrollment->eleve_prenom }}
                     </td>
                     <!-- Date & Lieu de Naissance -->
                     <td colspan="2" style="width: 40%;">
                         <strong>NÉ(E) LE :</strong>
-                        {{ $inscription->date_naissance ? date('d/m/Y', strtotime($inscription->date_naissance)) : 'N/A' }}
-                        À {{ strtoupper($inscription->lieu_naissance ?? 'N/A') }}
+                        {{ $enrollment->date_naissance ? date('d/m/Y', strtotime($enrollment->date_naissance)) : 'N/A' }}
+                        À {{ strtoupper($enrollment->lieu_naissance ?? 'N/A') }}
                     </td>
                     <!-- Photo d'identité (prend toute la hauteur des 2 lignes) -->
                     <td rowspan="2" style="width: 65px; text-align: center; vertical-align: middle; padding: 2px;">
@@ -309,23 +309,23 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
                 <tr>
                     <!-- Redoublant -->
                     <td style="width: 20%;">
-                        <strong>REDOUBLANT :</strong> {{ $inscription->est_redoublant ? 'Oui' : 'Non' }}
+                        <strong>REDOUBLANT :</strong> {{ $enrollment->est_redoublant ? 'Oui' : 'Non' }}
                     </td>
                     <!-- Matricule -->
                     <td style="width: 30%;">
-                        <strong>MATRICULE :</strong> {{ $inscription->matricule ?? 'N/A' }}
+                        <strong>MATRICULE :</strong> {{ $enrollment->matricule ?? 'N/A' }}
                     </td>
                     <!-- Classe -->
                     <td style="width: 25%;">
-                        <strong>CLASSE :</strong> {{ $inscription->classe_nom }}
-                        @if (!empty($inscription->section))
+                        <strong>CLASSE :</strong> {{ $enrollment->classe_nom }}
+                        @if (!empty($enrollment->section))
                             <em
-                                style="font-style: italic; font-size: 0.85em;">({{ ucfirst($inscription->section) }})</em>
+                                style="font-style: italic; font-size: 0.85em;">({{ ucfirst($enrollment->section) }})</em>
                         @endif
                     </td>
                     <!-- Sexe -->
                     <td style="width: 15%; font-size:8px;">
-                        <strong>S : </strong> {{ $inscription->sexe ?? 'N/A' }}
+                        <strong>S : </strong> {{ $enrollment->sexe ?? 'N/A' }}
                     </td>
                 </tr>
             </table>
@@ -468,7 +468,7 @@ $defaultAvatar = $inscription->sexe === 'F' ? 'images/defaultpictureF.png' : 'im
                             {{ number_format($moyenneEleve, 2, ',', ' ') }} / 20
                         </td>
                         <td style="font-weight: bold; font-size: 10px;">
-                            {{ $rangEleve }}{{ $rangEleve == 1 ? 'er' : 'ème' }} / {{ $totalElevesClasse }}
+                            {{ $studentRank }}{{ $studentRank == 1 ? 'er' : 'ème' }} / {{ $totalStudentsInClass }}
                         </td>
                         <td style="font-weight: bold;">
                             @if ($moyenneEleve < 10)

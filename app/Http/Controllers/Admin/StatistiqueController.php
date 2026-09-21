@@ -26,16 +26,16 @@ class StatistiqueController extends Controller
         $stats = [
             'general' => null,
             'par_classe' => [],
-            'majors' => []
+            'majors' => [],
         ];
 
         if ($sequenceId) {
             $stats['general'] = $this->getStatsGlobales($sequenceId);
-            $stats['majors'] = $this->getTopEleves($sequenceId);
-            $stats['par_classe'] = $this->getStatsParClasse($sequenceId);
+            $stats['majors'] = $this->getBestStudents($sequenceId);
+            $stats['par_classe'] = $this->getStatsByClasse($sequenceId);
         }
 
-        $sequences = Sequence::whereHas('trimestre', fn($q) => $q->where('annee_scolaire_id', $anneeId))->get();
+        $sequences = Sequence::whereHas('trimestre', fn ($q) => $q->where('annee_scolaire_id', $anneeId))->get();
 
         return view('pages.admin.stats-palmares', compact('sequences', 'stats'));
     }
@@ -68,19 +68,19 @@ class StatistiqueController extends Controller
             )->first();
 
         return (object) [
-            'effectif_total'   => $effectifRef->total,
-            'total_garcons'    => $effectifRef->total_garcons,
-            'total_filles'     => $effectifRef->total_filles,
+            'effectif_total' => $effectifRef->total,
+            'total_garcons' => $effectifRef->total_garcons,
+            'total_filles' => $effectifRef->total_filles,
             'moyenne_generale' => $perf->moyenne_generale ?? 0,
-            'meilleure_note'   => $perf->meilleure_note ?? 0,
-            'total_admis'      => $perf->total_admis ?? 0,
-            'total_echoues'    => $effectifRef->total - ($perf->total_admis ?? 0),
-            'garcons_admis'    => $perf->garcons_admis ?? 0,
-            'filles_admis'     => $perf->filles_admis ?? 0,
+            'meilleure_note' => $perf->meilleure_note ?? 0,
+            'total_admis' => $perf->total_admis ?? 0,
+            'total_echoues' => $effectifRef->total - ($perf->total_admis ?? 0),
+            'garcons_admis' => $perf->garcons_admis ?? 0,
+            'filles_admis' => $perf->filles_admis ?? 0,
         ];
     }
 
-    private function getTopEleves($sequenceId)
+    private function getBestStudents($sequenceId)
     {
         // Extraction du Top 5 basé sur la table 'bilans' (Sans table niveaux)
         return DB::table('bilans')
@@ -99,7 +99,7 @@ class StatistiqueController extends Controller
             ->get();
     }
 
-    private function getStatsParClasse($sequenceId)
+    private function getStatsByClasse($sequenceId)
     {
         // Statistiques par classe basées sur la table 'bilans' (Sans table niveaux)
         return DB::table('bilans')
@@ -150,12 +150,12 @@ class StatistiqueController extends Controller
             ->get();
 
         $appreciations = [
-            'Excellent'  => $moyennes->where('valeur', '>=', 18)->count(),
-            'Très Bien'  => $moyennes->where('valeur', '>=', 16)->where('valeur', '<', 18)->count(),
-            'Bien'       => $moyennes->where('valeur', '>=', 14)->where('valeur', '<', 16)->count(),
+            'Excellent' => $moyennes->where('valeur', '>=', 18)->count(),
+            'Très Bien' => $moyennes->where('valeur', '>=', 16)->where('valeur', '<', 18)->count(),
+            'Bien' => $moyennes->where('valeur', '>=', 14)->where('valeur', '<', 16)->count(),
             'Assez Bien' => $moyennes->where('valeur', '>=', 12)->where('valeur', '<', 14)->count(),
-            'Passable'   => $moyennes->where('valeur', '>=', 10)->where('valeur', '<', 12)->count(),
-            'Médiocre'   => $moyennes->where('valeur', '<', 10)->count(),
+            'Passable' => $moyennes->where('valeur', '>=', 10)->where('valeur', '<', 12)->count(),
+            'Médiocre' => $moyennes->where('valeur', '<', 10)->count(),
         ];
 
         // Plus de relation 'niveau' ici
@@ -174,7 +174,7 @@ class StatistiqueController extends Controller
         $classes = DB::table('classes')
             ->select('classes.id', 'classes.nom as nom')
             ->get();
-            
+
         $trimesters = DB::table('trimestres')
             ->where('annee_scolaire_id', $actifYear->id)
             ->get();
@@ -189,11 +189,11 @@ class StatistiqueController extends Controller
                 ->get();
 
             // 3. Extraction des matières de la classe avec leur prof
-            $matieres = DB::table('classe_matiere') 
+            $matieres = DB::table('classe_matiere')
                 ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
-                ->leftJoin('affectations', function($join) use ($classeId) {
+                ->leftJoin('affectations', function ($join) use ($classeId) {
                     $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
-                         ->where('affectations.classe_id', '=', $classeId);
+                        ->where('affectations.classe_id', '=', $classeId);
                 })
                 ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
                 ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
@@ -218,7 +218,7 @@ class StatistiqueController extends Controller
 
             $grilleNotes = [];
             $coefficientsMatieres = [];
-            
+
             foreach ($notesBrutes as $note) {
                 $grilleNotes[$note->inscription_id][$note->matiere_id][$note->sequence_id] = $note->valeur;
                 $coefficientsMatieres[$note->matiere_id] = $note->coefficient;
@@ -229,7 +229,7 @@ class StatistiqueController extends Controller
                 'matieres' => $matieres,
                 'eleves' => $students,
                 'grille' => $grilleNotes,
-                'coefficients' => $coefficientsMatieres
+                'coefficients' => $coefficientsMatieres,
             ];
         }
 

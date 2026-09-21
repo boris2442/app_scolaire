@@ -112,13 +112,13 @@
                             value="{{ old('english_department', $school->english_department) }}">
                     </div>
 
-                    <div class="md:col-span-2">
+                    {{-- <div class="md:col-span-2">
                         <label class="block text-sm font-medium mb-2" for='english_sub_division'>Arrondissement /
                             Sub-Division (EN)</label>
                         <input type="text" name="english_sub_division" id='english_sub_division'
                             class="w-full bg-secondary border-border rounded-lg px-4 py-2.5" placeholder="Ex: Bafoussam I"
                             value="{{ old('english_sub_division', $school->english_sub_division) }}">
-                    </div>
+                    </div> --}}
 
                     <!-- Logo -->
                     <div class="md:col-span-2">

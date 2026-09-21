@@ -1,37 +1,37 @@
 <?php
 
 use App\Http\Controllers\AcademicController;
-use App\Http\Controllers\Admin\DataAuditController;
 use App\Http\Controllers\Admin\BulletinPrintController;
+use App\Http\Controllers\Admin\DataAuditController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\StatistiqueController;
 use App\Http\Controllers\AfterLoginController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CheckProgramController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ClassSubjectController;
-use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\DashboardTeacherController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DisciplineController;
-use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\Exports\DepartmentExportController;
 use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\Exports\TeacherExportController;
 use App\Http\Controllers\GlobalStatController;
 use App\Http\Controllers\LessonController;
-use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\PresenceAndServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SchoolController;
-use App\Http\Controllers\SessionCourseController;
 use App\Http\Controllers\SequenceController;
+use App\Http\Controllers\SessionCourseController;
 use App\Http\Controllers\SettingAcademicController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SubjectGroupController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherProfileController;
+use App\Http\Controllers\TimeSlotController;
 use App\Http\Controllers\TrimesterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearController;
@@ -156,7 +156,9 @@ Route::middleware('scolarite.coherence')->group(function () {
 
         // Routes de gestion du verrouillage des séquences
         Route::get('/sequences', [SequenceController::class, 'index'])->name('admin.sequences.index');
-        Route::put('/sequences/{id}', [SequenceController::class, 'update'])->name('admin.sequences.update');
+        // Route::put('/sequences/{id}', [SequenceController::class, 'update'])->name('admin.sequences.update');
+        Route::put('/sequences/{sequence}', [SequenceController::class, 'update'])
+            ->name('admin.sequences.update');
 
         Route::get('/admin/audit-saisie', [DataAuditController::class, 'index'])->name('admin.audit.saisie');
         // Page principale : La grille avec le choix du trimestre
@@ -173,11 +175,11 @@ Route::middleware('scolarite.coherence')->group(function () {
             ->name('admin.bulletins.classe');
 
         // Route pour générer le PDF de toute la classe d'un coup
-        Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrintController::class, 'imprimerClasse'])
+        Route::get('/admin/report/class/{classe_id}/print/{trimestre_id}', [BulletinPrintController::class, 'printClasse'])
             ->name('admin.bulletins.imprimer-classe');
 
         // Route pour générer le PDF d'un seul élève isolé
-        Route::get('/admin/report/student/{inscriptionId}/print/{trimestreId}', [BulletinPrintController::class, 'imprimerEleve'])
+        Route::get('/admin/report/student/{inscriptionId}/print/{trimestreId}', [BulletinPrintController::class, 'printStudent'])
             ->name('admin.bulletins.imprimer-eleve');
 
         Route::get('/admin/report/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
@@ -199,7 +201,7 @@ Route::middleware('scolarite.coherence')->group(function () {
             Route::resource('/departments', DepartmentController::class)->except(['show']);
         });
 
-        Route::resource('admin/groupes-matieres', SubjectGroupController::class)
+        Route::resource('admin/subject-groups', SubjectGroupController::class)
             ->names('admin.groupes')
             ->parameters(['groupes-matieres' => 'groupe']);         //   Route::resource('admin/groupes-matieres', SubjectGroupController::class)->names('admin.groupes');
 
@@ -270,10 +272,10 @@ Route::middleware('scolarite.coherence')->group(function () {
             // Route::get('teachers', [TeacherController::class, 'index'])->name('enseignants.index');
             Route::get('teachers/create', [TeacherController::class, 'create'])->name('enseignants.create');
             Route::post('teachers', [TeacherController::class, 'store'])->name('enseignants.store');
-            Route::get('teachers/{enseignant}/edit', [TeacherController::class, 'edit'])->name('enseignants.edit');
-            Route::put('teachers/{enseignant}', [TeacherController::class, 'update'])->name('enseignants.update');
-            Route::delete('teachers/{enseignant}', [TeacherController::class, 'destroy'])->name('enseignants.destroy');
-            Route::get('teachers/{enseignant}', [TeacherController::class, 'show'])->name('enseignants.show');
+            Route::get('teachers/{teacher}/edit', [TeacherController::class, 'edit'])->name('enseignants.edit');
+            Route::put('teachers/{teacher}', [TeacherController::class, 'update'])->name('enseignants.update');
+            Route::delete('teachers/{teacher}', [TeacherController::class, 'destroy'])->name('enseignants.destroy');
+            Route::get('teachers/{teacher}', [TeacherController::class, 'show'])->name('enseignants.show');
 
             // --- MODULE PEDAGOGIQUE (AFFECTATIONS) ---
             // Rappel : Place la route 'index' avant d'éventuels paramètres dynamiques
@@ -304,9 +306,9 @@ Route::middleware('scolarite.coherence')->group(function () {
         ->group(function () {
 
             // Créneaux horaires
-            Route::get('/creneaux', [TimeSlotController::class, 'index'])->name('creneaux.index');
-            Route::post('/creneaux', [TimeSlotController::class, 'store'])->name('creneaux.store');
-            Route::delete('/creneaux/{creneau}', [TimeSlotController::class, 'destroy'])->name('creneaux.destroy');
+            Route::get('/times-slot', [TimeSlotController::class, 'index'])->name('creneaux.index');
+            Route::post('/times-slot', [TimeSlotController::class, 'store'])->name('creneaux.store');
+            Route::delete('/times-slot/{creneau}', [TimeSlotController::class, 'destroy'])->name('creneaux.destroy');
 
             // Emplois du temps
             Route::get('/emplois/classes', [SessionCourseController::class, 'indexClasses'])->name('emplois.classes');
@@ -337,10 +339,10 @@ Route::middleware('scolarite.coherence')->group(function () {
     // Route::get('/emplois/teacher/{userId}/pdf', [SessionCourseController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::put('/enseignants/{id}/reset-password', [UserController::class, 'resetPassword'])->name('enseignants.reset-password');
+        Route::put('/teacher/{id}/reset-password', [UserController::class, 'resetPassword'])->name('enseignants.reset-password');
     });
 
-    Route::get('/avancement-programmes', [CheckProgramController::class, 'index'])
+    Route::get('/program-progress', [CheckProgramController::class, 'index'])
         ->middleware(['auth'])
         ->name('avancement.index');
 
@@ -348,11 +350,11 @@ Route::middleware('scolarite.coherence')->group(function () {
         ->name('admin.sequences.calculate');
 
     Route::get(
-        '/admin/bulletins/classe/{classeId}/trimestre/{trimestreId}/controle-notes',
+        '/admin/report/classe/{classeId}/trimestre/{trimestreId}/controle-notes',
         [BulletinPrintController::class, 'imprimerEtatControleNotes']
     )->name('admin.bulletins.etat-controle-notes');
 
-    Route::get('/trimestres/{trimestreId}/statistiques-globales', [GlobalStatController::class, 'imprimerStatsGlobales'])
+    Route::get('/trimestres/{trimestreId}/globales-stats', [GlobalStatController::class, 'imprimerStatsGlobales'])
         ->name('stats.globales.pdf')
         ->middleware(['auth']);
 });

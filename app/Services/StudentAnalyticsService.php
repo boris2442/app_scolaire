@@ -70,7 +70,7 @@ class StudentAnalyticsService
             ->get();
     }
 
-    private function getStatsParClasse($anneeId)
+    private function getStatsByClasse($anneeId)
     {
         return Inscription::where('inscriptions.annee_scolaire_id', $anneeId) // Préfixe ajouté
             ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')

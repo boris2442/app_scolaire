@@ -202,7 +202,7 @@
                     <th class="p-4 text-[10px] font-black  text-muted-foreground rounded-tl-2xl">Enseignant</th>
                     <th class="p-4 text-[10px] font-black  text-muted-foreground">Matricule</th>
                     <th class="p-4 text-[10px] font-black  text-muted-foreground">Département</th>
-                    <th class="p-4 text-[10px] font-black  text-muted-foreground">Statut Compte</th>
+                    {{-- <th class="p-4 text-[10px] font-black  text-muted-foreground">Statut Compte</th> --}}
 
                     @can('access-admin')
                         <th class="p-4 text-[10px] font-black  text-muted-foreground text-right rounded-tr-2xl">Actions
@@ -211,28 +211,28 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-border">
-                @forelse($enseignants as $enseignant)
+                @forelse($teachers as $teacher)
                     <tr class="hover:bg-secondary/10 transition-colors">
                         <td class="p-4">
                             <div class="flex items-center gap-3">
                                 <div
                                     class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-xs">
-                                    {{ substr($enseignant->user->name, 0, 2) }}
+                                    {{ substr($teacher->user->name, 0, 2) }}
                                 </div>
                                 <div>
-                                    <p class="text-sm font-black ">{{ $enseignant->user->name }}</p>
-                                    <p class="text-[10px] text-muted-foreground">{{ $enseignant->user->phone }}</p>
+                                    <p class="text-sm font-black ">{{ $teacher->user->name }}</p>
+                                    <p class="text-[10px] text-muted-foreground">{{ $teacher->user->phone }}</p>
                                     <p class="text-[10px] italic font-bold text-muted-foreground">
-                                        {{ $enseignant->user->email }}</p>
+                                        {{ $teacher->user->email }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="p-4 text-xs font-bold text-primary">{{ $enseignant->matricule }}</td>
+                        <td class="p-4 text-xs font-bold text-primary">{{ $teacher->matricule }}</td>
                         <td class="p-4">
-                            @if ($enseignant->departement)
+                            @if ($teacher->departement)
                                 <span
                                     class="text-[10px] font-black  bg-primary/5 text-primary border border-primary/10 px-2 py-1 rounded">
-                                    {{ $enseignant->departement->nom }}
+                                    {{ $teacher->departement->nom }}
                                 </span>
                             @else
                                 <span
@@ -241,13 +241,13 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="p-4">
+                        {{-- <td class="p-4">
                             <span
                                 class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-[9px] font-black  bg-[var(--success)]/10 text-[var(--success)]">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--success)]"></span>
                                 Actif
                             </span>
-                        </td>
+                        </td> --}}
                         @can('access-admin')
                             <td class="p-4 text-right relative px-6">
 
@@ -264,26 +264,26 @@
                                         class="dropdown-menu hidden absolute right-0 mt-2 w-44 rounded-xl shadow-xl border border-[var(--border)] 
             bg-[var(--card)] text-[var(--card-foreground)] z-50 overflow-hidden text-left">
 
-                                        <a href="{{ route('admin.enseignants.show', $enseignant) }}"
+                                        <a href="{{ route('admin.enseignants.show', $teacher) }}"
                                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
 
                                             <x-lucide-eye class='text-[var(--primary)] w-4 h-4' />
                                             Voir plus
                                         </a>
 
-                                        <a href="{{ route('admin.enseignants.edit', $enseignant) }}"
+                                        {{-- <a href="{{ route('admin.enseignants.edit', $teacher) }}"
                                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-[var(--secondary)] transition">
 
                                             <x-lucide-edit class='text-[var(--primary)] w-4 h-4' />
                                             Éditer
-                                        </a>
+                                        </a> --}}
 
                                         <div class="border-t border-[var(--border)] my-1"></div>
-                                        <form action="{{ route('admin.enseignants.destroy', $enseignant) }}" method="POST">
+                                        <form action="{{ route('admin.enseignants.destroy', $teacher) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet teacher ?')"
                                                 class="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--danger)] hover:bg-red-50 dark:hover:bg-red-900/20 transition text-left">
 
                                                 <x-lucide-trash class='w-4 h-4' />
@@ -295,6 +295,7 @@
                             </td>
                         @endcan
                     </tr>
+
                 @empty
                     <tr>
                         <td colspan="5" class="p-12 text-center text-muted-foreground rounded-b-2xl">
@@ -303,8 +304,13 @@
                         </td>
                     </tr>
                 @endforelse
+               
             </tbody>
+
         </table>
+ <div class="mt-6">
+                    {{ $teachers->links() }}
+                </div>
     </div>
 
     <script>

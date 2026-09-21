@@ -13,7 +13,9 @@ class DepartmentController extends Controller
     {
 
         // Dans DepartmentController.php à la ligne 12
-        $departments = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')->get();
+        $departments = DB::table('departements')->select('id', 'nom', 'code', 'description', 'created_at')
+        ->orderBy('nom', 'asc')
+        ->get();
 
         return view('pages.departments.index', compact('departments'));
     }

@@ -186,7 +186,7 @@ class StudentController extends Controller
 
         // Utilisation du service
         $actifYear = $this->scolarite->getactifYear();
-        $inscriptionActuelle = $this->scolarite->getClasseActuelle($student->id);
+        $enrollmentNow = $this->scolarite->getClasseActuelle($student->id);
 
         // On récupère directement les classes (plus de niveaux)
         $classes = Classe::all();
@@ -197,7 +197,7 @@ class StudentController extends Controller
             'actifYear',
             'classes',
             'sexes',
-            'inscriptionActuelle'
+            'enrollmentNow'
         ));
     }
 
@@ -236,12 +236,12 @@ class StudentController extends Controller
             $actifYear = Year::where('est_active', true)->first();
 
             if ($actifYear) {
-                $inscription = Inscription::where('eleve_id', $student->id)
+                $enrollment = Inscription::where('eleve_id', $student->id)
                     ->where('annee_scolaire_id', $actifYear->id)
                     ->first();
 
-                if ($inscription) {
-                    $inscription->update(['classe_id' => $request->classe_id]);
+                if ($enrollment) {
+                    $enrollment->update(['classe_id' => $request->classe_id]);
                 }
             }
 
@@ -317,7 +317,7 @@ class StudentController extends Controller
         $classe = Classe::findOrFail($request->classe_id);
 
         // 3. Génération du PDF
-        $pdf = \PDF::loadView('pages.students.pdf.list', compact('eleves', 'classe', 'actifYear', 'school'));
+        $pdf = \PDF::loadView('pages.students.pdf.list', compact('students', 'classe', 'actifYear', 'school'));
 
         // 4. Téléchargement ou affichage
         $fileName = Str::slug('liste eleves '.$classe->nom).'.pdf';

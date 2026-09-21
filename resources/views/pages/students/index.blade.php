@@ -38,10 +38,12 @@
                         </a>
 
                         <a href="{{ route('admin.students.export') }}"
+                        target='_blank'
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
                         </a>
                         <a href="{{ route('admin.inscriptions.export') }}"
+                          target='_blank'
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel les inscrits
                         </a>

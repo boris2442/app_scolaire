@@ -145,10 +145,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('settings.academique.index') }}" title="Cycles & Niveaux"
+                    <a href="{{ route('settings.academique.index') }}" title="Cycles "
                         class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('settings.academique.*') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
                         <x-lucide-git-fork class="w-4 h-4 flex-shrink-0" />
-                        <span class="sidebar-label ml-3 truncate">Cycles & Niveaux</span>
+                        <span class="sidebar-label ml-3 truncate">Cycles </span>
                     </a>
                 </li>
                 <li>
