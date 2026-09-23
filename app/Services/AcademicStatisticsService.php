@@ -28,22 +28,22 @@ class AcademicStatisticsService
 
         foreach ($notesParMatiere as $item) {
             $totalPoints = $item->note_moyenne * $item->coefficient;
-            $appreciation = $this->obtenirMentionOuAppreciation($item->note_moyenne);
+            $appreciation = $this->getMentionOrAppreciation($item->note_moyenne);
 
             // Mise à jour ou insertion dans la table 'moyennes'
             DB::table('moyennes')->updateOrInsert(
                 [
                     'inscription_id' => $enrollmentId,
-                    'matiere_id'     => $item->matiere_id,
-                    'sequence_id'    => $sequenceId,
+                    'matiere_id' => $item->matiere_id,
+                    'sequence_id' => $sequenceId,
                 ],
                 [
-                    'valeur'       => $item->note_moyenne,
-                    'coefficient'  => $item->coefficient,
+                    'valeur' => $item->note_moyenne,
+                    'coefficient' => $item->coefficient,
                     'total_points' => $totalPoints,
                     'appreciation' => $appreciation,
-                    'effectif_classe'   => 0, // 👈 AJOUTE CETTE LIGNE ICI
-                    'updated_at'   => now(),
+                    'effectif_classe' => 0, // 👈 AJOUTE CETTE LIGNE ICI
+                    'updated_at' => now(),
                 ]
             );
         }
@@ -70,21 +70,21 @@ class AcademicStatisticsService
             $moyenneGenerale = $donneesGlobales->total_points_general / $donneesGlobales->total_coefficients_general;
         }
 
-        $mention = $this->obtenirMentionOuAppreciation($moyenneGenerale);
+        $mention = $this->getMentionOrAppreciation($moyenneGenerale);
 
         // Mise à jour ou insertion dans la table 'bilans'
         DB::table('bilans')->updateOrInsert(
             [
                 'inscription_id' => $enrollmentId,
-                'sequence_id'    => $sequenceId,
+                'sequence_id' => $sequenceId,
             ],
             [
-                'moyenne'          => $moyenneGenerale,
-                'total_points'     => $donneesGlobales->total_points_general ?? 0,
-                'total_coefs'      => $donneesGlobales->total_coefficients_general ?? 0,
-                'mention'          => $mention,
+                'moyenne' => $moyenneGenerale,
+                'total_points' => $donneesGlobales->total_points_general ?? 0,
+                'total_coefs' => $donneesGlobales->total_coefficients_general ?? 0,
+                'mention' => $mention,
                 'annee_scolaire_id' => $anneeScolaireId, // Ajusté selon ta colonne 'annee_scolaire_id'
-                'updated_at'       => now(),
+                'updated_at' => now(),
             ]
         );
     }
@@ -120,7 +120,7 @@ class AcademicStatisticsService
             DB::table('bilans')
                 ->where('id', $bilan->id)
                 ->update([
-                    'rang'            => $rang,
+                    'rang' => $rang,
                     'effectif_classe' => $effectif,
                 ]);
         }
@@ -129,17 +129,23 @@ class AcademicStatisticsService
     /**
      * Système d'appréciation unique pour harmoniser les tables
      */
-    private function obtenirMentionOuAppreciation($note)
+    private function getMentionOrAppreciation($note)
     {
-        if ($note >= 16) return 'Très Bien';
-        if ($note >= 14) return 'Bien';
-        if ($note >= 12) return 'Assez Bien';
-        if ($note >= 10) return 'Passable';
+        if ($note >= 16) {
+            return 'Très Bien';
+        }
+        if ($note >= 14) {
+            return 'Bien';
+        }
+        if ($note >= 12) {
+            return 'Assez Bien';
+        }
+        if ($note >= 10) {
+            return 'Passable';
+        }
+
         return 'Insuffisant';
     }
-
-
-
 
     public function calculerBilanGeneralTrimestre($trimesterId, $enrollmentId, $anneeScolaireId)
     {
@@ -158,32 +164,29 @@ class AcademicStatisticsService
             ->first();
 
         $moyenneTrimestre = $donneesTrimestre->moyenne_trimestrielle ?? 0;
-        $mention = $this->obtenirMentionOuAppreciation($moyenneTrimestre);
+        $mention = $this->getMentionOrAppreciation($moyenneTrimestre);
 
         // 3. IMPORTANT : Il crée une NOUVELLE LIGNE dans la table 'bilans'.
-        // Cette ligne représente le TRIMESTRE complet. 
+        // Cette ligne représente le TRIMESTRE complet.
         // Donc 'sequence_id' reste VIDE (null) et 'trimestre_id' est REMPLI.
- DB::table('bilans')->updateOrInsert(
-    [
-        'inscription_id' => $enrollmentId,
-        'trimestre_id'   => $trimesterId,
-        'sequence_id'    => null,
-        'annee_scolaire_id' => $anneeScolaireId,  // ⬅️ AJOUTE CETTE LIGNE ICI
-    ],
-    [
-        'moyenne'           => $moyenneTrimestre,
-        'total_points'      => $donneesTrimestre->total_points_trimestre ?? 0,
-        'total_coefs'       => $donneesTrimestre->total_coefs_trimestre ?? 0,
-        'mention'           => $mention,
-        'annee_scolaire_id' => $anneeScolaireId,
-        'rang'              => 0,
-        'updated_at'        => now(),
-    ]
-);
+        DB::table('bilans')->updateOrInsert(
+            [
+                'inscription_id' => $enrollmentId,
+                'trimestre_id' => $trimesterId,
+                'sequence_id' => null,
+                'annee_scolaire_id' => $anneeScolaireId,  // ⬅️ AJOUTE CETTE LIGNE ICI
+            ],
+            [
+                'moyenne' => $moyenneTrimestre,
+                'total_points' => $donneesTrimestre->total_points_trimestre ?? 0,
+                'total_coefs' => $donneesTrimestre->total_coefs_trimestre ?? 0,
+                'mention' => $mention,
+                'annee_scolaire_id' => $anneeScolaireId,
+                'rang' => 0,
+                'updated_at' => now(),
+            ]
+        );
     }
-
-
-
 
     public function attribuerRangsClasseForTrimestre($trimesterId, $classeId)
     {
@@ -219,7 +222,7 @@ class AcademicStatisticsService
             DB::table('bilans')
                 ->where('id', $bilan->id)
                 ->update([
-                    'rang'            => $rang,
+                    'rang' => $rang,
                     'effectif_classe' => $effectif,
                 ]);
         }

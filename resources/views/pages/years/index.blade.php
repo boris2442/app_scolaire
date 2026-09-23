@@ -2,13 +2,13 @@
 
 @section('content')
     {{-- 1. Cartes de statistiques --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
         <div class="bg-card p-4 rounded-xl border border-border flex items-center gap-4 shadow-sm">
             <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center text-xl">
                 <x-lucide-calendar class="w-6 h-6" />
             </div>
             <div>
-                <p class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Total Années</p>
+                <p class="text-[10px] text-muted-foreground  font-bold tracking-wider">Total Années</p>
                 <h3 class="text-xl font-black text-foreground">{{ $totalYears }}</h3>
             </div>
         </div>
@@ -18,7 +18,7 @@
                 <x-lucide-check-check class="w-4 h-4" />
             </div>
             <div>
-                <p class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Année en cours</p>
+                <p class="text-[10px] text-muted-foreground  font-bold tracking-wider">Année en cours</p>
                 <h3 class="text-sm font-bold text-foreground">
                     {{ $actifYear ? $actifYear->libelle : 'Aucune' }}
                 </h3>
@@ -31,7 +31,7 @@
 
         {{-- Formulaire à gauche --}}
         <div class="bg-card p-6 rounded-xl border border-border h-fit">
-            <h2 class="text-sm font-bold uppercase mb-4">Nouvelle Année</h2>
+            <h2 class="text-sm font-bold  mb-4">Nouvelle Année</h2>
             <form action="{{ route('settings.years.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
@@ -123,7 +123,7 @@
 
                     {{-- STRUCTURE PÉDAGOGIQUE (DÉPLACÉ ICI À L'INTÉRIEUR DU FOREACH) --}}
                     <div class="pt-3 border-t border-border/50">
-                        <p class="text-[9px] font-bold uppercase text-muted-foreground mb-2 tracking-tight">Périodes :</p>
+                        <p class="text-[9px] font-bold  text-muted-foreground mb-2 tracking-tight">Périodes :</p>
                         <div class="flex flex-wrap gap-2">
                             @foreach ($year->trimestres as $trim)
                                 <div class="group relative">

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\School;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +34,7 @@ class PresenceAndServiceController extends Controller
         $pdf->setPaper('a4', 'portrait');
 
         // return $pdf->download('Presence_effective'.$data['user']->name.'.pdf');
-        return $pdf->download(str('Presence effective ' . $data['user']->name)->slug('_') . '.pdf');
+        return $pdf->download(str('Presence effective '.$data['user']->name)->slug('_').'.pdf');
     }
 
     /**
@@ -55,7 +54,7 @@ class PresenceAndServiceController extends Controller
 
         // Télécharger le PDF
         return $pdf->download(
-            str('Prise de service ' . $data['user']->name)->slug('_') . '.pdf'
+            str('Prise de service '.$data['user']->name)->slug('_').'.pdf'
         );
     }
 
@@ -76,7 +75,7 @@ class PresenceAndServiceController extends Controller
 
         // Télécharger le document
         return $pdf->download(
-            str('Reprise de service ' . $data['user']->name)->slug('_') . '.pdf'
+            str('Reprise de service '.$data['user']->name)->slug('_').'.pdf'
         );
     }
 }

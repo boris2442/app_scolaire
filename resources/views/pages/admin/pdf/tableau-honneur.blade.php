@@ -422,7 +422,7 @@
 
 <body>
 
-    @foreach ($resultats as $student)
+    @foreach ($results as $student)
         @php
             $nomEleve = is_array($student) ? $student['nom'] ?? '' : $student->nom ?? '';
             $prenomEleve = is_array($student) ? $student['prenom'] ?? '' : $student->prenom ?? '';

@@ -150,8 +150,7 @@ class AssessmentController extends Controller
 
         return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
             ->with('success', 'Session d\'évaluation prête !');
-        // on finit on reste sur la meme page pour le telechargement des stats
-        //   return redirect()->back()->with('success', 'Session d\'évaluation prête ! Vous pouvez maintenant saisir les notes ou télécharger les statistiques.');
+      
     }
 
     public function bulkStoreNotes(Request $request, $id, ScolariteService $scolariteService)

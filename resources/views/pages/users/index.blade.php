@@ -161,7 +161,7 @@
                                         <button type="submit"
                                             onclick="return confirm('Générer un nouveau mot de passe pour {{ $user->name }} ?')"
                                             class="p-2 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-lg transition"
-                                            title="Générer un mot de passe">
+                                            title="Regénérer un mot de passe">
                                             <x-lucide-key-round class="w-4 h-4" />
                                         </button>
                                     </form>

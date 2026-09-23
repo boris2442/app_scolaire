@@ -2,36 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassRequest;
 use App\Http\Requests\ClassStoreRequest;
-
 use App\Models\Classe;
 use App\Models\Cycle;
-use App\Models\Niveau;
 use App\Models\Year;
-use Illuminate\Http\Request;
-
 
 class ClassController extends Controller
 {
-
     public function index()
     {
         // On récupère l'année active (très important !)
         $actifYear = Year::where('est_active', true)->first();
 
-        if (!$actifYear) {
+        if (! $actifYear) {
             return redirect()->route('settings.years.index')
                 ->with('error', 'Veuillez activer une année scolaire d\'abord.');
         }
 
-       
         // On récupère TOUTES les classes de l'établissement (sans filtrer par année)
         $classes = Classe::with(['matieres', 'cycle'])->get();
 
-
         return view('pages.classes.index', compact('classes', 'actifYear'));
     }
+
     public function store(ClassStoreRequest $request)
     {
         $request->validated();
@@ -44,6 +38,7 @@ class ClassController extends Controller
     public function destroy(Classe $classe)
     {
         $classe->delete();
+
         return redirect()->route('settings.classes.index')->with('success', 'Classe supprimée.');
     }
 
@@ -55,13 +50,9 @@ class ClassController extends Controller
         return view('pages.academics.classes-edit', compact('classe', 'cycles'));
     }
 
-    public function update(Request $request, $id)
+    public function update(ClassRequest $request, $id)
     {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'cycle_id' => 'required|exists:cycles,id',
-            'section' => 'required|in:francophone,anglophone',
-        ]);
+        $request->validated();
 
         $classe = Classe::findOrFail($id);
         $classe->update([

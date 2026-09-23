@@ -15,8 +15,7 @@ class AfterLoginController extends Controller
         $year = Year::where('est_active', true)->first();
         $school = School::first(); // Supposant qu'il n'y a qu'un seul paramétrage
 
-        // $user=Auth::user()->name();
-        // dd($user);
+      
         return view('pages.after-login', compact('year', 'school'));
     }
 }

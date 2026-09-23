@@ -407,7 +407,7 @@ class BulletinPrintController extends Controller
         $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
 
         // Récupération directe depuis la table 'bilans' (Seuil >= 12)
-        $resultats = DB::table('bilans')
+        $results = DB::table('bilans')
             ->join('inscriptions', 'bilans.inscription_id', '=', 'inscriptions.id')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classeId)
@@ -419,7 +419,7 @@ class BulletinPrintController extends Controller
             ->orderBy('bilans.moyenne', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pages.admin.pdf.tableau-honneur', compact('classe', 'trimester', 'school', 'resultats', 'actifYear'))
+        $pdf = Pdf::loadView('pages.admin.pdf.tableau-honneur', compact('classe', 'trimester', 'school', 'results', 'actifYear'))
             ->setPaper('a4', 'landscape');
 
         return $pdf->download(str("Tableau_Honneur_{$classe->nom}")->slug('_').'.pdf');
@@ -438,14 +438,14 @@ class BulletinPrintController extends Controller
             ->pluck('id');
 
         // 1. Récupération des élèves inscrits
-        $enrollmentsEleves = DB::table('inscriptions')
+        $enrollmentsStudents = DB::table('inscriptions')
             ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
             ->where('inscriptions.classe_id', $classeId)
             ->where('inscriptions.annee_scolaire_id', $actifYear->id)
             ->select('inscriptions.id as inscription_id', 'eleves.nom', 'eleves.prenom')
             ->get();
 
-        $totalEleves = $enrollmentsEleves->count();
+        $totalEleves = $enrollmentsStudents->count();
 
         // Initialisation uniforme du tableau des tranches
         $tranchesInitiales = [
@@ -497,11 +497,11 @@ class BulletinPrintController extends Controller
         $admis = 0;
         $noteMax = -1;
         $noteMin = 21;
-        $majorNom = $majorPrenom = 'Aucun';
-        $dernierNom = $dernierPrenom = 'Aucun';
+        $majorName = $majorSurname = 'Aucun';
+        $lastName = $lastSurname = 'Aucun';
         $tranches = $tranchesInitiales;
 
-        foreach ($enrollmentsEleves as $student) {
+        foreach ($enrollmentsStudents as $student) {
             $id = $student->inscription_id;
 
             // Moyenne de l'élève pour le trimestre (0 si pas de notes)
@@ -531,15 +531,15 @@ class BulletinPrintController extends Controller
             // Major
             if ($m > $noteMax) {
                 $noteMax = $m;
-                $majorNom = $student->nom;
-                $majorPrenom = $student->prenom;
+                $majorName = $student->nom;
+                $majorSurname = $student->prenom;
             }
 
             // Dernier
             if ($m < $noteMin) {
                 $noteMin = $m;
-                $dernierNom = $student->nom;
-                $dernierPrenom = $student->prenom;
+                $lastName = $student->nom;
+                $lastSurname = $student->prenom;
             }
         }
 
@@ -552,10 +552,10 @@ class BulletinPrintController extends Controller
             'moyenne_generale' => number_format($moyenneClasse, 2),
             'note_max' => number_format(max(0, $noteMax), 2),
             'note_min' => number_format($noteMin == 21 ? 0 : $noteMin, 2),
-            'major_nom' => $majorNom,
-            'major_prenom' => $majorPrenom,
-            'dernier_nom' => $dernierNom,
-            'dernier_prenom' => $dernierPrenom,
+            'major_nom' => $majorName,
+            'major_prenom' => $majorSurname,
+            'dernier_nom' => $lastName,
+            'dernier_prenom' => $lastSurname,
             'admis' => $admis,
             'refuses' => $refuses,
             'taux_reussite' => number_format($tauxReussite, 2),

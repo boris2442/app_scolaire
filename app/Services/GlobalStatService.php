@@ -61,9 +61,9 @@ class GlobalStatService
         // 3. Extraction groupée via SQL direct
         return [
             'etablissement' => $this->getAgregatSQL($baseQuery),
-            'sections' => $this->genererAgregatsParColonne($baseQuery, 'section'),
-            'cycles' => $this->genererAgregatsParColonne($baseQuery, 'cycle_nom'),
-            'niveaux' => $this->genererAgregatsParColonne($baseQuery, 'niveau'),
+            'sections' => $this->generateAggregatesByColumn($baseQuery, 'section'),
+            'cycles' => $this->generateAggregatesByColumn($baseQuery, 'cycle_nom'),
+            'niveaux' => $this->generateAggregatesByColumn($baseQuery, 'niveau'),
         ];
     }
 
@@ -114,18 +114,18 @@ class GlobalStatService
     /**
      * Groupe par colonne (section, cycle_nom, niveau) directement en SQL.
      */
-    private function genererAgregatsParColonne($query, string $colonne): array
+    private function generateAggregatesByColumn($query, string $colonne): array
     {
         $groupes = (clone $query)->distinct()->pluck($colonne);
-        $resultats = [];
+        $results = [];
 
         foreach ($groupes as $groupe) {
             if ($groupe) {
                 $queryGroupe = (clone $query)->where($colonne, $groupe);
-                $resultats[$groupe] = $this->getAgregatSQL($queryGroupe);
+                $results[$groupe] = $this->getAgregatSQL($queryGroupe);
             }
         }
 
-        return $resultats;
+        return $results;
     }
 }

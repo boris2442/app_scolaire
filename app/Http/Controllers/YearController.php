@@ -8,13 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class YearController extends Controller
 {
+    // private function data(){
+    //       $years = Year::with(['trimestres.sequences'])
+
+    //         ->orderBy('date_debut', 'desc')->get();
+    //     $totalYears = $years->count();
+
+    //     $actifYear = $years->where('est_active', true)->first();
+    //     return compact('years', 'totalYears', 'actifYear');
+    // }
     public function index()
     {
         $years = Year::with(['trimestres.sequences'])
-
             ->orderBy('date_debut', 'desc')->get();
         $totalYears = $years->count();
-       
+
         $actifYear = $years->where('est_active', true)->first();
 
         return view('pages.years.index', compact('years', 'totalYears', 'actifYear'));
@@ -89,5 +97,16 @@ class YearController extends Controller
         $year->update($request->validated());
 
         return redirect()->route('settings.years.index')->with('success', 'Année mise à jour.');
+    }
+
+    public function create()
+    {
+        $years = Year::with(['trimestres.sequences'])
+            ->orderBy('date_debut', 'desc')->get();
+        $totalYears = $years->count();
+
+        $actifYear = $years->where('est_active', true)->first();
+
+        return view('pages.years.index', compact('years', 'totalYears', 'actifYear'));
     }
 }

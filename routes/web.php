@@ -87,10 +87,8 @@ Route::middleware('scolarite.coherence')->group(function () {
             // On regroupe tout sous le préfixe 'settings'
             Route::prefix('settings')->name('settings.')->group(function () {
 
-                // Cette ligne gère TOUT (Index, Store, Edit, Update, Destroy)
-                // Elle crée automatiquement la route 'settings.annees.edit' et 'settings.annees.update'
                 Route::resource('years', YearController::class)->parameters([
-                    'years' => 'year', // Pour que Laravel injecte bien le modèle dans ton Controller
+                    'years' => 'year', 
                 ]);
 
                 // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)

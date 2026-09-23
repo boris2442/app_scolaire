@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TimeSlotRequest extends FormRequest
@@ -34,8 +33,8 @@ class TimeSlotRequest extends FormRequest
             'heure_fin.date_format' => "L'heure de fin doit être au format HH:MM.",
             'heure_fin.after' => "L'heure de fin doit être après l'heure de début.",
 
-            'libelle.string' => "Le libellé doit être une chaîne de caractères.",
-            'libelle.max' => "Le libellé ne doit pas dépasser 255 caractères.",
+            'libelle.string' => 'Le libellé doit être une chaîne de caractères.',
+            'libelle.max' => 'Le libellé ne doit pas dépasser 255 caractères.',
         ];
     }
 }
