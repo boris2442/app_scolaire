@@ -14,25 +14,25 @@
     <meta name="robots" content="index, follow">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://boris.espacecameroun.com">
+    <link rel="canonical" href="https://myacademiapro.com">
     <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://boris.espacecameroun.com">
+    <meta property="og:url" content="https://myacademiapro.com">
     <meta property="og:title" content="AcademiaPro | Simplifiez la Gestion Académique de votre Établissement">
     <meta property="og:description"
         content="Saisie des notes, calculs automatisés, gestion des absences et impression des bulletins en quelques clics.">
-    <meta property="og:image" content="https://boris.espacecameroun.com/images/logo.png">
+    <meta property="og:image" content="https://myacademiapro.com/images/logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://boris.espacecameroun.com">
+    <meta name="twitter:url" content="https://myacademiapro.com">
     <meta name="twitter:title" content="AcademiaPro | Logiciel de Gestion Scolaire">
     <meta name="twitter:description"
         content="Découvrez AcademiaPro : la plateforme moderne de gestion des notes et bulletins scolaires.">
-    <meta name="twitter:image" content="https://boris.espacecameroun.com/images/logo.png">
+    <meta name="twitter:image" content="https://myacademiapro.com/images/logo.png">
 
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
