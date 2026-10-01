@@ -78,6 +78,7 @@ class YearController extends Controller
 
             // 4. Supprimer les trimestres de cette année
             $year->trimestres()->delete();
+           
 
             // 5. Enfin, supprimer l'année
             $year->delete();

@@ -88,12 +88,12 @@
 
                             <div class="relative">
                                 <input id="password" type="password" name="password" required
-                                    autocomplete="current-password" placeholder="••••••••"
+                                    autocomplete="current-password" placeholder=""
                                     class="block w-full px-3 py-2.5 pr-10 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
 
                                 <button type="button" id="togglePassword"
                                     class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors">
-                                
+
                                     <x-lucide-eye class="w-4 h-4" />
                                 </button>
                             </div>
@@ -103,7 +103,7 @@
                             @enderror
                         </div>
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
+                            // document.addEventListener('DOMContentLoaded', function() {
 
                                 const passwordInput = document.getElementById('password');
                                 const togglePassword = document.getElementById('togglePassword');
@@ -111,8 +111,10 @@
                                 if (!passwordInput || !togglePassword) return;
 
                                 togglePassword.addEventListener('click', () => {
+                                    
 
                                     const icon = togglePassword.querySelector('i');
+                                    console.log('BOUTTON CLIQUER');
 
                                     if (passwordInput.type === 'password') {
                                         passwordInput.type = 'text';
@@ -131,9 +133,9 @@
                                     }
                                 });
 
-                            });
+                            // });
                         </script>
-                       
+
 
                         <div class="pt-2 w-full">
                             <button type="submit"

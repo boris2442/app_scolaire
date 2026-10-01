@@ -37,13 +37,11 @@
                             <x-lucide-plus class="w-4 h-4" /> Add student
                         </a>
 
-                        <a href="{{ route('admin.students.export') }}"
-                        target='_blank'
+                        <a href="{{ route('admin.students.export') }}" target='_blank'
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel
                         </a>
-                        <a href="{{ route('admin.inscriptions.export') }}"
-                          target='_blank'
+                        <a href="{{ route('admin.inscriptions.export') }}" target='_blank'
                             class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-secondary transition-colors">
                             <x-lucide-file-up class="w-4 h-4" /> Exporter en Excel les inscrits
                         </a>
@@ -264,6 +262,7 @@
         </div>
 
         <form action="{{ route('admin.students.index') }}" method="GET" class="space-y-4 mb-8">
+            <span class='text-red-500'>effectuer un filtre pour imprimer</span>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 <div class="relative flex items-center">
@@ -301,6 +300,19 @@
                         </a>
                     @endif
                 </div>
+
+                {{-- On n'affiche le bouton d'impression que si une classe est filtrée --}}
+                @if (request()->filled('classe_id'))
+                    <a href="{{ route('admin.eleves.imprimer', ['classe_id' => request('classe_id')]) }}" target="_blank"
+                        class="flex items-center gap-3 px-4 py-2 text-sm  hover:bg-primary/10 transition-colors bg-blue-700 text-white rounded">
+                        <x-lucide-printer class="w-4 h-4" /> Imprimer cette classe
+                    </a>
+                @else
+                    <div class="px-4 py-2 text-[10px] text-muted-foreground italic">
+                        Filtrez une classe pour imprimer
+                    </div>
+                @endif
+
             </div>
 
             @if (request('search') || request('classe_id'))

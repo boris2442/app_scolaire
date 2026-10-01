@@ -30,21 +30,20 @@ class LoginRequest extends FormRequest
         return [
             // 'email' => ['required', 'string', 'email'],
             'login' => ['required', 'string'],
-            'auth.failed' => 'Identifiant ou mot de passe incorrect.',
             'password' => ['required', 'string'],
         ];
     }
 
-public function messages(): array
-{
-    return [
-        'login.required' => 'Le champ identifiant est obligatoire.',
-        'login.string'   => 'L\'identifiant doit être une chaîne de caractères.',
-        'password.required' => 'Le mot de passe est obligatoire.',
-        'password.string'   => 'Le mot de passe doit être une chaîne de caractères.',
-    ];
-}
-
+    public function messages(): array
+    {
+        return [
+            'login.required' => 'Le champ identifiant est obligatoire.',
+            'login.string' => 'L\'identifiant doit être une chaîne de caractères.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
+            'auth.failed' => 'Identifiant ou mot de passe incorrect.',
+        ];
+    }
 
     /**
      * Attempt to authenticate the request's credentials.
@@ -52,7 +51,6 @@ public function messages(): array
      * @throws ValidationException
      */
     // public function authenticate(): void
-
 
     public function authenticate(): void
     {
@@ -76,11 +74,18 @@ public function messages(): array
             ]);
         }
 
+        // if (! Auth::attempt($credentials, $this->boolean('remember'))) {
+        //     // RateLimiter::hit($this->throttleKey());
+        //     RateLimiter::hit($this->throttleKey(), 300);
+
+        //     throw ValidationException::withMessages([
+        //         // Remplacer trans('auth.failed') par votre texte en dur
+        //         'login' => 'Identifiant ou mot de passe incorrect.',
+        //     ]);
+        // }
+
         RateLimiter::clear($this->throttleKey());
     }
-
-
-
 
     /**
      * Ensure the login request is not rate limited.
@@ -89,7 +94,7 @@ public function messages(): array
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 3)) {
             return;
         }
 
@@ -110,6 +115,6 @@ public function messages(): array
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('login')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->string('login')).'|'.$this->ip());
     }
 }

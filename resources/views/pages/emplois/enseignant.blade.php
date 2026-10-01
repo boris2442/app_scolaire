@@ -8,10 +8,10 @@
 
             <h1 class="text-lg sm:text-2xl font-bold leading-tight">
                 Emploi du temps de l'enseignant :
-                <span class="text-primary">{{ $enseignant->name }}</span>
+                <span class="text-primary">{{ $teacher->name }}</span>
             </h1>
 
-            <a href="{{ route('emplois.enseignant.pdf', $enseignant->id) }}" title="Télécharger le document PDF"
+            <a href="{{ route('emplois.enseignant.pdf', $teacher->id) }}" title="Télécharger le document PDF" target='_blank'
                 class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold text-sm sm:text-base py-2.5 px-4 rounded shadow transition whitespace-nowrap">
 
                 📄 Télécharger PDF
@@ -33,12 +33,12 @@
                         <tr class="bg-secondary text-secondary-foreground">
 
                             <th class="border border-border p-4">
-                                Créneaux / Jours
+                                Créneaux / days
                             </th>
 
-                            @foreach ($jours as $jour)
+                            @foreach ($days as $day)
                                 <th class="border border-border p-4">
-                                    {{ $jour->nom }}
+                                    {{ $day->nom }}
                                 </th>
                             @endforeach
 
@@ -63,13 +63,13 @@
 
                                 </td>
 
-                                @foreach ($jours as $jour)
+                                @foreach ($days as $day)
                                     <td class="border border-border p-3 align-top">
 
                                         @php
 
                                             $seance = $seances
-                                                ->where('jour_id', $jour->id)
+                                                ->where('jour_id', $day->id)
                                                 ->where('creneau_id', $creneau->id)
                                                 ->first();
 

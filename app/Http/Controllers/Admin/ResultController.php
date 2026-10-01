@@ -61,7 +61,7 @@ public function index()
             }
             // CAS 2 : On a choisi un Trimestre
             elseif ($request->filled('trimestre_id')) {
-                $this->moyenneService->calculerMoyennesTrimestrielles($request->classe_id, $request->trimestre_id);
+                $this->moyenneService->calculateTermAverages($request->classe_id, $request->trimestre_id);
                 // Optionnel : $this->moyenneService->genererBilansTrimestriels(...) si tu as créé la fonction
                 $message = 'Calculs du trimestre terminés !';
             } else {

@@ -23,7 +23,7 @@ return new class extends Migration
     {
         Schema::table('bilans', function (Blueprint $table) {
      // En cas de rollback, on remet la contrainte
-            $table->integer('effectif_classe')->nullable(false)->change();
+           // $table->integer('effectif_classe')->nullable(false)->change();
         });
     }
 };

@@ -82,7 +82,7 @@ class Student extends Model
         return $this->inscriptions()->latest()->first();
     }
 
-    public static function genererEtAttribuerMatricule(self $student, $anneeScolaireId)
+    public static function generateAndAssignStudent(self $student, $anneeScolaireId)
     {
         // Si l'élève a déjà un matricule (fourni par Excel par exemple), on ne touche à rien
         if (! empty($student->matricule)) {

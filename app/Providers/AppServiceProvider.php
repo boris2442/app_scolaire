@@ -27,11 +27,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $ecole = Cache::rememberForever('ecole', function () {
-            return School::first() ?? new School();
-        });
+        // $ecole = Cache::rememberForever('ecole', function () {
+        //     return School::first() ?? new School();
+        // });
 
-        View::share('ecole', $ecole);
+        // View::share('ecole', $ecole);
 
 
 

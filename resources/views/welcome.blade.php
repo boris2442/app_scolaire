@@ -409,11 +409,11 @@
 
     <footer class="bg-card border-t border-border mt-auto transition-colors duration-300">
         <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-400  tracking-wider">
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs  text-gray-500  ">
             <div class="flex items-center space-x-2">
                 <span class="font-bold text-foreground">Academia<span class="text-primary">Pro</span></span>
                 <span>—</span>
-                <span class="font-bold">Gestion de Scolarité (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06
+                <span >Gestion de Scolarité (+237) 679 13 51 77 / 689 58 72 79 / 694 22 35 03 / 675 06
                     60 01</span>
             </div>
             <div class="text-gray-500 font-normal normal-case text-center sm:text-right">

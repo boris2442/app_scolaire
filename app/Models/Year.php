@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Year extends Model
 {
-    protected $table='annee_scolaires';
+    protected $table = 'annee_scolaires';
+
     protected $fillable = ['libelle', 'date_debut', 'date_fin', 'est_active'];
 
     protected $casts = [
@@ -19,6 +20,8 @@ class Year extends Model
     {
         return $this->hasMany(Trimestre::class, 'annee_scolaire_id');
     }
+
+  
 
     // Méthode pour activer cette année et désactiver les autres
     public function activer()

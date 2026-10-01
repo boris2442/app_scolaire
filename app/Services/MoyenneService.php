@@ -251,7 +251,7 @@ class MoyenneService
         return 'Faible';
     }
 
-    public function calculerMoyennesTrimestrielles($classeId, $trimesterId)
+    public function calculateTermAverages($classeId, $trimesterId)
     {
         // 1. Trouver les IDs des deux séquences liées à ce trimestre
         $sequences = Sequence::where('trimestre_id', $trimesterId)->pluck('id');

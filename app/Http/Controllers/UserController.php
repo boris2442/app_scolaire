@@ -48,10 +48,10 @@ class UserController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        $rolesDisponibles = $this->getEnumRoles();
+        $availableRoles = $this->getEnumRoles();
 
         $request->validate([
-            'role' => 'required|in:'.implode(',', $rolesDisponibles),
+            'role' => 'required|in:'.implode(',', $availableRoles),
         ]);
 
         // Mise à jour de la base de données
@@ -62,18 +62,7 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Rôle mis à jour avec succès.');
     }
 
-    // public function destroy(User $user)
-    // {
-    //     // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même si besoin
-    //     if ($user->id === auth()->id()) {
-    //         return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
-    //     }
-
-    //     $user->delete();
-
-    //     return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
-    // }
-
+    
     public function destroy(User $user)
     {
         // Sécurité : Empêcher de supprimer l'administrateur courant ou soi-même

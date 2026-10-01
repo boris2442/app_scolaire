@@ -105,11 +105,11 @@
                                 <x-lucide-clipboard class="w-4 text-center" />
                                 <span>Reprise de service</span>
                             </a>
-                            <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Mon Emploi du temps"
+                           {{-- <a href="{{ route('emplois.enseignant.pdf', $teacher->id) }}" title="Mon Emploi du temps"
                                 class="flex items-center space-x-2 px-3 py-2 text-sm rounded-lg hover:bg-secondary hover:text-primary transition-colors">
                                 <x-lucide-calendar class="w-4 text-center" />
                                 <span>Mon Emploi du temps</span>
-                            </a>
+                            </a> --}}
                             {{-- <a href="{{ route('emplois.enseignant', auth()->id()) }}" title="Mon Emploi du temps"
                     class="flex items-center px-3 py-2 rounded-md text-sm transition-colors group {{ request()->routeIs('emplois.enseignant') ? 'bg-primary text-primary-foreground shadow-md' : 'hover:bg-accent hover:text-accent-foreground' }}">
                     <x-lucide-calendar class="w-4 h-4 flex-shrink-0" />

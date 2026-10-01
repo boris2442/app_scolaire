@@ -92,8 +92,8 @@ class StudentImport implements ToCollection, WithHeadingRow
                     $student = Student::create($studentData);
 
                     // 🔥 CORRECTION ICI : Utilisation de empty(trim(...)) pour forcer la génération si vide
-                    if (empty(trim($student->matricule)) && method_exists(Student::class, 'genererEtAttribuerMatricule')) {
-                        Student::genererEtAttribuerMatricule($student, $this->anneeScolaireId);
+                    if (empty(trim($student->matricule)) && method_exists(Student::class, 'generateAndAssignStudent')) {
+                        Student::generateAndAssignStudent($student, $this->anneeScolaireId);
                     }
                 } else {
                     // Mettre à jour les infos manquantes si besoin

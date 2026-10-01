@@ -37,8 +37,8 @@ class TrimesterController extends Controller
         $anneeScolaireId = $actifYear->id;
 
         // 2. PREMIÈRE ÉTAPE CRUCIALE : Calculer les moyennes et rangs par MATIÈRE
-        // C'est cette ligne qui va enfin remplir ta table 'moyennes' avec le trimestre_id !
-        $this->moyenneService->calculerMoyennesTrimestrielles($classeId, $trimesterId);
+     
+        $this->moyenneService->calculateTermAverages($classeId, $trimesterId);
 
         // 3. Récupérer tous les élèves inscrits dans cette classe
         $enrollments = Inscription::where('classe_id', $classeId)->get();

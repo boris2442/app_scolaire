@@ -24,9 +24,9 @@ class StatisticController extends Controller
     {
         $sequenceId = $request->input('sequence_id');
         $classeId = $request->input('classe_id');
-        
+
         // Récupérer l'ID de l'année scolaire active (ici fixé à 1 pour l'exemple)
-        $anneeScolaireId = 1; 
+        $anneeScolaireId = 1;
 
         // 1. Récupérer tous les élèves inscrits dans cette classe spécifique
         $studentsInscrits = DB::table('inscriptions')

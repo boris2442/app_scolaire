@@ -145,7 +145,7 @@ class StudentController extends Controller
             $actifYear = $this->scolarite->getactifYear();
 
             // UTILISATION DE LA NOUVELLE FONCTION DE MATRICULE
-            Student::genererEtAttribuerMatricule($newStudent, $actifYear->id);
+            Student::generateAndAssignStudent($newStudent, $actifYear->id);
 
             Inscription::create([
                 'eleve_id' => $newStudent->id,

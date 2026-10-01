@@ -88,7 +88,7 @@ Route::middleware('scolarite.coherence')->group(function () {
             Route::prefix('settings')->name('settings.')->group(function () {
 
                 Route::resource('years', YearController::class)->parameters([
-                    'years' => 'year', 
+                    'years' => 'year',
                 ]);
 
                 // On ajoute juste la route personnalisée pour l'activation (PATCH est plus correct que GET ici)
@@ -318,10 +318,15 @@ Route::middleware('scolarite.coherence')->group(function () {
     // });
 
     Route::middleware('auth')->group(function () {
-        Route::get('/emplois/teacher/{userId}', [SessionCourseController::class, 'showByEnseignant'])->name('emplois.enseignant');
+        // Route::get('my-schedule', [SessionCourseController::class, 'showByEnseignant'])->name('emplois.enseignant');
+
+        // // Emploi du temps de l'enseignant (Téléchargement PDF)
+        // Route::get('/my-schedule/pdf', [SessionCourseController::class, 'downloadTeacherPdf'])->name('emplois.enseignant.pdf');
+
+        Route::get('/my-schedule/teacher/{userId}', [SessionCourseController::class, 'showByEnseignant'])->name('emplois.enseignant');
 
         // Emploi du temps de l'enseignant (Téléchargement PDF)
-        Route::get('/emplois/teacher/{userId}/pdf', [SessionCourseController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
+        Route::get('/my-schedule/teacher/{userId}/pdf', [SessionCourseController::class, 'telechargerPdfEnseignant'])->name('emplois.enseignant.pdf');
 
         // Route::middleware(['auth', 'censeur'])->group(function () {
 

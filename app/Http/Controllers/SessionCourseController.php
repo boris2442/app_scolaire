@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Classe;
 use App\Models\Creneau;
-use App\Models\Enseignant;
 use App\Models\Jour;
 use App\Models\Matiere;
 use App\Models\School;
@@ -18,14 +18,11 @@ use Illuminate\Support\Facades\DB;
 class SessionCourseController extends Controller
 {
     // Afficher l'emploi du temps d'une classe spécifique
-
     public function showByClasse($classeId)
     {
-        // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
         $actifYear = Year::where('est_active', true)->first();
 
-        // Récupérer toutes les séances de cette classe pour l'année en cours
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
             ->where('classe_id', $classeId)
             ->where('annee_scolaire_id', $actifYear?->id)
@@ -34,7 +31,6 @@ class SessionCourseController extends Controller
         $jours = Jour::orderBy('ordre')->get();
         $creneaux = Creneau::orderBy('heure_debut')->get();
 
-        // 1. Récupérer uniquement les matières de cette classe via la table pivot classe_matiere
         $matieresIds = DB::table('classe_matiere')
             ->where('classe_id', $classeId)
             ->pluck('matiere_id');
@@ -44,19 +40,6 @@ class SessionCourseController extends Controller
             ->orderBy('nom')
             ->get();
 
-        // 2. Récupérer uniquement les enseignants affectés à cette classe (via la table affectations)
-        // $enseignantsIds = DB::table('affectations')
-        //     ->where('classe_id', $classeId)
-        //     ->when($actifYear, function ($q) use ($actifYear) {
-        //         return $q->where('annee_scolaire_id', $actifYear->id);
-        //     })
-        //     ->pluck('enseignant_id');
-
-        // $enseignants = User::whereIn('id', $enseignantsIds)
-        //     ->select('id', 'name')
-        //     ->orderBy('name')
-        //     ->get();
-        // 2. Récupérer absolument TOUS les utilisateurs (sans passer par la table affectations)
         $enseignants = User::select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -83,14 +66,13 @@ class SessionCourseController extends Controller
 
         $validated['annee_scolaire_id'] = $actifYear->id;
 
-        // Optionnel : Vérifier si l'enseignant est déjà occupé sur ce créneau ce jour-là
-        $conflitEnseignant = Seance::where('annee_scolaire_id', $actifYear->id)
+        $conflitTeacher = Seance::where('annee_scolaire_id', $actifYear->id)
             ->where('enseignant_id', $validated['enseignant_id'])
             ->where('jour_id', $validated['jour_id'])
             ->where('creneau_id', $validated['creneau_id'])
             ->exists();
 
-        if ($conflitEnseignant) {
+        if ($conflitTeacher) {
             return redirect()->back()->withErrors(['conflit' => 'Cet enseignant a déjà un cours prévu à ce créneau !']);
         }
 
@@ -101,14 +83,10 @@ class SessionCourseController extends Controller
 
     public function telechargerPdfClasse($classeId)
     {
-        // MODIFICATION ICI : On récupère la classe directement sans charger le niveau
         $classe = Classe::findOrFail($classeId);
         $actifYear = Year::where('est_active', true)->first();
-
-        // Récupération de l'établissement (prend le premier enregistrement de la table)
         $school = School::first();
 
-        // Même récupération des données
         $seances = Seance::with(['matiere', 'enseignant', 'jour', 'creneau'])
             ->where('classe_id', $classeId)
             ->where('annee_scolaire_id', $actifYear?->id)
@@ -117,20 +95,14 @@ class SessionCourseController extends Controller
         $jours = Jour::orderBy('ordre')->get();
         $creneaux = Creneau::orderBy('heure_debut')->get();
 
-        // Charger la vue PDF dédiée
         $pdf = Pdf::loadView('pages.emplois.pdf.classe-pdf', compact('classe', 'seances', 'jours', 'creneaux', 'actifYear', 'school'));
-
-        // Optionnel : format Paysage (Landscape) car un emploi du temps est souvent large
         $pdf->setPaper('A4', 'landscape');
-
-        // Télécharger ou afficher dans le navigateur
 
         return $pdf->download(str("emploi-du-temps-{$classe->nom}")->slug().'.pdf');
     }
 
     public function indexClasses()
     {
-        // On récupère directement les classes triées par nom (plus de with('niveau'))
         $classes = Classe::orderBy('nom')->get();
 
         return view('pages.emplois.choice-class', compact('classes'));
@@ -139,30 +111,26 @@ class SessionCourseController extends Controller
     // Afficher l'emploi du temps d'un enseignant spécifique
     public function showByEnseignant($userId)
     {
-        // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
-        $enseignant = User::findOrFail($userId);
+        $teacher = User::findOrFail($userId);
         $actifYear = Year::where('est_active', true)->first();
 
-        // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])
             ->where('enseignant_id', $userId)
             ->where('annee_scolaire_id', $actifYear?->id)
             ->get();
 
-        $jours = Jour::orderBy('ordre')->get();
+        $days = Jour::orderBy('ordre')->get();
         $creneaux = Creneau::orderBy('heure_debut')->get();
 
-        return view('pages.emplois.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'));
+        return view('pages.emplois.enseignant', compact('teacher', 'seances', 'days', 'creneaux'));
     }
 
-    // telecharger le pdf de l'emploi du temps d'un enseignant
+    // Télécharger le PDF de l'emploi du temps d'un enseignant
     public function telechargerPdfEnseignant($userId)
     {
-        // $enseignant = User::where('role', 'enseignant')->findOrFail($userId);
         $enseignant = User::findOrFail($userId);
         $actifYear = Year::where('est_active', true)->first();
 
-        // MODIFICATION ICI : On enlève '.niveau' de la relation 'classe'
         $seances = Seance::with(['matiere', 'classe', 'jour', 'creneau'])
             ->where('enseignant_id', $userId)
             ->where('annee_scolaire_id', $actifYear?->id)
@@ -171,9 +139,8 @@ class SessionCourseController extends Controller
         $jours = Jour::orderBy('ordre')->get();
         $creneaux = Creneau::orderBy('heure_debut')->get();
 
-        // On charge une vue spécifique pour le PDF (ou tu ajustes l'existante)
         $pdf = Pdf::loadView('pages.emplois.pdf.enseignant', compact('enseignant', 'seances', 'jours', 'creneaux'))
-            ->setPaper('a4', 'landscape'); // Format paysage conseillé pour les emplois du temps
+            ->setPaper('a4', 'landscape');
 
         return $pdf->download(str('emploi-du-temps-'.$enseignant->name)->slug('_').'.pdf');
     }

@@ -11,16 +11,16 @@
             </a>
         </div>
 
-    
 
-      <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold"> Emploi du temps : {{ $classe->nom }}</h1>
 
-    <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank" title="telechager le document pdf"
-        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
-        <span>Télécharger en PDF</span>
-    </a>
-</div>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold"> Emploi du temps : {{ $classe->nom }}</h1>
+
+            <a href="{{ route('admin.emplois.classe.pdf', $classe->id) }}" target="_blank" title="telechager le document pdf"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow transition flex items-center space-x-2">
+                <span>Télécharger en PDF</span>
+            </a>
+        </div>
 
         <div class="">
             <p class="text-sm text-foreground/70 mt-1">
@@ -261,7 +261,7 @@
 
                                                 <div class="text-xs text-foreground/70 mt-1">
 
-                                               M/Mme     {{ $seance->enseignant->name ?? 'Enseignant' }}
+                                                    M/Mme {{ $seance->enseignant->name ?? 'Enseignant' }}
 
                                                     {{ $seance->enseignant->prenom ?? '' }}
 

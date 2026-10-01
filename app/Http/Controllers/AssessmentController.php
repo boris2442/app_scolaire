@@ -150,7 +150,7 @@ class AssessmentController extends Controller
 
         return redirect()->route('admin.evaluations.saisie', ['id' => $evaluation->id])
             ->with('success', 'Session d\'évaluation prête !');
-      
+
     }
 
     public function bulkStoreNotes(Request $request, $id, ScolariteService $scolariteService)
