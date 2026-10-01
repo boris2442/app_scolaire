@@ -126,7 +126,7 @@
                         <label class="block text-sm font-medium" for='logo'>Logo actuel</label>
                         <div class="mt-2 mb-4">
                             @if ($school->logo)
-                                <img src="{{ asset('storage/' . $school->logo) }}" alt="Logo"
+                                <img src="{{ asset($school->logo) }}" alt="Logo"
                                     class="h-20 w-20 object-contain border rounded p-1 bg-white">
                             @else
                                 <span class="text-gray-400 text-xs italic">Aucun logo configuré</span>

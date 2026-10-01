@@ -438,7 +438,7 @@
             $anneeScolaire = optional($actifYear)->libelle ?? '2023-2024';
 
             $logoPath = !empty($school->logo)
-                ? public_path('storage/' . $school->logo)
+                ? public_path($school->logo)
                 : public_path('images/logoeducation.jpeg');
         @endphp
 

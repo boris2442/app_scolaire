@@ -22,11 +22,35 @@ class SchoolController extends Controller
 
         $validatedData = $request->validated(); // On récupère uniquement les données validées
 
+        // if ($request->hasFile('logo')) {
+        //     if ($school->logo) {
+        //         Storage::disk('public')->delete($school->logo);
+        //     }
+        //     $validatedData['logo'] = $request->file('logo')->store('uploads/ecole', 'public');
+        // }
+
         if ($request->hasFile('logo')) {
-            if ($school->logo) {
-                Storage::disk('public')->delete($school->logo);
+
+            // Supprimer l'ancien logo
+            if ($school->logo && file_exists(public_path($school->logo))) {
+                unlink(public_path($school->logo));
             }
-            $validatedData['logo'] = $request->file('logo')->store('uploads/ecole', 'public');
+
+            // Dossier public/uploads/ecole
+            $directory = public_path('uploads/ecole');
+
+            if (! file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Nom unique du fichier
+            $filename = uniqid().'.'.$request->file('logo')->getClientOriginalExtension();
+
+            // Déplacer directement dans public/uploads/ecole
+            $request->file('logo')->move($directory, $filename);
+
+            // Enregistrer le chemin en base
+            $validatedData['logo'] = 'uploads/ecole/'.$filename;
         }
 
         $school->fill($validatedData);

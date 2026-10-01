@@ -138,7 +138,7 @@
                     <!-- Logo stocké (si tu stockes l'image dans public/storage/ ou public/images/) -->
                     @if ($school?->logo)
                         <!-- Ajuste le chemin selon ta façon de stocker les images (ex: public_path('storage/' . $school->logo)) -->
-                        <img src="{{ public_path('storage/' . $school->logo) }}" class="logo" alt="Logo">
+                        <img src="{{ public_path($school->logo) }}" class="logo" alt="Logo">
                     @else
                         <h3 style="margin:0; font-size: 16px;">EMPLOI DU TEMPS</h3>
                     @endif

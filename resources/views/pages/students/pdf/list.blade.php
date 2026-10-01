@@ -58,7 +58,7 @@
             </td>
             <td class="header-col">
                 @php
-                    $vraiCheminDansPublic = 'storage/' . $school->logo;
+                    $vraiCheminDansPublic = $school->logo;
                 @endphp
                 @if ($school->logo && file_exists(public_path($vraiCheminDansPublic)))
                     <img src="{{ public_path($vraiCheminDansPublic) }}" width="60">
