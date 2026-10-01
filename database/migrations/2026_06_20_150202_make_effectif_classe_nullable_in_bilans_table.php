@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bilans', function (Blueprint $table) {
-          $table->integer('effectif_classe')->nullable()->change();
+          $table->integer('effectif_classe')->nullable();
         });
     }
 
