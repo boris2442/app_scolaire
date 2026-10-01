@@ -14,7 +14,7 @@ use App\Services\StudentAnalyticsService;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -119,8 +119,23 @@ class StudentController extends Controller
     {
         $data = $request->validated();
 
+        // if ($request->hasFile('photo')) {
+        //     $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
+        // }
+
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
+
+            $directory = public_path('photos_eleves');
+
+            if (! file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $filename = uniqid().'.'.$request->file('photo')->getClientOriginalExtension();
+
+            $request->file('photo')->move($directory, $filename);
+
+            $data['photo'] = 'pictures_eleves/'.$filename;
         }
 
         // On récupère le résultat de la transaction (qui sera notre objet $student)
@@ -209,12 +224,38 @@ class StudentController extends Controller
         return DB::transaction(function () use ($data, $request, $student) {
 
             // 1. Gestion de la Photo (Remplacement)
+            // if ($request->hasFile('photo')) {
+            //     // Supprimer l'ancienne si elle existe
+            //     if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+            //         Storage::disk('public')->delete($student->photo);
+            //     }
+            //     $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
+            // }
+
+            // 1. Gestion de la Photo (Remplacement)
             if ($request->hasFile('photo')) {
-                // Supprimer l'ancienne si elle existe
-                if ($student->photo && Storage::disk('public')->exists($student->photo)) {
-                    Storage::disk('public')->delete($student->photo);
+
+                // Supprimer l'ancienne photo si elle existe
+                if ($student->photo && file_exists(public_path($student->photo))) {
+                    unlink(public_path($student->photo));
                 }
-                $data['photo'] = $request->file('photo')->store('photos_eleves', 'public');
+
+                // Créer le dossier public/photos_eleves s'il n'existe pas
+                $directory = public_path('photos_eleves');
+
+                if (! file_exists($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+
+                // Générer un nom unique
+                $filename = Str::uuid().'.'.
+                    $request->file('photo')->getClientOriginalExtension();
+
+                // Déplacer la nouvelle photo directement dans public/
+                $request->file('photo')->move($directory, $filename);
+
+                // Chemin enregistré en base
+                $data['photo'] = 'photos_eleves/'.$filename;
             }
 
             // 2. Mise à jour de l'élève

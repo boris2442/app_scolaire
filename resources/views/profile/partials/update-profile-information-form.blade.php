@@ -21,7 +21,7 @@
         <!-- Aperçu de la photo actuelle (Optionnel mais recommandé) -->
         @if ($user->avatar)
             <div class="flex items-center gap-4">
-                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
+                <img src="{{ asset( $user->avatar) }}" alt="Avatar"
                     class="w-16 h-16 rounded-full object-cover border border-gray-300 dark:border-gray-700">
                 <span class="text-sm text-gray-500">Photo actuelle</span>
             </div>

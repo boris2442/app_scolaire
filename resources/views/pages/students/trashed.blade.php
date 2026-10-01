@@ -40,7 +40,7 @@
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-border flex items-center justify-center overflow-hidden">
                                     @if ($student->photo)
-                                        <img src="{{ asset('storage/' . $student->photo) }}"
+                                        <img src="{{ asset( $student->photo) }}"
                                             class="w-full h-full object-cover grayscale">
                                     @else
                                         <x-lucide-user class="w-4 h-4 text-muted-foreground/50" />

@@ -204,7 +204,7 @@
             $studentRank = $b['rang'] ?? 'N/A';
 
             // Traitement de la photo d'identité
-                $photoPath = 'storage/' . ($enrollment->student_picture ?? '');
+                $photoPath =  ($enrollment->student_picture ?? '');
              $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
 
             if (!empty($enrollment->student_picture) && file_exists(public_path($photoPath))) {

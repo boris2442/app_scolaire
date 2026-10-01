@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -43,17 +44,43 @@ class ProfileController extends Controller
         }
 
         // 2. Traitement correct de l'image de profil
+        // if ($request->hasFile('avatar')) {
+        //     // Supprimer l'ancienne image si elle existe
+        //     if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        //         Storage::disk('public')->delete($user->avatar);
+        //     }
+
+        //     // Enregistrer la nouvelle image et récupérer le chemin textuel
+        //     $path = $request->file('avatar')->store('avatars', 'public');
+
+        //     // Assigner le chemin textuel au modèle
+        //     $user->avatar = $path;
+        // }
+
+        // 2. Traitement correct de l'image de profil
         if ($request->hasFile('avatar')) {
+
             // Supprimer l'ancienne image si elle existe
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($user->avatar && file_exists(public_path($user->avatar))) {
+                unlink(public_path($user->avatar));
             }
 
-            // Enregistrer la nouvelle image et récupérer le chemin textuel
-            $path = $request->file('avatar')->store('avatars', 'public');
+            // Créer le dossier public/avatars s'il n'existe pas
+            $directory = public_path('avatars');
 
-            // Assigner le chemin textuel au modèle
-            $user->avatar = $path;
+            if (! file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Générer un nom unique
+            $filename = Str::uuid().'.'.
+                $request->file('avatar')->getClientOriginalExtension();
+
+            // Déplacer directement dans public/avatars
+            $request->file('avatar')->move($directory, $filename);
+
+            // Enregistrer le chemin dans le modèle
+            $user->avatar = 'avatars/'.$filename;
         }
 
         $user->save();

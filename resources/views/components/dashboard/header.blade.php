@@ -51,7 +51,7 @@
 
                         <div class="relative">
                             @if (auth()->user()?->avatar)
-                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                                <img src="{{ asset( auth()->user()->avatar) }}"
                                     alt="{{ auth()->user()->name }}"
                                     class="w-7 h-7 rounded-full object-cover shadow-sm group-hover:ring-4 group-hover:ring-primary/20 transition-all" />
                             @else

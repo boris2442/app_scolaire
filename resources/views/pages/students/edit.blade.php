@@ -162,7 +162,7 @@ $currentClasseId = $student->inscriptions->where('annee_scolaire_id', $actifYear
                         <div
                             class="w-32 h-32 bg-secondary rounded-2xl border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
                             @if ($student->photo)
-                                <img id="preview" src="{{ asset('storage/' . $student->photo) }}"
+                                <img id="preview" src="{{ asset($student->photo) }}"
                                     class="w-full h-full object-cover">
                             @else
                                 <i id="icon-cam" class="fas fa-camera text-2xl text-muted-foreground/30"></i>

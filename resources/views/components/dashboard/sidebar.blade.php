@@ -29,7 +29,7 @@
             <div class="flex-shrink-0">
                 <a href="{{ route('profile.edit') }}" title="Voir le profil" aria-label="Voir le profil">
                     @if (auth()->user()->avatar)
-                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
+                        <img src="{{ asset( auth()->user()->avatar) }}" alt="Avatar"
                             class="w-9 h-9 rounded-full object-cover border border-primary shadow-sm">
                     @else
                         <div

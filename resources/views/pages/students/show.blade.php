@@ -48,7 +48,7 @@
                     <div
                         class="w-32 h-32 bg-secondary rounded-2xl mb-4 overflow-hidden border border-border flex items-center justify-center shadow-inner">
                         @if ($student->photo)
-                            <img src="{{ asset('storage/' . $student->photo) }}" alt="{{ $student->nom }}"
+                            <img src="{{ asset( $student->photo) }}" alt="{{ $student->nom }}"
                                 class="w-full h-full object-cover">
                         @else
                             <x-lucide-user class="w-12 h-12 text-muted-foreground/40" />
