@@ -6,8 +6,9 @@
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-foreground">
                 <a href="{{ route('discipline.index') }}" title="Retour à la liste des classes"
-                    aria-label="Retour à la liste des classes" class="text-primary hover:underline"><x-lucide-arrow-left
-                        class="inline-block w-5 h-5 mr-2" /></a>
+                    aria-label="Retour à la liste des classes" class="text-primary hover:underline">
+                    <x-lucide-arrow-left class="inline-block w-5 h-5 mr-2" />
+                </a>
                 Saisie Disciplinaire
             </h2>
             <p class="text-sm text-muted-foreground mt-1">

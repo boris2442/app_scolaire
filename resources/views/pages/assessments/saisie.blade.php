@@ -139,7 +139,9 @@
                                     </td>
 
                                     <td class="py-3 px-4 text-center">
-                                        <input type="number" step="0.25" name="notes[{{ $enrollment->id }}][valeur]"
+                                        <input type="number"
+                                        min='0' max='20'
+                                         step="0.25" name="notes[{{ $enrollment->id }}][valeur]"
                                             value="{{ $maNote->valeur ?? '' }}"
                                             class="w-24 mx-auto bg-secondary border {{ isset($maNote) ? 'border-primary/50' : 'border-white/10' }} rounded px-2 py-1.5 text-center font-black text-primary text-sm outline-none focus:border-primary transition-all block"
                                             placeholder="--">

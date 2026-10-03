@@ -86,7 +86,7 @@
                                 Mot de passe
                             </label>
 
-                            <div class="relative">
+                            {{-- <div class="relative">
                                 <input id="password" type="password" name="password" required
                                     autocomplete="current-password" placeholder=""
                                     class="block w-full px-3 py-2.5 pr-10 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
@@ -96,45 +96,71 @@
 
                                     <x-lucide-eye class="w-4 h-4" />
                                 </button>
+                            </div> --}}
+
+
+
+                            <div class="relative" x-data="{ showPassword: false }">
+                                <input id="password" :type="showPassword ? 'text' : 'password'" name="password"
+                                    required autocomplete="current-password"
+                                    class="block w-full px-3 py-2.5 pr-10 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
+
+                                <button type="button" @click="showPassword = !showPassword"
+                                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors">
+                                    <template x-if="!showPassword">
+                                        <x-lucide-eye class="w-4 h-4" />
+                                    </template>
+                                    <template x-if="showPassword">
+                                        <x-lucide-eye-off class="w-4 h-4" />
+                                    </template>
+                                </button>
                             </div>
+
+
+
+
+
+
+
+
 
                             @error('password')
                                 <p class="text-[11px] font-medium text-danger mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        <script>
+                        {{-- <script>
                             // document.addEventListener('DOMContentLoaded', function() {
 
-                                const passwordInput = document.getElementById('password');
-                                const togglePassword = document.getElementById('togglePassword');
+                            const passwordInput = document.getElementById('password');
+                            const togglePassword = document.getElementById('togglePassword');
 
-                                if (!passwordInput || !togglePassword) return;
+                            if (!passwordInput || !togglePassword) return;
 
-                                togglePassword.addEventListener('click', () => {
-                                    
+                            togglePassword.addEventListener('click', () => {
 
-                                    const icon = togglePassword.querySelector('i');
-                                    console.log('BOUTTON CLIQUER');
 
-                                    if (passwordInput.type === 'password') {
-                                        passwordInput.type = 'text';
+                                const icon = togglePassword.querySelector('i');
+                                console.log('BOUTTON CLIQUER');
 
-                                        if (icon) {
-                                            icon.classList.remove('fa-eye');
-                                            icon.classList.add('fa-eye-slash');
-                                        }
-                                    } else {
-                                        passwordInput.type = 'password';
+                                if (passwordInput.type === 'password') {
+                                    passwordInput.type = 'text';
 
-                                        if (icon) {
-                                            icon.classList.remove('fa-eye-slash');
-                                            icon.classList.add('fa-eye');
-                                        }
+                                    if (icon) {
+                                        icon.classList.remove('fa-eye');
+                                        icon.classList.add('fa-eye-slash');
                                     }
-                                });
+                                } else {
+                                    passwordInput.type = 'password';
+
+                                    if (icon) {
+                                        icon.classList.remove('fa-eye-slash');
+                                        icon.classList.add('fa-eye');
+                                    }
+                                }
+                            });
 
                             // });
-                        </script>
+                        </script> --}}
 
 
                         <div class="pt-2 w-full">
