@@ -86,33 +86,23 @@
                                 Mot de passe
                             </label>
 
-                            {{-- <div class="relative">
-                                <input id="password" type="password" name="password" required
-                                    autocomplete="current-password" placeholder=""
-                                    class="block w-full px-3 py-2.5 pr-10 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
-
-                                <button type="button" id="togglePassword"
-                                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors">
-
-                                    <x-lucide-eye class="w-4 h-4" />
-                                </button>
-                            </div> --}}
+                        
 
 
+                            <div class="relative">
+                                <input id="password" type="password" name="password" required class="block w-full px-3 py-2.5 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
 
-                            <div class="relative" x-data="{ showPassword: false }">
-                                <input id="password" :type="showPassword ? 'text' : 'password'" name="password"
-                                    required autocomplete="current-password"
-                                    class="block w-full px-3 py-2.5 pr-10 bg-background border border-input rounded text-xs font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground" />
+                                <button type="button" onclick="togglePasswordVisibility('password', this)"
+                                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors focus:outline-none">
 
-                                <button type="button" @click="showPassword = !showPassword"
-                                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-primary transition-colors">
-                                    <template x-if="!showPassword">
+                                    <!-- Icône Oeil (Masqué par défaut si le type est password) -->
+                                    <span class="icon-eye">
                                         <x-lucide-eye class="w-4 h-4" />
-                                    </template>
-                                    <template x-if="showPassword">
+                                    </span>
+                                    <!-- Icône Oeil Barré -->
+                                    <span class="icon-eye-off hidden">
                                         <x-lucide-eye-off class="w-4 h-4" />
-                                    </template>
+                                    </span>
                                 </button>
                             </div>
 
@@ -185,4 +175,21 @@
         </div>
 
     </div>
+    <script>
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            const eyeIcon = button.querySelector('.icon-eye');
+            const eyeOffIcon = button.querySelector('.icon-eye-off');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.classList.add('hidden');
+                eyeOffIcon.classList.remove('hidden');
+            } else {
+                input.type = 'password';
+                eyeIcon.classList.remove('hidden');
+                eyeOffIcon.classList.add('hidden');
+            }
+        }
+    </script>
 </x-guest-layout>
