@@ -208,6 +208,11 @@ class BulletinPrintController extends Controller
             ];
         }
 
+        $professeurPrincipal = $this->getProfesseurPrincipal(
+            $classeId,
+            $actifYear->id
+        );
+
         // 6. Assemblage en mémoire
         $reportCards = [];
         foreach ($enrollments as $ins) {
@@ -230,6 +235,7 @@ class BulletinPrintController extends Controller
                 'suivi' => $tousLesSuivis->get($id),
                 'moyenneEleve' => $rangsEtMoyennes[$id]['moyenne'] ?? 0,
                 'rang' => $rangsEtMoyennes[$id]['rang'] ?? 'N/A',
+                'professeurPrincipal' => $professeurPrincipal,
             ];
         }
 
@@ -350,6 +356,12 @@ class BulletinPrintController extends Controller
             ->get()
             ->count() + 1;
 
+        $professeurPrincipal = $this->getProfesseurPrincipal(
+            $enrollment->classe_id,
+            $enrollment->annee_scolaire_id
+        );
+
+        // dd($professeurPrincipal);
         return [
             'inscription' => $enrollment,
             'totalStudentsInClass' => $totalStudentsInClass,
@@ -359,7 +371,32 @@ class BulletinPrintController extends Controller
             'suivi' => $suiviDisciplinaire,
             'moyenneEleve' => $moyenneEleve,
             'rang' => $studentRank,
+            'professeurPrincipal' => $professeurPrincipal,
         ];
+    }
+
+    private function getProfesseurPrincipal($classeId, $anneeScolaireId)
+    {
+        return DB::table('classe_enseignant_principal')
+            ->join(
+                'enseignants',
+                'classe_enseignant_principal.enseignant_id',
+                '=',
+                'enseignants.id'
+            )
+            ->join(
+                'users',
+                'enseignants.user_id',
+                '=',
+                'users.id'
+            )
+            ->where('classe_enseignant_principal.classe_id', $classeId)
+            ->where('classe_enseignant_principal.annee_scolaire_id', $anneeScolaireId)
+            ->select(
+                'enseignants.id',
+                'users.name'
+            )
+            ->first();
     }
 
     /**

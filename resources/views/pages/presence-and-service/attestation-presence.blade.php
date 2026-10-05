@@ -130,8 +130,8 @@
 
     <!-- PHOTO FIXÉE EN HAUT À DROITE -->
     <div class="photo-box">
-        @if (isset($user->avatar) && $user->avatar && file_exists(storage_path('app/public/' . $user->avatar)))
-            <img src="{{ storage_path('app/public/' . $user->avatar) }}"
+        @if (isset($user->avatar) && $user->avatar )
+            <img src="{{ public_path($user->avatar) }}"
                 style="width: 73px; height: 88px; object-fit: cover; 
                  ">
         @else
@@ -161,9 +161,9 @@
                 Immatriculation : {{ $school->code_ecole }}
             </td>
             <td style="width: 18%; text-align: center; vertical-align: middle; font-weight:bold;">
-                @if (file_exists(public_path('images/logo.png')))
-                    <img src="{{ public_path('images/logo.png') }}" style="width: 55px; height: auto;">
-                @endif
+                {{-- @if (file_exists(public_path('images/logo.png'))) --}}
+                    <img src="{{ public_path($school->logo) }}" style="width: 55px; height: auto;">
+                {{-- @endif --}}
             </td>
             <td style="width: 44%; text-align: center; padding-right: 80px;">
                 REPUBLIC OF CAMEROON<br> <i>
@@ -176,7 +176,7 @@
                 *******<br>
                 DIVISIONAL DELEGATION FOR SECONDARY EDUCATION<br>
                 *******<br>
-                {{ $school->english_sub_division }} SUB DIVISION<br>
+                {{ $school->sub_division }} SUB DIVISION<br>
                 *******<br>
                 <strong>{{ $school->english_name }}</strong><br>
                 PO-BOX : - - PHONE : {{ $school->telephone }}<br>

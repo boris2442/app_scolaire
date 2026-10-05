@@ -204,8 +204,8 @@
             $studentRank = $b['rang'] ?? 'N/A';
 
             // Traitement de la photo d'identité
-                $photoPath =  ($enrollment->student_picture ?? '');
-             $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
+$photoPath = $enrollment->student_picture ?? '';
+$defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
 
             if (!empty($enrollment->student_picture) && file_exists(public_path($photoPath))) {
                 $imageSrc = public_path($photoPath);
@@ -242,7 +242,7 @@
 
                 <div class="bloc-centre">
                     @php
-                        $vraiCheminDansPublic = 'storage/' . ($school->logo ?? '');
+                        $vraiCheminDansPublic = $school->logo ?? '';
                     @endphp
 
                     @if ($school->logo && file_exists(public_path($vraiCheminDansPublic)))
@@ -539,10 +539,45 @@
             </table>
 
             <!-- SIGNATURES -->
-            <table class="table-signatures" style="margin-top: 6px;">
+            {{-- <table class="table-signatures" style="margin-top: 6px;">
                 <tr>
                     <td width="33%" class="text-center">Nom et Visa du Titulaire</td>
                     <td width="33%" class="text-center">Visa du Parent / Tuteur</td>
+                    <td width="34%" class="text-center">
+                        Le Chef d'Établissement<br><br><br>
+                        <span style="font-weight: normal; font-size: 7.5px;">
+                            Fait à ................................., le ..............
+                        </span>
+                    </td>
+                </tr>
+            </table> --}}
+
+
+            <!-- SIGNATURES -->
+            <table class="table-signatures" style="margin-top: 6px;">
+                <tr>
+                    {{-- <td width="33%" class="text-center">
+                        <strong>Le Professeur Principal</strong><br>
+                        M. {{ $b['professeurPrincipal']->name ?? 'Non désigné' }}
+                        <br><br>
+                        Visa
+                    </td> --}}
+                    <td width="33%" class="text-center" style="vertical-align: top; padding: 8px 5px;">
+                        <strong>Le Professeur Principal</strong>
+
+                        <div style="margin-top: 12px;">
+                            M. {{ $b['professeurPrincipal']->name ?? 'Non désigné' }}
+                        </div>
+
+                        <div style="margin-top: 28px;">
+                            Visa
+                        </div>
+                    </td>
+
+                    <td width="33%" class="text-center">
+                        Visa du Parent / Tuteur
+                    </td>
+
                     <td width="34%" class="text-center">
                         Le Chef d'Établissement<br><br><br>
                         <span style="font-weight: normal; font-size: 7.5px;">

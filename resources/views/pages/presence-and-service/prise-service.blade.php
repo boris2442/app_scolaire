@@ -132,9 +132,8 @@
     ========================================================== --}}
     <div class="photo-box">
 
-        @if (isset($user->avatar) && $user->avatar && file_exists(storage_path('app/public/' . $user->avatar)))
-            <img src="{{ storage_path('app/public/' . $user->avatar) }}"
-                style="width: 73px; height: 88px; object-fit: cover;">
+        @if (isset($user->avatar) && $user->avatar)
+            <img src="{{ public_path($user->avatar) }}" style="width: 73px; height: 88px; object-fit: cover;">
         @else
             <div style="font-size: 8px; padding-top: 38px;">
                 PHOTO
@@ -199,9 +198,9 @@
                 font-weight:bold;
             ">
 
-                @if (file_exists(public_path('images/logo.png')))
-                    <img src="{{ public_path('images/logo.png') }}" style="width: 55px; height: auto;">
-                @endif
+                {{-- @if (file_exists(public_path('images/logo.png'))) --}}
+                <img src="{{ public_path($school->logo) }}" style="width: 55px; height: auto;">
+                {{-- @endif --}}
 
             </td>
 
@@ -232,9 +231,9 @@
 
                 DIVISIONAL DELEGATION FOR SECONDARY EDUCATION<br>
 
-                *******<br>
+                *******<br>    
 
-                {{ $school->english_sub_division }} SUB DIVISION<br>
+                {{ $school->sub_division }} SUB DIVISION<br>
 
                 *******<br>
 

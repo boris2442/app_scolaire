@@ -23,9 +23,11 @@ class ClassStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom' => 'required|string|max:50',
-  
-            'annee_scolaire_id' => 'required|exists:annee_scolaires,id'
+            'nom' => 'required|string|max:100',
+            'cycle_id' => 'required|exists:cycles,id',
+            'section' => 'required|string|in:francophone,anglophone',
+            'annee_scolaire_id' => 'nullable|exists:annee_scolaires,id',
+            'teacher_id' => 'nullable|exists:enseignants,id',
         ];
     }
 }

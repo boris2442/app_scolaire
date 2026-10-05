@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-
-use App\Models\Inscription;
-use App\Models\Matiere;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
 
 class Classe extends Model
 {
     protected $fillable = ['nom', 'cycle_id', 'annee_scolaire_id', 'section'];
+
     // Helper pour vérifier rapidement la section
     public function isAnglophone(): bool
     {
@@ -24,16 +20,15 @@ class Classe extends Model
         return $this->section === 'francophone';
     }
 
-
     public function cycle()
     {
         return $this->belongsTo(Cycle::class);
     }
+
     public function anneeScolaire()
     {
         return $this->belongsTo(Year::class, 'annee_scolaire_id');
     }
-
 
     public function matieres()
     {
@@ -42,11 +37,11 @@ class Classe extends Model
             ->withTimestamps();
     }
 
-
     public function getNomCompletAttribute()
     {
         return $this->nom;
     }
+
     /**
      * Récupérer toutes les inscriptions pour cette classe.
      */
@@ -60,22 +55,47 @@ class Classe extends Model
     //     return $this->hasMany(Classe::class);
     // }
 
-
-
-
-
-
     // Dans App\Models\Classe.php
 
-    public function parametres()
-    {
-        return $this->hasMany(ParametreAcademique::class);
-    }
+    // public function parametres()
+    // {
+    //     return $this->hasMany(ParametreAcademique::class);
+    // }
 
     // Accessor pour simplifier l'affichage dans la vue
     public function getMoyenneMinAttribute()
     {
         $regle = $this->parametres->where('cle', 'moyenne_min')->first();
+
         return $regle ? $regle->valeur : 10; // 10 par défaut
+    }
+
+    // public function professeursPrincipaux()
+    // {
+    //     return $this->belongsToMany(Teacher::class, 'classe_enseignant_principal')
+    //         ->withPivot('annee_scolaire_id')
+    //         ->withTimestamps();
+    // }
+
+    public function professeursPrincipaux()
+{
+    return $this->belongsToMany(
+        Teacher::class,
+        'classe_enseignant_principal',
+        'classe_id',
+        'enseignant_id'
+    )
+    ->withPivot('annee_scolaire_id')
+    ->withTimestamps();
+}
+
+    // Helper pour récupérer le prof principal de l'année en cours
+    public function professeurPrincipalActif()
+    {
+        $activeYearId = Year::where('est_active', true)->value('id');
+
+        return $this->professeursPrincipaux()
+            ->wherePivot('annee_scolaire_id', $activeYearId)
+            ->first();
     }
 }

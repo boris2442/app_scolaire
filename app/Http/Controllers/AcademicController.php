@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCycleRequest;
 use App\Models\Cycle;
+use App\Models\Teacher;
 use App\Models\Year;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,9 @@ class AcademicController extends Controller
         }
         // On récupère uniquement les cycles (la relation 'niveaux' est supprimée)
         $cycles = Cycle::with('classes')->get(); // avec 'with' pour charger la relation
+        $teachers = Teacher::with('user')->get(); // avec 'with' pour charger la relation
 
-        return view('pages.academics.index', compact('cycles', 'year'));
+        return view('pages.academics.index', compact('cycles', 'year', 'teachers'));
     }
 
     public function storeCycle(StoreCycleRequest $request)

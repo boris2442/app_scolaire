@@ -33,7 +33,7 @@
                             class="w-9 h-9 rounded-full object-cover border border-primary shadow-sm">
                     @else
                         <div
-                            class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary shadow-sm">
+                            class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary shadow-sm ">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                         </div>
                     @endif
@@ -47,7 +47,7 @@
                         {{ auth()->user()->role ?? 'UTILISATEUR' }}
                     </span>
                 </div>
-                <h2 class="font-bold text-xs tracking-tight text-foreground mt-0.5 truncate">
+                <h2 class="font-bold text-xs tracking-tight text-foreground mt-0.5 truncate underline">
                     <a href="{{ route('profile.edit') }}" title="Voir le profil" class="hover:underline">
                         {{ auth()->user()->name }}
                     </a>

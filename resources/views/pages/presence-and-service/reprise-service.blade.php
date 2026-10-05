@@ -161,8 +161,8 @@
     ========================================================== --}}
     <div class="photo-box">
 
-        @if (isset($user->avatar) && $user->avatar && file_exists(storage_path('app/public/' . $user->avatar)))
-            <img src="{{ storage_path('app/public/' . $user->avatar) }}">
+        @if (isset($user->avatar) && $user->avatar )
+            <img src="{{ public_path($user->avatar) }}">
         @else
             <div style="font-size: 8px; padding-top: 38px;">
                 PHOTO
@@ -235,9 +235,9 @@
                 font-weight: bold;
             ">
 
-                @if (file_exists(public_path('images/logo.png')))
-                    <img src="{{ public_path('images/logo.png') }}" style="width: 55px; height: auto;">
-                @endif
+                {{-- @if (file_exists(public_path('images/logo.png'))) --}}
+                    <img src="{{ public_path($school->logo) }}" style="width: 55px; height: auto;">
+                {{-- @endif --}}
 
             </td>
 
@@ -271,7 +271,7 @@
 
                 *******<br>
 
-                {{ $school->english_sub_division }}
+                {{ $school->sub_division }}
                 SUB DIVISION<br>
 
                 *******<br>

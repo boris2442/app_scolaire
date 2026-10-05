@@ -8,7 +8,7 @@
                 <h2 class="text-xs  text-primary mb-4 tracking-widest">1. Ajouter un Cycle</h2>
                 <form action="{{ route('settings.academique.cycles.store') }}" method="POST" class="flex gap-2">
                     @csrf
-                    <input  type="text" name="nom" placeholder="ex: Premier Cycle" required
+                    <input type="text" name="nom" placeholder="ex: Premier Cycle" required
                         class="flex-1 bg-secondary border-border rounded text-sm px-3 py-2">
                     <button class="bg-primary text-white p-2 rounded hover:opacity-90">
                         <x-lucide-plus class="w-4 h-4" />
@@ -38,7 +38,8 @@
                     </div>
 
                     <div>
-                        <label for='nom' class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème B)</label>
+                        <label for='nom' class="text-[10px] text-muted-foreground">Nom de la Classe (ex: 6ème A, 3ème
+                            B)</label>
                         <input type="text" name="nom" id='nom' placeholder="Ex: 6ème A"
                             class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1" required>
                     </div>
@@ -49,8 +50,9 @@
                         </label>
 
                         <select name="section" id="section"
-                            class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1 focus:ring-2 focus:ring-primary focus:outline-none" required>
-                            <option value="">Sélectionner une section...</option>   
+                            class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1 focus:ring-2 focus:ring-primary focus:outline-none"
+                            required>
+                            <option value="">Sélectionner une section...</option>
                             <option value="francophone"
                                 {{ old('section', $classe->section ?? '') == 'francophone' ? 'selected' : '' }}>
                                 Subdivision Francophone (Séquences / Trimestres)
@@ -62,6 +64,27 @@
                         </select>
 
                         @error('section')
+                            <p class="text-xs text-destructive mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="teacher_id" class="block text-sm font-medium text-foreground flex items-center gap-1.5">
+                            <x-lucide-user-check class="w-4 h-4 text-primary" />
+                            Professeur Principal (Optionnel)
+                        </label>
+
+                        <select name="teacher_id" id="teacher_id"
+                            class="w-full bg-secondary border-border rounded text-sm px-3 py-2 mt-1 focus:ring-2 focus:ring-primary focus:outline-none">
+                            <option value="">Sélectionner un professeur principal...</option>
+                            @foreach ($teachers as $teacher)
+                                <option value="{{ $teacher->id }}"
+                                    {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                    {{ $teacher->user->name ?? '' }} 
+                                </option>
+                            @endforeach
+                        </select>
+
+                        @error('teacher_id')
                             <p class="text-xs text-destructive mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -92,8 +115,10 @@
                             <span
                                 class="text-sm font-black text-foreground uppercase tracking-wider">{{ $cycle->nom }}</span>
                             <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full font-bold">
-                                {{ $cycle->classes->count() }}
+                       <a href="{{ route('settings.classes.index') }}" >
+                        {{ $cycle->classes->count() }}
                                 classes
+                            </a>
                             </span>
                         </div>
 
@@ -116,7 +141,7 @@
                     </div>
 
 
-                 
+
                 </div>
             @empty
                 <div class="bg-card p-12 rounded-xl border border-dashed border-border text-center">
