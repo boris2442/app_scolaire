@@ -207,13 +207,19 @@
 $photoPath = $enrollment->student_picture ?? '';
 $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'images/defaultpicture.png';
 
-            if (!empty($enrollment->student_picture) && file_exists(public_path($photoPath))) {
-                $imageSrc = public_path($photoPath);
-            } elseif (file_exists(public_path($defaultAvatar))) {
-                $imageSrc = public_path($defaultAvatar);
-            } else {
-                $imageSrc = null;
-            }
+if (!empty($enrollment->student_picture) && file_exists(public_path($photoPath))) {
+    $imageSrc = public_path($photoPath);
+} elseif (file_exists(public_path($defaultAvatar))) {
+    $imageSrc = public_path($defaultAvatar);
+} else {
+    $imageSrc = null;
+}
+
+// On vérifie si la section est 'anglophone' (en gérant la casse minuscule/majuscule)
+$isAnglophone = isset($enrollment->section) && strtolower($enrollment->section) === 'anglophone';
+
+            // dd($isAnglophone);
+
         @endphp
 
         <div class="page-bulletin">
@@ -278,71 +284,114 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
             </div>
 
             <!-- TITRE DU BULLETIN -->
+
+
+
             <div class="titre-bulletin">
-                <h2>BULLETIN DE NOTES DU {{ $trimester->nom ?? '' }}</h2>
-                <p>ANNÉE SCOLAIRE : {{ $enrollment->annee_libelle }}</p>
+                <h2>
+                    {{ $isAnglophone ? (strtoupper($trimester->nom) ?? '') . ' REPORT CARD' : 'BULLETIN DE NOTES DU ' . ($trimester->nom ?? '') }}
+                </h2>
+                <p>
+                    {{ $isAnglophone ? 'SCHOOL YEAR :' : 'ANNÉE SCOLAIRE :' }} {{ $enrollment->annee_libelle }}
+                </p>
             </div>
 
+
+
             <!-- INFOS ÉLÈVE AVEC PHOTO -->
+
+
+
+
             <table class="table-eleve">
                 <tr>
                     <!-- Nom & Prénom -->
                     <td colspan="2" style="text-transform: uppercase; width: 50%;">
-                        <strong>NOM ET PRENOM :</strong> {{ $enrollment->eleve_nom }}
+                        <strong>
+                            {{ $isAnglophone ? 'NAME :' : 'NOM ET PRENOM :' }}
+                        </strong>
+                        {{ $enrollment->eleve_nom }}
                         {{ $enrollment->eleve_prenom }}
                     </td>
+
                     <!-- Date & Lieu de Naissance -->
                     <td colspan="2" style="width: 40%;">
-                        <strong>NÉ(E) LE :</strong>
+                        <strong>
+                            {{ $isAnglophone ? 'DATE OF BIRTH :' : 'NÉ(E) LE :' }}
+                        </strong>
                         {{ $enrollment->date_naissance ? date('d/m/Y', strtotime($enrollment->date_naissance)) : 'N/A' }}
-                        À {{ strtoupper($enrollment->lieu_naissance ?? 'N/A') }}
+
+                        {{ $isAnglophone ? 'AT' : 'À' }}
+                        {{ strtoupper($enrollment->lieu_naissance ?? 'N/A') }}
                     </td>
-                    <!-- Photo d'identité (prend toute la hauteur des 2 lignes) -->
+
+                    <!-- Photo d'identité -->
                     <td rowspan="2" style="width: 65px; text-align: center; vertical-align: middle; padding: 2px;">
                         @if (!empty($imageSrc))
-                            <img src="{{ $imageSrc }}" class="photo-eleve" alt="Photo Élève">
+                            <img src="{{ $imageSrc }}" class="photo-eleve"
+                                alt="{{ $isAnglophone ? 'Student Photo' : 'Photo Élève' }}">
                         @else
                             <div class="photo-placeholder">PHOTO</div>
                         @endif
                     </td>
                 </tr>
+
                 <tr>
                     <!-- Redoublant -->
                     <td style="width: 20%;">
-                        <strong>REDOUBLANT :</strong> {{ $enrollment->est_redoublant ? 'Oui' : 'Non' }}
+                        <strong>
+                            {{ $isAnglophone ? 'REPEATER :' : 'REDOUBLANT :' }}
+                        </strong>
+                        {{ $isAnglophone ? ($enrollment->est_redoublant ? 'Yes' : 'No') : ($enrollment->est_redoublant ? 'Oui' : 'Non') }}
                     </td>
+
                     <!-- Matricule -->
                     <td style="width: 30%;">
-                        <strong>MATRICULE :</strong> {{ $enrollment->matricule ?? 'N/A' }}
+                        <strong>
+                            {{ $isAnglophone ? 'STUDENT ID :' : 'MATRICULE :' }}
+                        </strong>
+                        {{ $enrollment->matricule ?? 'N/A' }}
                     </td>
+
                     <!-- Classe -->
                     <td style="width: 25%;">
-                        <strong>CLASSE :</strong> {{ $enrollment->classe_nom }}
+                        <strong>
+                            {{ $isAnglophone ? 'CLASS :' : 'CLASSE :' }}
+                        </strong>
+                        {{ $enrollment->classe_nom }}
+
                         @if (!empty($enrollment->section))
-                            <em
-                                style="font-style: italic; font-size: 0.85em;">({{ ucfirst($enrollment->section) }})</em>
+                            <em style="font-style: italic; font-size: 0.85em;">
+                                ({{ ucfirst($enrollment->section) }})
+                            </em>
                         @endif
                     </td>
+
                     <!-- Sexe -->
-                    <td style="width: 15%; font-size:8px;">
-                        <strong>S : </strong> {{ $enrollment->sexe ?? 'N/A' }}
+                    <td style="width: 15%; font-size: 8px;">
+                        <strong>{{ $isAnglophone ? 'SEX :' : 'SEXE :' }}</strong>
+                        {{ $enrollment->sexe ?? 'N/A' }}
                     </td>
                 </tr>
             </table>
+
+
+
 
             <!-- TABLEAU DES NOTES -->
             <table class="table-notes">
                 <thead>
                     <tr>
-                        <th width="28%">Matières</th>
+
+                        <th width="28%">{{ $isAnglophone ? 'Subjects' : 'Matières' }}</th>
                         @foreach ($sequences as $seq)
                             <th width="8%">{{ $seq->nom }}</th>
                         @endforeach
-                        <th width="9%">Moy/20</th>
-                        <th width="6%">Coeff</th>
-                        <th width="10%">Total (N*C)</th>
-                        <th width="14%">Compétences</th>
-                        <th width="17%">Professeur & Visa</th>
+                        <th width="9%">{{ $isAnglophone ? 'Avg/20' : 'Moy/20' }}</th>
+                        <th width="6%">{{ $isAnglophone ? 'Coeff.' : 'Coeff' }}</th>
+                        <th width="10%">{{ $isAnglophone ? 'Total (A*C)' : 'Total (N*C)' }}</th>
+                        <th width="14%">{{ $isAnglophone ? 'Skills' : 'Compétences' }}</th>
+                        <th width="17%">{{ $isAnglophone ? 'Teacher & Signature' : 'Professeur & Visa' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -399,27 +448,32 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
                                 </td>
                                 <td class="text-center">{{ $coef }}</td>
                                 <td class="text-center">{{ number_format($pointsMatiere, 2) }}</td>
+
+
                                 <td class="text-center" style="font-size: 7.5px; font-style: italic;">
                                     @if ($noteSeq1 === null && $noteSeq2 === null)
                                         -
-                                    @elseif($moyenneMatiere20 >= 14)
-                                        Acquis
-                                    @elseif($moyenneMatiere20 >= 10)
-                                        En cours d’acquisition
+                                    @elseif ($moyenneMatiere20 >= 14)
+                                        {{ $isAnglophone ? 'Acquired' : 'Acquis' }}
+                                    @elseif ($moyenneMatiere20 >= 10)
+                                        {{ $isAnglophone ? 'Being Acquired' : 'En cours d’acquisition' }}
                                     @else
-                                        Non acquis
+                                        {{ $isAnglophone ? 'Not Acquired' : 'Non acquis' }}
                                     @endif
                                 </td>
+
                                 <td class="text-left" style="font-size: 7.5px;">
-                                    M / Mme {{ $matiere->prof_nom ?? 'Non assigné' }}
+                                    {{ $isAnglophone ? 'M. ' : 'M. ' }}{{ $matiere->prof_nom ?? ($isAnglophone ? 'Unassigned' : 'Non assigné') }}
                                 </td>
                             </tr>
                         @endforeach
 
                         <!-- SOUS-TOTAL DU GROUPE -->
                         <tr style="background-color: #f9f9f9; font-weight: bold;">
+
                             <td colspan="4" class="text-right" style="font-size: 8.5px;">
-                                SOUS-TOTAL {{ strtoupper($matieresDuGroupe->first()->groupe_nom ?? '') }}
+                                {{ $isAnglophone ? 'SUBTOTAL' : 'SOUS-TOTAL' }}
+                                {{ strtoupper($matieresDuGroupe->first()->groupe_nom ?? '') }}
                             </td>
                             <td class="text-center">{{ $sousTotalCoeffs }}</td>
                             <td class="text-center">{{ number_format($sousTotalPoints, 2) }}</td>
@@ -434,7 +488,10 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
 
                     <!-- TOTAL GÉNÉRAL -->
                     <tr style="font-weight: bold; background-color: #eaeaea;">
-                        <td class="text-left" style="text-transform: uppercase;">TOTAL GÉNÉRAL</td>
+
+                        <td class="text-left" style="text-transform: uppercase;">
+                            {{ $isAnglophone ? 'GRAND TOTAL' : 'TOTAL GÉNÉRAL' }}
+                        </td>
                         <td colspan="3"></td>
                         <td class="text-center">{{ $totalCoeffGlobal }}</td>
                         <td class="text-center">{{ number_format($totalPointsGlobal, 2) }}</td>
@@ -452,14 +509,15 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
             <!-- RECAPITULATIF ELEVE & STATISTIQUES DE CLASSE -->
             <table class="table-stats text-center">
                 <thead>
+
                     <tr>
-                        <th width="15%">MOY TRIM</th>
-                        <th width="15%">RANG</th>
-                        <th width="20%">MENTION</th>
-                        <th width="12.5%">MOY CLASSE</th>
-                        <th width="12.5%">MOY MAX</th>
-                        <th width="12.5%">MOY MIN</th>
-                        <th width="12.5%">RÉUSSITE</th>
+                        <th width="15%">{{ $isAnglophone ? 'TERM AVG' : 'MOY TRIM' }}</th>
+                        <th width="15%">{{ $isAnglophone ? 'RANK' : 'RANG' }}</th>
+                        <th width="20%">{{ $isAnglophone ? 'GRADE' : 'MENTION' }}</th>
+                        <th width="12.5%">{{ $isAnglophone ? 'CLASS AVG' : 'MOY CLASSE' }}</th>
+                        <th width="12.5%">{{ $isAnglophone ? 'HIGHEST AVG' : 'MOY MAX' }}</th>
+                        <th width="12.5%">{{ $isAnglophone ? 'LOWEST AVG' : 'MOY MIN' }}</th>
+                        <th width="12.5%">{{ $isAnglophone ? 'PASS RATE' : 'RÉUSSITE' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -470,19 +528,20 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
                         <td style="font-weight: bold; font-size: 10px;">
                             {{ $studentRank }}{{ $studentRank == 1 ? 'er' : 'ème' }} / {{ $totalStudentsInClass }}
                         </td>
+
                         <td style="font-weight: bold;">
                             @if ($moyenneEleve < 10)
-                                Insuffisant
+                                {{ $isAnglophone ? 'Fail' : 'Insuffisant' }}
                             @elseif ($moyenneEleve < 12)
-                                Passable
+                                {{ $isAnglophone ? 'Fair' : 'Passable' }}
                             @elseif ($moyenneEleve < 14)
-                                Assez Bien
+                                {{ $isAnglophone ? ' fairly Good' : 'Assez Bien' }}
                             @elseif ($moyenneEleve < 16)
-                                Bien
+                                {{ $isAnglophone ? 'Good' : 'Bien' }}
                             @elseif ($moyenneEleve < 18)
-                                Très Bien
+                                {{ $isAnglophone ? 'Very Good' : 'Très Bien' }}
                             @else
-                                Excellent
+                                {{ $isAnglophone ? 'Excellent' : 'Excellent' }}
                             @endif
                         </td>
                         <td>{{ number_format($stats['moyenne'] ?? 0, 2) }}</td>
@@ -498,13 +557,14 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
                 <tr>
                     <td width="70%" style="border: none; padding: 0 5px 0 0;">
                         <table class="table-discipline text-center">
+
                             <tr style="background-color: #f4f4f4; font-weight: bold; font-size: 8px;">
-                                <td width="16.6%">Retards (h)</td>
-                                <td width="16.6%">Absences (h)</td>
-                                <td width="16.6%">Suspensions</td>
-                                <td width="16.6%">Avertiss.</td>
-                                <td width="16.6%">Blâmes</td>
-                                <td width="16.6%">Exclusions</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Late (h)' : 'Retards (h)' }}</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Absences (h)' : 'Absences (h)' }}</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Suspensions' : 'Suspensions' }}</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Warnings' : 'Avertiss.' }}</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Reprimands' : 'Blâmes' }}</td>
+                                <td width="16.6%">{{ $isAnglophone ? 'Expulsions' : 'Exclusions' }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $suivi->retards ?? 0 }}</td>
@@ -517,19 +577,24 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
                         </table>
                     </td>
                     <td width="30%" style="border: none; padding: 0;">
+
                         <table class="table-stats text-center">
                             <thead>
                                 <tr>
-                                    <th colspan="2">TABLEAU D'HONNEUR</th>
+                                    <th colspan="2">
+                                        {{ $isAnglophone ? 'HONOUR ROLL' : "TABLEAU D'HONNEUR" }}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td width="50%">
-                                        <strong>OUI :</strong> {{ $moyenneEleve >= 12 ? '[ X ]' : '[   ]' }}
+                                        <strong>{{ $isAnglophone ? 'YES :' : 'OUI :' }}</strong>
+                                        {{ $moyenneEleve >= 12 ? '[ X ]' : '[   ]' }}
                                     </td>
                                     <td width="50%">
-                                        <strong>NON :</strong> {{ $moyenneEleve < 12 ? '[ X ]' : '[   ]' }}
+                                        <strong>{{ $isAnglophone ? 'NO :' : 'NON :' }}</strong>
+                                        {{ $moyenneEleve < 12 ? '[ X ]' : '[   ]' }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -538,50 +603,38 @@ $defaultAvatar = $enrollment->sexe === 'F' ? 'images/defaultpictureF.png' : 'ima
                 </tr>
             </table>
 
-            <!-- SIGNATURES -->
-            {{-- <table class="table-signatures" style="margin-top: 6px;">
-                <tr>
-                    <td width="33%" class="text-center">Nom et Visa du Titulaire</td>
-                    <td width="33%" class="text-center">Visa du Parent / Tuteur</td>
-                    <td width="34%" class="text-center">
-                        Le Chef d'Établissement<br><br><br>
-                        <span style="font-weight: normal; font-size: 7.5px;">
-                            Fait à ................................., le ..............
-                        </span>
-                    </td>
-                </tr>
-            </table> --}}
+
 
 
             <!-- SIGNATURES -->
             <table class="table-signatures" style="margin-top: 6px;">
+
                 <tr>
-                    {{-- <td width="33%" class="text-center">
-                        <strong>Le Professeur Principal</strong><br>
-                        M. {{ $b['professeurPrincipal']->name ?? 'Non désigné' }}
-                        <br><br>
-                        Visa
-                    </td> --}}
                     <td width="33%" class="text-center" style="vertical-align: top; padding: 8px 5px;">
-                        <strong>Le Professeur Principal</strong>
+                        <strong>
+                            {{ $isAnglophone ? 'The Class Teacher' : 'Le Professeur Principal' }}
+                        </strong>
 
                         <div style="margin-top: 12px;">
-                            M. {{ $b['professeurPrincipal']->name ?? 'Non désigné' }}
+                            {{ $isAnglophone ? 'Mr. ' : 'M. ' }}{{ $b['professeurPrincipal']->name ?? ($isAnglophone ? 'Not Assigned' : 'Non désigné') }}
                         </div>
 
                         <div style="margin-top: 28px;">
-                            Visa
+                            {{ $isAnglophone ? 'Signature' : 'Visa' }}
                         </div>
                     </td>
 
                     <td width="33%" class="text-center">
-                        Visa du Parent / Tuteur
+                        {{ $isAnglophone ? 'Parent / Guardian Signature' : 'Visa du Parent / Tuteur' }}
                     </td>
 
                     <td width="34%" class="text-center">
-                        Le Chef d'Établissement<br><br><br>
+                        {{ $isAnglophone ? 'The Head of School' : "Le Chef d'Établissement" }}<br><br><br>
                         <span style="font-weight: normal; font-size: 7.5px;">
-                            Fait à ................................., le ..............
+                            {{ $isAnglophone ? 'Done at' : 'Fait à' }}
+                            .................................
+                            {{ $isAnglophone ? 'on' : 'le' }}
+                            ..............
                         </span>
                     </td>
                 </tr>
