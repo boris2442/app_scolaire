@@ -54,6 +54,13 @@
                     <span>Tableau d'Honneur</span>
                 </a>
 
+                <!-- Bouton pour imprimer les Bulletins Annuels de la classe -->
+                <a href="{{ route('admin.bulletins.imprimer-classe-annuel', ['classe_id' => $classe->id]) }}"
+                    target="_blank" data-turbo="false"
+                    class="inline-flex items-center justify-center px-3 py-2 bg-emerald-600 text-white hover:bg-emerald-700 text-sm font-semibold rounded transition shadow-sm gap-2">
+                    <x-lucide-file-badge class="w-4 h-4" />
+                    <span>Bulletin Annuel (Classe)</span>
+                </a>
             </div>
         </div>
 
@@ -79,7 +86,8 @@
                             @forelse ($students as $index => $student)
                                 <tr class="hover:bg-secondary/10 transition">
                                     <td class="p-2 sm:p-4 font-mono text-xs text-foreground/70 whitespace-nowrap">
-                                        <span class="font-bold sm:font-normal">#{{ $students->firstItem() + $index }}</span>
+                                        <span
+                                            class="font-bold sm:font-normal">#{{ $students->firstItem() + $index }}</span>
                                         <span class="hidden sm:inline"> / {{ $student->matricule ?? 'N/A' }}</span>
                                     </td>
                                     <td class="p-2 sm:p-4 text-xs sm:text-sm font-medium text-foreground">

@@ -46,27 +46,7 @@ class ScolariteService
     ): void {
         $actifYear = $actifYear ?? $this->getactifYear();
 
-        // dd([
-        //     'ANNEE_ACTIVE' => [
-        //         'id' => $actifYear->id,
-        //         'libelle' => $actifYear->libelle,
-        //     ],
-
-        //     'TRIMESTRE_ACTUEL' => [
-        //         'id' => $trimester->id,
-        //         'nom' => $trimester->nom,
-        //         'annee_scolaire_id' => $trimester->annee_scolaire_id,
-        //     ],
-
-        //     'TOUS_LES_TRIMESTRES' => Trimestre::orderBy('annee_scolaire_id')
-        //         ->orderBy('id')
-        //         ->get([
-        //             'id',
-        //             'nom',
-        //             'annee_scolaire_id',
-        //         ])
-        //         ->toArray(),
-        // ]);
+  
 
         if ((int) $trimester->annee_scolaire_id !== (int) $actifYear->id) {
             throw new IncoherentScolariteException(

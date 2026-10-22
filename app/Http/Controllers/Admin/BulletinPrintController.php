@@ -802,4 +802,652 @@ class BulletinPrintController extends Controller
 
         return $pdf->download($fileName);
     }
+
+    /**
+     * Impression du Bulletin Annuel pour toute la classe (6 Séquences + Moyennes Trimesterielles/Annuelles)
+     */
+    // public function imprimerClasseAnnuel($classeId)
+    // {
+    //     $school = DB::table('etablissements')->first();
+    //     $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
+
+    //     if (! $actifYear) {
+    //         abort(500, 'Aucune année scolaire active configurée.');
+    //     }
+
+    //     // 🔒 Sécurité : Vérification de la clôture des 6 séquences
+    //     $unClosedSequences = DB::table('sequences')
+    //         ->join('trimestres', 'sequences.trimestre_id', '=', 'trimestres.id')
+    //         ->where('trimestres.annee_scolaire_id', $actifYear->id)
+    //         ->where('sequences.is_closed', 0)
+    //         ->exists();
+
+    //     if ($unClosedSequences) {
+    //         return redirect()
+    //             ->back()
+    //             ->with('error', 'Impossible d\'imprimer les bulletins annuels : toutes les séquences de l\'année doivent être closes.');
+    //     }
+
+    //     // 1. Récupération ordonnée des trimestres et des 6 séquences
+    //     $trimestres = DB::table('trimestres')
+    //         ->where('annee_scolaire_id', $actifYear->id)
+    //         ->orderBy('id', 'asc')
+    //         ->get();
+
+    //     $sequencesParTrimestre = [];
+    //     $allSequenceIds = [];
+
+    //     foreach ($trimestres as $trimestre) {
+    //         $seqs = DB::table('sequences')
+    //             ->where('trimestre_id', $trimestre->id)
+    //             ->orderBy('id', 'asc')
+    //             ->get();
+
+    //         $sequencesParTrimestre[$trimestre->id] = $seqs;
+    //         foreach ($seqs as $s) {
+    //             $allSequenceIds[] = $s->id;
+    //         }
+    //     }
+
+    //     $classe = DB::table('classes')->where('id', $classeId)->first();
+    //     if (! $classe) {
+    //         abort(404, 'Classe introuvable.');
+    //     }
+
+    //     // 2. Récupération des élèves inscrits
+    //     $enrollments = DB::table('inscriptions')
+    //         ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+    //         ->join('classes', 'inscriptions.classe_id', '=', 'classes.id')
+    //         ->join('annee_scolaires', 'inscriptions.annee_scolaire_id', '=', 'annee_scolaires.id')
+    //         ->where('inscriptions.classe_id', $classeId)
+    //         ->where('inscriptions.annee_scolaire_id', $actifYear->id)
+    //         ->select(
+    //             'inscriptions.id as inscription_id',
+    //             'inscriptions.classe_id',
+    //             'inscriptions.est_redoublant',
+    //             'inscriptions.annee_scolaire_id',
+    //             'eleves.nom as eleve_nom',
+    //             'eleves.photo as student_picture',
+    //             'eleves.prenom as eleve_prenom',
+    //             'eleves.matricule',
+    //             'eleves.sexe',
+    //             'eleves.date_naissance',
+    //             'eleves.lieu_naissance',
+    //             'classes.nom as classe_nom',
+    //             'classes.section',
+    //             'annee_scolaires.libelle as annee_libelle'
+    //         )->get();
+    //     // Appel de la fonction pour récupérer la discipline
+    //     // $disciplineStats = $this->getAnnualDisciplineStats($id);
+    //     // $totalStudentsInClass = $enrollments->count();
+    //     // $enrollmentIds = $enrollments->pluck('inscription_id');
+
+    //     $totalStudentsInClass = $enrollments->count();
+
+    //     $enrollmentIds = $enrollments->pluck('inscription_id');
+
+    //     $disciplineStats = DB::table('suivi_disciplinaires')
+    //         ->whereIn('inscription_id', $enrollmentIds)
+    //         ->select(
+    //             'inscription_id',
+    //             DB::raw('SUM(absences) as total_absences'),
+    //             DB::raw('SUM(retards) as total_retards'),
+    //             DB::raw('SUM(avertissements) as total_avertissements'),
+    //             DB::raw('SUM(blames) as total_blames'),
+    //             DB::raw('SUM(suspensions) as total_suspensions'),
+    //             DB::raw('SUM(exclusions) as total_exclusions')
+    //         )
+    //         ->groupBy('inscription_id')
+    //         ->get()
+    //         ->keyBy('inscription_id');
+
+    //     // 3. Charger les matières
+    //     $matieres = DB::table('classe_matiere')
+    //         ->join('matieres', 'classe_matiere.matiere_id', '=', 'matieres.id')
+    //         ->leftJoin('groupes_matieres', 'matieres.groupe_matiere_id', '=', 'groupes_matieres.id')
+    //         ->leftJoin('affectations', function ($join) use ($classeId, $actifYear) {
+    //             $join->on('affectations.matiere_id', '=', 'classe_matiere.matiere_id')
+    //                 ->where('affectations.classe_id', '=', $classeId)
+    //                 ->where('affectations.annee_scolaire_id', '=', $actifYear->id);
+    //         })
+    //         ->leftJoin('enseignants', 'affectations.enseignant_id', '=', 'enseignants.id')
+    //         ->leftJoin('users', 'enseignants.user_id', '=', 'users.id')
+    //         ->where('classe_matiere.classe_id', $classeId)
+    //         ->select(
+    //             'matieres.id as matiere_id',
+    //             'matieres.nom as matiere_nom',
+    //             'classe_matiere.coefficient',
+    //             'groupes_matieres.id as groupe_id',
+    //             'groupes_matieres.nom as groupe_nom',
+    //             'groupes_matieres.ordre as groupe_ordre',
+    //             DB::raw("GROUP_CONCAT(DISTINCT users.name SEPARATOR ' / ') as prof_nom")
+    //         )
+    //         ->groupBy(
+    //             'matieres.id', 'matieres.nom', 'classe_matiere.coefficient',
+    //             'groupes_matieres.id', 'groupes_matieres.nom', 'groupes_matieres.ordre'
+    //         )
+    //         ->orderBy('groupes_matieres.ordre', 'asc')
+    //         ->get()
+    //         ->groupBy('groupe_id');
+
+    //     // 4. Charger TOUTES les moyennes (séquentielles et trimestrielles)
+    //     $allMoyennes = DB::table('moyennes')
+    //         ->whereIn('inscription_id', $enrollmentIds)
+    //         ->get()
+    //         ->groupBy('inscription_id');
+
+    //     // 5. Calcul de la moyenne annuelle et des rangs annuels
+    //     $bilanAnnuelClasse = DB::table('moyennes')
+    //         ->whereIn('inscription_id', $enrollmentIds)
+    //         ->whereIn('sequence_id', $allSequenceIds)
+    //         ->select(
+    //             'inscription_id',
+    //             DB::raw('ROUND(SUM(total_points) / NULLIF(SUM(coefficient), 0), 2) as moyenne_annuelle')
+    //         )
+    //         ->groupBy('inscription_id')
+    //         ->orderByDesc('moyenne_annuelle')
+    //         ->get();
+
+    //     $rangsAnnuels = [];
+    //     $rangActuel = 1;
+    //     foreach ($bilanAnnuelClasse as $b) {
+    //         $rangsAnnuels[$b->inscription_id] = [
+    //             'moyenne' => $b->moyenne_annuelle,
+    //             'rang' => $rangActuel++,
+    //         ];
+    //     }
+
+    //     $professeurPrincipal = $this->getProfesseurPrincipal($classeId, $actifYear->id);
+
+    //     // 6. Assemblage des livrets d'élèves
+    //     $reportCards = [];
+    //     foreach ($enrollments as $ins) {
+    //         $id = $ins->inscription_id;
+    //         $disciplineStats = $this->getAnnualDisciplineStats($id);
+    //         $moyennesEleve = $allMoyennes->get($id, collect());
+    //         $notesSequences = [];
+    //         $notesTrimestresGlobal = [];
+    //         $coefficients = [];
+
+    //         foreach ($moyennesEleve as $m) {
+    //             if ($m->sequence_id) {
+    //                 $notesSequences[$m->matiere_id][$m->sequence_id] = $m->valeur;
+    //             }
+    //             if ($m->trimestre_id && $m->matiere_id) {
+    //                 // Moyenne de la matière pour ce trimestre
+    //             }
+    //             $coefficients[$m->matiere_id] = $m->coefficient;
+    //         }
+
+    //         // Calcul explicite des moyennes trimestrielles globales de l'élève (bas du bulletin)
+    //         foreach ($trimestres as $t) {
+    //             $seqsT = $sequencesParTrimestre[$t->id]->pluck('id');
+    //             $moyT = DB::table('moyennes')
+    //                 ->where('inscription_id', $id)
+    //                 ->whereIn('sequence_id', $seqsT)
+    //                 ->select(DB::raw('SUM(total_points) / NULLIF(SUM(coefficient), 0) as moy'))
+    //                 ->value('moy');
+
+    //             $notesTrimestresGlobal[$t->id] = $moyT ? round($moyT, 2) : null;
+    //         }
+
+    //         $reportCards[] = [
+    //             'inscription' => $ins,
+    //             'totalStudentsInClass' => $totalStudentsInClass,
+    //             'matieres' => $matieres,
+    //             'notesSequences' => $notesSequences,
+    //             'notesTrimestres' => $notesTrimestresGlobal,
+    //             // 'notesTrimestresGlobal' => $notesTrimestresGlobal,
+    //             'coefficients' => $coefficients,
+    //             'moyenneEleve' => $rangsAnnuels[$id]['moyenne'] ?? 0,
+    //             'rang' => $rangsAnnuels[$id]['rang'] ?? 'N/A',
+    //             'professeurPrincipal' => $professeurPrincipal,
+
+    //             'disciplineStats' => $disciplineStats,
+    //         ];
+    //     }
+
+    //     $pdf = Pdf::loadView('pages.admin.pdf.bulletin-annuel', compact('reportCards', 'trimestres', 'sequencesParTrimestre', 'school', 'actifYear', 'disciplineStats'))
+    //         ->setPaper('a4', 'landscape');
+
+    //     return $pdf->download(str("Bulletin_Annuel_{$classe->nom}")->slug('_').'.pdf');
+    // }
+
+
+
+public function imprimerClasseAnnuel($classeId)
+{
+    $school = DB::table('etablissements')->first();
+
+    $actifYear = DB::table('annee_scolaires')
+        ->where('est_active', 1)
+        ->first();
+
+    if (! $actifYear) {
+        abort(500, 'Aucune année scolaire active configurée.');
+    }
+
+    // 🔒 Vérification de la clôture des séquences
+    $unClosedSequences = DB::table('sequences')
+        ->join(
+            'trimestres',
+            'sequences.trimestre_id',
+            '=',
+            'trimestres.id'
+        )
+        ->where('trimestres.annee_scolaire_id', $actifYear->id)
+        ->where('sequences.is_closed', 0)
+        ->exists();
+
+    if ($unClosedSequences) {
+        return redirect()
+            ->back()
+            ->with(
+                'error',
+                'Impossible d\'imprimer les bulletins annuels : toutes les séquences de l\'année doivent être closes.'
+            );
+    }
+
+    // =========================================================
+    // 1. Récupération des trimestres et séquences
+    // =========================================================
+
+    $trimestres = DB::table('trimestres')
+        ->where('annee_scolaire_id', $actifYear->id)
+        ->orderBy('id', 'asc')
+        ->get();
+
+    $sequencesParTrimestre = [];
+    $allSequenceIds = [];
+
+    foreach ($trimestres as $trimestre) {
+
+        $seqs = DB::table('sequences')
+            ->where('trimestre_id', $trimestre->id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $sequencesParTrimestre[$trimestre->id] = $seqs;
+
+        foreach ($seqs as $sequence) {
+            $allSequenceIds[] = $sequence->id;
+        }
+    }
+
+    // =========================================================
+    // 2. Vérification de la classe
+    // =========================================================
+
+    $classe = DB::table('classes')
+        ->where('id', $classeId)
+        ->first();
+
+    if (! $classe) {
+        abort(404, 'Classe introuvable.');
+    }
+
+    // =========================================================
+    // 3. Récupération des élèves inscrits
+    // =========================================================
+
+    $enrollments = DB::table('inscriptions')
+        ->join(
+            'eleves',
+            'inscriptions.eleve_id',
+            '=',
+            'eleves.id'
+        )
+        ->join(
+            'classes',
+            'inscriptions.classe_id',
+            '=',
+            'classes.id'
+        )
+        ->join(
+            'annee_scolaires',
+            'inscriptions.annee_scolaire_id',
+            '=',
+            'annee_scolaires.id'
+        )
+        ->where('inscriptions.classe_id', $classeId)
+        ->where('inscriptions.annee_scolaire_id', $actifYear->id)
+        ->select(
+            'inscriptions.id as inscription_id',
+            'inscriptions.classe_id',
+            'inscriptions.est_redoublant',
+            'inscriptions.annee_scolaire_id',
+            'eleves.nom as eleve_nom',
+            'eleves.photo as student_picture',
+            'eleves.prenom as eleve_prenom',
+            'eleves.matricule',
+            'eleves.sexe',
+            'eleves.date_naissance',
+            'eleves.lieu_naissance',
+            'classes.nom as classe_nom',
+            'classes.section',
+            'annee_scolaires.libelle as annee_libelle'
+        )
+        ->get();
+
+    $totalStudentsInClass = $enrollments->count();
+
+    $enrollmentIds = $enrollments->pluck('inscription_id');
+
+    // =========================================================
+    // 4. Discipline de TOUS les élèves
+    //    Une seule requête SQL pour toute la classe
+    // =========================================================
+
+    $disciplineStats = DB::table('suivi_disciplinaires')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->select(
+            'inscription_id',
+            DB::raw('COALESCE(SUM(absences), 0) as total_absences'),
+            DB::raw('COALESCE(SUM(retards), 0) as total_retards'),
+            DB::raw('COALESCE(SUM(avertissements), 0) as total_avertissements'),
+            DB::raw('COALESCE(SUM(blames), 0) as total_blames'),
+            DB::raw('COALESCE(SUM(suspensions), 0) as total_suspensions'),
+            DB::raw('COALESCE(SUM(exclusions), 0) as total_exclusions')
+        )
+        ->groupBy('inscription_id')
+        ->get()
+        ->keyBy('inscription_id');
+
+    // =========================================================
+    // 5. Charger les matières
+    // =========================================================
+
+    $matieres = DB::table('classe_matiere')
+        ->join(
+            'matieres',
+            'classe_matiere.matiere_id',
+            '=',
+            'matieres.id'
+        )
+        ->leftJoin(
+            'groupes_matieres',
+            'matieres.groupe_matiere_id',
+            '=',
+            'groupes_matieres.id'
+        )
+        ->leftJoin('affectations', function ($join) use (
+            $classeId,
+            $actifYear
+        ) {
+            $join->on(
+                'affectations.matiere_id',
+                '=',
+                'classe_matiere.matiere_id'
+            )
+                ->where(
+                    'affectations.classe_id',
+                    '=',
+                    $classeId
+                )
+                ->where(
+                    'affectations.annee_scolaire_id',
+                    '=',
+                    $actifYear->id
+                );
+        })
+        ->leftJoin(
+            'enseignants',
+            'affectations.enseignant_id',
+            '=',
+            'enseignants.id'
+        )
+        ->leftJoin(
+            'users',
+            'enseignants.user_id',
+            '=',
+            'users.id'
+        )
+        ->where(
+            'classe_matiere.classe_id',
+            $classeId
+        )
+        ->select(
+            'matieres.id as matiere_id',
+            'matieres.nom as matiere_nom',
+            'classe_matiere.coefficient',
+            'groupes_matieres.id as groupe_id',
+            'groupes_matieres.nom as groupe_nom',
+            'groupes_matieres.ordre as groupe_ordre',
+            DB::raw(
+                "GROUP_CONCAT(DISTINCT users.name SEPARATOR ' / ') as prof_nom"
+            )
+        )
+        ->groupBy(
+            'matieres.id',
+            'matieres.nom',
+            'classe_matiere.coefficient',
+            'groupes_matieres.id',
+            'groupes_matieres.nom',
+            'groupes_matieres.ordre'
+        )
+        ->orderBy('groupes_matieres.ordre', 'asc')
+        ->get()
+        ->groupBy('groupe_id');
+
+    // =========================================================
+    // 6. Charger toutes les moyennes
+    // =========================================================
+
+    $allMoyennes = DB::table('moyennes')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->get()
+        ->groupBy('inscription_id');
+
+    // =========================================================
+    // 7. Moyennes trimestrielles de TOUS les élèves
+    //    Une seule requête au lieu d'une requête par élève/trimestre
+    // =========================================================
+
+    $moyennesTrimestrielles = DB::table('moyennes')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->whereIn('sequence_id', $allSequenceIds)
+        ->select(
+            'inscription_id',
+            'trimestre_id',
+            DB::raw(
+                'SUM(total_points) / NULLIF(SUM(coefficient), 0) as moyenne'
+            )
+        )
+        ->groupBy(
+            'inscription_id',
+            'trimestre_id'
+        )
+        ->get()
+        ->groupBy('inscription_id');
+
+    // =========================================================
+    // 8. Calcul des moyennes annuelles et des rangs
+    // =========================================================
+
+    $bilanAnnuelClasse = DB::table('moyennes')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->whereIn('sequence_id', $allSequenceIds)
+        ->select(
+            'inscription_id',
+            DB::raw(
+                'ROUND(
+                    SUM(total_points) /
+                    NULLIF(SUM(coefficient), 0),
+                    2
+                ) as moyenne_annuelle'
+            )
+        )
+        ->groupBy('inscription_id')
+        ->orderByDesc('moyenne_annuelle')
+        ->get();
+
+    $rangsAnnuels = [];
+
+    $rangActuel = 1;
+
+    foreach ($bilanAnnuelClasse as $bilan) {
+
+        $rangsAnnuels[$bilan->inscription_id] = [
+            'moyenne' => $bilan->moyenne_annuelle,
+            'rang' => $rangActuel++,
+        ];
+    }
+
+    // =========================================================
+    // 9. Professeur principal
+    // =========================================================
+
+    $professeurPrincipal = $this->getProfesseurPrincipal(
+        $classeId,
+        $actifYear->id
+    );
+
+    // =========================================================
+    // 10. Assemblage des bulletins
+    // =========================================================
+
+    $reportCards = [];
+
+    foreach ($enrollments as $ins) {
+
+        $id = $ins->inscription_id;
+
+        // ---------------------------------------------
+        // Discipline de cet élève
+        // ---------------------------------------------
+
+        $studentDiscipline = $disciplineStats->get($id);
+
+        // Si aucune donnée disciplinaire n'existe
+        // pour cet élève, on crée des valeurs à 0.
+        if (! $studentDiscipline) {
+            $studentDiscipline = (object) [
+                'total_absences' => 0,
+                'total_retards' => 0,
+                'total_avertissements' => 0,
+                'total_blames' => 0,
+                'total_suspensions' => 0,
+                'total_exclusions' => 0,
+            ];
+        }
+
+        // ---------------------------------------------
+        // Moyennes de l'élève
+        // ---------------------------------------------
+
+        $moyennesEleve = $allMoyennes->get(
+            $id,
+            collect()
+        );
+
+        $notesSequences = [];
+        $coefficients = [];
+
+        foreach ($moyennesEleve as $moyenne) {
+
+            if ($moyenne->sequence_id) {
+
+                $notesSequences[
+                    $moyenne->matiere_id
+                ][$moyenne->sequence_id] = $moyenne->valeur;
+            }
+
+            if (
+                $moyenne->trimestre_id &&
+                $moyenne->matiere_id
+            ) {
+                // Moyenne de la matière pour ce trimestre
+            }
+
+            $coefficients[
+                $moyenne->matiere_id
+            ] = $moyenne->coefficient;
+        }
+
+        // ---------------------------------------------
+        // Moyennes trimestrielles
+        // ---------------------------------------------
+
+        $notesTrimestresGlobal = [];
+
+        $moyennesEleveTrimestres =
+            $moyennesTrimestrielles->get(
+                $id,
+                collect()
+            );
+
+        foreach ($trimestres as $trimestre) {
+
+            $moyenneTrimestre =
+                $moyennesEleveTrimestres->firstWhere(
+                    'trimestre_id',
+                    $trimestre->id
+                );
+
+            $notesTrimestresGlobal[$trimestre->id] =
+                $moyenneTrimestre
+                    ? round($moyenneTrimestre->moyenne, 2)
+                    : null;
+        }
+
+        // ---------------------------------------------
+        // Bulletin de l'élève
+        // ---------------------------------------------
+
+        $reportCards[] = [
+            'inscription' => $ins,
+
+            'totalStudentsInClass' =>
+                $totalStudentsInClass,
+
+            'matieres' =>
+                $matieres,
+
+            'notesSequences' =>
+                $notesSequences,
+
+            'notesTrimestres' =>
+                $notesTrimestresGlobal,
+
+            'coefficients' =>
+                $coefficients,
+
+            'moyenneEleve' =>
+                $rangsAnnuels[$id]['moyenne'] ?? 0,
+
+            'rang' =>
+                $rangsAnnuels[$id]['rang'] ?? 'N/A',
+
+            'professeurPrincipal' =>
+                $professeurPrincipal,
+
+            'disciplineStats' =>
+                $studentDiscipline,
+        ];
+    }
+
+    // =========================================================
+    // 11. Génération du PDF
+    // =========================================================
+
+    $pdf = Pdf::loadView(
+        'pages.admin.pdf.bulletin-annuel',
+        compact(
+            'reportCards',
+            'trimestres',
+            'sequencesParTrimestre',
+            'school',
+            'actifYear'
+        )
+    )->setPaper('a4', 'landscape');
+
+    return $pdf->download(
+        str("Bulletin_Annuel_{$classe->nom}")
+            ->slug('_') . '.pdf'
+    );
+}
+
+
+
+   
 }

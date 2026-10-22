@@ -304,13 +304,13 @@
                         </td>
                     </tr>
                 @endforelse
-               
+
             </tbody>
 
         </table>
- <div class="mt-6">
-                    {{ $teachers->links() }}
-                </div>
+        <div class="mt-6">
+            {{ $teachers->links() }}
+        </div>
     </div>
 
     <script>
