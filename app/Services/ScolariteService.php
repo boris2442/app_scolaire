@@ -31,15 +31,7 @@ class ScolariteService
     /**
      * Vérifie qu'un trimestre appartient bien à l'année scolaire active (ou spécifiée)
      */
-    // public function validateTrimester(Trimestre $trimester, ?Year $actifYear = null): void
-    // {
-    //     $actifYear = $actifYear ?? $this->getactifYear();
-
-    //     if ((int) $trimester->annee_scolaire_id !== (int) $actifYear->id) {
-    //         throw new IncoherentScolariteException("Le trimestre '{$trimester->nom}' n'appartient pas à l'année scolaire en cours.");
-    //     }
-    // }
-
+  
     public function validateTrimester(
         Trimestre $trimester,
         ?Year $actifYear = null

@@ -61,6 +61,12 @@
                     <x-lucide-file-badge class="w-4 h-4" />
                     <span>Bulletin Annuel (Classe)</span>
                 </a>
+
+
+                <a href="{{ route('admin.reports.recapitulatif-conseil', $classe->id) }}" class="btn btn-primary"
+                    target="_blank">
+                    📄 Imprimer le Récapitulatif Conseil de Classe
+                </a>
             </div>
         </div>
 

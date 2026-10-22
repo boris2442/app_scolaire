@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classe;
+use App\Models\Inscription;
+use App\Models\School;
 use App\Models\Trimestre;
+use App\Models\Year;
 use App\Services\ScolariteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -1446,6 +1450,117 @@ public function imprimerClasseAnnuel($classeId)
             ->slug('_') . '.pdf'
     );
 }
+
+
+public function imprimerRecapitulatifConseil($classeId)
+{
+    $school = DB::table('etablissements')->first();
+    $actifYear = DB::table('annee_scolaires')->where('est_active', 1)->first();
+
+    if (! $actifYear) {
+        abort(500, 'Aucune année scolaire active configurée.');
+    }
+
+    $classe = DB::table('classes')->where('id', $classeId)->first();
+    if (! $classe) {
+        abort(404, 'Classe introuvable.');
+    }
+
+    // 1. Récupérer tous les trimestres et toutes les séquences de l'année active
+    $trimestres = DB::table('trimestres')
+        ->where('annee_scolaire_id', $actifYear->id)
+        ->orderBy('id', 'asc')
+        ->get();
+
+    $allSequenceIds = DB::table('sequences')
+        ->join('trimestres', 'sequences.trimestre_id', '=', 'trimestres.id')
+        ->where('trimestres.annee_scolaire_id', $actifYear->id)
+        ->pluck('sequences.id');
+
+    // 2. Récupérer tous les élèves inscrits dans la classe
+    $enrollments = DB::table('inscriptions')
+        ->join('eleves', 'inscriptions.eleve_id', '=', 'eleves.id')
+        ->where('inscriptions.classe_id', $classeId)
+        ->where('inscriptions.annee_scolaire_id', $actifYear->id)
+        ->select(
+            'inscriptions.id as inscription_id',
+            'inscriptions.est_redoublant',
+            'eleves.nom',
+            'eleves.prenom',
+            'eleves.matricule',
+            'eleves.date_naissance'
+        )
+        ->get();
+
+    $enrollmentIds = $enrollments->pluck('inscription_id');
+
+    // 3. Récupérer les moyennes trimestrielles de toute la classe en UNE SEULE requête
+    $moyennesTrimestrielles = DB::table('moyennes')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->whereIn('sequence_id', $allSequenceIds)
+        ->select(
+            'inscription_id',
+            'trimestre_id',
+            DB::raw('SUM(total_points) / NULLIF(SUM(coefficient), 0) as moyenne')
+        )
+        ->groupBy('inscription_id', 'trimestre_id')
+        ->get()
+        ->groupBy('inscription_id');
+
+    // 4. Calculer la moyenne annuelle et le classement de toute la classe en UNE SEULE requête (comme pour le bulletin annuel)
+    $bilanAnnuelClasse = DB::table('moyennes')
+        ->whereIn('inscription_id', $enrollmentIds)
+        ->whereIn('sequence_id', $allSequenceIds)
+        ->select(
+            'inscription_id',
+            DB::raw('ROUND(SUM(total_points) / NULLIF(SUM(coefficient), 0), 2) as moyenne_annuelle')
+        )
+        ->groupBy('inscription_id')
+        ->orderByDesc('moyenne_annuelle')
+        ->get();
+
+    $rangsAnnuels = [];
+    $rangActuel = 1;
+    foreach ($bilanAnnuelClasse as $bilan) {
+        $rangsAnnuels[$bilan->inscription_id] = [
+            'moyenne' => $bilan->moyenne_annuelle,
+            'rang' => $rangActuel++,
+        ];
+    }
+
+    // 5. Assemblage des données pour la vue
+    $recapData = [];
+    foreach ($enrollments as $ins) {
+        $id = $ins->inscription_id;
+        $moyennesEleveTrimestres = $moyennesTrimestrielles->get($id, collect());
+
+        $notesTrims = [];
+        foreach ($trimestres as $t) {
+            $mTrim = $moyennesEleveTrimestres->firstWhere('trimestre_id', $t->id);
+            $notesTrims[$t->id] = $mTrim ? round($mTrim->moyenne, 2) : null;
+        }
+
+        $recapData[] = [
+            'inscription' => $ins,
+            'moyT1' => $notesTrims[$trimestres[0]->id ?? 0] ?? null,
+            'moyT2' => $notesTrims[$trimestres[1]->id ?? 0] ?? null,
+            'moyT3' => $notesTrims[$trimestres[2]->id ?? 0] ?? null,
+            'moyAnnuelle' => $rangsAnnuels[$id]['moyenne'] ?? 0,
+            'rang' => $rangsAnnuels[$id]['rang'] ?? 'N/A',
+        ];
+    }
+
+    // Tri par ordre de mérite décroissant sur la moyenne annuelle
+    usort($recapData, function ($a, $b) {
+        return $b['moyAnnuelle'] <=> $a['moyAnnuelle'];
+    });
+
+    $pdf = Pdf::loadView('pages.admin.pdf.recapitulatif-conseil', compact('school', 'classe', 'recapData', 'actifYear'))
+        ->setPaper('a4', 'landscape');
+
+    return $pdf->download(str("Recapitulatif_Conseil_{$classe->nom}")->slug('_') . '.pdf');
+}
+
 
 
 

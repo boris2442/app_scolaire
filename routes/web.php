@@ -140,7 +140,8 @@ Route::middleware('scolarite.coherence')->group(function () {
 
         Route::get('/admin/report/student/{inscriptionId}/print/{trimestreId}', [BulletinPrintController::class, 'printStudent'])
             ->name('admin.bulletins.imprimer-eleve');
-
+Route::get('/admin/classes/{classeId}/recapitulatif-conseil', [BulletinPrintController::class, 'imprimerRecapitulatifConseil'])
+    ->name('admin.reports.recapitulatif-conseil');
         Route::get('/admin/report/classe/{classeId}/trimestre/{trimestreId}/stats', [BulletinPrintController::class, 'imprimerStatsClasse'])
             ->name('admin.bulletins.download-stats');
 
