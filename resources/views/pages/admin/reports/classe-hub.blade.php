@@ -63,7 +63,7 @@
                 </a>
 
 
-                <a href="{{ route('admin.reports.recapitulatif-conseil', $classe->id) }}" class="btn btn-primary"
+                <a href="{{ route('admin.reports.recapitulatif-conseil', $classe->id) }}" class="inline-flex items-center justify-center px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold rounded transition shadow-sm gap-2"
                     target="_blank">
                     📄 Imprimer le Récapitulatif Conseil de Classe
                 </a>
