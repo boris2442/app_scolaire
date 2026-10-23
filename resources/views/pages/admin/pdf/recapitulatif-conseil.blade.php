@@ -126,18 +126,29 @@
             padding-left: 6px !important;
         }
 
-        /* Code couleur conditionnel */
-        .moyenne-admis {
-            color: #2563eb;
-            /* Bleu */
-            font-weight: bold;
-        }
+      /* Code couleur conditionnel */
+/* Code couleur conditionnel */
+.moyenne-admis {
+    color: #2563eb;
+    background-color: #eff6ff;
+    font-weight: bold;
+}
 
-        .moyenne-echec {
-            color: #dc2626;
-            /* Rouge */
-            font-weight: bold;
-        }
+.moyenne-echec {
+    color: #dc2626;
+    background-color: #fef2f2;
+    font-weight: bold;
+}
+
+
+.checkbox {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border: 1px solid #333;
+    margin-right: 2px;
+    vertical-align: middle;
+}
 
         /* Pied de page / Signatures */
         .footer-signatures {
@@ -208,15 +219,16 @@
         <thead>
             <tr>
                 <th style="width: 4%;">N°</th>
-                <th style="width: 12%;">Matricule</th>
-                <th style="width: 28%;" class="text-left">Noms et Prénoms</th>
+                <th style="width: 10%;">Matricule</th>
+                <th style="width: 25%;" class="text-left">Noms et Prénoms</th>
                 <th style="width: 9%;">Date Naiss.</th>
-                <th style="width: 9%;">Statut</th>
-                <th style="width: 8%;">Moy. T1</th>
-                <th style="width: 8%;">Moy. T2</th>
-                <th style="width: 8%;">Moy. T3</th>
-                <th style="width: 9%;">Moy. Annuelle</th>
+                <th style="width: 7%;">Statut</th>
+                <th style="width: 6%;">Moy. T1</th>
+                <th style="width: 6%;">Moy. T2</th>
+                <th style="width: 6%;">Moy. T3</th>
+                <th style="width: 6%;">Moy. Annuelle</th>
                 <th style="width: 5%;">Rang</th>
+                <th style="width: 7%;">Statut</th>
             </tr>
         </thead>
         <tbody>
@@ -254,6 +266,12 @@
                     <td style="font-weight: bold;">
                         {{ $row['rang'] }}
                     </td>
+
+                   <td style="font-size: 8.5px; white-space: nowrap;">
+    <span class="checkbox"></span> Ad
+    <span class="checkbox"></span> Ref
+    <span class="checkbox"></span> Ex
+</td>
                 </tr>
             @empty
                 <tr>
