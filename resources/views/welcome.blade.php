@@ -42,18 +42,17 @@
 
 
 
-    <script>
-        (function() {
-            const theme = localStorage.getItem('color-theme') ||
-                (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches ?
-                    'dark' : 'light');
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        })();
-    </script>
+  <script>
+    (function() {
+        // Force 'light' par défaut si aucun choix n'est enregistré dans localStorage
+        const theme = localStorage.getItem('color-theme') || 'light';
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    })();
+</script>
 
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
@@ -67,7 +66,7 @@
     @endif
 </head>
 
-<body class="antialiased min-h-screen flex flex-col transition-colors duration-300">
+<body class="antialiased min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
 
     <header
         class="sticky top-0 z-40 w-full bg-card/80 backdrop-blur border-b border-border transition-colors duration-300">
