@@ -67,4 +67,9 @@ class User extends Authenticatable
             default => route('dashboard'),
         };
     }
+
+    public function feedbacks()
+{
+    return $this->hasMany(Feedback::class);
+}
 }

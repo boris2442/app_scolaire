@@ -17,6 +17,7 @@ use App\Http\Controllers\Exports\DepartmentExportController;
 use App\Http\Controllers\Exports\ExportInscriptionController;
 use App\Http\Controllers\Exports\StudentControllerExport;
 use App\Http\Controllers\Exports\TeacherExportController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\GlobalStatController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\PresenceAndServiceController;
@@ -277,4 +278,10 @@ Route::get('/admin/classes/{classeId}/recapitulatif-conseil', [BulletinPrintCont
         ->middleware(['auth']);
 });
 
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/feedbacks', [FeedbackController::class, 'store'])
+        ->name('feedbacks.store');
+});
 require __DIR__.'/auth.php';
