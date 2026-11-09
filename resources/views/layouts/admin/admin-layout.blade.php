@@ -237,32 +237,53 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.getElementById('feedback-toggle');
-            const close = document.getElementById('feedback-close');
-            const panel = document.getElementById('feedback-panel');
+        (() => {
+            function initFeedback() {
+                const toggle = document.getElementById('feedback-toggle');
+                const close = document.getElementById('feedback-close');
+                const panel = document.getElementById('feedback-panel');
 
-            if (toggle && panel) {
-                toggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    panel.classList.toggle('hidden');
-                });
-            }
-
-            if (close && panel) {
-                close.addEventListener('click', () => {
-                    panel.classList.add('hidden');
-                });
-            }
-
-            // Fermer le panneau si on clique en dehors
-            document.addEventListener('click', (e) => {
-                if (panel && !panel.classList.contains('hidden') && !panel.contains(e.target) && !toggle
-                    .contains(e.target)) {
-                    panel.classList.add('hidden');
+                if (!toggle || !panel) {
+                    console.warn('Feedback : éléments introuvables.');
+                    return;
                 }
-            });
-        });
+
+                // Éviter les doubles initialisations
+                if (toggle.dataset.initialized === 'true') return;
+                toggle.dataset.initialized = 'true';
+
+                // Ouverture / fermeture
+                toggle.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    panel.classList.toggle('hidden');
+                    console.log('Feedback cliqué');
+                });
+
+                // Fermeture avec X
+                close?.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    panel.classList.add('hidden');
+                });
+
+                // Empêcher la fermeture lors d'un clic dans le panneau
+                panel.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                });
+
+                // Fermeture extérieure
+                document.addEventListener('click', () => {
+                    panel.classList.add('hidden');
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFeedback);
+            } else {
+                initFeedback();
+            }
+        })();
     </script>
 </body>
 
