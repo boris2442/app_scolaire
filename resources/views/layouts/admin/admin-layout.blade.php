@@ -238,20 +238,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
             const toggle = document.getElementById('feedback-toggle');
             const close = document.getElementById('feedback-close');
             const panel = document.getElementById('feedback-panel');
 
-            toggle.addEventListener('click', () => {
-                panel.classList.toggle('hidden');
-            });
+            if (toggle && panel) {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    panel.classList.toggle('hidden');
+                });
+            }
 
-            close.addEventListener('click', () => {
-                panel.classList.add('hidden');
-            });
+            if (close && panel) {
+                close.addEventListener('click', () => {
+                    panel.classList.add('hidden');
+                });
+            }
 
-            // lucide.createIcons();
+            // Fermer le panneau si on clique en dehors
+            document.addEventListener('click', (e) => {
+                if (panel && !panel.classList.contains('hidden') && !panel.contains(e.target) && !toggle
+                    .contains(e.target)) {
+                    panel.classList.add('hidden');
+                }
+            });
         });
     </script>
 </body>
